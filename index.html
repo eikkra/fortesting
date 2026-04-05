@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Goat FC Leaderboard</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #020617, #0f172a);
+      color: white;
+      text-align: center;
+      transition: 0.3s;
+    }
+
+    body.light {
+      background: #f1f5f9;
+      color: black;
+    }
+
+    /* HEADER */
+    .header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      padding-top: 15px;
+    }
+
+    .logo {
+      width: 60px;
+      animation: float 3s ease-in-out infinite;
+      filter: drop-shadow(0 0 12px #00ffcc);
+    }
+
+    h1 {
+      margin: 0;
+      color: #00ffcc;
+    }
+
+    .slogan {
+      font-size: 13px;
+      opacity: 0.8;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+      100% { transform: translateY(0px); }
+    }
+
+    /* BUTTONS */
+    .tabs {
+      margin: 15px;
+    }
+
+    button {
+      padding: 10px 18px;
+      border-radius: 20px;
+      border: none;
+      background: #1f2937;
+      color: white;
+      margin: 5px;
+      cursor: pointer;
+    }
+
+    button.active {
+      background: linear-gradient(to right,#00ffcc,#00c3ff);
+      color: black;
+    }
+
+    body.light button {
+      background: #e2e8f0;
+      color: black;
+    }
+
+    /* CARD */
+    .card {
+      width: 95%;
+      max-width: 1100px;
+      margin: auto;
+      background: rgba(255,255,255,0.05);
+      border-radius: 15px;
+      padding: 10px;
+    }
+
+    body.light .card {
+      background: white;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      padding: 12px;
+      background: rgba(255,255,255,0.08);
+      color: #00ffcc;
+    }
+
+    body.light th {
+      background: #e2e8f0;
+      color: black;
+    }
+
+    td {
+      padding: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    tr:hover {
+      background: rgba(255,255,255,0.05);
+    }
+
+    /* TOP 3 */
+    .rank-1 { color: gold; }
+    .rank-2 { color: silver; }
+    .rank-3 { color: #cd7f32; }
+
+    /* 🔥 TOP 10 STRONG HIGHLIGHT */
+    .top10 {
+      background: linear-gradient(90deg, rgba(0,255,150,0.15), transparent);
+      border-left: 4px solid #00ffcc;
+      box-shadow: inset 0 0 10px rgba(0,255,150,0.3);
+    }
+
+    /* rank badge glow */
+    .rank-1, .rank-2, .rank-3 {
+      text-shadow: 0 0 8px rgba(255,255,255,0.6);
+    }
+
+    .toggle {
+      margin: 10px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+  </style>
+</head>
+
+<body>
+
+<div class="header">
+  <img src="https://i.imgur.com/LY3Bb9m.png" class="logo">
+  <h1>GOAT FC LEADERBOARD</h1>
+</div>
+
+<div class="slogan">⚡ BE THE GAME CHANGER! ⚡</div>
+
+<div class="toggle" onclick="toggleTheme()">🌗 Dark Mode</div>
+
+<div class="tabs">
+  <button onclick="loadData('overall')" class="active" id="overallBtn">🏆 Overall</button>
+  <button onclick="loadData('monthly')" id="monthlyBtn">📅 Monthly</button>
+</div>
+
+<div class="card">
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Club ID</th>
+<th>Points</th>
+<th>Match</th>
+<th>Win %</th>
+<th>GF</th>
+<th>GA</th>
+<th>GD</th>
+</tr>
+</thead>
+<tbody id="table"></tbody>
+</table>
+</div>
+
+<script>
+
+const SHEET_ID = "1DSPKPaU1ZQYbFM4iYbE1VXgDAXU-FCT7--QhYJsNf1M";
+const SHEET_NAME = "Leaderboard Goat FC";
+
+let currentType = "overall";
+
+function toggleTheme(){
+document.body.classList.toggle("light");
+}
+
+function loadData(type){
+
+currentType = type;
+
+document.getElementById("overallBtn").classList.remove("active");
+document.getElementById("monthlyBtn").classList.remove("active");
+
+if(type==="overall"){
+document.getElementById("overallBtn").classList.add("active");
+}else{
+document.getElementById("monthlyBtn").classList.add("active");
+}
+
+fetch(`https://opensheet.elk.sh/${SHEET_ID}/${SHEET_NAME}`)
+.then(res => res.json())
+.then(data => {
+
+let tbody = document.getElementById("table");
+tbody.innerHTML = "";
+
+// sort by rank
+if(type==="overall"){
+data.sort((a,b)=> (a["Overall Rank"]||999)-(b["Overall Rank"]||999));
+}else{
+data.sort((a,b)=> (a["Monthly Rank"]||999)-(b["Monthly Rank"]||999));
+}
+
+data.forEach((row,index)=>{
+
+let rankClass="";
+let badge="";
+
+if(index==0){rankClass="rank-1"; badge="🥇";}
+if(index==1){rankClass="rank-2"; badge="🥈";}
+if(index==2){rankClass="rank-3"; badge="🥉";}
+
+// 🔥 TOP 10 FIXED
+let topClass = index < 10 ? "top10" : "";
+
+let point = type==="overall" ? row["Overall_Point"] : row["Monthly_Point"];
+let match = type==="overall" ? row["Overall_PL"] : row["Monthly_PL"];
+let win = type==="overall" ? row["Overall_Win%"] : row["Monthly_Win%"];
+let gf = type==="overall" ? row["Total GF"] : row["Montly GF"];
+let ga = type==="overall" ? row["Total GA"] : row["Montly GA"];
+let gd = type==="overall" ? row["Total GD"] : row["Montly GD"];
+
+win = (parseFloat(win)||0)*100;
+
+let tr = `
+<tr class="${topClass}">
+<td class="${rankClass}">${badge} ${index+1}</td>
+<td>${row["Club_ID"]}</td>
+<td>${point||0}</td>
+<td>${match||0}</td>
+<td>${win.toFixed(1)}%</td>
+<td>${gf||0}</td>
+<td>${ga||0}</td>
+<td>${gd||0}</td>
+</tr>
+`;
+
+tbody.innerHTML += tr;
+
+});
+
+});
+}
+
+loadData("overall");
+
+setInterval(()=>{
+loadData(currentType);
+},30000);
+
+</script>
+
+</body>
+</html>

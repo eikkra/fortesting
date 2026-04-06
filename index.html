@@ -13,9 +13,10 @@
       transition: 0.3s;
     }
 
+    /* 🔴 ESPORTS RED THEME */
     body.light {
-      background: #f1f5f9;
-      color: black;
+      background: linear-gradient(135deg, #1a0000, #3b0000);
+      color: #fff;
     }
 
     /* HEADER */
@@ -51,7 +52,7 @@
       100% { transform: translateY(0px); }
     }
 
-    /* BUTTONS */
+    /* BUTTON */
     .tabs {
       margin: 15px;
     }
@@ -72,8 +73,8 @@
     }
 
     body.light button {
-      background: #e2e8f0;
-      color: black;
+      background: #5a0000;
+      color: white;
     }
 
     /* CARD */
@@ -87,7 +88,7 @@
     }
 
     body.light .card {
-      background: white;
+      background: rgba(255,0,0,0.1);
     }
 
     table {
@@ -102,8 +103,8 @@
     }
 
     body.light th {
-      background: #e2e8f0;
-      color: black;
+      background: rgba(255,0,0,0.2);
+      color: #fff;
     }
 
     td {
@@ -115,27 +116,46 @@
       background: rgba(255,255,255,0.05);
     }
 
-    /* TOP 3 */
-    .rank-1 { color: gold; }
-    .rank-2 { color: silver; }
-    .rank-3 { color: #cd7f32; }
+    /* 🥇🥈🥉 TOP 3 ROW ANIMATION */
+    .rank1-row {
+      background: linear-gradient(90deg, rgba(255,215,0,0.2), transparent);
+      animation: glowGold 2s infinite alternate;
+    }
 
-    /* 🔥 TOP 10 STRONG HIGHLIGHT */
+    .rank2-row {
+      background: linear-gradient(90deg, rgba(192,192,192,0.2), transparent);
+      animation: glowSilver 2s infinite alternate;
+    }
+
+    .rank3-row {
+      background: linear-gradient(90deg, rgba(205,127,50,0.2), transparent);
+      animation: glowBronze 2s infinite alternate;
+    }
+
+    @keyframes glowGold {
+      from { box-shadow: inset 0 0 5px gold; }
+      to { box-shadow: inset 0 0 15px gold; }
+    }
+
+    @keyframes glowSilver {
+      from { box-shadow: inset 0 0 5px silver; }
+      to { box-shadow: inset 0 0 15px silver; }
+    }
+
+    @keyframes glowBronze {
+      from { box-shadow: inset 0 0 5px #cd7f32; }
+      to { box-shadow: inset 0 0 15px #cd7f32; }
+    }
+
+    /* 🔥 TOP 10 */
     .top10 {
       background: linear-gradient(90deg, rgba(0,255,150,0.15), transparent);
       border-left: 4px solid #00ffcc;
-      box-shadow: inset 0 0 10px rgba(0,255,150,0.3);
-    }
-
-    /* rank badge glow */
-    .rank-1, .rank-2, .rank-3 {
-      text-shadow: 0 0 8px rgba(255,255,255,0.6);
     }
 
     .toggle {
       margin: 10px;
       cursor: pointer;
-      font-size: 14px;
     }
 
   </style>
@@ -150,7 +170,7 @@
 
 <div class="slogan">⚡ BE THE GAME CHANGER! ⚡</div>
 
-<div class="toggle" onclick="toggleTheme()">🌗 Dark Mode</div>
+<div class="toggle" onclick="toggleTheme()">🌗 Dark/Red Mode</div>
 
 <div class="tabs">
   <button onclick="loadData('overall')" class="active" id="overallBtn">🏆 Overall</button>
@@ -206,7 +226,6 @@ fetch(`https://opensheet.elk.sh/${SHEET_ID}/${SHEET_NAME}`)
 let tbody = document.getElementById("table");
 tbody.innerHTML = "";
 
-// sort by rank
 if(type==="overall"){
 data.sort((a,b)=> (a["Overall Rank"]||999)-(b["Overall Rank"]||999));
 }else{
@@ -215,15 +234,13 @@ data.sort((a,b)=> (a["Monthly Rank"]||999)-(b["Monthly Rank"]||999));
 
 data.forEach((row,index)=>{
 
-let rankClass="";
+let rowClass="";
 let badge="";
 
-if(index==0){rankClass="rank-1"; badge="🥇";}
-if(index==1){rankClass="rank-2"; badge="🥈";}
-if(index==2){rankClass="rank-3"; badge="🥉";}
-
-// 🔥 TOP 10 FIXED
-let topClass = index < 10 ? "top10" : "";
+if(index==0){rowClass="rank1-row"; badge="🥇";}
+else if(index==1){rowClass="rank2-row"; badge="🥈";}
+else if(index==2){rowClass="rank3-row"; badge="🥉";}
+else if(index<10){rowClass="top10";}
 
 let point = type==="overall" ? row["Overall_Point"] : row["Monthly_Point"];
 let match = type==="overall" ? row["Overall_PL"] : row["Monthly_PL"];
@@ -235,8 +252,8 @@ let gd = type==="overall" ? row["Total GD"] : row["Montly GD"];
 win = (parseFloat(win)||0)*100;
 
 let tr = `
-<tr class="${topClass}">
-<td class="${rankClass}">${badge} ${index+1}</td>
+<tr class="${rowClass}">
+<td>${badge} ${index+1}</td>
 <td>${row["Club_ID"]}</td>
 <td>${point||0}</td>
 <td>${match||0}</td>

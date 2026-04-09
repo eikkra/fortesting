@@ -3,7 +3,6 @@
 <head>
   <title>Goat FC Leaderboard</title>
 
-  <!-- 🔥 Google Font Oswald -->
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet">
 
   <style>
@@ -13,16 +12,12 @@
       background: linear-gradient(135deg, #020617, #0f172a);
       color: white;
       text-align: center;
-      transition: 0.3s;
     }
 
-    /* 🔴 ESPORTS RED THEME */
     body.light {
       background: linear-gradient(135deg, #1a0000, #3b0000);
-      color: #fff;
     }
 
-    /* HEADER */
     .header {
       display: flex;
       justify-content: center;
@@ -46,16 +41,12 @@
       font-size: 13px;
       opacity: 0.8;
       margin-bottom: 10px;
-      letter-spacing: 1px;
     }
 
     @keyframes float {
-      0% { transform: translateY(0px); }
       50% { transform: translateY(-6px); }
-      100% { transform: translateY(0px); }
     }
 
-    /* BUTTON */
     .tabs {
       margin: 15px;
     }
@@ -77,10 +68,48 @@
 
     body.light button {
       background: #5a0000;
-      color: white;
     }
 
-    /* CARD */
+    /* 🔥 SLIM STATS BAR */
+    .stats-bar {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+
+    .stat-box {
+      padding: 6px 14px;
+      border-radius: 8px;
+      background: rgba(0,255,200,0.06);
+      border: 1px solid rgba(0,255,200,0.25);
+      box-shadow: 0 0 6px rgba(0,255,200,0.4);
+      min-width: 130px;
+    }
+
+    .stat-title {
+      font-size: 10px;
+      opacity: 0.7;
+    }
+
+    .stat-value {
+      font-size: 16px;
+      color: #00ffcc;
+      text-shadow: 0 0 6px #00ffcc;
+    }
+
+    body.light .stat-box {
+      background: rgba(255,0,0,0.08);
+      border: 1px solid rgba(255,0,0,0.3);
+      box-shadow: 0 0 6px rgba(255,0,0,0.5);
+    }
+
+    body.light .stat-value {
+      color: #ff4d4d;
+      text-shadow: 0 0 6px red;
+    }
+
     .card {
       width: 95%;
       max-width: 1100px;
@@ -88,10 +117,6 @@
       background: rgba(255,255,255,0.05);
       border-radius: 15px;
       padding: 10px;
-    }
-
-    body.light .card {
-      background: rgba(255,0,0,0.1);
     }
 
     table {
@@ -105,11 +130,6 @@
       color: #00ffcc;
     }
 
-    body.light th {
-      background: rgba(255,0,0,0.2);
-      color: #fff;
-    }
-
     td {
       padding: 10px;
       border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -119,38 +139,25 @@
       background: rgba(255,255,255,0.05);
     }
 
-    /* 🥇🥈🥉 TOP 3 ROW ANIMATION */
-    .rank1-row {
-      background: linear-gradient(90deg, rgba(255,215,0,0.2), transparent);
-      animation: glowGold 2s infinite alternate;
-    }
-
-    .rank2-row {
-      background: linear-gradient(90deg, rgba(192,192,192,0.2), transparent);
-      animation: glowSilver 2s infinite alternate;
-    }
-
-    .rank3-row {
-      background: linear-gradient(90deg, rgba(205,127,50,0.2), transparent);
-      animation: glowBronze 2s infinite alternate;
-    }
+    .rank1-row { animation: glowGold 2s infinite alternate; }
+    .rank2-row { animation: glowSilver 2s infinite alternate; }
+    .rank3-row { animation: glowBronze 2s infinite alternate; }
 
     @keyframes glowGold {
       from { box-shadow: inset 0 0 5px gold; }
-      to { box-shadow: inset 0 0 15px gold; }
+      to { box-shadow: inset 0 0 12px gold; }
     }
 
     @keyframes glowSilver {
       from { box-shadow: inset 0 0 5px silver; }
-      to { box-shadow: inset 0 0 15px silver; }
+      to { box-shadow: inset 0 0 12px silver; }
     }
 
     @keyframes glowBronze {
       from { box-shadow: inset 0 0 5px #cd7f32; }
-      to { box-shadow: inset 0 0 15px #cd7f32; }
+      to { box-shadow: inset 0 0 12px #cd7f32; }
     }
 
-    /* 🔥 TOP 10 */
     .top10 {
       background: linear-gradient(90deg, rgba(0,255,150,0.15), transparent);
       border-left: 4px solid #00ffcc;
@@ -178,6 +185,24 @@
 <div class="tabs">
   <button onclick="loadData('overall')" class="active" id="overallBtn">🏆 Overall</button>
   <button onclick="loadData('monthly')" id="monthlyBtn">📅 Monthly</button>
+</div>
+
+<!-- 🔥 STATS -->
+<div class="stats-bar">
+  <div class="stat-box">
+    <div class="stat-title">Total Match</div>
+    <div class="stat-value" id="totalMatch">0</div>
+  </div>
+
+  <div class="stat-box">
+    <div class="stat-title">Total Goal</div>
+    <div class="stat-value" id="totalGoal">0</div>
+  </div>
+
+  <div class="stat-box">
+    <div class="stat-title">Per Match Goal</div>
+    <div class="stat-value" id="perMatch">0</div>
+  </div>
 </div>
 
 <div class="card">
@@ -229,6 +254,9 @@ fetch(`https://opensheet.elk.sh/${SHEET_ID}/${SHEET_NAME}`)
 let tbody = document.getElementById("table");
 tbody.innerHTML = "";
 
+let totalMatchRaw = 0;
+let totalGoal = 0;
+
 if(type==="overall"){
 data.sort((a,b)=> (a["Overall Rank"]||999)-(b["Overall Rank"]||999));
 }else{
@@ -245,10 +273,14 @@ else if(index==1){rowClass="rank2-row"; badge="🥈";}
 else if(index==2){rowClass="rank3-row"; badge="🥉";}
 else if(index<10){rowClass="top10";}
 
-let point = type==="overall" ? row["Overall_Point"] : row["Monthly_Point"];
 let match = type==="overall" ? row["Overall_PL"] : row["Monthly_PL"];
-let win = type==="overall" ? row["Overall_Win%"] : row["Monthly_Win%"];
 let gf = type==="overall" ? row["Total GF"] : row["Montly GF"];
+
+totalMatchRaw += parseFloat(match)||0;
+totalGoal += parseFloat(gf)||0;
+
+let point = type==="overall" ? row["Overall_Point"] : row["Monthly_Point"];
+let win = type==="overall" ? row["Overall_Win%"] : row["Monthly_Win%"];
 let ga = type==="overall" ? row["Total GA"] : row["Montly GA"];
 let gd = type==="overall" ? row["Total GD"] : row["Montly GD"];
 
@@ -270,6 +302,14 @@ let tr = `
 tbody.innerHTML += tr;
 
 });
+
+// 🔥 FINAL CALCULATION FIX
+let totalMatch = Math.round(totalMatchRaw / 2);
+let perMatch = totalMatch ? (totalGoal / totalMatch).toFixed(2) : 0;
+
+document.getElementById("totalMatch").innerText = totalMatch;
+document.getElementById("totalGoal").innerText = totalGoal;
+document.getElementById("perMatch").innerText = perMatch;
 
 });
 }

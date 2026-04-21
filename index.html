@@ -3,154 +3,154 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GOAT FC Player Database</title>
+<title>GOAT FC PLAY CARD</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap" rel="stylesheet">
+
+<!-- Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <!-- PapaParse -->
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Orbitron', sans-serif;
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Orbitron',sans-serif;
 }
 
-body {
-  background: radial-gradient(circle at top, #0f2027, #000);
-  color: #fff;
+body{
+  background:#050505;
+  color:#fff;
 }
 
 /* HEADER */
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 15px;
-  padding: 20px;
-  flex-wrap: wrap;
+.header{
+  display:flex;
+  align-items:center;
+  gap:15px;
+  padding:20px;
+  justify-content:center;
+  flex-wrap:wrap;
 }
 
-.logo {
-  width: 50px;
-  filter: drop-shadow(0 0 10px #00f7ff) drop-shadow(0 0 20px #00f7ff);
+.logo{
+  width:55px;
+  filter: drop-shadow(0 0 10px #00f7ff)
+          drop-shadow(0 0 20px #00f7ff);
   animation: glow 2s infinite alternate;
 }
 
-.title {
-  font-size: 26px;
-  color: #00f7ff;
-  text-shadow: 0 0 10px #00f7ff, 0 0 20px #00f7ff;
+@keyframes glow{
+  from{ filter: drop-shadow(0 0 5px #00f7ff);}
+  to{ filter: drop-shadow(0 0 25px #00f7ff);}
 }
 
-@keyframes glow {
-  from { filter: drop-shadow(0 0 5px #00f7ff); }
-  to { filter: drop-shadow(0 0 20px #00f7ff); }
+.title{
+  font-size:26px;
+  color:#00f7ff;
+  text-shadow:0 0 10px #00f7ff,0 0 30px #00f7ff;
 }
 
 /* DESCRIPTION */
-.desc {
-  text-align: center;
-  margin-bottom: 20px;
-  color: #aaa;
-  font-size: 14px;
+.desc{
+  text-align:center;
+  padding:0 15px 15px;
+  color:#aaa;
+  font-size:13px;
 }
 
 /* SEARCH */
-.search-box {
-  text-align: center;
-  margin-bottom: 20px;
+.search-box{
+  text-align:center;
+  margin-bottom:20px;
 }
 
-.search-box input {
-  padding: 12px;
-  width: 300px;
-  max-width: 90%;
-  border-radius: 12px;
-  border: none;
-  background: #111;
-  color: #00f7ff;
-  box-shadow: 0 0 10px #00f7ff;
+.search-box input{
+  padding:12px;
+  width:300px;
+  max-width:90%;
+  border-radius:10px;
+  border:none;
+  background:#111;
+  color:#00f7ff;
+  box-shadow:0 0 10px #00f7ff;
 }
 
 /* TABLE */
-.container {
-  padding: 10px;
+.container{
+  padding:10px;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
+table{
+  width:100%;
+  border-collapse:collapse;
 }
 
-th {
-  background: #111;
-  color: #00f7ff;
-  padding: 12px;
+th{
+  background:#111;
+  color:#00f7ff;
+  padding:12px;
+  text-shadow:0 0 5px #00f7ff;
 }
 
-td {
-  padding: 10px;
-  text-align: center;
-  border-bottom: 1px solid #222;
+td{
+  padding:10px;
+  text-align:center;
+  border-bottom:1px solid #222;
 }
 
-tr {
-  transition: 0.3s;
-}
-
-tr:hover {
-  background: rgba(0,247,255,0.08);
-  box-shadow: 0 0 10px #00f7ff44;
+tr:hover{
+  background:rgba(0,247,255,0.1);
+  box-shadow:0 0 10px #00f7ff55;
 }
 
 /* FACEBOOK BUTTON */
-.fb-btn {
-  padding: 6px 12px;
-  border-radius: 20px;
-  background: linear-gradient(45deg, #1877f2, #00f7ff);
-  color: #fff;
-  text-decoration: none;
-  font-size: 12px;
-  box-shadow: 0 0 10px #00f7ff;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
+.fb-btn{
+  display:inline-block;
+  padding:6px 10px;
+  background:#0a0a0a;
+  border:1px solid #00f7ff;
+  border-radius:6px;
+  color:#00f7ff;
+  transition:0.3s;
 }
 
-.fb-btn:hover {
-  transform: scale(1.05);
+.fb-btn:hover{
+  background:#00f7ff;
+  color:#000;
+  box-shadow:0 0 10px #00f7ff;
 }
 
-/* MOBILE VIEW */
-@media(max-width: 768px) {
-  table, thead, tbody, th, td, tr {
-    display: block;
+/* MOBILE */
+@media(max-width:768px){
+  table,thead,tbody,th,td,tr{
+    display:block;
   }
 
-  tr {
-    margin-bottom: 15px;
-    background: #111;
-    border-radius: 12px;
-    padding: 10px;
-    box-shadow: 0 0 10px #00f7ff33;
+  tr{
+    margin-bottom:15px;
+    background:#111;
+    border-radius:10px;
+    padding:10px;
+    box-shadow:0 0 10px #00f7ff33;
   }
 
-  td {
-    text-align: left;
-    padding: 6px;
+  td{
+    text-align:left;
+    padding:6px;
   }
 
-  td::before {
-    content: attr(data-label);
-    color: #00f7ff;
-    font-weight: bold;
-    display: block;
+  td::before{
+    content:attr(data-label);
+    color:#00f7ff;
+    font-weight:bold;
+    display:block;
   }
 
-  th { display: none; }
+  th{display:none;}
 }
 </style>
 </head>
@@ -160,12 +160,12 @@ tr:hover {
 <!-- HEADER -->
 <div class="header">
   <img src="https://i.imgur.com/LY3Bb9m.png" class="logo">
-  <div class="title">GOAT FC PLAYER DATABASE</div>
+  <div class="title">GOAT FC PLAY CARD</div>
 </div>
 
 <!-- DESCRIPTION -->
 <div class="desc">
-  Explore registered players, check club IDs, and connect with competitors before the tournament begins ⚡
+  Official GOAT FC tournament player database. Search players using Club ID and view their registered game details instantly.
 </div>
 
 <!-- SEARCH -->
@@ -175,73 +175,73 @@ tr:hover {
 
 <!-- TABLE -->
 <div class="container">
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Club ID</th>
-        <th>KONAMI ID</th>
-        <th>Device</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody id="tableBody"></tbody>
-  </table>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Club ID</th>
+<th>KONAMI ID</th>
+<th>Device</th>
+<th>Facebook</th>
+</tr>
+</thead>
+<tbody id="tableBody"></tbody>
+</table>
 </div>
 
 <script>
-const csvURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRxNxMgcwsp3k8B9jqnfObnnRfhSX3vUcEOuaPTsyEMaEVOZKE9OIcLiMQRJHHkAQiJWn-msKE6Cs80/pub?output=csv";
+const csvURL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRxNxMgcwsp3k8B9jqnfObnnRfhSX3vUcEOuaPTsyEMaEVOZKE9OIcLiMQRJHHkAQiJWn-msKE6Cs80/pub?output=csv";
 
-let players = [];
+let players=[];
 
-function loadData() {
-  Papa.parse(csvURL, {
-    download: true,
-    header: true,
-    skipEmptyLines: true,
-    complete: function(results) {
-      players = results.data;
-      render(players);
-    }
-  });
+/* LOAD DATA */
+function loadData(){
+Papa.parse(csvURL,{
+download:true,
+header:true,
+skipEmptyLines:true,
+complete:function(res){
+players=res.data;
+render(players);
+}
+});
 }
 
-function render(data) {
-  const tbody = document.getElementById("tableBody");
-  tbody.innerHTML = "";
+/* RENDER */
+function render(data){
+const tbody=document.getElementById("tableBody");
+tbody.innerHTML="";
 
-  data.forEach(p => {
-    const row = `
-      <tr>
-        <td data-label="Name">${p["Player Name"] || ""}</td>
-        <td data-label="Club ID">${p["Your Club ID"] || ""}</td>
-        <td data-label="KONAMI ID">${p["KONAMI ID"] || ""}</td>
-        <td data-label="Device">${p["DEVICE NAME"] || ""}</td>
-        <td data-label="Action">
-          <a class="fb-btn" href="${p["Facebook URL"]}" target="_blank">🔗 Profile</a>
-        </td>
-      </tr>
-    `;
-    tbody.innerHTML += row;
-  });
+data.forEach(p=>{
+tbody.innerHTML+=`
+<tr>
+<td data-label="Name">${p["Player Name"]||""}</td>
+<td data-label="Club ID">${p["Your Club ID"]||""}</td>
+<td data-label="KONAMI ID">${p["KONAMI ID"]||""}</td>
+<td data-label="Device">${p["DEVICE NAME"]||""}</td>
+<td data-label="Facebook">
+<a href="${p["Facebook URL"]}" target="_blank" class="fb-btn">
+<i class="fab fa-facebook-f"></i>
+</a>
+</td>
+</tr>`;
+});
 }
 
 /* SEARCH */
-document.getElementById("searchInput").addEventListener("keyup", function() {
-  const val = this.value.toLowerCase();
-
-  const filtered = players.filter(p =>
-    (p["Your Club ID"] || "").toLowerCase().includes(val)
-  );
-
-  render(filtered);
+document.getElementById("searchInput").addEventListener("keyup",function(){
+let val=this.value.toLowerCase();
+let filtered=players.filter(p=>
+(p["Your Club ID"]||"").toLowerCase().includes(val)
+);
+render(filtered);
 });
-
-/* AUTO REFRESH EVERY 30 SEC */
-setInterval(loadData, 30000);
 
 /* INITIAL LOAD */
 loadData();
+
+/* AUTO REFRESH 30s */
+setInterval(loadData,30000);
 </script>
 
 </body>

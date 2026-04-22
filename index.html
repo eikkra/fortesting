@@ -3,245 +3,146 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GOAT FC PLAY CARD</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap" rel="stylesheet">
-
-<!-- Icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-<!-- PapaParse -->
-<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+<title>Goat FC Match Log</title>
 
 <style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:'Orbitron',sans-serif;
-}
-
 body{
-  background:#050505;
-  color:#fff;
+    font-family: Arial;
+    background:#0f172a;
+    color:white;
+    padding:20px;
+}
+h1{
+    text-align:center;
+    color:#38bdf8;
 }
 
-/* HEADER */
-.header{
-  display:flex;
-  align-items:center;
-  gap:15px;
-  padding:20px;
-  justify-content:center;
-  flex-wrap:wrap;
+.filter-box{
+    background:#1e293b;
+    padding:15px;
+    border-radius:10px;
+    margin-bottom:20px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
 }
 
-.logo{
-  width:55px;
-  filter: drop-shadow(0 0 10px #00f7ff)
-          drop-shadow(0 0 20px #00f7ff);
-  animation: glow 2s infinite alternate;
+select,input,button{
+    padding:8px;
+    border-radius:5px;
+    border:none;
 }
 
-@keyframes glow{
-  from{ filter: drop-shadow(0 0 5px #00f7ff);}
-  to{ filter: drop-shadow(0 0 25px #00f7ff);}
-}
-
-.title{
-  font-size:26px;
-  color:#00f7ff;
-  text-shadow:0 0 10px #00f7ff,0 0 30px #00f7ff;
-}
-
-/* DESCRIPTION */
-.desc{
-  text-align:center;
-  padding:0 15px 15px;
-  color:#aaa;
-  font-size:13px;
-}
-
-/* SEARCH */
-.search-box{
-  text-align:center;
-  margin-bottom:20px;
-}
-
-.search-box input{
-  padding:12px;
-  width:300px;
-  max-width:90%;
-  border-radius:10px;
-  border:none;
-  background:#111;
-  color:#00f7ff;
-  box-shadow:0 0 10px #00f7ff;
-}
-
-/* TABLE */
-.container{
-  padding:10px;
+button{
+    background:#22c55e;
+    color:white;
+    cursor:pointer;
 }
 
 table{
-  width:100%;
-  border-collapse:collapse;
+    width:100%;
+    border-collapse:collapse;
+    background:#1e293b;
+}
+
+th,td{
+    padding:10px;
+    border-bottom:1px solid #334155;
+    text-align:center;
 }
 
 th{
-  background:#111;
-  color:#00f7ff;
-  padding:12px;
-  text-shadow:0 0 5px #00f7ff;
+    background:#334155;
 }
 
-td{
-  padding:10px;
-  text-align:center;
-  border-bottom:1px solid #222;
-}
-
-tr:hover{
-  background:rgba(0,247,255,0.1);
-  box-shadow:0 0 10px #00f7ff55;
-}
-
-/* FACEBOOK BUTTON */
-.fb-btn{
-  display:inline-block;
-  padding:6px 10px;
-  background:#0a0a0a;
-  border:1px solid #00f7ff;
-  border-radius:6px;
-  color:#00f7ff;
-  transition:0.3s;
-}
-
-.fb-btn:hover{
-  background:#00f7ff;
-  color:#000;
-  box-shadow:0 0 10px #00f7ff;
-}
-
-/* MOBILE */
-@media(max-width:768px){
-  table,thead,tbody,th,td,tr{
-    display:block;
-  }
-
-  tr{
-    margin-bottom:15px;
-    background:#111;
-    border-radius:10px;
-    padding:10px;
-    box-shadow:0 0 10px #00f7ff33;
-  }
-
-  td{
-    text-align:left;
-    padding:6px;
-  }
-
-  td::before{
-    content:attr(data-label);
-    color:#00f7ff;
-    font-weight:bold;
-    display:block;
-  }
-
-  th{display:none;}
-}
 </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
-<div class="header">
-  <img src="https://i.imgur.com/LY3Bb9m.png" class="logo">
-  <div class="title">GOAT FC PLAY CARD</div>
+<h1>🐐 Goat FC Match Log Viewer</h1>
+
+<div class="filter-box">
+
+<select id="matchType">
+<option value="">All Match Type</option>
+<option>Friendly</option>
+<option>Solo Tournament</option>
+<option>Bid Tournament</option>
+<option>League</option>
+<option>Co-op</option>
+</select>
+
+<input type="date" id="startDate">
+<input type="date" id="endDate">
+
+<button onclick="loadData()">Apply Filter</button>
+
 </div>
 
-<!-- DESCRIPTION -->
-<div class="desc">
-  Official GOAT FC tournament player database. Search players using Club ID and view their registered game details instantly.
-</div>
-
-<!-- SEARCH -->
-<div class="search-box">
-  <input type="text" id="searchInput" placeholder="Search by Club ID...">
-</div>
-
-<!-- TABLE -->
-<div class="container">
 <table>
 <thead>
 <tr>
-<th>Name</th>
-<th>Club ID</th>
-<th>KONAMI ID</th>
-<th>Device</th>
-<th>Facebook</th>
+<th>Date</th>
+<th>Match Type</th>
+<th>P1</th>
+<th>P2</th>
+<th>Score</th>
+<th>Points</th>
+<th>Goals</th>
 </tr>
 </thead>
+
 <tbody id="tableBody"></tbody>
 </table>
-</div>
 
 <script>
-const csvURL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRxNxMgcwsp3k8B9jqnfObnnRfhSX3vUcEOuaPTsyEMaEVOZKE9OIcLiMQRJHHkAQiJWn-msKE6Cs80/pub?output=csv";
 
-let players=[];
+const API_URL = "https://opensheet.elk.sh/1DSPKPaU1ZQYbFM4iYbE1VXgDAXU-FCT7--QhYJsNf1M/Points_Calc";
 
-/* LOAD DATA */
-function loadData(){
-Papa.parse(csvURL,{
-download:true,
-header:true,
-skipEmptyLines:true,
-complete:function(res){
-players=res.data;
-render(players);
+async function loadData(){
+    const res = await fetch(API_URL);
+    const data = await res.json();
+
+    const type = document.getElementById("matchType").value;
+    const start = document.getElementById("startDate").value;
+    const end = document.getElementById("endDate").value;
+
+    const tbody = document.getElementById("tableBody");
+    tbody.innerHTML = "";
+
+    data.forEach(row => {
+
+        // Approved filter
+        if(row.Approved.toLowerCase() !== "yes") return;
+
+        // Match type filter
+        if(type && row.Match_Type !== type) return;
+
+        // Date filter
+        const matchDate = new Date(row.Match_Date);
+        if(start && matchDate < new Date(start)) return;
+        if(end && matchDate > new Date(end)) return;
+
+        const tr = `
+        <tr>
+            <td>${row.Match_Date}</td>
+            <td>${row.Match_Type}</td>
+            <td>${row.P1_ID}</td>
+            <td>${row.P2_ID}</td>
+            <td>${row.P1_Score} - ${row.P2_Score}</td>
+            <td>${row.P1_Point} - ${row.P2_Point}</td>
+            <td>${row.P1_Goal} - ${row.P2_Goal}</td>
+        </tr>
+        `;
+
+        tbody.innerHTML += tr;
+    });
 }
-});
-}
 
-/* RENDER */
-function render(data){
-const tbody=document.getElementById("tableBody");
-tbody.innerHTML="";
-
-data.forEach(p=>{
-tbody.innerHTML+=`
-<tr>
-<td data-label="Name">${p["Player Name"]||""}</td>
-<td data-label="Club ID">${p["Your Club ID"]||""}</td>
-<td data-label="KONAMI ID">${p["KONAMI ID"]||""}</td>
-<td data-label="Device">${p["DEVICE NAME"]||""}</td>
-<td data-label="Facebook">
-<a href="${p["Facebook URL"]}" target="_blank" class="fb-btn">
-<i class="fab fa-facebook-f"></i>
-</a>
-</td>
-</tr>`;
-});
-}
-
-/* SEARCH */
-document.getElementById("searchInput").addEventListener("keyup",function(){
-let val=this.value.toLowerCase();
-let filtered=players.filter(p=>
-(p["Your Club ID"]||"").toLowerCase().includes(val)
-);
-render(filtered);
-});
-
-/* INITIAL LOAD */
+// Initial load
 loadData();
 
-/* AUTO REFRESH 30s */
-setInterval(loadData,30000);
 </script>
 
 </body>

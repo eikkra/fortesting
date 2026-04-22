@@ -6,115 +6,61 @@
 <title>GOAT FC MATCH LOG</title>
 
 <style>
-body{
-    margin:0;
-    font-family:'Segoe UI',sans-serif;
-    background:#020617;
-    color:#e2e8f0;
-}
+body{margin:0;font-family:sans-serif;background:#020617;color:#e2e8f0}
 
 /* HEADER */
-.header{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    gap:8px;
-    padding:10px;
-}
-.header img{width:35px;}
-.header h1{
-    font-size:16px;
-    color:#00f5ff;
-    text-shadow:0 0 10px #00f5ff;
-}
+.header{display:flex;justify-content:center;align-items:center;gap:8px;padding:10px}
+.header img{width:35px}
+.header h1{font-size:15px;color:#00f5ff;text-shadow:0 0 10px #00f5ff}
 
-/* DESC */
-.desc{
-    text-align:center;
-    font-size:12px;
-    color:#94a3b8;
-    margin-bottom:5px;
-}
+.desc{text-align:center;font-size:11px;color:#94a3b8}
 
-/* TABS */
-.tabs{
-    display:flex;
-    justify-content:center;
-    gap:6px;
-}
-.tab{
-    padding:5px 12px;
-    font-size:12px;
-    border:1px solid #00f5ff;
-    border-radius:5px;
-    color:#00f5ff;
-    cursor:pointer;
-}
-.active{background:#00f5ff;color:black;}
+/* TAB */
+.tabs{display:flex;justify-content:center;gap:6px}
+.tab{padding:5px 10px;border:1px solid #00f5ff;border-radius:5px;color:#00f5ff;font-size:11px;cursor:pointer}
+.active{background:#00f5ff;color:black}
 
 /* FILTER */
-.filter-box{
-    display:flex;
-    gap:5px;
-    padding:8px;
-    justify-content:center;
-    overflow-x:auto;
-}
-select,input,button{
-    padding:5px;
-    font-size:11px;
-    border-radius:5px;
-    border:1px solid #00f5ff;
-    background:black;
-    color:#00f5ff;
-}
-button{background:#00f5ff;color:black;}
+.filter{display:flex;gap:5px;padding:8px;justify-content:center;overflow:auto}
+select,input,button{padding:5px;font-size:11px;border:1px solid #00f5ff;background:black;color:#00f5ff;border-radius:5px}
+button{background:#00f5ff;color:black}
 
 /* TABLE */
-.container{max-height:65vh;overflow:auto;}
-table{width:100%;border-collapse:collapse;table-layout:fixed;}
-thead{position:sticky;top:0;background:#020617;}
-th,td{
-    padding:6px;
-    text-align:center;
-    white-space:nowrap;
-    font-size:11px;
-}
-th{color:#00f5ff;border-bottom:2px solid #00f5ff;}
-tr{border-bottom:1px solid #0f172a;}
+.container{max-height:65vh;overflow:auto}
+table{width:100%;border-collapse:collapse;table-layout:fixed}
+thead{position:sticky;top:0;background:#020617}
+th,td{padding:6px;text-align:center;font-size:11px;white-space:nowrap}
+th{color:#00f5ff;border-bottom:2px solid #00f5ff}
 
-.win{color:#22c55e;}
-.loss{color:#ef4444;}
-.draw{color:#facc15;}
-.gold{color:gold;text-shadow:0 0 8px gold;}
+.win{color:#22c55e}
+.loss{color:#ef4444}
+.draw{color:#facc15}
+.gold{color:gold;text-shadow:0 0 8px gold}
 
 /* STATS */
-.stats{display:none;padding:10px;}
-.search-box{text-align:center;margin-bottom:10px;}
-.search-box input{
-    width:80%;
-    max-width:300px;
-}
-
-/* CARD */
+.stats{display:none;padding:10px}
 .card{
     border:1px solid #00f5ff;
-    border-radius:10px;
-    padding:12px;
     margin-bottom:10px;
+    padding:10px;
+    border-radius:10px;
     text-align:center;
-    box-shadow:0 0 10px #00f5ff;
-    background:linear-gradient(145deg,#020617,#0f172a);
+    background:linear-gradient(135deg,#020617,#020617,#001f2f);
+    box-shadow:0 0 15px #00f5ff;
+    animation:fade 0.4s ease;
 }
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1}}
+
 .club{
-    color:#00f5ff;
     font-weight:bold;
-    text-shadow:0 0 8px #00f5ff;
+    color:#00f5ff;
+    text-shadow:0 0 10px #00f5ff;
+    margin-bottom:5px;
 }
 
 /* MOBILE */
 @media(max-width:768px){
-    th,td{font-size:11px;}
+    th,td{font-size:10px}
 }
 </style>
 </head>
@@ -122,21 +68,19 @@ tr{border-bottom:1px solid #0f172a;}
 <body>
 
 <div class="header">
-    <img src="https://i.imgur.com/LY3Bb9m.png">
-    <h1>GOAT FC MATCH LOG</h1>
+<img src="https://i.imgur.com/LY3Bb9m.png">
+<h1>GOAT FC MATCH LOG</h1>
 </div>
 
-<div class="desc">
-Live approved match logs and player performance statistics.
-</div>
+<div class="desc">Live approved match logs & player statistics</div>
 
 <div class="tabs">
-    <div class="tab active" onclick="showTab('log',this)">Match Log</div>
-    <div class="tab" onclick="showTab('stats',this)">Statistics</div>
+<div class="tab active" onclick="tab('log',this)">Log</div>
+<div class="tab" onclick="tab('stats',this)">Stats</div>
 </div>
 
 <!-- FILTER -->
-<div class="filter-box" id="filterBox">
+<div class="filter" id="filterBox">
 <select id="type">
 <option value="">All</option>
 <option value="Friendly">Friendly</option>
@@ -147,7 +91,7 @@ Live approved match logs and player performance statistics.
 </select>
 <input type="date" id="start">
 <input type="date" id="end">
-<button onclick="applyFilter()">Filter</button>
+<button onclick="filter()">Filter</button>
 </div>
 
 <!-- LOG -->
@@ -168,12 +112,7 @@ Live approved match logs and player performance statistics.
 </div>
 
 <!-- STATS -->
-<div class="stats" id="stats">
-<div class="search-box">
-<input type="text" id="search" placeholder="Search Club ID" oninput="generateStats()">
-</div>
-<div id="statsData"></div>
-</div>
+<div class="stats" id="stats"></div>
 
 <script>
 
@@ -189,15 +128,14 @@ function parseDate(s){
     }catch{return null;}
 }
 
-// LOAD
+// LOAD (FIXED FAST)
 async function load(){
-    let t=await fetch(URL).then(r=>r.text());
+    let t=await fetch(URL+"?t="+Date.now()).then(r=>r.text());
     let lines=t.split("\n");
 
     data=lines.slice(1).map(l=>{
         let r=l.split(",");
         if(r.length<12) return null;
-
         let d=parseDate(r[11]);
         if(!d) return null;
 
@@ -213,7 +151,7 @@ async function load(){
     render(data);
 }
 
-// LOG RENDER
+// RENDER LOG
 function render(arr){
     let h="";
     arr.slice(0,500).forEach(r=>{
@@ -231,12 +169,11 @@ function render(arr){
         <td>${r.pt1}-${r.pt2}</td>
         </tr>`;
     });
-
     document.getElementById("body").innerHTML=h;
 }
 
 // FILTER
-function applyFilter(){
+function filter(){
     let t=document.getElementById("type").value;
     let s=document.getElementById("start").value;
     let e=document.getElementById("end").value;
@@ -251,31 +188,32 @@ function applyFilter(){
 }
 
 // TAB
-function showTab(tab,el){
+function tab(t,el){
     document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
     el.classList.add("active");
 
-    document.getElementById("log").style.display=tab==="log"?"block":"none";
-    document.getElementById("filterBox").style.display=tab==="log"?"flex":"none";
-    document.getElementById("stats").style.display=tab==="stats"?"block":"none";
+    document.getElementById("log").style.display=t==="log"?"block":"none";
+    document.getElementById("filterBox").style.display=t==="log"?"flex":"none";
+    document.getElementById("stats").style.display=t==="stats"?"block":"none";
 
-    if(tab==="stats") generateStats();
+    if(t==="stats") stats();
 }
 
-// STATS
-function generateStats(){
-    let q=document.getElementById("search").value.toLowerCase();
+// STATS (SORT BY WIN)
+function stats(){
     let map={};
 
     data.forEach(r=>{
         [r.p1,r.p2].forEach((p,i)=>{
-            if(!map[p]) map[p]={w:0,l:0,d:0,gs:0,gc:0};
+            if(!map[p]) map[p]={w:0,l:0,d:0,gs:0,gc:0,s7:0};
 
-            let me=i===0?r.s1:r.s2;
-            let op=i===0?r.s2:r.s1;
+            let me=i? r.s2:r.s1;
+            let op=i? r.s1:r.s2;
 
             map[p].gs+=me;
             map[p].gc+=op;
+
+            if(me>=7) map[p].s7++;
 
             if(me>op) map[p].w++;
             else if(me<op) map[p].l++;
@@ -287,24 +225,19 @@ function generateStats(){
 
     let h="";
     sorted.forEach(([p,s])=>{
-        if(q && !p.toLowerCase().includes(q)) return;
-
         h+=`
         <div class="card">
-            <div class="club">Club ID: ${p}</div><br>
-            🟢 Wins: ${s.w}<br>
-            🔴 Loss: ${s.l}<br>
-            🟡 Draw: ${s.d}<br><br>
-            ⚽ Goals Scored: ${s.gs}<br>
-            🥅 Goals Conceded: ${s.gc}
+        <div class="club">Club ID: ${p}</div>
+        🟢 Win: ${s.w} | 🔴 Loss: ${s.l} | 🟡 Draw: ${s.d}<br>
+        ⚽ Scored: ${s.gs} | 🥅 Conceded: ${s.gc}<br>
+        👑 7+ Goals: ${s.s7}
         </div>`;
     });
 
-    document.getElementById("statsData").innerHTML=h;
+    document.getElementById("stats").innerHTML=h;
 }
 
 load();
-
 </script>
 
 </body>

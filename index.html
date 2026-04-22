@@ -3,144 +3,319 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Goat FC Match Log</title>
+<title>GOAT FC MATCH LOG</title>
 
 <style>
 body{
-    font-family: Arial;
-    background:#0f172a;
-    color:white;
-    padding:20px;
-}
-h1{
-    text-align:center;
-    color:#38bdf8;
+    margin:0;
+    font-family:'Segoe UI',sans-serif;
+    background:#020617;
+    color:#e2e8f0;
 }
 
-.filter-box{
-    background:#1e293b;
-    padding:15px;
-    border-radius:10px;
-    margin-bottom:20px;
+/* HEADER */
+.header{
     display:flex;
-    flex-wrap:wrap;
+    justify-content:center;
+    align-items:center;
     gap:10px;
+    padding:10px;
+}
+.header img{width:40px;}
+.header h1{
+    color:#00f5ff;
+    text-shadow:0 0 15px #00f5ff,0 0 25px #00f5ff;
+}
+
+/* TABS */
+.tabs{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    margin-top:5px;
+}
+.tab-btn{
+    padding:6px 12px;
+    border:1px solid #00f5ff;
+    background:black;
+    color:#00f5ff;
+    border-radius:6px;
+    cursor:pointer;
+}
+.active-tab{
+    background:#00f5ff;
+    color:black;
+}
+
+/* DESC */
+.desc{
+    text-align:center;
+    font-size:12px;
+    color:#94a3b8;
+}
+
+/* FILTER */
+.filter-box{
+    display:flex;
+    justify-content:center;
+    gap:6px;
+    flex-wrap:nowrap;
+    padding:10px;
+    overflow-x:auto;
 }
 
 select,input,button{
-    padding:8px;
-    border-radius:5px;
-    border:none;
+    padding:6px;
+    border-radius:6px;
+    border:1px solid #00f5ff;
+    background:black;
+    color:#00f5ff;
+    font-size:11px;
 }
 
 button{
-    background:#22c55e;
-    color:white;
-    cursor:pointer;
+    background:#00f5ff;
+    color:black;
+    font-weight:bold;
+}
+
+/* TABLE */
+.container{
+    max-height:70vh;
+    overflow:auto;
+    padding:5px;
 }
 
 table{
     width:100%;
     border-collapse:collapse;
-    background:#1e293b;
+    table-layout:fixed;
 }
 
-th,td{
-    padding:10px;
-    border-bottom:1px solid #334155;
-    text-align:center;
+thead{
+    position:sticky;
+    top:0;
+    background:#020617;
 }
 
 th{
-    background:#334155;
+    color:#00f5ff;
+    padding:8px;
+    border-bottom:2px solid #00f5ff;
+    white-space:nowrap;
 }
 
+td{
+    padding:8px;
+    text-align:center;
+    white-space:nowrap;
+}
+
+tr{
+    border-bottom:1px solid #0f172a;
+}
+
+/* RESULT COLORS */
+.win{color:#22c55e;}
+.loss{color:#ef4444;}
+.draw{color:#facc15;}
+.gold{color:gold;text-shadow:0 0 10px gold;}
+
+/* STAT CARD */
+.stats-container{
+    display:none;
+    padding:10px;
+}
+
+.card{
+    border:1px solid #00f5ff;
+    border-radius:8px;
+    padding:10px;
+    margin-bottom:8px;
+    box-shadow:0 0 10px #00f5ff;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+    th,td{font-size:11px;}
+}
 </style>
 </head>
 
 <body>
 
-<h1>🐐 Goat FC Match Log Viewer</h1>
+<div class="header">
+    <img src="https://i.imgur.com/LY3Bb9m.png">
+    <h1>GOAT FC MATCH LOG</h1>
+</div>
 
-<div class="filter-box">
+<!-- TABS -->
+<div class="tabs">
+    <div class="tab-btn active-tab" onclick="showTab('log')">Match Log</div>
+    <div class="tab-btn" onclick="showTab('stats')">Statistics</div>
+</div>
 
+<div class="desc">
+Live approved match logs & player statistics.
+</div>
+
+<!-- FILTER -->
+<div class="filter-box" id="filterBox">
 <select id="matchType">
-<option value="">All Match Type</option>
-<option>Friendly</option>
-<option>Solo Tournament</option>
-<option>Bid Tournament</option>
-<option>League</option>
-<option>Co-op</option>
+<option value="">All</option>
+<option value="Friendly">Friendly</option>
+<option value="Solo Tournament">Solo</option>
+<option value="Bid Tournament">Bid</option>
+<option value="League">League</option>
+<option value="Co-op">Co-op</option>
 </select>
 
 <input type="date" id="startDate">
 <input type="date" id="endDate">
 
-<button onclick="loadData()">Apply Filter</button>
-
+<button onclick="applyFilter()">Filter</button>
 </div>
 
+<!-- MATCH LOG -->
+<div class="container" id="logSection">
 <table>
 <thead>
 <tr>
 <th>Date</th>
-<th>Match Type</th>
-<th>P1</th>
-<th>P2</th>
+<th>Type</th>
+<th>Player 1</th>
+<th>Player 2</th>
 <th>Score</th>
 <th>Points</th>
-<th>Goals</th>
 </tr>
 </thead>
-
 <tbody id="tableBody"></tbody>
 </table>
+</div>
+
+<!-- STATS -->
+<div class="stats-container" id="statsSection"></div>
 
 <script>
 
-const API_URL = "https://opensheet.elk.sh/1DSPKPaU1ZQYbFM4iYbE1VXgDAXU-FCT7--QhYJsNf1M/Points_Calc";
+const CSV_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv";
 
-async function loadData(){
-    const res = await fetch(API_URL);
-    const data = await res.json();
+let allData=[];
 
-    const type = document.getElementById("matchType").value;
-    const start = document.getElementById("startDate").value;
-    const end = document.getElementById("endDate").value;
+// TAB SWITCH
+function showTab(tab){
+    document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active-tab"));
+    event.target.classList.add("active-tab");
 
-    const tbody = document.getElementById("tableBody");
-    tbody.innerHTML = "";
+    document.getElementById("logSection").style.display = tab==="log"?"block":"none";
+    document.getElementById("filterBox").style.display = tab==="log"?"flex":"none";
+    document.getElementById("statsSection").style.display = tab==="stats"?"block":"none";
 
-    data.forEach(row => {
-
-        // Approved filter
-        if(row.Approved.toLowerCase() !== "yes") return;
-
-        // Match type filter
-        if(type && row.Match_Type !== type) return;
-
-        // Date filter
-        const matchDate = new Date(row.Match_Date);
-        if(start && matchDate < new Date(start)) return;
-        if(end && matchDate > new Date(end)) return;
-
-        const tr = `
-        <tr>
-            <td>${row.Match_Date}</td>
-            <td>${row.Match_Type}</td>
-            <td>${row.P1_ID}</td>
-            <td>${row.P2_ID}</td>
-            <td>${row.P1_Score} - ${row.P2_Score}</td>
-            <td>${row.P1_Point} - ${row.P2_Point}</td>
-            <td>${row.P1_Goal} - ${row.P2_Goal}</td>
-        </tr>
-        `;
-
-        tbody.innerHTML += tr;
-    });
+    if(tab==="stats") generateStats();
 }
 
-// Initial load
+// DATE PARSE
+function parseDate(str){
+    let d=str.split(" ")[0].split("/");
+    return new Date(d[2],d[0]-1,d[1]);
+}
+
+// CSV
+function fastCSV(csv){
+    let lines=csv.split("\n"),res=[];
+    for(let i=1;i<lines.length;i++){
+        let r=lines[i].split(",");
+        if(r.length<12) continue;
+        let date=parseDate(r[11]);
+        if(!date) continue;
+
+        res.push({
+            date,type:r[2],p1:r[0],p2:r[1],
+            s1:+r[3],s2:+r[4],
+            pt1:+r[5],pt2:+r[6],
+            approved:r[9].toLowerCase()
+        });
+    }
+    return res;
+}
+
+// LOAD
+async function loadData(){
+    let res=await fetch(CSV_URL);
+    let text=await res.text();
+    allData=fastCSV(text).filter(r=>r.approved==="yes");
+    render(allData);
+}
+
+// FILTER
+function applyFilter(){
+    let type=document.getElementById("matchType").value;
+    let start=document.getElementById("startDate").value?new Date(document.getElementById("startDate").value):null;
+    let end=document.getElementById("endDate").value?new Date(document.getElementById("endDate").value):null;
+
+    let f=allData.filter(r=>
+        (!type||r.type===type)&&
+        (!start||r.date>=start)&&
+        (!end||r.date<=end)
+    );
+
+    render(f);
+}
+
+// RENDER LOG
+function render(data){
+    let html="";
+    data.slice(0,500).forEach(r=>{
+        let p1="draw",p2="draw";
+        if(r.s1>r.s2){p1="win";p2="loss";}
+        else if(r.s1<r.s2){p1="loss";p2="win";}
+        let gold=(r.s1>=7||r.s2>=7)?"gold":"";
+
+        html+=`<tr>
+        <td>${r.date.toISOString().slice(0,10)}</td>
+        <td>${r.type.replace(" Tournament","")}</td>
+        <td class="${p1}">${r.p1}</td>
+        <td class="${p2}">${r.p2}</td>
+        <td class="${gold}">${r.s1}-${r.s2}</td>
+        <td>${r.pt1}-${r.pt2}</td>
+        </tr>`;
+    });
+    document.getElementById("tableBody").innerHTML=html;
+}
+
+// STATS
+function generateStats(){
+    let stats={};
+
+    allData.forEach(r=>{
+        if(!stats[r.p1]) stats[r.p1]={w:0,l:0,d:0,gs:0,gc:0};
+        if(!stats[r.p2]) stats[r.p2]={w:0,l:0,d:0,gs:0,gc:0};
+
+        stats[r.p1].gs+=r.s1;
+        stats[r.p1].gc+=r.s2;
+
+        stats[r.p2].gs+=r.s2;
+        stats[r.p2].gc+=r.s1;
+
+        if(r.s1>r.s2){stats[r.p1].w++;stats[r.p2].l++;}
+        else if(r.s1<r.s2){stats[r.p2].w++;stats[r.p1].l++;}
+        else{stats[r.p1].d++;stats[r.p2].d++;}
+    });
+
+    let html="";
+    Object.keys(stats).forEach(p=>{
+        let s=stats[p];
+        html+=`
+        <div class="card">
+            <b>${p}</b><br>
+            🟢 Win: ${s.w} | 🔴 Loss: ${s.l} | 🟡 Draw: ${s.d}<br>
+            ⚽ Scored: ${s.gs} | 🥅 Conceded: ${s.gc}
+        </div>`;
+    });
+
+    document.getElementById("statsSection").innerHTML=html;
+}
+
 loadData();
 
 </script>

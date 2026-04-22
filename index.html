@@ -8,27 +8,36 @@
 <style>
 body{
     margin:0;
-    font-family:sans-serif;
+    font-family:'Segoe UI',sans-serif;
     background:#020617;
     color:white;
 }
 
 /* HEADER */
-.header{text-align:center;padding:10px;}
-.logo{
-    width:60px;
+.header{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:8px;
+    padding:10px;
+}
+.header img{
+    width:40px;
     filter:drop-shadow(0 0 10px #00f5ff);
 }
-.title{
-    color:#00f5ff;
+.header h1{
     font-size:18px;
-    text-shadow:0 0 10px #00f5ff;
+    color:#00f5ff;
+    text-shadow:0 0 10px #00f5ff,0 0 20px #00f5ff;
 }
 
+/* DESCRIPTION */
 .desc{
     text-align:center;
-    font-size:11px;
+    font-size:12px;
     color:#94a3b8;
+    margin-top:-5px;
+    margin-bottom:8px;
 }
 
 /* SEARCH */
@@ -36,40 +45,65 @@ body{
 .search input{
     padding:8px;
     width:85%;
-    max-width:300px;
+    max-width:320px;
+    border-radius:8px;
     border:1px solid #00f5ff;
     background:black;
     color:#00f5ff;
+    box-shadow:0 0 10px #00f5ff;
 }
 
 /* CARD */
 .card{
-    margin:10px;
+    margin:12px;
     padding:12px;
+    border-radius:14px;
+    background:linear-gradient(145deg,#020617,#001f2f);
     border:1px solid #00f5ff;
-    border-radius:10px;
-    background:#001f2f;
-    box-shadow:0 0 10px #00f5ff;
+    box-shadow:0 0 20px #00f5ff;
     text-align:center;
 }
 
 .club{
-    color:#00f5ff;
+    font-size:15px;
     font-weight:bold;
     margin-bottom:10px;
+    color:#00f5ff;
+    text-shadow:0 0 10px #00f5ff,0 0 25px #00f5ff;
 }
 
 /* GRID */
 .grid{
     display:grid;
     grid-template-columns:repeat(3,1fr);
-    gap:5px;
+    gap:6px;
 }
+
 .box{
-    background:#020617;
-    border:1px solid #00f5ff;
-    padding:5px;
+    padding:6px;
+    border-radius:8px;
     font-size:11px;
+    background:#001f2f;
+    border:1px solid #00f5ff;
+    box-shadow:0 0 8px #00f5ff inset;
+}
+
+/* BUTTONS */
+.btns{
+    margin-top:10px;
+    display:flex;
+    justify-content:center;
+    gap:10px;
+}
+.btn{
+    padding:6px 10px;
+    border:none;
+    border-radius:6px;
+    background:#00f5ff;
+    color:black;
+    font-size:11px;
+    cursor:pointer;
+    box-shadow:0 0 10px #00f5ff;
 }
 
 /* MOBILE */
@@ -82,17 +116,19 @@ body{
 <body>
 
 <div class="header">
-<img src="https://i.imgur.com/LY3Bb9m.png" class="logo">
-<div class="title">GOAT FC STATISTICS</div>
+<img src="https://i.imgur.com/LY3Bb9m.png">
+<h1>GOAT FC STATISTICS</h1>
 </div>
 
-<div class="desc">Live approved stats • Auto updated</div>
+<div class="desc">
+Live approved match statistics — auto updated from official match records.
+</div>
 
 <div class="search">
-<input type="text" id="search" placeholder="Search Club ID" oninput="render()">
+<input type="text" id="search" placeholder="Search Club ID (e.g. GFC001)" oninput="render()">
 </div>
 
-<div id="data">Loading...</div>
+<div id="data"></div>
 
 <script>
 
@@ -100,134 +136,117 @@ const URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLa
 
 let data=[];
 
-// FIXED CSV PARSER (MAIN FIX)
-function parseCSV(text){
-    const rows = text.trim().split("\n");
-    const result=[];
-
-    for(let i=1;i<rows.length;i++){
-        let cols = rows[i].split(",");
-
-        // skip invalid rows
-        if(cols.length < 12) continue;
-
-        if((cols[9]||"").toLowerCase().trim() !== "yes") continue;
-
-        result.push({
-            p1: cols[0].trim(),
-            p2: cols[1].trim(),
-            type: cols[2].trim(),
-            s1: Number(cols[3])||0,
-            s2: Number(cols[4])||0
-        });
-    }
-
-    return result;
+// SMART ID NORMALIZE
+function normalize(id){
+    return (id||"").toLowerCase().replace(/[^a-z0-9]/g,'');
 }
 
-// LOAD (ULTRA SAFE)
+// SAFE CSV PARSE (IMPORTANT FIX)
+function parseCSV(text){
+    const rows = text.trim().split("\n");
+    return rows.slice(1).map(r=>{
+        let c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/); // fix comma issue
+        return c.map(x=>x.replace(/"/g,'').trim());
+    });
+}
+
+// LOAD DATA
 async function load(){
     try{
-        let res = await fetch(URL + "&t=" + Date.now());
-        let text = await res.text();
+        let res = await fetch(URL+"?t="+Date.now());
+        let txt = await res.text();
 
-        let rows = parseCSV(text);
+        let rows = parseCSV(txt);
 
-        if(rows.length === 0){
-            document.getElementById("data").innerHTML="No approved data found";
-            return;
-        }
-
-        let map={};
-
-        rows.forEach(r=>{
-            [[r.p1,r.s1,r.s2],[r.p2,r.s2,r.s1]].forEach(([id,me,op])=>{
-
-                if(!id) return;
-
-                if(!map[id]) map[id]={w:0,l:0,d:0,m:0,gs:0,gc:0,s7:0,f:0,o:0};
-
-                map[id].m++;
-                map[id].gs+=me;
-                map[id].gc+=op;
-
-                if(me>=7) map[id].s7++;
-
-                if(r.type==="Friendly") map[id].f++;
-                else map[id].o++;
-
-                if(me>op) map[id].w++;
-                else if(me<op) map[id].l++;
-                else map[id].d++;
-            });
-        });
-
-        data = Object.keys(map).map(id=>{
-            let v=map[id];
-            return{
-                id,
-                ...v,
-                winp: v.m? (v.w/v.m*100):0,
-                rate: v.m? (v.gs/v.m):0,
-                diff: v.gs-v.gc
-            }
-        });
+        data = rows.map(c=>({
+            id:c[0],
+            match:+c[1],
+            win:+c[2],
+            loss:+c[3],
+            draw:+c[4],
+            winp:+c[5],
+            gs:+c[7],
+            gc:+c[8],
+            diff:+c[9],
+            rate:+c[10],
+            seven:+c[11],
+            friendly:+c[12],
+            other:+c[13]
+        })).filter(x=>x.id);
 
         render();
 
     }catch(e){
-        document.getElementById("data").innerHTML="Error loading data";
-        console.error(e);
+        document.getElementById("data").innerHTML="⚠️ Data load failed";
     }
-}
-
-// SEARCH NORMALIZE
-function normalize(s){
-    return s.toLowerCase().replace(/[^a-z0-9]/g,"");
 }
 
 // RENDER
 function render(){
     let q = normalize(document.getElementById("search").value);
 
-    let sorted = [...data].sort((a,b)=>b.w-a.w);
+    let sorted = [...data].sort((a,b)=>b.win-a.win);
 
     let html="";
-
     sorted.forEach(p=>{
         if(q && !normalize(p.id).includes(q)) return;
 
         html+=`
         <div class="card">
-        <div class="club">Player ID: ${p.id}</div>
+            <div class="club">Player ID: ${p.id}</div>
 
-        <div class="grid">
-            <div class="box">Win<br>${p.w}</div>
-            <div class="box">Loss<br>${p.l}</div>
-            <div class="box">Draw<br>${p.d}</div>
+            <div class="grid">
+                <div class="box">🟢 Win<br>${p.win}</div>
+                <div class="box">🔴 Loss<br>${p.loss}</div>
+                <div class="box">🟡 Draw<br>${p.draw}</div>
 
-            <div class="box">Match<br>${p.m}</div>
-            <div class="box">Win%<br>${p.winp.toFixed(1)}</div>
-            <div class="box">Rate<br>${p.rate.toFixed(2)}</div>
+                <div class="box">🎮 Match<br>${p.match}</div>
+                <div class="box">📊 Win%<br>${p.winp.toFixed(1)}</div>
+                <div class="box">⚽ Rate<br>${p.rate.toFixed(2)}</div>
 
-            <div class="box">Scored<br>${p.gs}</div>
-            <div class="box">Conceded<br>${p.gc}</div>
-            <div class="box">Difference<br>${p.diff}</div>
+                <div class="box">⚽ Scored<br>${p.gs}</div>
+                <div class="box">🥅 Conceded<br>${p.gc}</div>
+                <div class="box">📈 Difference<br>${p.diff}</div>
 
-            <div class="box">7+ Goals<br>${p.s7}</div>
-            <div class="box">Friendly<br>${p.f}</div>
-            <div class="box">Tournaments<br>${p.o}</div>
-        </div>
+                <div class="box">👑 7+ Goals<br>${p.seven}</div>
+                <div class="box">🤝 Friendly<br>${p.friendly}</div>
+                <div class="box">🏆 Tournaments<br>${p.other}</div>
+            </div>
+
+            <div class="btns">
+                <button class="btn" onclick="share('${p.id}')">Share</button>
+                <button class="btn" onclick="download(this)">Download</button>
+            </div>
         </div>`;
     });
 
-    document.getElementById("data").innerHTML = html || "No result found";
+    document.getElementById("data").innerHTML=html;
+}
+
+// SHARE
+function share(id){
+    let text="Check my GOAT FC stats: "+id;
+    navigator.clipboard.writeText(text);
+    alert("Copied!");
+}
+
+// DOWNLOAD
+function download(btn){
+    let card=btn.closest(".card");
+    html2canvas(card).then(canvas=>{
+        let link=document.createElement("a");
+        link.download="stats.png";
+        link.href=canvas.toDataURL();
+        link.click();
+    });
 }
 
 // START
 load();
 
 </script>
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
 </body>
 </html>

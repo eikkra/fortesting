@@ -22,26 +22,21 @@ body{
     padding:12px;
     flex-wrap:wrap;
 }
-
 .header img{
     width:42px;
     filter: drop-shadow(0 0 8px #00f5ff) drop-shadow(0 0 15px #00f5ff);
 }
-
 .header h1{
     font-size:20px;
     margin:0;
     color:#00f5ff;
     text-shadow:0 0 10px #00f5ff,0 0 25px #00f5ff;
 }
-
-/* DESCRIPTION */
 .desc{
     width:100%;
     text-align:center;
     font-size:12px;
     color:#94a3b8;
-    margin-top:4px;
 }
 
 /* SEARCH */
@@ -61,15 +56,34 @@ body{
     box-shadow:0 0 12px #00f5ff;
 }
 
+/* DATA GRID PC */
+#data{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    gap:10px;
+    padding:10px;
+}
+
 /* CARD */
 .card{
-    margin:12px;
     padding:14px;
     border-radius:16px;
     background:linear-gradient(145deg,#020617,#001f2f);
-    border:1px solid rgba(0,245,255,0.5);
-    box-shadow:0 0 25px rgba(0,245,255,0.3);
+    border:1px solid rgba(0,245,255,0.4);
+    box-shadow:0 0 20px rgba(0,245,255,0.25);
     text-align:center;
+}
+
+/* TOP 3 */
+.top3{
+    border:1px solid gold;
+    box-shadow:0 0 25px gold;
+}
+
+/* TOP 10 */
+.top10{
+    border:1px solid #a855f7;
+    box-shadow:0 0 20px #a855f7;
 }
 
 /* CLUB */
@@ -78,7 +92,7 @@ body{
     font-weight:bold;
     margin-bottom:12px;
     color:#00f5ff;
-    text-shadow:0 0 10px #00f5ff,0 0 25px #00f5ff;
+    text-shadow:0 0 10px #00f5ff;
 }
 
 /* GRID */
@@ -92,32 +106,41 @@ body{
 .box{
     padding:8px;
     border-radius:10px;
-    font-size:11px;
+    font-size:12px;
     background:rgba(0,245,255,0.08);
     border:1px solid rgba(0,245,255,0.4);
-    box-shadow:
-        0 0 8px rgba(0,245,255,0.6),
-        inset 0 0 6px rgba(0,245,255,0.5);
+    box-shadow:0 0 6px rgba(0,245,255,0.6);
     color:#e0faff;
-    font-weight:500;
 }
 
-/* MOBILE */
+/* MOBILE FIX */
 @media(max-width:768px){
-    .grid{grid-template-columns:repeat(2,1fr);}
-    .header h1{font-size:18px;}
+
+    #data{
+        display:block;
+        padding:6px;
+    }
+
+    .card{
+        margin-bottom:12px;
+        padding:12px;
+    }
+
+    .grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:6px;
+    }
+
+    .box{
+        font-size:11px;
+        padding:6px;
+    }
+
+    .club{
+        font-size:14px;
+    }
 }
 
-/* LARGE SCREEN */
-@media(min-width:900px){
-    #data{
-        display:grid;
-        grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-        gap:10px;
-        padding:10px;
-    }
-    .card{margin:5px;}
-}
 </style>
 </head>
 
@@ -132,7 +155,7 @@ Official performance dashboard showing wins, goals, win rate and match stats (Ap
 </div>
 
 <div class="search">
-<input type="text" id="search" placeholder="Search Club ID (e.g. GFC-001)" oninput="render()">
+<input type="text" id="search" placeholder="Search Club ID..." oninput="render()">
 </div>
 
 <div id="data"></div>
@@ -210,30 +233,34 @@ function render(){
 
     let html="";
 
-    sorted.forEach(([id,p])=>{
+    sorted.forEach(([id,p],index)=>{
 
         if(q && !normalize(id).includes(q)) return;
 
+        let cls="card";
+        if(index<3) cls+=" top3";
+        else if(index<10) cls+=" top10";
+
         html+=`
-        <div class="card">
+        <div class="${cls}">
             <div class="club">${id}</div>
 
             <div class="grid">
-                <div class="box">🟢 Win<br>${p.win}</div>
-                <div class="box">🔴 Loss<br>${p.loss}</div>
-                <div class="box">🟡 Draw<br>${p.draw}</div>
+                <div class="box">🟢 Win : ${p.win}</div>
+                <div class="box">🔴 Loss : ${p.loss}</div>
+                <div class="box">🟡 Draw : ${p.draw}</div>
 
-                <div class="box">🎮 Match<br>${p.match}</div>
-                <div class="box">📊 Win%<br>${p.winp.toFixed(1)}</div>
-                <div class="box">⚽ Rate<br>${p.rate.toFixed(2)}</div>
+                <div class="box">🎮 Match : ${p.match}</div>
+                <div class="box">📊 Win% : ${p.winp.toFixed(1)}</div>
+                <div class="box">⚽ Rate : ${p.rate.toFixed(2)}</div>
 
-                <div class="box">⚽ Scored<br>${p.gs}</div>
-                <div class="box">🥅 Conceded<br>${p.gc}</div>
-                <div class="box">📈 Diff<br>${p.diff}</div>
+                <div class="box">⚽ Scored : ${p.gs}</div>
+                <div class="box">🥅 Conceded : ${p.gc}</div>
+                <div class="box">📈 Diff : ${p.diff}</div>
 
-                <div class="box">👑 7+ Goals<br>${p.seven}</div>
-                <div class="box">🤝 Friendly<br>${p.friendly}</div>
-                <div class="box">🏆 Other<br>${p.other}</div>
+                <div class="box">👑 7+ Goals : ${p.seven}</div>
+                <div class="box">🤝 Friendly : ${p.friendly}</div>
+                <div class="box">🏆 Tournament : ${p.other}</div>
             </div>
         </div>`;
     });

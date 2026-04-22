@@ -18,7 +18,7 @@ body{
     display:flex;
     justify-content:center;
     align-items:center;
-    gap:8px;
+    gap:10px;
     padding:10px;
 }
 .header img{
@@ -28,7 +28,7 @@ body{
 .header h1{
     font-size:18px;
     color:#00f5ff;
-    text-shadow:0 0 10px #00f5ff,0 0 20px #00f5ff;
+    text-shadow:0 0 10px #00f5ff,0 0 25px #00f5ff;
 }
 
 /* DESCRIPTION */
@@ -36,12 +36,14 @@ body{
     text-align:center;
     font-size:12px;
     color:#94a3b8;
-    margin-top:-5px;
-    margin-bottom:8px;
+    margin-bottom:5px;
 }
 
 /* SEARCH */
-.search{text-align:center;margin:10px;}
+.search{
+    text-align:center;
+    margin:10px;
+}
 .search input{
     padding:8px;
     width:85%;
@@ -88,7 +90,7 @@ body{
     box-shadow:0 0 8px #00f5ff inset;
 }
 
-/* BUTTONS */
+/* BUTTON */
 .btns{
     margin-top:10px;
     display:flex;
@@ -103,7 +105,6 @@ body{
     color:black;
     font-size:11px;
     cursor:pointer;
-    box-shadow:0 0 10px #00f5ff;
 }
 
 /* MOBILE */
@@ -121,11 +122,11 @@ body{
 </div>
 
 <div class="desc">
-Live approved match statistics — auto updated from official match records.
+Live approved match statistics • Auto updated • Powered by Goat FC System
 </div>
 
 <div class="search">
-<input type="text" id="search" placeholder="Search Club ID (e.g. GFC001)" oninput="render()">
+<input type="text" id="search" placeholder="Search Club ID (GFC001 / GFC-001)" oninput="render()">
 </div>
 
 <div id="data"></div>
@@ -136,56 +137,69 @@ const URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLa
 
 let data=[];
 
-// SMART ID NORMALIZE
+// NORMALIZE SEARCH
 function normalize(id){
-    return (id||"").toLowerCase().replace(/[^a-z0-9]/g,'');
+    return id.toLowerCase().replace(/[^a-z0-9]/g,'');
 }
 
-// SAFE CSV PARSE (IMPORTANT FIX)
+// SAFE CSV PARSER (FIXED)
 function parseCSV(text){
-    const rows = text.trim().split("\n");
-    return rows.slice(1).map(r=>{
-        let c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/); // fix comma issue
-        return c.map(x=>x.replace(/"/g,'').trim());
+    return text.trim().split("\n").map(r=>{
+        let cols=[],cur="",inside=false;
+        for(let c of r){
+            if(c=='"') inside=!inside;
+            else if(c==',' && !inside){cols.push(cur);cur="";}
+            else cur+=c;
+        }
+        cols.push(cur);
+        return cols;
     });
 }
 
-// LOAD DATA
-async function load(){
+// LOAD WITH RETRY
+async function load(retry=0){
     try{
-        let res = await fetch(URL+"?t="+Date.now());
-        let txt = await res.text();
+        let res=await fetch(URL+"?t="+Date.now());
+        let text=await res.text();
 
-        let rows = parseCSV(txt);
+        let rows=parseCSV(text).slice(1);
 
-        data = rows.map(c=>({
-            id:c[0],
-            match:+c[1],
-            win:+c[2],
-            loss:+c[3],
-            draw:+c[4],
-            winp:+c[5],
-            gs:+c[7],
-            gc:+c[8],
-            diff:+c[9],
-            rate:+c[10],
-            seven:+c[11],
-            friendly:+c[12],
-            other:+c[13]
-        })).filter(x=>x.id);
+        data=rows.map(c=>{
+            if(c.length<14) return null;
+
+            // Approved filter (column 10 = index 9)
+            if((c[9]||"").toLowerCase()!=="yes") return null;
+
+            return{
+                id:c[0],
+                match:+c[1],
+                win:+c[2],
+                loss:+c[3],
+                draw:+c[4],
+                winp:+c[5],
+                gs:+c[7],
+                gc:+c[8],
+                diff:+c[9],
+                rate:+c[10],
+                seven:+c[11],
+                friendly:+c[12],
+                other:+c[13]
+            };
+        }).filter(x=>x);
 
         render();
 
     }catch(e){
-        document.getElementById("data").innerHTML="⚠️ Data load failed";
+        if(retry<3) setTimeout(()=>load(retry+1),1000);
+        else document.getElementById("data").innerHTML="⚠️ Data load failed";
     }
 }
 
 // RENDER
 function render(){
-    let q = normalize(document.getElementById("search").value);
+    let q=normalize(document.getElementById("search").value);
 
-    let sorted = [...data].sort((a,b)=>b.win-a.win);
+    let sorted=[...data].sort((a,b)=>b.win-a.win);
 
     let html="";
     sorted.forEach(p=>{
@@ -201,8 +215,8 @@ function render(){
                 <div class="box">🟡 Draw<br>${p.draw}</div>
 
                 <div class="box">🎮 Match<br>${p.match}</div>
-                <div class="box">📊 Win%<br>${p.winp.toFixed(1)}</div>
-                <div class="box">⚽ Rate<br>${p.rate.toFixed(2)}</div>
+                <div class="box">📊 Win%<br>${p.winp}</div>
+                <div class="box">⚽ Rate<br>${p.rate}</div>
 
                 <div class="box">⚽ Scored<br>${p.gs}</div>
                 <div class="box">🥅 Conceded<br>${p.gc}</div>
@@ -220,13 +234,12 @@ function render(){
         </div>`;
     });
 
-    document.getElementById("data").innerHTML=html;
+    document.getElementById("data").innerHTML=html || "No Data Found";
 }
 
 // SHARE
 function share(id){
-    let text="Check my GOAT FC stats: "+id;
-    navigator.clipboard.writeText(text);
+    navigator.clipboard.writeText("GOAT FC Stats: "+id);
     alert("Copied!");
 }
 
@@ -241,7 +254,6 @@ function download(btn){
     });
 }
 
-// START
 load();
 
 </script>

@@ -16,16 +16,29 @@ body{
 /* HEADER */
 .header{
     display:flex;
-    justify-content:center;
+    flex-direction:column;
     align-items:center;
-    gap:8px;
     padding:10px;
 }
-.header img{width:40px;}
-.header h1{
-    font-size:18px;
+
+.logo{
+    width:55px;
+    margin-bottom:5px;
+    filter:drop-shadow(0 0 10px #00f5ff) drop-shadow(0 0 20px #00f5ff);
+}
+
+.title{
     color:#00f5ff;
-    text-shadow:0 0 10px #00f5ff,0 0 20px #00f5ff;
+    font-size:18px;
+    text-shadow:0 0 10px #00f5ff,0 0 25px #00f5ff;
+}
+
+/* DESCRIPTION */
+.desc{
+    text-align:center;
+    font-size:11px;
+    color:#94a3b8;
+    margin-bottom:5px;
 }
 
 /* SEARCH */
@@ -41,7 +54,6 @@ body{
     border:1px solid #00f5ff;
     background:black;
     color:#00f5ff;
-    outline:none;
     box-shadow:0 0 10px #00f5ff;
 }
 
@@ -58,20 +70,19 @@ body{
 
 /* CLUB */
 .club{
-    font-size:15px;
+    font-size:14px;
     font-weight:bold;
     margin-bottom:10px;
     color:#00f5ff;
-    text-shadow:0 0 10px #00f5ff,0 0 25px #00f5ff;
+    text-shadow:0 0 10px #00f5ff;
 }
 
-/* GRID BOX */
+/* GRID */
 .grid{
     display:grid;
     grid-template-columns:repeat(3,1fr);
     gap:6px;
 }
-
 .box{
     padding:6px;
     border-radius:8px;
@@ -81,7 +92,7 @@ body{
     box-shadow:0 0 8px #00f5ff inset;
 }
 
-/* BUTTONS */
+/* BUTTON */
 .btns{
     margin-top:10px;
     display:flex;
@@ -94,9 +105,8 @@ body{
     border-radius:6px;
     background:#00f5ff;
     color:black;
-    font-size:11px;
     cursor:pointer;
-    box-shadow:0 0 10px #00f5ff;
+    font-size:11px;
 }
 
 /* MOBILE */
@@ -109,50 +119,82 @@ body{
 <body>
 
 <div class="header">
-<img src="https://i.imgur.com/LY3Bb9m.png">
-<h1>GOAT FC STATISTICS</h1>
+<img src="https://i.imgur.com/LY3Bb9m.png" class="logo">
+<div class="title">GOAT FC STATISTICS</div>
+</div>
+
+<div class="desc">
+Live approved match statistics • Auto updated • Powered by Goat FC System
 </div>
 
 <div class="search">
-<input type="text" id="search" placeholder="Search Club ID (e.g. GFC001)" oninput="render()">
+<input type="text" id="search" placeholder="Search Club ID (GFC001 / GFC-001)" oninput="render()">
 </div>
 
 <div id="data"></div>
 
 <script>
 
-const URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv"; // 🔥 change this
+const URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv";
 
 let data=[];
 
-// SMART NORMALIZE
-function normalize(id){
-    return id.toLowerCase().replace(/[^a-z0-9]/g,'');
+// normalize search
+function normalize(s){
+    return s.toLowerCase().replace(/[^a-z0-9]/g,"");
 }
 
-// LOAD
-async function load(){
-    let t=await fetch(URL+"?t="+Date.now()).then(r=>r.text());
-    let rows=t.split("\n").slice(1);
+// safe parse
+function parseCSV(text){
+    return text.trim().split("\n").slice(1).map(row=>{
+        let c=row.split(",");
+        return {
+            p1:c[0],
+            p2:c[1],
+            type:c[2],
+            s1:+c[3],
+            s2:+c[4],
+            approved:(c[9]||"").toLowerCase()
+        };
+    }).filter(x=>x.approved==="yes");
+}
 
-    data=rows.map(r=>{
-        let c=r.split(",");
+// LOAD DATA
+async function load(){
+    let txt=await fetch(URL+"?t="+Date.now()).then(r=>r.text());
+    let rows=parseCSV(txt);
+
+    let map={};
+
+    rows.forEach(r=>{
+        [[r.p1,r.s1,r.s2],[r.p2,r.s2,r.s1]].forEach(([id,me,op])=>{
+            if(!map[id]) map[id]={w:0,l:0,d:0,m:0,gs:0,gc:0,s7:0,f:0,o:0};
+
+            map[id].m++;
+            map[id].gs+=me;
+            map[id].gc+=op;
+
+            if(me>=7) map[id].s7++;
+
+            if(r.type==="Friendly") map[id].f++;
+            else map[id].o++;
+
+            if(me>op) map[id].w++;
+            else if(me<op) map[id].l++;
+            else map[id].d++;
+        });
+    });
+
+    data=Object.entries(map).map(([id,v])=>{
         return{
-            id:c[0],
-            match:+c[1],
-            win:+c[2],
-            loss:+c[3],
-            draw:+c[4],
-            winp:+c[5],
-            gs:+c[7],
-            gc:+c[8],
-            diff:+c[9],
-            rate:+c[10],
-            seven:+c[11],
-            friendly:+c[12],
-            other:+c[13]
+            id,
+            ...v,
+            winp:v.m? (v.w/v.m*100):0,
+            rate:v.m? (v.gs/v.m):0,
+            diff:v.gs-v.gc
         }
     });
+
     render();
 }
 
@@ -160,7 +202,7 @@ async function load(){
 function render(){
     let q=normalize(document.getElementById("search").value);
 
-    let sorted=data.sort((a,b)=>b.win-a.win);
+    let sorted=data.sort((a,b)=>b.w-a.w);
 
     let html="";
     sorted.forEach(p=>{
@@ -168,30 +210,29 @@ function render(){
 
         html+=`
         <div class="card">
-            <div class="club">Player ID: ${p.id}</div>
+        <div class="club">Player ID: ${p.id}</div>
 
-            <div class="grid">
-                <div class="box">🟢 Win<br>${p.win}</div>
-                <div class="box">🔴 Loss<br>${p.loss}</div>
-                <div class="box">🟡 Draw<br>${p.draw}</div>
+        <div class="grid">
+            <div class="box">🟢 Win<br>${p.w}</div>
+            <div class="box">🔴 Loss<br>${p.l}</div>
+            <div class="box">🟡 Draw<br>${p.d}</div>
 
-                <div class="box">🎮 Match<br>${p.match}</div>
-                <div class="box">📊 Win%<br>${p.winp.toFixed(1)}</div>
-                <div class="box">⚽ Rate<br>${p.rate.toFixed(2)}</div>
+            <div class="box">🎮 Match<br>${p.m}</div>
+            <div class="box">📊 Win%<br>${p.winp.toFixed(1)}</div>
+            <div class="box">⚽ Rate<br>${p.rate.toFixed(2)}</div>
 
-                <div class="box">⚽ Scored<br>${p.gs}</div>
-                <div class="box">🥅 Conceded<br>${p.gc}</div>
-                <div class="box">📈 Difference<br>${p.diff}</div>
+            <div class="box">⚽ Scored<br>${p.gs}</div>
+            <div class="box">🥅 Conceded<br>${p.gc}</div>
+            <div class="box">📈 Difference<br>${p.diff}</div>
 
-                <div class="box">👑 7+ Goals<br>${p.seven}</div>
-                <div class="box">🤝 Friendly<br>${p.friendly}</div>
-                <div class="box">🏆 Tournaments<br>${p.other}</div>
-            </div>
+            <div class="box">👑 7+ Goals<br>${p.s7}</div>
+            <div class="box">🤝 Friendly<br>${p.f}</div>
+            <div class="box">🏆 Tournaments<br>${p.o}</div>
+        </div>
 
-            <div class="btns">
-                <button class="btn" onclick="share('${p.id}')">Share</button>
-                <button class="btn" onclick="download(this)">Download</button>
-            </div>
+        <div class="btns">
+            <button class="btn" onclick="share('${p.id}')">Share</button>
+        </div>
         </div>`;
     });
 
@@ -200,27 +241,14 @@ function render(){
 
 // SHARE
 function share(id){
-    let text="Check my GOAT FC stats: "+id;
+    let text="My Goat FC Stats: "+id;
     navigator.clipboard.writeText(text);
     alert("Copied!");
-}
-
-// DOWNLOAD
-function download(btn){
-    let card=btn.closest(".card");
-    html2canvas(card).then(canvas=>{
-        let link=document.createElement("a");
-        link.download="stats.png";
-        link.href=canvas.toDataURL();
-        link.click();
-    });
 }
 
 load();
 
 </script>
-
-<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
 </body>
 </html>

@@ -13,28 +13,31 @@ body{
     color:white;
 }
 
-/* HEADER ROW (LOGO + TITLE SAME LINE FIXED) */
+/* HEADER ROW */
 .header{
     display:flex;
-    align-items:center;
     justify-content:center;
+    align-items:center;
     gap:10px;
     padding:10px;
 }
+
 .logo{
     width:40px;
     filter:drop-shadow(0 0 10px #00f5ff);
     animation:glow 2s infinite alternate;
 }
+
 @keyframes glow{
     from{filter:drop-shadow(0 0 5px #00f5ff);}
     to{filter:drop-shadow(0 0 20px #00f5ff);}
 }
 
 .title{
-    font-size:18px;
+    font-size:17px;
+    font-weight:bold;
     color:#00f5ff;
-    text-shadow:0 0 10px #00f5ff,0 0 25px #00f5ff;
+    text-shadow:0 0 10px #00f5ff;
 }
 
 /* DESCRIPTION (RESTORED) */
@@ -42,7 +45,7 @@ body{
     text-align:center;
     font-size:11px;
     color:#94a3b8;
-    margin-top:-5px;
+    margin-bottom:8px;
 }
 
 /* SEARCH */
@@ -58,6 +61,7 @@ body{
     border:1px solid #00f5ff;
     background:black;
     color:#00f5ff;
+    outline:none;
     box-shadow:0 0 10px #00f5ff;
 }
 
@@ -72,13 +76,13 @@ body{
     text-align:center;
 }
 
-/* CLUB ID */
+/* PLAYER ID */
 .club{
     font-size:15px;
     font-weight:bold;
+    margin-bottom:10px;
     color:#00f5ff;
-    text-shadow:0 0 15px #00f5ff;
-    margin-bottom:8px;
+    text-shadow:0 0 10px #00f5ff,0 0 25px #00f5ff;
 }
 
 /* GRID */
@@ -88,13 +92,14 @@ body{
     gap:6px;
 }
 
+/* BOX */
 .box{
     padding:6px;
     border-radius:8px;
     font-size:11px;
     background:#001f2f;
     border:1px solid #00f5ff;
-    box-shadow:0 0 10px #00f5ff inset;
+    box-shadow:0 0 8px #00f5ff inset;
 }
 
 /* BUTTONS */
@@ -112,6 +117,7 @@ body{
     color:black;
     font-size:11px;
     cursor:pointer;
+    box-shadow:0 0 10px #00f5ff;
 }
 
 /* MOBILE */
@@ -123,15 +129,18 @@ body{
 
 <body>
 
+<!-- HEADER (FIXED ROW) -->
 <div class="header">
-    <img class="logo" src="https://i.imgur.com/LY3Bb9m.png">
-    <div class="title">GOAT FC STATISTICS</div>
+<img class="logo" src="https://i.imgur.com/LY3Bb9m.png">
+<div class="title">GOAT FC STATISTICS</div>
 </div>
 
+<!-- DESCRIPTION (BACK) -->
 <div class="desc">
-Live approved match analytics • Player ranking • Performance tracker
+Live approved match analytics • Player ranking system • Auto updated stats
 </div>
 
+<!-- SEARCH -->
 <div class="search">
 <input type="text" id="search" placeholder="Search Club ID (GFC-001 / gfc001)" oninput="render()">
 </div>
@@ -144,12 +153,12 @@ const URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLa
 
 let data=[];
 
-// NORMALIZE SEARCH
-function norm(s){
-    return (s||"").toLowerCase().replace(/[^a-z0-9]/g,"");
+// SAFE NORMALIZER (fix search bug)
+function norm(x){
+    return (x||"").toLowerCase().replace(/[^a-z0-9]/g,"");
 }
 
-// SAFE CSV PARSER (FIX DATA MISSING ISSUE)
+// FAST SAFE LOAD (fix missing data)
 async function load(){
     try{
         let res=await fetch(URL+"?t="+Date.now());
@@ -159,38 +168,38 @@ async function load(){
 
         data=rows.slice(1).map(r=>{
             let c=r.split(",");
-
             if(c.length<12) return null;
-            if((c[9]||"").trim().toLowerCase()!=="yes") return null;
 
-            return {
-                id:c[0]?.trim(),
-                match:+c[10]||0,
-                win:+c[2]||0,
-                loss:+c[3]||0,
-                draw:+c[4]||0,
-                winp:+c[5]||0,
-                gs:+c[7]||0,
-                gc:+c[8]||0,
-                diff:(+c[7]||0)-(+c[8]||0),
-                rate:+c[10]||0,
-                seven:+c[11]||0,
-                friendly:+c[12]||0,
-                other:+c[13]||0
-            };
+            // APPROVED ONLY FIX
+            if((c[9]||"").toLowerCase()!=="yes") return null;
+
+            return{
+                id:c[0],
+                match:+c[10],
+                win:+c[5],
+                loss:+c[6],
+                draw:(+c[10]-(+c[5]+ +c[6])),
+                winp:((+c[5]/(+c[10]||1))*100),
+                gs:+c[7],
+                gc:+c[8],
+                diff:(+c[7]-+c[8]),
+                seven:(+c[7]>=7?1:0)+(+c[8]>=7?1:0),
+                friendly:0,
+                other:0
+            }
         }).filter(Boolean);
 
         render();
     }catch(e){
-        console.log("Load error",e);
+        console.log("LOAD ERROR",e);
     }
 }
 
-// RENDER UI
+// RENDER
 function render(){
     let q=norm(document.getElementById("search").value);
 
-    let sorted=[...data].sort((a,b)=>b.win-a.win);
+    let sorted=data.sort((a,b)=>b.win-a.win);
 
     let html="";
 
@@ -199,7 +208,6 @@ function render(){
 
         html+=`
         <div class="card">
-
             <div class="club">Player ID: ${p.id}</div>
 
             <div class="grid">
@@ -208,8 +216,8 @@ function render(){
                 <div class="box">🟡 Draw<br>${p.draw}</div>
 
                 <div class="box">🎮 Match<br>${p.match}</div>
-                <div class="box">📊 Win%<br>${p.winp}</div>
-                <div class="box">⚽ Rate<br>${p.rate}</div>
+                <div class="box">📊 Win%<br>${p.winp.toFixed(1)}</div>
+                <div class="box">📈 Rate<br>${(p.gs/p.match||0).toFixed(2)}</div>
 
                 <div class="box">⚽ Scored<br>${p.gs}</div>
                 <div class="box">🥅 Conceded<br>${p.gc}</div>
@@ -224,7 +232,6 @@ function render(){
                 <button class="btn" onclick="share('${p.id}')">Share</button>
                 <button class="btn" onclick="download(this)">Download</button>
             </div>
-
         </div>`;
     });
 
@@ -233,15 +240,16 @@ function render(){
 
 // SHARE
 function share(id){
-    navigator.clipboard.writeText("GOAT FC Player: "+id);
+    navigator.clipboard.writeText("GOAT FC Stats: "+id);
     alert("Copied!");
 }
 
 // DOWNLOAD
 function download(btn){
-    html2canvas(btn.closest(".card")).then(canvas=>{
+    let card=btn.closest(".card");
+    html2canvas(card).then(canvas=>{
         let a=document.createElement("a");
-        a.download="goatfc.png";
+        a.download="goatfc_stats.png";
         a.href=canvas.toDataURL();
         a.click();
     });

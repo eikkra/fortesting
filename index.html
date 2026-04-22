@@ -3,100 +3,105 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GOAT FC Statistics</title>
+<title>GOAT FC STATISTICS</title>
 
 <style>
-body {
-    margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg, #020617, #0f172a);
-    color: #fff;
+body{
+    margin:0;
+    font-family:'Segoe UI',sans-serif;
+    background:#020617;
+    color:white;
 }
 
 /* HEADER */
-.header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    padding: 15px;
-    flex-wrap: wrap;
+.header{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:8px;
+    padding:10px;
 }
-
-.header img {
-    width: 40px;
-    height: 40px;
-}
-
-.title {
-    font-size: 22px;
-    font-weight: bold;
-    color: #22c55e;
-}
-
-.description {
-    width: 100%;
-    text-align: center;
-    font-size: 13px;
-    color: #94a3b8;
+.header img{width:40px;}
+.header h1{
+    font-size:18px;
+    color:#00f5ff;
+    text-shadow:0 0 10px #00f5ff,0 0 20px #00f5ff;
 }
 
 /* SEARCH */
-.search-box {
-    text-align: center;
-    margin: 15px;
+.search{
+    text-align:center;
+    margin:10px;
+}
+.search input{
+    padding:8px;
+    width:85%;
+    max-width:320px;
+    border-radius:8px;
+    border:1px solid #00f5ff;
+    background:black;
+    color:#00f5ff;
+    outline:none;
+    box-shadow:0 0 10px #00f5ff;
 }
 
-.search-box input {
-    width: 90%;
-    max-width: 400px;
-    padding: 12px;
-    border-radius: 10px;
-    border: none;
-    outline: none;
+/* CARD */
+.card{
+    margin:12px;
+    padding:12px;
+    border-radius:14px;
+    background:linear-gradient(145deg,#020617,#001f2f);
+    border:1px solid #00f5ff;
+    box-shadow:0 0 20px #00f5ff;
+    text-align:center;
 }
 
-/* GRID */
-.container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
-    padding: 20px;
+/* CLUB */
+.club{
+    font-size:15px;
+    font-weight:bold;
+    margin-bottom:10px;
+    color:#00f5ff;
+    text-shadow:0 0 10px #00f5ff,0 0 25px #00f5ff;
 }
 
-/* CARD - GLASS EFFECT */
-.card {
-    background: rgba(255,255,255,0.05);
-    border-radius: 15px;
-    padding: 20px;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,0.1);
-    box-shadow: 0 0 15px rgba(34,197,94,0.2);
-    transition: 0.3s;
+/* GRID BOX */
+.grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:6px;
 }
 
-.card:hover {
-    transform: scale(1.04);
+.box{
+    padding:6px;
+    border-radius:8px;
+    font-size:11px;
+    background:#001f2f;
+    border:1px solid #00f5ff;
+    box-shadow:0 0 8px #00f5ff inset;
 }
 
-/* CLUB ID SPECIAL */
-.player-id {
-    font-size: 20px;
-    font-weight: bold;
-    color: #22c55e;
-    text-shadow: 0 0 10px #22c55e;
+/* BUTTONS */
+.btns{
+    margin-top:10px;
+    display:flex;
+    justify-content:center;
+    gap:10px;
+}
+.btn{
+    padding:6px 10px;
+    border:none;
+    border-radius:6px;
+    background:#00f5ff;
+    color:black;
+    font-size:11px;
+    cursor:pointer;
+    box-shadow:0 0 10px #00f5ff;
 }
 
-/* STATS */
-.stats span {
-    display: block;
-    font-size: 14px;
-    margin: 3px 0;
-}
-
-/* RESPONSIVE */
-@media(max-width:600px){
-    .title { font-size: 18px; }
+/* MOBILE */
+@media(max-width:768px){
+    .grid{grid-template-columns:repeat(2,1fr);}
 }
 </style>
 </head>
@@ -104,126 +109,118 @@ body {
 <body>
 
 <div class="header">
-    <img src="https://i.imgur.com/LY3Bb9m.png">
-    <div class="title">GOAT FC Statistics</div>
-    <div class="description">
-        Track player performance including wins, goals, win rate, and match analytics from official approved matches only.
-    </div>
+<img src="https://i.imgur.com/LY3Bb9m.png">
+<h1>GOAT FC STATISTICS</h1>
 </div>
 
-<div class="search-box">
-    <input type="text" id="search" placeholder="Search Club ID...">
+<div class="search">
+<input type="text" id="search" placeholder="Search Club ID (e.g. GFC001)" oninput="render()">
 </div>
 
-<div class="container" id="cards"></div>
+<div id="data"></div>
 
 <script>
 
-const csvURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv";
+const URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv"; // 🔥 change this
 
-let players = {};
+let data=[];
 
-// FETCH CSV
-fetch(csvURL)
-.then(res => res.text())
-.then(data => {
-    const rows = data.split("\n").slice(1);
+// SMART NORMALIZE
+function normalize(id){
+    return id.toLowerCase().replace(/[^a-z0-9]/g,'');
+}
 
-    rows.forEach(row => {
-        const cols = row.split(",");
+// LOAD
+async function load(){
+    let t=await fetch(URL+"?t="+Date.now()).then(r=>r.text());
+    let rows=t.split("\n").slice(1);
 
-        const P1 = cols[0];
-        const P2 = cols[1];
-        const type = cols[2];
-        const P1S = Number(cols[3]);
-        const P2S = Number(cols[4]);
-        const approved = cols[9];
-
-        // ✅ ONLY APPROVED MATCH
-        if (approved !== "yes") return;
-
-        update(P1, P1S, P2S, type);
-        update(P2, P2S, P1S, type);
+    data=rows.map(r=>{
+        let c=r.split(",");
+        return{
+            id:c[0],
+            match:+c[1],
+            win:+c[2],
+            loss:+c[3],
+            draw:+c[4],
+            winp:+c[5],
+            gs:+c[7],
+            gc:+c[8],
+            diff:+c[9],
+            rate:+c[10],
+            seven:+c[11],
+            friendly:+c[12],
+            other:+c[13]
+        }
     });
-
     render();
-});
-
-// UPDATE PLAYER
-function update(id, scored, conceded, type){
-    if(!players[id]){
-        players[id] = {
-            win:0, loss:0, draw:0,
-            goals:0, conceded:0,
-            matches:0,
-            friendly:0, other:0,
-            bigWin:0
-        };
-    }
-
-    let p = players[id];
-
-    p.matches++;
-    p.goals += scored;
-    p.conceded += conceded;
-
-    if(type === "Friendly") p.friendly++;
-    else p.other++;
-
-    if(scored > conceded) p.win++;
-    else if(scored < conceded) p.loss++;
-    else p.draw++;
-
-    if(scored >= 7) p.bigWin++;
 }
 
 // RENDER
-function render(filter=""){
-    const container = document.getElementById("cards");
-    container.innerHTML = "";
+function render(){
+    let q=normalize(document.getElementById("search").value);
 
-    let sorted = Object.entries(players)
-        .sort((a,b)=>b[1].win - a[1].win);
+    let sorted=data.sort((a,b)=>b.win-a.win);
 
-    sorted.forEach(([id,p])=>{
+    let html="";
+    sorted.forEach(p=>{
+        if(q && !normalize(p.id).includes(q)) return;
 
-        if(!id.toLowerCase().includes(filter.toLowerCase())) return;
+        html+=`
+        <div class="card">
+            <div class="club">Player ID: ${p.id}</div>
 
-        let winRate = ((p.win/p.matches)*100).toFixed(1);
-        let goalRate = (p.goals/p.matches).toFixed(2);
-        let gd = p.goals - p.conceded;
+            <div class="grid">
+                <div class="box">🟢 Win<br>${p.win}</div>
+                <div class="box">🔴 Loss<br>${p.loss}</div>
+                <div class="box">🟡 Draw<br>${p.draw}</div>
 
-        const card = document.createElement("div");
-        card.className = "card";
+                <div class="box">🎮 Match<br>${p.match}</div>
+                <div class="box">📊 Win%<br>${p.winp.toFixed(1)}</div>
+                <div class="box">⚽ Rate<br>${p.rate.toFixed(2)}</div>
 
-        card.innerHTML = `
-        <div class="player-id">${id}</div>
-        <div class="stats">
-            <span>🏆 Win: ${p.win}</span>
-            <span>❌ Loss: ${p.loss}</span>
-            <span>🤝 Draw: ${p.draw}</span>
-            <span>📊 Win%: ${winRate}%</span>
-            <span>⚽ Goal Rate: ${goalRate}</span>
-            <span>🎯 Goals: ${p.goals}</span>
-            <span>🥅 Conceded: ${p.conceded}</span>
-            <span>➕ GD: ${gd}</span>
-            <span>🔥 7+ Goals: ${p.bigWin}</span>
-            <span>📅 Matches: ${p.matches}</span>
-            <span>🎮 Friendly: ${p.friendly}</span>
-            <span>⚔️ Others: ${p.other}</span>
-        </div>
-        `;
+                <div class="box">⚽ Scored<br>${p.gs}</div>
+                <div class="box">🥅 Conceded<br>${p.gc}</div>
+                <div class="box">📈 Difference<br>${p.diff}</div>
 
-        container.appendChild(card);
+                <div class="box">👑 7+ Goals<br>${p.seven}</div>
+                <div class="box">🤝 Friendly<br>${p.friendly}</div>
+                <div class="box">🏆 Tournaments<br>${p.other}</div>
+            </div>
+
+            <div class="btns">
+                <button class="btn" onclick="share('${p.id}')">Share</button>
+                <button class="btn" onclick="download(this)">Download</button>
+            </div>
+        </div>`;
+    });
+
+    document.getElementById("data").innerHTML=html;
+}
+
+// SHARE
+function share(id){
+    let text="Check my GOAT FC stats: "+id;
+    navigator.clipboard.writeText(text);
+    alert("Copied!");
+}
+
+// DOWNLOAD
+function download(btn){
+    let card=btn.closest(".card");
+    html2canvas(card).then(canvas=>{
+        let link=document.createElement("a");
+        link.download="stats.png";
+        link.href=canvas.toDataURL();
+        link.click();
     });
 }
 
-// SEARCH
-document.getElementById("search").addEventListener("input", e=>{
-    render(e.target.value);
-});
+load();
 
 </script>
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
 </body>
 </html>

@@ -3,118 +3,100 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GOAT FC MATCH LOG</title>
+<title>GOAT FC Statistics</title>
 
 <style>
-body{
-    margin:0;
-    font-family:'Segoe UI',sans-serif;
-    background:#020617;
-    color:#e2e8f0;
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #020617, #0f172a);
+    color: #fff;
 }
 
 /* HEADER */
-.header{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    gap:8px;
-    padding:10px;
-}
-.header img{width:35px;}
-.header h1{
-    font-size:16px;
-    color:#00f5ff;
-    text-shadow:0 0 10px #00f5ff;
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 15px;
+    flex-wrap: wrap;
 }
 
-/* DESC */
-.desc{
-    text-align:center;
-    font-size:12px;
-    color:#94a3b8;
-    margin-bottom:5px;
+.header img {
+    width: 40px;
+    height: 40px;
 }
 
-/* TABS */
-.tabs{
-    display:flex;
-    justify-content:center;
-    gap:6px;
+.title {
+    font-size: 22px;
+    font-weight: bold;
+    color: #22c55e;
 }
-.tab{
-    padding:5px 12px;
-    font-size:12px;
-    border:1px solid #00f5ff;
-    border-radius:5px;
-    color:#00f5ff;
-    cursor:pointer;
-}
-.active{background:#00f5ff;color:black;}
 
-/* FILTER */
-.filter-box{
-    display:flex;
-    gap:5px;
-    padding:8px;
-    justify-content:center;
-    overflow-x:auto;
+.description {
+    width: 100%;
+    text-align: center;
+    font-size: 13px;
+    color: #94a3b8;
 }
-select,input,button{
-    padding:5px;
-    font-size:11px;
-    border-radius:5px;
-    border:1px solid #00f5ff;
-    background:black;
-    color:#00f5ff;
-}
-button{background:#00f5ff;color:black;}
 
-/* TABLE */
-.container{max-height:65vh;overflow:auto;}
-table{width:100%;border-collapse:collapse;table-layout:fixed;}
-thead{position:sticky;top:0;background:#020617;}
-th,td{
-    padding:6px;
-    text-align:center;
-    white-space:nowrap;
-    font-size:11px;
+/* SEARCH */
+.search-box {
+    text-align: center;
+    margin: 15px;
 }
-th{color:#00f5ff;border-bottom:2px solid #00f5ff;}
-tr{border-bottom:1px solid #0f172a;}
 
-.win{color:#22c55e;}
-.loss{color:#ef4444;}
-.draw{color:#facc15;}
-.gold{color:gold;text-shadow:0 0 8px gold;}
+.search-box input {
+    width: 90%;
+    max-width: 400px;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+}
+
+/* GRID */
+.container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+/* CARD - GLASS EFFECT */
+.card {
+    background: rgba(255,255,255,0.05);
+    border-radius: 15px;
+    padding: 20px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 0 15px rgba(34,197,94,0.2);
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: scale(1.04);
+}
+
+/* CLUB ID SPECIAL */
+.player-id {
+    font-size: 20px;
+    font-weight: bold;
+    color: #22c55e;
+    text-shadow: 0 0 10px #22c55e;
+}
 
 /* STATS */
-.stats{display:none;padding:10px;}
-.search-box{text-align:center;margin-bottom:10px;}
-.search-box input{
-    width:80%;
-    max-width:300px;
+.stats span {
+    display: block;
+    font-size: 14px;
+    margin: 3px 0;
 }
 
-/* CARD */
-.card{
-    border:1px solid #00f5ff;
-    border-radius:10px;
-    padding:12px;
-    margin-bottom:10px;
-    text-align:center;
-    box-shadow:0 0 10px #00f5ff;
-    background:linear-gradient(145deg,#020617,#0f172a);
-}
-.club{
-    color:#00f5ff;
-    font-weight:bold;
-    text-shadow:0 0 8px #00f5ff;
-}
-
-/* MOBILE */
-@media(max-width:768px){
-    th,td{font-size:11px;}
+/* RESPONSIVE */
+@media(max-width:600px){
+    .title { font-size: 18px; }
 }
 </style>
 </head>
@@ -123,187 +105,123 @@ tr{border-bottom:1px solid #0f172a;}
 
 <div class="header">
     <img src="https://i.imgur.com/LY3Bb9m.png">
-    <h1>GOAT FC MATCH LOG</h1>
+    <div class="title">GOAT FC Statistics</div>
+    <div class="description">
+        Track player performance including wins, goals, win rate, and match analytics from official approved matches only.
+    </div>
 </div>
 
-<div class="desc">
-Live approved match logs and player performance statistics.
-</div>
-
-<div class="tabs">
-    <div class="tab active" onclick="showTab('log',this)">Match Log</div>
-    <div class="tab" onclick="showTab('stats',this)">Statistics</div>
-</div>
-
-<!-- FILTER -->
-<div class="filter-box" id="filterBox">
-<select id="type">
-<option value="">All</option>
-<option value="Friendly">Friendly</option>
-<option value="Solo Tournament">Solo</option>
-<option value="Bid Tournament">Bid</option>
-<option value="League">League</option>
-<option value="Co-op">Co-op</option>
-</select>
-<input type="date" id="start">
-<input type="date" id="end">
-<button onclick="applyFilter()">Filter</button>
-</div>
-
-<!-- LOG -->
-<div class="container" id="log">
-<table>
-<thead>
-<tr>
-<th>Date</th>
-<th>Type</th>
-<th>Player 1</th>
-<th>Player 2</th>
-<th>Score</th>
-<th>Points</th>
-</tr>
-</thead>
-<tbody id="body"></tbody>
-</table>
-</div>
-
-<!-- STATS -->
-<div class="stats" id="stats">
 <div class="search-box">
-<input type="text" id="search" placeholder="Search Club ID" oninput="generateStats()">
+    <input type="text" id="search" placeholder="Search Club ID...">
 </div>
-<div id="statsData"></div>
-</div>
+
+<div class="container" id="cards"></div>
 
 <script>
 
-const URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv";
+const csvURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv";
 
-let data=[];
+let players = {};
 
-// DATE
-function parseDate(s){
-    try{
-        let p=s.split(" ")[0].split("/");
-        return new Date(p[2],p[0]-1,p[1]);
-    }catch{return null;}
-}
+// FETCH CSV
+fetch(csvURL)
+.then(res => res.text())
+.then(data => {
+    const rows = data.split("\n").slice(1);
 
-// LOAD
-async function load(){
-    let t=await fetch(URL).then(r=>r.text());
-    let lines=t.split("\n");
+    rows.forEach(row => {
+        const cols = row.split(",");
 
-    data=lines.slice(1).map(l=>{
-        let r=l.split(",");
-        if(r.length<12) return null;
+        const P1 = cols[0];
+        const P2 = cols[1];
+        const type = cols[2];
+        const P1S = Number(cols[3]);
+        const P2S = Number(cols[4]);
+        const approved = cols[9];
 
-        let d=parseDate(r[11]);
-        if(!d) return null;
+        // ✅ ONLY APPROVED MATCH
+        if (approved !== "yes") return;
 
-        return {
-            date:d,type:r[2],
-            p1:r[0],p2:r[1],
-            s1:+r[3],s2:+r[4],
-            pt1:+r[5],pt2:+r[6],
-            ok:(r[9]||"").toLowerCase()
+        update(P1, P1S, P2S, type);
+        update(P2, P2S, P1S, type);
+    });
+
+    render();
+});
+
+// UPDATE PLAYER
+function update(id, scored, conceded, type){
+    if(!players[id]){
+        players[id] = {
+            win:0, loss:0, draw:0,
+            goals:0, conceded:0,
+            matches:0,
+            friendly:0, other:0,
+            bigWin:0
         };
-    }).filter(x=>x && x.ok==="yes");
+    }
 
-    render(data);
+    let p = players[id];
+
+    p.matches++;
+    p.goals += scored;
+    p.conceded += conceded;
+
+    if(type === "Friendly") p.friendly++;
+    else p.other++;
+
+    if(scored > conceded) p.win++;
+    else if(scored < conceded) p.loss++;
+    else p.draw++;
+
+    if(scored >= 7) p.bigWin++;
 }
 
-// LOG RENDER
-function render(arr){
-    let h="";
-    arr.slice(0,500).forEach(r=>{
-        let c1="draw",c2="draw";
-        if(r.s1>r.s2){c1="win";c2="loss";}
-        else if(r.s1<r.s2){c1="loss";c2="win";}
-        let g=(r.s1>=7||r.s2>=7)?"gold":"";
+// RENDER
+function render(filter=""){
+    const container = document.getElementById("cards");
+    container.innerHTML = "";
 
-        h+=`<tr>
-        <td>${r.date.toISOString().slice(0,10)}</td>
-        <td>${r.type.replace(" Tournament","")}</td>
-        <td class="${c1}">${r.p1}</td>
-        <td class="${c2}">${r.p2}</td>
-        <td class="${g}">${r.s1}-${r.s2}</td>
-        <td>${r.pt1}-${r.pt2}</td>
-        </tr>`;
+    let sorted = Object.entries(players)
+        .sort((a,b)=>b[1].win - a[1].win);
+
+    sorted.forEach(([id,p])=>{
+
+        if(!id.toLowerCase().includes(filter.toLowerCase())) return;
+
+        let winRate = ((p.win/p.matches)*100).toFixed(1);
+        let goalRate = (p.goals/p.matches).toFixed(2);
+        let gd = p.goals - p.conceded;
+
+        const card = document.createElement("div");
+        card.className = "card";
+
+        card.innerHTML = `
+        <div class="player-id">${id}</div>
+        <div class="stats">
+            <span>🏆 Win: ${p.win}</span>
+            <span>❌ Loss: ${p.loss}</span>
+            <span>🤝 Draw: ${p.draw}</span>
+            <span>📊 Win%: ${winRate}%</span>
+            <span>⚽ Goal Rate: ${goalRate}</span>
+            <span>🎯 Goals: ${p.goals}</span>
+            <span>🥅 Conceded: ${p.conceded}</span>
+            <span>➕ GD: ${gd}</span>
+            <span>🔥 7+ Goals: ${p.bigWin}</span>
+            <span>📅 Matches: ${p.matches}</span>
+            <span>🎮 Friendly: ${p.friendly}</span>
+            <span>⚔️ Others: ${p.other}</span>
+        </div>
+        `;
+
+        container.appendChild(card);
     });
-
-    document.getElementById("body").innerHTML=h;
 }
 
-// FILTER
-function applyFilter(){
-    let t=document.getElementById("type").value;
-    let s=document.getElementById("start").value;
-    let e=document.getElementById("end").value;
-
-    let res=data.filter(r=>
-        (!t||r.type===t)&&
-        (!s||r.date>=new Date(s))&&
-        (!e||r.date<=new Date(e))
-    );
-
-    render(res);
-}
-
-// TAB
-function showTab(tab,el){
-    document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
-    el.classList.add("active");
-
-    document.getElementById("log").style.display=tab==="log"?"block":"none";
-    document.getElementById("filterBox").style.display=tab==="log"?"flex":"none";
-    document.getElementById("stats").style.display=tab==="stats"?"block":"none";
-
-    if(tab==="stats") generateStats();
-}
-
-// STATS
-function generateStats(){
-    let q=document.getElementById("search").value.toLowerCase();
-    let map={};
-
-    data.forEach(r=>{
-        [r.p1,r.p2].forEach((p,i)=>{
-            if(!map[p]) map[p]={w:0,l:0,d:0,gs:0,gc:0};
-
-            let me=i===0?r.s1:r.s2;
-            let op=i===0?r.s2:r.s1;
-
-            map[p].gs+=me;
-            map[p].gc+=op;
-
-            if(me>op) map[p].w++;
-            else if(me<op) map[p].l++;
-            else map[p].d++;
-        });
-    });
-
-    let sorted=Object.entries(map).sort((a,b)=>b[1].w-a[1].w);
-
-    let h="";
-    sorted.forEach(([p,s])=>{
-        if(q && !p.toLowerCase().includes(q)) return;
-
-        h+=`
-        <div class="card">
-            <div class="club">Club ID: ${p}</div><br>
-            🟢 Wins: ${s.w}<br>
-            🔴 Loss: ${s.l}<br>
-            🟡 Draw: ${s.d}<br><br>
-            ⚽ Goals Scored: ${s.gs}<br>
-            🥅 Goals Conceded: ${s.gc}
-        </div>`;
-    });
-
-    document.getElementById("statsData").innerHTML=h;
-}
-
-load();
+// SEARCH
+document.getElementById("search").addEventListener("input", e=>{
+    render(e.target.value);
+});
 
 </script>
 

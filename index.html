@@ -13,39 +13,19 @@ body{
     color:white;
 }
 
-/* HEADER ROW */
+/* HEADER */
 .header{
     display:flex;
     justify-content:center;
     align-items:center;
-    gap:10px;
+    gap:8px;
     padding:10px;
 }
-
-.logo{
-    width:40px;
-    filter:drop-shadow(0 0 10px #00f5ff);
-    animation:glow 2s infinite alternate;
-}
-
-@keyframes glow{
-    from{filter:drop-shadow(0 0 5px #00f5ff);}
-    to{filter:drop-shadow(0 0 20px #00f5ff);}
-}
-
-.title{
-    font-size:17px;
-    font-weight:bold;
+.header img{width:40px;}
+.header h1{
+    font-size:18px;
     color:#00f5ff;
-    text-shadow:0 0 10px #00f5ff;
-}
-
-/* DESCRIPTION (RESTORED) */
-.desc{
-    text-align:center;
-    font-size:11px;
-    color:#94a3b8;
-    margin-bottom:8px;
+    text-shadow:0 0 10px #00f5ff,0 0 20px #00f5ff;
 }
 
 /* SEARCH */
@@ -76,7 +56,7 @@ body{
     text-align:center;
 }
 
-/* PLAYER ID */
+/* CLUB */
 .club{
     font-size:15px;
     font-weight:bold;
@@ -85,14 +65,13 @@ body{
     text-shadow:0 0 10px #00f5ff,0 0 25px #00f5ff;
 }
 
-/* GRID */
+/* GRID BOX */
 .grid{
     display:grid;
     grid-template-columns:repeat(3,1fr);
     gap:6px;
 }
 
-/* BOX */
 .box{
     padding:6px;
     border-radius:8px;
@@ -129,20 +108,13 @@ body{
 
 <body>
 
-<!-- HEADER (FIXED ROW) -->
 <div class="header">
-<img class="logo" src="https://i.imgur.com/LY3Bb9m.png">
-<div class="title">GOAT FC STATISTICS</div>
+<img src="https://i.imgur.com/LY3Bb9m.png">
+<h1>GOAT FC STATISTICS</h1>
 </div>
 
-<!-- DESCRIPTION (BACK) -->
-<div class="desc">
-Live approved match analytics • Player ranking system • Auto updated stats
-</div>
-
-<!-- SEARCH -->
 <div class="search">
-<input type="text" id="search" placeholder="Search Club ID (GFC-001 / gfc001)" oninput="render()">
+<input type="text" id="search" placeholder="Search Club ID (e.g. GFC-001)" oninput="render()">
 </div>
 
 <div id="data"></div>
@@ -151,64 +123,87 @@ Live approved match analytics • Player ranking system • Auto updated stats
 
 const URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv";
 
-let data=[];
+let players={};
 
-// SAFE NORMALIZER (fix search bug)
-function norm(x){
-    return (x||"").toLowerCase().replace(/[^a-z0-9]/g,"");
+// NORMALIZE
+function normalize(id){
+    return (id||"").toLowerCase().replace(/[^a-z0-9]/g,'');
 }
 
-// FAST SAFE LOAD (fix missing data)
+// LOAD DATA
 async function load(){
-    try{
-        let res=await fetch(URL+"?t="+Date.now());
-        let text=await res.text();
+    let text = await fetch(URL + "&t=" + Date.now()).then(r=>r.text());
+    let rows = text.split("\n").slice(1);
 
-        let rows=text.split("\n");
+    rows.forEach(r=>{
+        let c = r.split(",");
 
-        data=rows.slice(1).map(r=>{
-            let c=r.split(",");
-            if(c.length<12) return null;
+        let P1 = c[0];
+        let P2 = c[1];
+        let type = c[2];
+        let P1S = Number(c[3]);
+        let P2S = Number(c[4]);
+        let approved = (c[9]||"").toLowerCase();
 
-            // APPROVED ONLY FIX
-            if((c[9]||"").toLowerCase()!=="yes") return null;
+        // ✅ ONLY APPROVED
+        if(approved !== "yes") return;
 
-            return{
-                id:c[0],
-                match:+c[10],
-                win:+c[5],
-                loss:+c[6],
-                draw:(+c[10]-(+c[5]+ +c[6])),
-                winp:((+c[5]/(+c[10]||1))*100),
-                gs:+c[7],
-                gc:+c[8],
-                diff:(+c[7]-+c[8]),
-                seven:(+c[7]>=7?1:0)+(+c[8]>=7?1:0),
-                friendly:0,
-                other:0
-            }
-        }).filter(Boolean);
+        update(P1,P1S,P2S,type);
+        update(P2,P2S,P1S,type);
+    });
 
-        render();
-    }catch(e){
-        console.log("LOAD ERROR",e);
+    render();
+}
+
+// UPDATE
+function update(id,scored,conceded,type){
+
+    if(!players[id]){
+        players[id]={
+            match:0,win:0,loss:0,draw:0,
+            gs:0,gc:0,diff:0,
+            rate:0,seven:0,
+            friendly:0,other:0
+        };
     }
+
+    let p=players[id];
+
+    p.match++;
+    p.gs+=scored;
+    p.gc+=conceded;
+    p.diff=p.gs-p.gc;
+
+    if(type==="Friendly") p.friendly++;
+    else p.other++;
+
+    if(scored>conceded) p.win++;
+    else if(scored<conceded) p.loss++;
+    else p.draw++;
+
+    if(scored>=7) p.seven++;
+
+    p.winp=(p.win/p.match)*100;
+    p.rate=(p.gs/p.match);
 }
 
 // RENDER
 function render(){
-    let q=norm(document.getElementById("search").value);
 
-    let sorted=data.sort((a,b)=>b.win-a.win);
+    let q=normalize(document.getElementById("search").value);
+
+    let sorted=Object.entries(players)
+        .sort((a,b)=>b[1].win-a[1].win);
 
     let html="";
 
-    sorted.forEach(p=>{
-        if(q && !norm(p.id).includes(q)) return;
+    sorted.forEach(([id,p])=>{
+
+        if(q && !normalize(id).includes(q)) return;
 
         html+=`
         <div class="card">
-            <div class="club">Player ID: ${p.id}</div>
+            <div class="club">Player ID: ${id}</div>
 
             <div class="grid">
                 <div class="box">🟢 Win<br>${p.win}</div>
@@ -217,19 +212,19 @@ function render(){
 
                 <div class="box">🎮 Match<br>${p.match}</div>
                 <div class="box">📊 Win%<br>${p.winp.toFixed(1)}</div>
-                <div class="box">📈 Rate<br>${(p.gs/p.match||0).toFixed(2)}</div>
+                <div class="box">⚽ Rate<br>${p.rate.toFixed(2)}</div>
 
                 <div class="box">⚽ Scored<br>${p.gs}</div>
                 <div class="box">🥅 Conceded<br>${p.gc}</div>
-                <div class="box">📉 Difference<br>${p.diff}</div>
+                <div class="box">📈 Difference<br>${p.diff}</div>
 
                 <div class="box">👑 7+ Goals<br>${p.seven}</div>
                 <div class="box">🤝 Friendly<br>${p.friendly}</div>
-                <div class="box">🏆 Tournaments<br>${p.other}</div>
+                <div class="box">🏆 Other<br>${p.other}</div>
             </div>
 
             <div class="btns">
-                <button class="btn" onclick="share('${p.id}')">Share</button>
+                <button class="btn" onclick="share('${id}')">Share</button>
                 <button class="btn" onclick="download(this)">Download</button>
             </div>
         </div>`;
@@ -240,7 +235,8 @@ function render(){
 
 // SHARE
 function share(id){
-    navigator.clipboard.writeText("GOAT FC Stats: "+id);
+    let text="Check my GOAT FC stats: "+id;
+    navigator.clipboard.writeText(text);
     alert("Copied!");
 }
 
@@ -248,10 +244,10 @@ function share(id){
 function download(btn){
     let card=btn.closest(".card");
     html2canvas(card).then(canvas=>{
-        let a=document.createElement("a");
-        a.download="goatfc_stats.png";
-        a.href=canvas.toDataURL();
-        a.click();
+        let link=document.createElement("a");
+        link.download="stats.png";
+        link.href=canvas.toDataURL();
+        link.click();
     });
 }
 

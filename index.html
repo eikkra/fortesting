@@ -16,16 +16,32 @@ body{
 /* HEADER */
 .header{
     display:flex;
-    justify-content:center;
     align-items:center;
-    gap:8px;
-    padding:10px;
+    justify-content:center;
+    gap:10px;
+    padding:12px;
+    flex-wrap:wrap;
 }
-.header img{width:40px;}
+
+.header img{
+    width:42px;
+    filter: drop-shadow(0 0 8px #00f5ff) drop-shadow(0 0 15px #00f5ff);
+}
+
 .header h1{
-    font-size:18px;
+    font-size:20px;
+    margin:0;
     color:#00f5ff;
-    text-shadow:0 0 10px #00f5ff,0 0 20px #00f5ff;
+    text-shadow:0 0 10px #00f5ff,0 0 25px #00f5ff;
+}
+
+/* DESCRIPTION */
+.desc{
+    width:100%;
+    text-align:center;
+    font-size:12px;
+    color:#94a3b8;
+    margin-top:4px;
 }
 
 /* SEARCH */
@@ -34,74 +50,73 @@ body{
     margin:10px;
 }
 .search input{
-    padding:8px;
-    width:85%;
-    max-width:320px;
-    border-radius:8px;
+    padding:10px;
+    width:90%;
+    max-width:380px;
+    border-radius:10px;
     border:1px solid #00f5ff;
     background:black;
     color:#00f5ff;
     outline:none;
-    box-shadow:0 0 10px #00f5ff;
+    box-shadow:0 0 12px #00f5ff;
 }
 
 /* CARD */
 .card{
     margin:12px;
-    padding:12px;
-    border-radius:14px;
+    padding:14px;
+    border-radius:16px;
     background:linear-gradient(145deg,#020617,#001f2f);
-    border:1px solid #00f5ff;
-    box-shadow:0 0 20px #00f5ff;
+    border:1px solid rgba(0,245,255,0.5);
+    box-shadow:0 0 25px rgba(0,245,255,0.3);
     text-align:center;
 }
 
 /* CLUB */
 .club{
-    font-size:15px;
+    font-size:16px;
     font-weight:bold;
-    margin-bottom:10px;
+    margin-bottom:12px;
     color:#00f5ff;
     text-shadow:0 0 10px #00f5ff,0 0 25px #00f5ff;
 }
 
-/* GRID BOX */
+/* GRID */
 .grid{
     display:grid;
     grid-template-columns:repeat(3,1fr);
-    gap:6px;
+    gap:8px;
 }
 
+/* BOX */
 .box{
-    padding:6px;
-    border-radius:8px;
+    padding:8px;
+    border-radius:10px;
     font-size:11px;
-    background:#001f2f;
-    border:1px solid #00f5ff;
-    box-shadow:0 0 8px #00f5ff inset;
-}
-
-/* BUTTONS */
-.btns{
-    margin-top:10px;
-    display:flex;
-    justify-content:center;
-    gap:10px;
-}
-.btn{
-    padding:6px 10px;
-    border:none;
-    border-radius:6px;
-    background:#00f5ff;
-    color:black;
-    font-size:11px;
-    cursor:pointer;
-    box-shadow:0 0 10px #00f5ff;
+    background:rgba(0,245,255,0.08);
+    border:1px solid rgba(0,245,255,0.4);
+    box-shadow:
+        0 0 8px rgba(0,245,255,0.6),
+        inset 0 0 6px rgba(0,245,255,0.5);
+    color:#e0faff;
+    font-weight:500;
 }
 
 /* MOBILE */
 @media(max-width:768px){
     .grid{grid-template-columns:repeat(2,1fr);}
+    .header h1{font-size:18px;}
+}
+
+/* LARGE SCREEN */
+@media(min-width:900px){
+    #data{
+        display:grid;
+        grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+        gap:10px;
+        padding:10px;
+    }
+    .card{margin:5px;}
 }
 </style>
 </head>
@@ -111,6 +126,9 @@ body{
 <div class="header">
 <img src="https://i.imgur.com/LY3Bb9m.png">
 <h1>GOAT FC STATISTICS</h1>
+<div class="desc">
+Official performance dashboard showing wins, goals, win rate and match stats (Approved matches only)
+</div>
 </div>
 
 <div class="search">
@@ -125,12 +143,10 @@ const URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLa
 
 let players={};
 
-// NORMALIZE
 function normalize(id){
     return (id||"").toLowerCase().replace(/[^a-z0-9]/g,'');
 }
 
-// LOAD DATA
 async function load(){
     let text = await fetch(URL + "&t=" + Date.now()).then(r=>r.text());
     let rows = text.split("\n").slice(1);
@@ -145,7 +161,6 @@ async function load(){
         let P2S = Number(c[4]);
         let approved = (c[9]||"").toLowerCase();
 
-        // ✅ ONLY APPROVED
         if(approved !== "yes") return;
 
         update(P1,P1S,P2S,type);
@@ -155,7 +170,6 @@ async function load(){
     render();
 }
 
-// UPDATE
 function update(id,scored,conceded,type){
 
     if(!players[id]){
@@ -187,7 +201,6 @@ function update(id,scored,conceded,type){
     p.rate=(p.gs/p.match);
 }
 
-// RENDER
 function render(){
 
     let q=normalize(document.getElementById("search").value);
@@ -203,7 +216,7 @@ function render(){
 
         html+=`
         <div class="card">
-            <div class="club">Player ID: ${id}</div>
+            <div class="club">${id}</div>
 
             <div class="grid">
                 <div class="box">🟢 Win<br>${p.win}</div>
@@ -216,16 +229,11 @@ function render(){
 
                 <div class="box">⚽ Scored<br>${p.gs}</div>
                 <div class="box">🥅 Conceded<br>${p.gc}</div>
-                <div class="box">📈 Difference<br>${p.diff}</div>
+                <div class="box">📈 Diff<br>${p.diff}</div>
 
                 <div class="box">👑 7+ Goals<br>${p.seven}</div>
                 <div class="box">🤝 Friendly<br>${p.friendly}</div>
                 <div class="box">🏆 Other<br>${p.other}</div>
-            </div>
-
-            <div class="btns">
-                <button class="btn" onclick="share('${id}')">Share</button>
-                <button class="btn" onclick="download(this)">Download</button>
             </div>
         </div>`;
     });
@@ -233,29 +241,9 @@ function render(){
     document.getElementById("data").innerHTML=html;
 }
 
-// SHARE
-function share(id){
-    let text="Check my GOAT FC stats: "+id;
-    navigator.clipboard.writeText(text);
-    alert("Copied!");
-}
-
-// DOWNLOAD
-function download(btn){
-    let card=btn.closest(".card");
-    html2canvas(card).then(canvas=>{
-        let link=document.createElement("a");
-        link.download="stats.png";
-        link.href=canvas.toDataURL();
-        link.click();
-    });
-}
-
 load();
 
 </script>
-
-<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
 </body>
 </html>

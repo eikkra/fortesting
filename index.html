@@ -75,41 +75,68 @@ th,td{
 th{color:#00f5ff;border-bottom:2px solid #00f5ff;}
 tr{border-bottom:1px solid #0f172a;}
 
-/* RESULT COLORS */
 .win{color:#22c55e;}
 .loss{color:#ef4444;}
 .draw{color:#facc15;}
 .gold{color:gold;text-shadow:0 0 8px gold;}
 
 /* STATS */
-.stats{
-    display:none;
-    padding:10px;
-}
-.search-box{
-    display:flex;
-    justify-content:center;
-    margin-bottom:10px;
-}
+.stats{display:none;padding:10px;}
+.search-box{text-align:center;margin-bottom:10px;}
 .search-box input{
     width:80%;
     max-width:300px;
 }
 
-/* CARD */
+/* PREMIUM CARD */
 .card{
-    border:1px solid #00f5ff;
-    border-radius:10px;
-    padding:10px;
-    margin-bottom:10px;
+    position:relative;
+    border-radius:12px;
+    overflow:hidden;
+    margin-bottom:12px;
+    color:white;
+}
+
+.card::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:url('https://c4.wallpaperflare.com/wallpaper/398/874/541/champions-league-stadium-wallpaper-preview.jpg') center/cover;
+    filter:blur(8px) brightness(0.3);
+}
+
+.card-content{
+    position:relative;
+    padding:12px;
     text-align:center;
+    border:1px solid #00f5ff;
     box-shadow:0 0 10px #00f5ff;
 }
 
-/* MOBILE FIX */
-@media(max-width:768px){
-    .header h1{font-size:14px;}
+/* CLUB ID GLOW */
+.club{
+    font-size:14px;
+    color:#00f5ff;
+    text-shadow:0 0 10px #00f5ff,0 0 20px #00f5ff;
+    animation:glow 1.5s infinite alternate;
 }
+@keyframes glow{
+    from{opacity:0.7;}
+    to{opacity:1;}
+}
+
+/* DOWNLOAD BTN */
+.download{
+    margin-top:8px;
+    padding:5px 10px;
+    border:none;
+    background:#00f5ff;
+    color:black;
+    border-radius:5px;
+    cursor:pointer;
+    font-size:11px;
+}
+
 </style>
 </head>
 
@@ -147,8 +174,8 @@ tr{border-bottom:1px solid #0f172a;}
 <tr>
 <th>Date</th>
 <th>Type</th>
-<th>P1</th>
-<th>P2</th>
+<th>Player 1</th>
+<th>Player 2</th>
 <th>Score</th>
 <th>Points</th>
 </tr>
@@ -160,18 +187,16 @@ tr{border-bottom:1px solid #0f172a;}
 <!-- STATS -->
 <div class="stats" id="stats">
 <div class="search-box">
-<input type="text" id="search" placeholder="Search Club ID (e.g. GFC-009)" oninput="generateStats()">
+<input type="text" id="search" placeholder="Search Club ID" oninput="generateStats()">
 </div>
 <div id="statsData"></div>
 </div>
 
 <script>
-
 const URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv";
 
 let data=[];
 
-// SAFE DATE
 function parseDate(s){
     try{
         let p=s.split(" ")[0].split("/");
@@ -179,35 +204,28 @@ function parseDate(s){
     }catch{return null;}
 }
 
-// LOAD
 async function load(){
-    try{
-        let t=await fetch(URL).then(r=>r.text());
-        let lines=t.split("\n");
+    let t=await fetch(URL).then(r=>r.text());
+    let lines=t.split("\n");
 
-        data=lines.slice(1).map(l=>{
-            let r=l.split(",");
-            if(r.length<12) return null;
+    data=lines.slice(1).map(l=>{
+        let r=l.split(",");
+        if(r.length<12) return null;
+        let d=parseDate(r[11]);
+        if(!d) return null;
 
-            let d=parseDate(r[11]);
-            if(!d) return null;
+        return {
+            date:d,type:r[2],
+            p1:r[0],p2:r[1],
+            s1:+r[3],s2:+r[4],
+            pt1:+r[5],pt2:+r[6],
+            ok:(r[9]||"").toLowerCase()
+        };
+    }).filter(x=>x && x.ok==="yes");
 
-            return {
-                date:d,type:r[2],
-                p1:r[0],p2:r[1],
-                s1:+r[3],s2:+r[4],
-                pt1:+r[5],pt2:+r[6],
-                ok:(r[9]||"").toLowerCase()
-            };
-        }).filter(x=>x && x.ok==="yes");
-
-        render(data);
-    }catch(e){
-        console.log("Load error");
-    }
+    render(data);
 }
 
-// RENDER LOG
 function render(arr){
     let h="";
     arr.slice(0,500).forEach(r=>{
@@ -228,22 +246,20 @@ function render(arr){
     document.getElementById("body").innerHTML=h;
 }
 
-// FILTER
 function applyFilter(){
     let t=document.getElementById("type").value;
     let s=document.getElementById("start").value;
     let e=document.getElementById("end").value;
 
     let res=data.filter(r=>
-        (!t||r.type===t) &&
-        (!s||r.date>=new Date(s)) &&
+        (!t||r.type===t)&&
+        (!s||r.date>=new Date(s))&&
         (!e||r.date<=new Date(e))
     );
 
     render(res);
 }
 
-// TAB
 function showTab(tab,el){
     document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
     el.classList.add("active");
@@ -262,13 +278,15 @@ function generateStats(){
 
     data.forEach(r=>{
         [r.p1,r.p2].forEach((p,i)=>{
-            if(!map[p]) map[p]={w:0,l:0,d:0,gs:0,gc:0};
+            if(!map[p]) map[p]={w:0,l:0,d:0,gs:0,gc:0,seven:0};
 
-            let me=i===0? r.s1:r.s2;
-            let op=i===0? r.s2:r.s1;
+            let me=i===0?r.s1:r.s2;
+            let op=i===0?r.s2:r.s1;
 
             map[p].gs+=me;
             map[p].gc+=op;
+
+            if(me>=7) map[p].seven++;
 
             if(me>op) map[p].w++;
             else if(me<op) map[p].l++;
@@ -281,19 +299,38 @@ function generateStats(){
         if(q && !p.toLowerCase().includes(q)) return;
         let s=map[p];
 
-        h+=`<div class="card">
-        <b>Club ID: ${p}</b><br><br>
-        🟢 Win: ${s.w} | 🔴 Loss: ${s.l} | 🟡 Draw: ${s.d}<br>
-        ⚽ Scored: ${s.gs} | 🥅 Conceded: ${s.gc}
+        h+=`
+        <div class="card">
+            <div class="card-content">
+                <div class="club">Club ID: ${p}</div><br>
+                🟢 ${s.w} | 🔴 ${s.l} | 🟡 ${s.d}<br>
+                ⚽ ${s.gs} | 🥅 ${s.gc}<br>
+                👑 7+ Goals: ${s.seven}
+                <br>
+                <button class="download" onclick="downloadCard(this)">Download</button>
+            </div>
         </div>`;
     });
 
     document.getElementById("statsData").innerHTML=h;
 }
 
-load();
+// DOWNLOAD CARD
+function downloadCard(btn){
+    let card=btn.parentElement;
+    html2canvas(card).then(canvas=>{
+        let link=document.createElement("a");
+        link.download="stats.png";
+        link.href=canvas.toDataURL();
+        link.click();
+    });
+}
 
+// LOAD
+load();
 </script>
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
 </body>
 </html>

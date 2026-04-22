@@ -13,30 +13,36 @@ body{
     color:white;
 }
 
-/* HEADER */
+/* HEADER ROW (LOGO + TITLE SAME LINE FIXED) */
 .header{
     display:flex;
-    justify-content:center;
     align-items:center;
+    justify-content:center;
     gap:10px;
     padding:10px;
 }
-.header img{
+.logo{
     width:40px;
     filter:drop-shadow(0 0 10px #00f5ff);
+    animation:glow 2s infinite alternate;
 }
-.header h1{
+@keyframes glow{
+    from{filter:drop-shadow(0 0 5px #00f5ff);}
+    to{filter:drop-shadow(0 0 20px #00f5ff);}
+}
+
+.title{
     font-size:18px;
     color:#00f5ff;
     text-shadow:0 0 10px #00f5ff,0 0 25px #00f5ff;
 }
 
-/* DESCRIPTION */
+/* DESCRIPTION (RESTORED) */
 .desc{
     text-align:center;
-    font-size:12px;
+    font-size:11px;
     color:#94a3b8;
-    margin-bottom:5px;
+    margin-top:-5px;
 }
 
 /* SEARCH */
@@ -66,12 +72,13 @@ body{
     text-align:center;
 }
 
+/* CLUB ID */
 .club{
     font-size:15px;
     font-weight:bold;
-    margin-bottom:10px;
     color:#00f5ff;
-    text-shadow:0 0 10px #00f5ff,0 0 25px #00f5ff;
+    text-shadow:0 0 15px #00f5ff;
+    margin-bottom:8px;
 }
 
 /* GRID */
@@ -87,10 +94,10 @@ body{
     font-size:11px;
     background:#001f2f;
     border:1px solid #00f5ff;
-    box-shadow:0 0 8px #00f5ff inset;
+    box-shadow:0 0 10px #00f5ff inset;
 }
 
-/* BUTTON */
+/* BUTTONS */
 .btns{
     margin-top:10px;
     display:flex;
@@ -117,16 +124,16 @@ body{
 <body>
 
 <div class="header">
-<img src="https://i.imgur.com/LY3Bb9m.png">
-<h1>GOAT FC STATISTICS</h1>
+    <img class="logo" src="https://i.imgur.com/LY3Bb9m.png">
+    <div class="title">GOAT FC STATISTICS</div>
 </div>
 
 <div class="desc">
-Live approved match statistics • Auto updated • Powered by Goat FC System
+Live approved match analytics • Player ranking • Performance tracker
 </div>
 
 <div class="search">
-<input type="text" id="search" placeholder="Search Club ID (GFC001 / GFC-001)" oninput="render()">
+<input type="text" id="search" placeholder="Search Club ID (GFC-001 / gfc001)" oninput="render()">
 </div>
 
 <div id="data"></div>
@@ -138,75 +145,61 @@ const URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLa
 let data=[];
 
 // NORMALIZE SEARCH
-function normalize(id){
-    return id.toLowerCase().replace(/[^a-z0-9]/g,'');
+function norm(s){
+    return (s||"").toLowerCase().replace(/[^a-z0-9]/g,"");
 }
 
-// SAFE CSV PARSER (FIXED)
-function parseCSV(text){
-    return text.trim().split("\n").map(r=>{
-        let cols=[],cur="",inside=false;
-        for(let c of r){
-            if(c=='"') inside=!inside;
-            else if(c==',' && !inside){cols.push(cur);cur="";}
-            else cur+=c;
-        }
-        cols.push(cur);
-        return cols;
-    });
-}
-
-// LOAD WITH RETRY
-async function load(retry=0){
+// SAFE CSV PARSER (FIX DATA MISSING ISSUE)
+async function load(){
     try{
         let res=await fetch(URL+"?t="+Date.now());
         let text=await res.text();
 
-        let rows=parseCSV(text).slice(1);
+        let rows=text.split("\n");
 
-        data=rows.map(c=>{
-            if(c.length<14) return null;
+        data=rows.slice(1).map(r=>{
+            let c=r.split(",");
 
-            // Approved filter (column 10 = index 9)
-            if((c[9]||"").toLowerCase()!=="yes") return null;
+            if(c.length<12) return null;
+            if((c[9]||"").trim().toLowerCase()!=="yes") return null;
 
-            return{
-                id:c[0],
-                match:+c[1],
-                win:+c[2],
-                loss:+c[3],
-                draw:+c[4],
-                winp:+c[5],
-                gs:+c[7],
-                gc:+c[8],
-                diff:+c[9],
-                rate:+c[10],
-                seven:+c[11],
-                friendly:+c[12],
-                other:+c[13]
+            return {
+                id:c[0]?.trim(),
+                match:+c[10]||0,
+                win:+c[2]||0,
+                loss:+c[3]||0,
+                draw:+c[4]||0,
+                winp:+c[5]||0,
+                gs:+c[7]||0,
+                gc:+c[8]||0,
+                diff:(+c[7]||0)-(+c[8]||0),
+                rate:+c[10]||0,
+                seven:+c[11]||0,
+                friendly:+c[12]||0,
+                other:+c[13]||0
             };
-        }).filter(x=>x);
+        }).filter(Boolean);
 
         render();
-
     }catch(e){
-        if(retry<3) setTimeout(()=>load(retry+1),1000);
-        else document.getElementById("data").innerHTML="⚠️ Data load failed";
+        console.log("Load error",e);
     }
 }
 
-// RENDER
+// RENDER UI
 function render(){
-    let q=normalize(document.getElementById("search").value);
+    let q=norm(document.getElementById("search").value);
 
     let sorted=[...data].sort((a,b)=>b.win-a.win);
 
     let html="";
+
     sorted.forEach(p=>{
-        if(q && !normalize(p.id).includes(q)) return;
+        if(q && !norm(p.id).includes(q)) return;
 
         html+=`
         <div class="card">
+
             <div class="club">Player ID: ${p.id}</div>
 
             <div class="grid">
@@ -220,7 +213,7 @@ function render(){
 
                 <div class="box">⚽ Scored<br>${p.gs}</div>
                 <div class="box">🥅 Conceded<br>${p.gc}</div>
-                <div class="box">📈 Difference<br>${p.diff}</div>
+                <div class="box">📉 Difference<br>${p.diff}</div>
 
                 <div class="box">👑 7+ Goals<br>${p.seven}</div>
                 <div class="box">🤝 Friendly<br>${p.friendly}</div>
@@ -231,26 +224,26 @@ function render(){
                 <button class="btn" onclick="share('${p.id}')">Share</button>
                 <button class="btn" onclick="download(this)">Download</button>
             </div>
+
         </div>`;
     });
 
-    document.getElementById("data").innerHTML=html || "No Data Found";
+    document.getElementById("data").innerHTML=html;
 }
 
 // SHARE
 function share(id){
-    navigator.clipboard.writeText("GOAT FC Stats: "+id);
+    navigator.clipboard.writeText("GOAT FC Player: "+id);
     alert("Copied!");
 }
 
 // DOWNLOAD
 function download(btn){
-    let card=btn.closest(".card");
-    html2canvas(card).then(canvas=>{
-        let link=document.createElement("a");
-        link.download="stats.png";
-        link.href=canvas.toDataURL();
-        link.click();
+    html2canvas(btn.closest(".card")).then(canvas=>{
+        let a=document.createElement("a");
+        a.download="goatfc.png";
+        a.href=canvas.toDataURL();
+        a.click();
     });
 }
 

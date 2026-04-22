@@ -24,13 +24,13 @@ body{
 }
 .header img{
     width:42px;
-    filter: drop-shadow(0 0 8px #00f5ff) drop-shadow(0 0 15px #00f5ff);
+    filter: drop-shadow(0 0 8px #00f5ff);
 }
 .header h1{
     font-size:20px;
     margin:0;
     color:#00f5ff;
-    text-shadow:0 0 10px #00f5ff,0 0 25px #00f5ff;
+    text-shadow:0 0 10px #00f5ff;
 }
 .desc{
     width:100%;
@@ -53,10 +53,9 @@ body{
     background:black;
     color:#00f5ff;
     outline:none;
-    box-shadow:0 0 12px #00f5ff;
 }
 
-/* DATA GRID PC */
+/* GRID */
 #data{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
@@ -69,75 +68,78 @@ body{
     padding:14px;
     border-radius:16px;
     background:linear-gradient(145deg,#020617,#001f2f);
-    border:1px solid rgba(0,245,255,0.4);
-    box-shadow:0 0 20px rgba(0,245,255,0.25);
+    border:1px solid rgba(0,245,255,0.3);
+    box-shadow:0 0 10px rgba(0,245,255,0.15);
     text-align:center;
 }
 
-/* TOP 3 */
-.top3{
+/* TOP COLORS */
+.rank1{
     border:1px solid gold;
-    box-shadow:0 0 25px gold;
+    box-shadow:0 0 15px gold;
 }
-
-/* TOP 10 */
+.rank2{
+    border:1px solid silver;
+    box-shadow:0 0 15px silver;
+}
+.rank3{
+    border:1px solid #cd7f32;
+    box-shadow:0 0 15px #cd7f32;
+}
 .top10{
     border:1px solid #a855f7;
-    box-shadow:0 0 20px #a855f7;
+    box-shadow:0 0 12px #a855f7;
 }
 
 /* CLUB */
 .club{
-    font-size:16px;
+    font-size:15px;
     font-weight:bold;
     margin-bottom:12px;
     color:#00f5ff;
-    text-shadow:0 0 10px #00f5ff;
 }
 
-/* GRID */
+/* GRID BOX */
 .grid{
     display:grid;
     grid-template-columns:repeat(3,1fr);
     gap:8px;
 }
 
-/* BOX */
 .box{
     padding:8px;
     border-radius:10px;
     font-size:12px;
-    background:rgba(0,245,255,0.08);
-    border:1px solid rgba(0,245,255,0.4);
-    box-shadow:0 0 6px rgba(0,245,255,0.6);
-    color:#e0faff;
+    background:rgba(0,245,255,0.06);
+    border:1px solid rgba(0,245,255,0.3);
+    box-shadow:0 0 5px rgba(0,245,255,0.4);
 }
 
-/* MOBILE FIX */
-@media(max-width:768px){
+/* DOWNLOAD BUTTON */
+.download{
+    margin-top:10px;
+}
+.download button{
+    padding:6px 12px;
+    border:none;
+    border-radius:8px;
+    background:#00f5ff;
+    color:black;
+    font-size:12px;
+    cursor:pointer;
+}
 
+/* MOBILE */
+@media(max-width:768px){
     #data{
         display:block;
         padding:6px;
     }
-
-    .card{
-        margin-bottom:12px;
-        padding:12px;
-    }
-
     .grid{
         grid-template-columns:repeat(2,1fr);
-        gap:6px;
     }
-
-    .box{
-        font-size:11px;
-        padding:6px;
-    }
-
-    .club{
-        font-size:14px;
+    .card{
+        margin-bottom:12px;
     }
 }
 
@@ -238,12 +240,14 @@ function render(){
         if(q && !normalize(id).includes(q)) return;
 
         let cls="card";
-        if(index<3) cls+=" top3";
+        if(index===0) cls+=" rank1";
+        else if(index===1) cls+=" rank2";
+        else if(index===2) cls+=" rank3";
         else if(index<10) cls+=" top10";
 
         html+=`
         <div class="${cls}">
-            <div class="club">${id}</div>
+            <div class="club">PLAYER ID: ${id}</div>
 
             <div class="grid">
                 <div class="box">🟢 Win : ${p.win}</div>
@@ -256,11 +260,15 @@ function render(){
 
                 <div class="box">⚽ Scored : ${p.gs}</div>
                 <div class="box">🥅 Conceded : ${p.gc}</div>
-                <div class="box">📈 Diff : ${p.diff}</div>
+                <div class="box">📈 Difference : ${p.diff}</div>
 
                 <div class="box">👑 7+ Goals : ${p.seven}</div>
                 <div class="box">🤝 Friendly : ${p.friendly}</div>
                 <div class="box">🏆 Tournament : ${p.other}</div>
+            </div>
+
+            <div class="download">
+                <button onclick="downloadCard(this)">Download</button>
             </div>
         </div>`;
     });
@@ -268,9 +276,23 @@ function render(){
     document.getElementById("data").innerHTML=html;
 }
 
+// DOWNLOAD IMAGE
+function downloadCard(btn){
+    let card = btn.closest(".card");
+
+    html2canvas(card).then(canvas=>{
+        let link=document.createElement("a");
+        link.download="GOAT_FC_STATS.jpg";
+        link.href=canvas.toDataURL("image/jpeg");
+        link.click();
+    });
+}
+
 load();
 
 </script>
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
 </body>
 </html>

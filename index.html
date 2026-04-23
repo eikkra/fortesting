@@ -35,12 +35,13 @@ h1{
 margin:0;
 font-size:20px;
 color:#00ffcc;
-animation:glowText 2s infinite alternate;
+animation:glowText 1.8s infinite alternate;
 }
 
+/* 🔥 GLOW BACK */
 @keyframes glowText{
-from{text-shadow:0 0 5px #00ffcc;}
-to{text-shadow:0 0 15px #00ffcc;}
+from{text-shadow:0 0 6px #00ffcc,0 0 12px #00ffcc;}
+to{text-shadow:0 0 12px #00ffcc,0 0 25px #00ffff;}
 }
 
 /* DESC */
@@ -90,7 +91,7 @@ from{box-shadow:0 0 6px #00ffcc;}
 to{box-shadow:0 0 14px #00ffcc;}
 }
 
-/* TABLE FIX */
+/* TABLE */
 .card{
 width:95%;
 margin:auto;
@@ -99,38 +100,48 @@ margin:auto;
 table{
 width:100%;
 border-collapse:collapse;
-table-layout:fixed; /* 🔥 FIX */
 }
 
+/* 🔥 TIGHT COLUMN CONTROL */
 th, td{
-padding:8px 4px;
+padding:6px 4px;
 font-size:13px;
+text-align:center;
 }
 
-/* COLUMN WIDTH CONTROL */
-th:nth-child(1), td:nth-child(1){width:6%;}
-th:nth-child(2), td:nth-child(2){width:32%;}
-th:nth-child(3), td:nth-child(3){width:8%;}
-th:nth-child(4), td:nth-child(4){width:8%;}
-th:nth-child(5), td:nth-child(5){width:12%;}
-th:nth-child(6), td:nth-child(6){width:10%;}
-th:nth-child(7), td:nth-child(7){width:10%;}
-th:nth-child(8), td:nth-child(8){width:10%;}
+th{
+color:#00ffcc;
+}
 
-/* PLAYER COLUMN FIX */
+/* 🔥 PLAYER COLUMN */
 .player{
 text-align:left;
+max-width:140px;
 overflow:hidden;
 white-space:nowrap;
 text-overflow:ellipsis;
 }
 
+/* 🔥 REMOVE GAP FORCE */
+td:nth-child(2){
+width:140px;
+}
+td:nth-child(3){
+width:45px;
+}
+
+/* ID */
 .id{
 font-size:10px;
 opacity:.6;
 }
 
-/* RANK STYLE */
+/* 🔥 ROW SEPARATOR */
+tbody tr{
+border-bottom:1px solid rgba(255,255,255,0.08);
+}
+
+/* RANK */
 .rank1{
 background:linear-gradient(90deg,rgba(255,215,0,0.25),transparent);
 }
@@ -141,26 +152,34 @@ background:linear-gradient(90deg,rgba(192,192,192,0.25),transparent);
 background:linear-gradient(90deg,rgba(205,127,50,0.25),transparent);
 }
 
-/* TOP 10 */
 .top10{
 background:linear-gradient(90deg,rgba(0,255,150,0.12),transparent);
 border-left:3px solid #00ffcc;
 }
 
-/* 📱 MOBILE VIEW */
+/* 📱 MOBILE FIX */
 @media(max-width:600px){
 
-table, thead{
+table{
 display:none;
+}
+
+.card{
+width:95%;
+}
+
+/* 🔥 CARD STYLE */
+tbody{
+display:block;
 }
 
 tbody tr{
 display:block;
 margin-bottom:12px;
-padding:12px;
-border-radius:12px;
+padding:10px;
+border-radius:10px;
 background:#111827;
-text-align:left;
+border:1px solid rgba(255,255,255,0.08);
 }
 
 tbody td{
@@ -170,6 +189,7 @@ padding:5px 0;
 font-size:12px;
 }
 
+/* LABEL SHOW */
 tbody td::before{
 content:attr(data-label);
 opacity:.6;
@@ -255,13 +275,9 @@ map[x["Club ID Number"].trim()]=x["Full Name"];
 ld=ld.filter(r=>map[r["Club_ID"]?.trim()]);
 
 ld.sort((a,b)=>{
-
-let A_pt=+(t==="overall"?a["Overall_Point"]:a["Monthly_Point"])||0;
-let B_pt=+(t==="overall"?b["Overall_Point"]:b["Monthly_Point"])||0;
-
-if(B_pt!==A_pt) return B_pt-A_pt;
-
-return 0;
+let A=+(t==="overall"?a["Overall_Point"]:a["Monthly_Point"])||0;
+let B=+(t==="overall"?b["Overall_Point"]:b["Monthly_Point"])||0;
+return B-A;
 });
 
 let tbody=document.getElementById("table");

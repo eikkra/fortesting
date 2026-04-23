@@ -18,13 +18,11 @@ color:white;
 text-align:center;
 }
 
-/* 🔥 CENTER CONTAINER */
 .wrapper{
 max-width:900px;
 margin:auto;
 }
 
-/* HEADER */
 .header{
 display:flex;
 justify-content:center;
@@ -56,7 +54,6 @@ opacity:.7;
 margin-bottom:10px;
 }
 
-/* BUTTON */
 .tabs{margin:8px;}
 
 button{
@@ -74,7 +71,6 @@ background:linear-gradient(90deg,#00ffcc,#00c3ff);
 color:black;
 }
 
-/* STATS */
 .stats{
 display:flex;
 justify-content:center;
@@ -96,7 +92,6 @@ from{box-shadow:0 0 6px #00ffcc;}
 to{box-shadow:0 0 14px #00ffcc;}
 }
 
-/* 🔥 CARD BACKGROUND */
 .card{
 background:rgba(255,255,255,0.04);
 backdrop-filter:blur(10px);
@@ -107,7 +102,6 @@ margin-top:10px;
 overflow-x:auto;
 }
 
-/* TABLE */
 table{
 width:100%;
 border-collapse:collapse;
@@ -124,38 +118,23 @@ padding:8px 6px;
 font-size:13px;
 }
 
-/* COLUMN */
 th:nth-child(1){width:5%;}
 th:nth-child(2){width:30%;}
 th:nth-child(3){width:8%;}
 
-/* PLAYER */
 .player{
 text-align:left;
 }
 
-/* ID */
 .id{
 font-size:10px;
 opacity:.6;
 }
 
-/* ROW LINE */
-@media(max-width:600px){
-
-/* 🔥 REMOVE EXTRA LINE INSIDE CARD */
 tbody tr{
-border-bottom:none;
+border-bottom:1px solid rgba(255,255,255,0.08);
 }
 
-/* 🔥 CLEAN CARD LOOK */
-tbody tr:not(:last-child){
-margin-bottom:12px;
-}
-
-}
-
-/* 🥇🥈🥉 */
 .rank1{
 background:linear-gradient(90deg,rgba(255,215,0,0.25),transparent);
 animation:goldGlow 2s infinite alternate;
@@ -183,13 +162,12 @@ from{box-shadow:inset 0 0 6px #cd7f32;}
 to{box-shadow:inset 0 0 18px #cd7f32;}
 }
 
-/* TOP 10 */
 .top10{
 background:linear-gradient(90deg,rgba(0,255,150,0.12),transparent);
 border-left:3px solid #00ffcc;
 }
 
-/* 📱 MOBILE */
+/* 📱 MOBILE FIX ONLY */
 @media(max-width:600px){
 
 .wrapper{
@@ -207,6 +185,11 @@ text-overflow:ellipsis;
 td{
 font-size:11px;
 padding:6px 4px;
+}
+
+/* 🔥 ONLY CHANGE */
+tbody tr{
+border-bottom:none;
 }
 
 }
@@ -260,8 +243,6 @@ Live competitive ranking based on performance, goals & consistency.
 </div>
 
 <script>
-
-/* 🔥 SAME JS AS BEFORE (UNCHANGED) */
 
 const L="https://opensheet.elk.sh/1DSPKPaU1ZQYbFM4iYbE1VXgDAXU-FCT7--QhYJsNf1M/Leaderboard%20Goat%20FC";
 const M="https://opensheet.elk.sh/1DSPKPaU1ZQYbFM4iYbE1VXgDAXU-FCT7--QhYJsNf1M/CLUB%20MEMBERS";

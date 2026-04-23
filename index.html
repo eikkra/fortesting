@@ -18,11 +18,13 @@ color:white;
 text-align:center;
 }
 
+/* WRAPPER */
 .wrapper{
 max-width:900px;
 margin:auto;
 }
 
+/* HEADER */
 .header{
 display:flex;
 justify-content:center;
@@ -54,6 +56,7 @@ opacity:.7;
 margin-bottom:10px;
 }
 
+/* BUTTON */
 .tabs{margin:8px;}
 
 button{
@@ -71,6 +74,7 @@ background:linear-gradient(90deg,#00ffcc,#00c3ff);
 color:black;
 }
 
+/* STATS */
 .stats{
 display:flex;
 justify-content:center;
@@ -92,6 +96,7 @@ from{box-shadow:0 0 6px #00ffcc;}
 to{box-shadow:0 0 14px #00ffcc;}
 }
 
+/* CARD */
 .card{
 background:rgba(255,255,255,0.04);
 backdrop-filter:blur(10px);
@@ -102,6 +107,7 @@ margin-top:10px;
 overflow-x:auto;
 }
 
+/* TABLE */
 table{
 width:100%;
 border-collapse:collapse;
@@ -118,10 +124,11 @@ padding:8px 6px;
 font-size:13px;
 }
 
-th:nth-child(1){width:5%;}
-th:nth-child(2){width:30%;}
-th:nth-child(3){width:8%;}
+tbody tr{
+border-bottom:1px solid rgba(255,255,255,0.08);
+}
 
+/* PLAYER */
 .player{
 text-align:left;
 }
@@ -131,10 +138,7 @@ font-size:10px;
 opacity:.6;
 }
 
-tbody tr{
-border-bottom:1px solid rgba(255,255,255,0.08);
-}
-
+/* RANK */
 .rank1{
 background:linear-gradient(90deg,rgba(255,215,0,0.25),transparent);
 animation:goldGlow 2s infinite alternate;
@@ -167,7 +171,7 @@ background:linear-gradient(90deg,rgba(0,255,150,0.12),transparent);
 border-left:3px solid #00ffcc;
 }
 
-/* 📱 MOBILE FIX ONLY */
+/* 📱 MOBILE FIX */
 @media(max-width:600px){
 
 .wrapper{
@@ -175,11 +179,13 @@ max-width:100%;
 padding:0 6px;
 }
 
+/* REMOVE EXTRA VISUAL LINE UNDER PLAYER (FIX) */
 .player{
 font-size:11px;
 white-space:nowrap;
 overflow:hidden;
 text-overflow:ellipsis;
+border-bottom:none !important; /* 🔥 FIX */
 }
 
 td{
@@ -187,9 +193,8 @@ font-size:11px;
 padding:6px 4px;
 }
 
-/* 🔥 ONLY CHANGE */
 tbody tr{
-border-bottom:none;
+border-bottom:1px solid rgba(255,255,255,0.08);
 }
 
 }

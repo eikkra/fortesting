@@ -141,8 +141,18 @@ opacity:.6;
 }
 
 /* ROW LINE */
+@media(max-width:600px){
+
+/* 🔥 REMOVE EXTRA LINE INSIDE CARD */
 tbody tr{
-border-bottom:1px solid rgba(255,255,255,0.08);
+border-bottom:none;
+}
+
+/* 🔥 CLEAN CARD LOOK */
+tbody tr:not(:last-child){
+margin-bottom:12px;
+}
+
 }
 
 /* 🥇🥈🥉 */

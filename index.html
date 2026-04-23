@@ -20,26 +20,25 @@ text-align:center;
 display:flex;
 justify-content:center;
 align-items:center;
-gap:10px;
+gap:8px;
 padding:12px;
 }
 
 .logo{
-width:48px;
+width:44px;
 filter:drop-shadow(0 0 10px #00ffcc);
 }
 
 h1{
 margin:0;
-font-size:22px;
+font-size:20px;
 color:#00ffcc;
-letter-spacing:1px;
 }
 
-/* DESCRIPTION */
+/* DESC */
 .desc{
 font-size:12px;
-opacity:.75;
+opacity:.7;
 margin-bottom:10px;
 }
 
@@ -83,7 +82,7 @@ from{box-shadow:0 0 6px #00ffcc;}
 to{box-shadow:0 0 14px #00ffcc;}
 }
 
-/* TABLE */
+/* TABLE FIX */
 .card{
 width:95%;
 margin:auto;
@@ -92,6 +91,7 @@ margin:auto;
 table{
 width:100%;
 border-collapse:collapse;
+table-layout:auto; /* 🔥 FIX */
 }
 
 th{
@@ -101,14 +101,14 @@ color:#00ffcc;
 }
 
 td{
-padding:10px;
+padding:10px 6px; /* 🔥 tight spacing */
 font-size:13px;
 }
 
-/* PLAYER */
+/* PLAYER COLUMN FIX */
 .player{
 text-align:left;
-line-height:1.3;
+white-space:nowrap; /* 🔥 prevent big gap */
 }
 
 .id{
@@ -149,35 +149,36 @@ background:linear-gradient(90deg,rgba(0,255,150,0.12),transparent);
 border-left:3px solid #00ffcc;
 }
 
-/* 📱 MOBILE PERFECT */
+/* 📱 MOBILE VIEW (CARD STYLE) */
 @media(max-width:600px){
 
-h1{font-size:16px;}
-.logo{width:36px;}
-
-th{
-font-size:11px;
-padding:6px;
+table, thead{
+display:none;
 }
 
-td{
-font-size:11px;
-padding:6px;
+.card{
+width:95%;
 }
 
-/* STACK PLAYER */
+tbody tr{
+display:block;
+margin-bottom:10px;
+padding:10px;
+border-radius:10px;
+background:#111827;
+text-align:left;
+}
+
+tbody td{
+display:flex;
+justify-content:space-between;
+padding:6px 0;
+font-size:12px;
+}
+
 .player{
-font-size:11px;
-}
-
-.id{
-font-size:9px;
-}
-
-/* compact stats */
-.stat{
-font-size:10px;
-padding:4px 8px;
+flex-direction:column;
+align-items:flex-start;
 }
 
 }
@@ -193,7 +194,7 @@ padding:4px 8px;
 </div>
 
 <div class="desc">
-Live competitive ranking based on match performance, goal stats & consistency.
+Live competitive ranking based on performance, goals & consistency.
 </div>
 
 <div class="tabs">
@@ -254,7 +255,6 @@ map[x["Club ID Number"].trim()]=x["Full Name"];
 
 ld=ld.filter(r=>map[r["Club_ID"]?.trim()]);
 
-// SMART SORT
 ld.sort((a,b)=>{
 
 let A_pt=+(t==="overall"?a["Overall_Point"]:a["Monthly_Point"])||0;

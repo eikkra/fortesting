@@ -2,6 +2,7 @@
 <html>
 <head>
 <title>Goat FC Leaderboard</title>
+<link rel="icon" type="image/png" href="https://i.imgur.com/LY3Bb9m.png">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -15,6 +16,12 @@ font-family:'Oswald',sans-serif;
 background:linear-gradient(135deg,#020617,#0f172a);
 color:white;
 text-align:center;
+}
+
+/* 🔥 CENTER CONTAINER */
+.wrapper{
+max-width:900px;
+margin:auto;
 }
 
 /* HEADER */
@@ -43,7 +50,6 @@ from{text-shadow:0 0 5px #00ffcc;}
 to{text-shadow:0 0 18px #00ffff;}
 }
 
-/* DESC */
 .desc{
 font-size:12px;
 opacity:.7;
@@ -90,40 +96,38 @@ from{box-shadow:0 0 6px #00ffcc;}
 to{box-shadow:0 0 14px #00ffcc;}
 }
 
-/* TABLE */
+/* 🔥 CARD BACKGROUND */
 .card{
-width:95%;
-margin:auto;
-overflow-x:auto; /* 🔥 mobile fix */
+background:rgba(255,255,255,0.04);
+backdrop-filter:blur(10px);
+border:1px solid rgba(255,255,255,0.08);
+border-radius:12px;
+padding:10px;
+margin-top:10px;
+overflow-x:auto;
 }
 
+/* TABLE */
 table{
 width:100%;
 border-collapse:collapse;
 }
 
-/* HEADER */
 th{
 color:#00ffcc;
 font-size:13px;
 padding:8px 6px;
 }
 
-/* CELL */
 td{
 padding:8px 6px;
 font-size:13px;
 }
 
-/* COLUMN CONTROL */
+/* COLUMN */
 th:nth-child(1){width:5%;}
 th:nth-child(2){width:30%;}
 th:nth-child(3){width:8%;}
-th:nth-child(4){width:8%;}
-th:nth-child(5){width:12%;}
-th:nth-child(6){width:10%;}
-th:nth-child(7){width:10%;}
-th:nth-child(8){width:10%;}
 
 /* PLAYER */
 .player{
@@ -141,7 +145,7 @@ tbody tr{
 border-bottom:1px solid rgba(255,255,255,0.08);
 }
 
-/* 🥇 TOP 1 */
+/* 🥇🥈🥉 */
 .rank1{
 background:linear-gradient(90deg,rgba(255,215,0,0.25),transparent);
 animation:goldGlow 2s infinite alternate;
@@ -151,7 +155,6 @@ from{box-shadow:inset 0 0 6px gold;}
 to{box-shadow:inset 0 0 18px gold;}
 }
 
-/* 🥈 TOP 2 */
 .rank2{
 background:linear-gradient(90deg,rgba(192,192,192,0.25),transparent);
 animation:silverGlow 2s infinite alternate;
@@ -161,7 +164,6 @@ from{box-shadow:inset 0 0 6px silver;}
 to{box-shadow:inset 0 0 18px silver;}
 }
 
-/* 🥉 TOP 3 */
 .rank3{
 background:linear-gradient(90deg,rgba(205,127,50,0.25),transparent);
 animation:bronzeGlow 2s infinite alternate;
@@ -171,16 +173,40 @@ from{box-shadow:inset 0 0 6px #cd7f32;}
 to{box-shadow:inset 0 0 18px #cd7f32;}
 }
 
-/* 🟢 TOP 4-10 */
+/* TOP 10 */
 .top10{
 background:linear-gradient(90deg,rgba(0,255,150,0.12),transparent);
 border-left:3px solid #00ffcc;
+}
+
+/* 📱 MOBILE */
+@media(max-width:600px){
+
+.wrapper{
+max-width:100%;
+padding:0 6px;
+}
+
+.player{
+font-size:11px;
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;
+}
+
+td{
+font-size:11px;
+padding:6px 4px;
+}
+
 }
 
 </style>
 </head>
 
 <body>
+
+<div class="wrapper">
 
 <div class="header">
 <img src="https://i.imgur.com/LY3Bb9m.png" class="logo">
@@ -221,7 +247,11 @@ Live competitive ranking based on performance, goals & consistency.
 </table>
 </div>
 
+</div>
+
 <script>
+
+/* 🔥 SAME JS AS BEFORE (UNCHANGED) */
 
 const L="https://opensheet.elk.sh/1DSPKPaU1ZQYbFM4iYbE1VXgDAXU-FCT7--QhYJsNf1M/Leaderboard%20Goat%20FC";
 const M="https://opensheet.elk.sh/1DSPKPaU1ZQYbFM4iYbE1VXgDAXU-FCT7--QhYJsNf1M/CLUB%20MEMBERS";
@@ -249,13 +279,11 @@ map[x["Club ID Number"].trim()]=x["Full Name"];
 
 ld=ld.filter(r=>map[r["Club_ID"]?.trim()]);
 
-/* 🔥 PERFECT SORT */
 ld.sort((a,b)=>{
 
 let A_m=+(t==="overall"?a["Overall_PL"]:a["Monthly_PL"])||0;
 let B_m=+(t==="overall"?b["Overall_PL"]:b["Monthly_PL"])||0;
 
-/* no match = last */
 if(A_m===0 && B_m>0) return 1;
 if(B_m===0 && A_m>0) return -1;
 
@@ -274,7 +302,7 @@ if(B_gf!==A_gf) return B_gf-A_gf;
 let A_ga=+(t==="overall"?a["Total GA"]:a["Montly GA"])||0;
 let B_ga=+(t==="overall"?b["Total GA"]:b["Montly GA"])||0;
 
-return A_ga-B_ga; /* lower GA better */
+return A_ga-B_ga;
 
 });
 

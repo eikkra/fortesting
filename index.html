@@ -1,238 +1,220 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GOAT FC STATISTICS</title>
+  <title>Goat FC Leaderboard</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet">
 
-<style>
-body{margin:0;font-family:'Rajdhani',sans-serif;background:#020617;color:white;}
-.header{display:flex;align-items:center;justify-content:center;gap:10px;padding:12px;flex-wrap:wrap;}
-.header img{width:42px;filter: drop-shadow(0 0 8px #00f5ff);}
-.header h1{
-    font-size:22px;margin:0;color:#00f5ff;letter-spacing:0.5px;
-    text-shadow:0 0 6px #00f5ff,0 0 12px #00f5ff,0 0 18px #00f5ff;
-}
-.desc{width:100%;text-align:center;font-size:13px;color:#94a3b8;}
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Oswald', sans-serif;
+      background: linear-gradient(135deg, #020617, #0f172a);
+      color: white;
+      text-align: center;
+      overflow-x: hidden;
+    }
 
-.search{text-align:center;margin:10px;}
-.search input{
-    padding:10px;width:90%;max-width:380px;border-radius:10px;
-    border:1px solid #00f5ff;background:black;color:#00f5ff;
-    outline:none;font-family:'Rajdhani';
-}
+    body.light {
+      background: linear-gradient(135deg, #001a0f, #003d26);
+    }
 
-#data{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-    gap:10px;padding:10px;
-}
+    .header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      padding-top: 15px;
+    }
 
-.card{
-    padding:14px;border-radius:16px;
-    background:linear-gradient(145deg,#020617,#001f2f);
-    border:1px solid rgba(0,245,255,0.3);
-    box-shadow:0 0 10px rgba(0,245,255,0.12);
-    text-align:center;
-}
+    .logo {
+      width: 55px;
+      animation: float 3s infinite;
+      filter: drop-shadow(0 0 12px #00ffcc);
+    }
 
-.rank1{border:1px solid gold;box-shadow:0 0 12px gold;}
-.rank2{border:1px solid silver;box-shadow:0 0 12px silver;}
-.rank3{border:1px solid #cd7f32;box-shadow:0 0 12px #cd7f32;}
-.top10{border:1px solid #a855f7;box-shadow:0 0 10px #a855f7;}
+    h1 {
+      margin: 0;
+      color: #00ffcc;
+    }
 
-.club{font-size:16px;font-weight:700;margin-bottom:12px;}
-.player-label{color:#94a3b8;}
-.player-name{color:#22c55e;}
-.player-id{color:#00f5ff;}
+    .slogan {
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
 
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
-.box{
-    padding:8px;border-radius:10px;font-size:13px;font-weight:600;
-    background:rgba(0,245,255,0.06);
-    border:1px solid rgba(0,245,255,0.3);
-    box-shadow:0 0 4px rgba(0,245,255,0.4);
-}
+    .tabs { margin: 10px; }
 
-.download{margin-top:10px;}
-.download button{
-    padding:6px 12px;border:none;border-radius:8px;
-    background:#00f5ff;color:black;font-size:13px;
-    cursor:pointer;font-family:'Rajdhani';
-}
+    button {
+      padding: 6px 12px;
+      border-radius: 15px;
+      border: none;
+      background: #1f2937;
+      color: white;
+      margin: 3px;
+      cursor: pointer;
+    }
 
-@media(max-width:768px){
-    #data{display:block;padding:6px;}
-    .grid{grid-template-columns:repeat(2,1fr);}
-    .card{margin-bottom:12px;}
-}
-</style>
+    button.active {
+      background: linear-gradient(to right,#00ffcc,#00c3ff);
+      color: black;
+    }
+
+    .card {
+      width: 98%;
+      margin: auto;
+      background: rgba(255,255,255,0.05);
+      border-radius: 10px;
+      padding: 6px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 6px;
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    th { color: #00ffcc; }
+
+    .rank1-row { background: rgba(255,215,0,0.15); }
+    .rank2-row { background: rgba(192,192,192,0.15); }
+    .rank3-row { background: rgba(205,127,50,0.15); }
+
+    .top10 {
+      background: rgba(0,255,150,0.08);
+      border-left: 3px solid #00ffcc;
+    }
+
+    .toggle {
+      margin: 8px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    /* 📱 MOBILE PERFECT */
+    @media(max-width:600px){
+      th,td { font-size: 10px; padding: 5px; }
+      .logo { width: 45px; }
+      h1 { font-size: 16px; }
+    }
+
+  </style>
 </head>
 
 <body>
 
 <div class="header">
-<img src="https://i.imgur.com/LY3Bb9m.png">
-<h1>GOAT FC STATISTICS</h1>
-<div class="desc">
-Official performance dashboard showing wins, goals, win rate and match stats (Approved matches only)
-</div>
+  <img src="https://i.imgur.com/LY3Bb9m.png" class="logo">
+  <h1>GOAT FC LEADERBOARD</h1>
 </div>
 
-<div class="search">
-<input type="text" id="search" placeholder="Search Name or Club ID..." oninput="render()">
+<div class="slogan">⚡ BE THE GAME CHANGER! ⚡</div>
+
+<div class="toggle" onclick="document.body.classList.toggle('light')">🌗 Theme</div>
+
+<div class="tabs">
+  <button onclick="loadData('overall')" class="active" id="overallBtn">Overall</button>
+  <button onclick="loadData('monthly')" id="monthlyBtn">Monthly</button>
 </div>
 
-<div id="data"></div>
+<div class="card">
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Player</th>
+<th>ID</th>
+<th>Pts</th>
+<th>M</th>
+<th>Win%</th>
+<th>GF</th>
+<th>GA</th>
+<th>GD</th>
+</tr>
+</thead>
+<tbody id="table"></tbody>
+</table>
+</div>
 
 <script>
 
-const MATCH_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv";
-const MEMBER_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv";
+const LEADERBOARD = "https://opensheet.elk.sh/1DSPKPaU1ZQYbFM4iYbE1VXgDAXU-FCT7--QhYJsNf1M/Leaderboard%20Goat%20FC";
+const MEMBERS = "https://opensheet.elk.sh/1DSPKPaU1ZQYbFM4iYbE1VXgDAXU-FCT7--QhYJsNf1M/CLUB%20MEMBERS";
 
-let players={}, members={}, cache={};
+let currentType="overall";
 
-function parseCSV(text){
-    const rows=[]; let cur=[], val="", q=false;
-    for(let i=0;i<text.length;i++){
-        let c=text[i];
-        if(c=='"'){ if(q && text[i+1]=='"'){val+='"';i++;} else q=!q;}
-        else if(c==','&&!q){cur.push(val); val="";}
-        else if((c=='\n'||c=='\r')&&!q){
-            if(val||cur.length){cur.push(val);rows.push(cur);cur=[];val="";}
-        } else val+=c;
-    }
-    return rows;
+async function loadData(type){
+
+currentType=type;
+
+document.getElementById("overallBtn").classList.remove("active");
+document.getElementById("monthlyBtn").classList.remove("active");
+document.getElementById(type+"Btn").classList.add("active");
+
+let [leaderData, memberData] = await Promise.all([
+fetch(LEADERBOARD).then(r=>r.json()),
+fetch(MEMBERS).then(r=>r.json())
+]);
+
+// 🔥 create ID → NAME map
+let memberMap = {};
+memberData.forEach(m=>{
+memberMap[m["Club ID Number"]?.trim()] = m["Full Name"];
+});
+
+let tbody=document.getElementById("table");
+tbody.innerHTML="";
+
+// SORT
+leaderData.sort((a,b)=>
+type==="overall"
+? (a["Overall Rank"]||999)-(b["Overall Rank"]||999)
+: (a["Monthly Rank"]||999)-(b["Monthly Rank"]||999)
+);
+
+leaderData.forEach((row,index)=>{
+
+let clubID = row["Club_ID"]?.trim();
+
+// 🔥 MATCH NAME
+let playerName = memberMap[clubID] || "Reserve ID";
+
+let cls = index==0?"rank1-row":index==1?"rank2-row":index==2?"rank3-row":index<10?"top10":"";
+
+let match = type==="overall"?row["Overall_PL"]:row["Monthly_PL"];
+let gf = type==="overall"?row["Total GF"]:row["Montly GF"];
+let point = type==="overall"?row["Overall_Point"]:row["Monthly_Point"];
+let win = ((type==="overall"?row["Overall_Win%"]:row["Monthly_Win%"])||0)*100;
+let ga = type==="overall"?row["Total GA"]:row["Montly GA"];
+let gd = type==="overall"?row["Total GD"]:row["Montly GD"];
+
+tbody.innerHTML+=`
+<tr class="${cls}">
+<td>${index+1}</td>
+<td>${playerName}</td>
+<td>${clubID}</td>
+<td>${point||0}</td>
+<td>${match||0}</td>
+<td>${win.toFixed(1)}%</td>
+<td>${gf||0}</td>
+<td>${ga||0}</td>
+<td>${gd||0}</td>
+</tr>
+`;
+
+});
+
 }
 
-function normalize(id){
-    return (id||"").toLowerCase().replace(/[^a-z0-9]/g,'');
-}
-
-async function getData(url){
-    if(cache[url]) return cache[url];
-    let t=await fetch(url+"&t="+Date.now()).then(r=>r.text());
-    cache[url]=t;
-    return t;
-}
-
-async function loadMembers(){
-    let rows=parseCSV(await getData(MEMBER_URL)).slice(1);
-    rows.forEach(c=>{
-        if(c[1] && !c[1].includes("#VALUE")){
-            members[normalize(c[1])] = c[0];
-        }
-    });
-}
-
-async function loadMatches(){
-    let rows=parseCSV(await getData(MATCH_URL)).slice(1);
-
-    rows.forEach(c=>{
-
-        let P1=c[0], P2=c[1];
-        let s1=Number(c[3]), s2=Number(c[4]);
-        let approved=(c[9]||"").toLowerCase();
-
-        // 🔥 FIX
-        if(
-            !P1 || !P2 ||
-            P1.includes("#VALUE") || P2.includes("#VALUE") ||
-            isNaN(s1) || isNaN(s2) ||
-            approved!=="yes"
-        ) return;
-
-        update(P1,s1,s2,c[2]);
-        update(P2,s2,s1,c[2]);
-    });
-}
-
-function update(id,s,c,t){
-    if(!players[id]) players[id]={match:0,win:0,loss:0,draw:0,gs:0,gc:0,diff:0,rate:0,seven:0,friendly:0,other:0};
-
-    let p=players[id];
-    p.match++; p.gs+=s; p.gc+=c; p.diff=p.gs-p.gc;
-
-    if(t==="Friendly") p.friendly++; else p.other++;
-
-    if(s>c) p.win++;
-    else if(s<c) p.loss++;
-    else p.draw++;
-
-    if(s>=7) p.seven++;
-
-    p.winp=(p.win/p.match)*100;
-    p.rate=(p.gs/p.match);
-}
-
-function render(){
-    let q=normalize(document.getElementById("search").value);
-    let sorted=Object.entries(players).sort((a,b)=>b[1].win-a[1].win);
-
-    let html="";
-    sorted.forEach(([id,p],i)=>{
-        let name=members[normalize(id)]||"Unknown Player";
-
-        if(q && !(normalize(id).includes(q)||normalize(name).includes(q))) return;
-
-        let cls="card";
-        if(i===0) cls+=" rank1";
-        else if(i===1) cls+=" rank2";
-        else if(i===2) cls+=" rank3";
-        else if(i<10) cls+=" top10";
-
-        html+=`
-        <div class="${cls}">
-            <div class="club">
-                <span class="player-label">Player :</span>
-                <span class="player-name">${name}</span>
-                <span class="player-id">(${id})</span>
-            </div>
-
-            <div class="grid">
-                <div class="box">🟢 Win : ${p.win}</div>
-                <div class="box">🔴 Loss : ${p.loss}</div>
-                <div class="box">🟡 Draw : ${p.draw}</div>
-                <div class="box">🎮 Match : ${p.match}</div>
-                <div class="box">📊 Win% : ${p.winp.toFixed(1)}</div>
-                <div class="box">⚽ Rate : ${p.rate.toFixed(2)}</div>
-                <div class="box">⚽ Scored : ${p.gs}</div>
-                <div class="box">🥅 Conc. : ${p.gc}</div>
-                <div class="box">📈 Diff. : ${p.diff}</div>
-                <div class="box">👑 7+ Goals : ${p.seven}</div>
-                <div class="box">🤝 Friendly : ${p.friendly}</div>
-                <div class="box">🏆 Tour : ${p.other}</div>
-            </div>
-
-            <div class="download">
-                <button onclick="downloadCard(this)">Download</button>
-            </div>
-        </div>`;
-    });
-
-    document.getElementById("data").innerHTML=html;
-}
-
-function downloadCard(btn){
-    html2canvas(btn.closest(".card")).then(c=>{
-        let a=document.createElement("a");
-        a.download="GOAT_FC_STATS.jpg";
-        a.href=c.toDataURL("image/jpeg");
-        a.click();
-    });
-}
-
-async function init(){
-    await Promise.all([loadMembers(),loadMatches()]);
-    render();
-}
-init();
+loadData("overall");
+setInterval(()=>loadData(currentType),30000);
 
 </script>
-
-<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
 </body>
 </html>

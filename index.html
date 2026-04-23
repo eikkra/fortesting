@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GOAT FC STATISTICS</title>
 
-<!-- 🔥 BETTER GAMING FONTS -->
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600&family=Orbitron:wght@500&display=swap" rel="stylesheet">
+<!-- 🔥 BETTER GAMING FONT -->
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
 body{
@@ -30,15 +30,15 @@ body{
     filter: drop-shadow(0 0 8px #00f5ff);
 }
 .header h1{
-    font-family:'Orbitron',sans-serif;
-    font-size:20px;
+    font-size:22px;
     margin:0;
     color:#00f5ff;
+    letter-spacing:1px;
 }
 .desc{
     width:100%;
     text-align:center;
-    font-size:12px;
+    font-size:13px;
     color:#94a3b8;
 }
 
@@ -56,7 +56,7 @@ body{
     background:black;
     color:#00f5ff;
     outline:none;
-    font-family:'Rajdhani',sans-serif;
+    font-family:'Rajdhani';
 }
 
 /* GRID */
@@ -73,46 +73,41 @@ body{
     border-radius:16px;
     background:linear-gradient(145deg,#020617,#001f2f);
     border:1px solid rgba(0,245,255,0.3);
-    box-shadow:0 0 10px rgba(0,245,255,0.15);
+    box-shadow:0 0 10px rgba(0,245,255,0.12);
     text-align:center;
 }
 
-/* TOP COLORS */
-.rank1{border:1px solid gold;box-shadow:0 0 15px gold;}
-.rank2{border:1px solid silver;box-shadow:0 0 15px silver;}
-.rank3{border:1px solid #cd7f32;box-shadow:0 0 15px #cd7f32;}
-.top10{border:1px solid #a855f7;box-shadow:0 0 12px #a855f7;}
+/* RANK COLORS */
+.rank1{border:1px solid gold;box-shadow:0 0 12px gold;}
+.rank2{border:1px solid silver;box-shadow:0 0 12px silver;}
+.rank3{border:1px solid #cd7f32;box-shadow:0 0 12px #cd7f32;}
+.top10{border:1px solid #a855f7;box-shadow:0 0 10px #a855f7;}
 
-/* PLAYER TITLE */
+/* PLAYER TEXT */
 .club{
-    font-size:15px;
-    font-weight:600;
+    font-size:16px;
+    font-weight:700;
     margin-bottom:12px;
 }
 
-/* NAME + ID COLOR */
-.name{
-    color:#22c55e;
-}
-.id{
-    color:#00f5ff;
-}
+.player-label{color:#94a3b8;}
+.player-name{color:#22c55e;}
+.player-id{color:#00f5ff;}
 
-/* GRID */
+/* GRID BOX */
 .grid{
     display:grid;
     grid-template-columns:repeat(3,1fr);
     gap:8px;
 }
 
-/* BOX */
 .box{
     padding:8px;
     border-radius:10px;
-    font-size:12px;
+    font-size:13px;
     background:rgba(0,245,255,0.06);
     border:1px solid rgba(0,245,255,0.3);
-    box-shadow:0 0 5px rgba(0,245,255,0.4);
+    box-shadow:0 0 4px rgba(0,245,255,0.4);
 }
 
 /* DOWNLOAD */
@@ -125,9 +120,9 @@ body{
     border-radius:8px;
     background:#00f5ff;
     color:black;
-    font-size:12px;
+    font-size:13px;
     cursor:pointer;
-    font-family:'Rajdhani',sans-serif;
+    font-family:'Rajdhani';
 }
 
 /* MOBILE */
@@ -157,13 +152,16 @@ Official performance dashboard showing wins, goals, win rate and match stats (Ap
 
 <script>
 
-// URLS
+// URLs
 const MATCH_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv";
 const MEMBER_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv";
 
 let players={}, members={};
 
-// 🔒 SAFE CSV PARSER
+// ⚡ CACHE
+const cache={};
+
+// 🔒 PRO CSV PARSER
 function parseCSV(text){
     const rows=[];
     let current=[], value="", insideQuotes=false;
@@ -195,52 +193,55 @@ function normalize(id){
     return (id||"").toLowerCase().replace(/[^a-z0-9]/g,'');
 }
 
-// ⚡ FAST LOAD
-async function init(){
-    const [memberText, matchText] = await Promise.all([
-        fetch(MEMBER_URL).then(r=>r.text()),
-        fetch(MATCH_URL + "&t=" + Date.now()).then(r=>r.text())
-    ]);
-
-    parseMembers(memberText);
-    parseMatches(matchText);
-
-    render();
+// ⚡ FAST FETCH
+async function getData(url){
+    if(cache[url]) return cache[url];
+    let res = await fetch(url + "&t=" + Date.now());
+    let text = await res.text();
+    cache[url]=text;
+    return text;
 }
 
-// MEMBERS
-function parseMembers(text){
+// LOAD MEMBERS
+async function loadMembers(){
+    let text = await getData(MEMBER_URL);
     let rows = parseCSV(text).slice(1);
+
     rows.forEach(c=>{
         let name=c[0];
         let clubId=c[1];
-        if(clubId) members[normalize(clubId)] = name;
+        if(clubId){
+            members[normalize(clubId)] = name;
+        }
     });
 }
 
-// MATCHES
-function parseMatches(text){
+// LOAD MATCHES
+async function loadMatches(){
+    let text = await getData(MATCH_URL);
     let rows = parseCSV(text).slice(1);
 
     rows.forEach(c=>{
-        let P1=c[0], P2=c[1], type=c[2];
-        let P1S=+c[3], P2S=+c[4];
-        let approved=(c[9]||"").toLowerCase();
+        let P1 = c[0];
+        let P2 = c[1];
+        let type = c[2];
+        let P1S = Number(c[3]);
+        let P2S = Number(c[4]);
+        let approved = (c[9]||"").toLowerCase();
 
-        if(approved!=="yes") return;
+        if(approved !== "yes") return;
 
         update(P1,P1S,P2S,type);
         update(P2,P2S,P1S,type);
     });
 }
 
-// UPDATE
 function update(id,scored,conceded,type){
     if(!players[id]){
         players[id]={match:0,win:0,loss:0,draw:0,gs:0,gc:0,diff:0,rate:0,seven:0,friendly:0,other:0};
     }
-    let p=players[id;
 
+    let p=players[id];
     p.match++; p.gs+=scored; p.gc+=conceded; p.diff=p.gs-p.gc;
 
     if(type==="Friendly") p.friendly++; else p.other++;
@@ -265,7 +266,7 @@ function render(){
     sorted.forEach(([id,p],index)=>{
 
         let name = members[normalize(id)] || "Unknown Player";
-        if(q && !(normalize(id).includes(q)||normalize(name).includes(q))) return;
+        if(q && !(normalize(id).includes(q) || normalize(name).includes(q))) return;
 
         let cls="card";
         if(index===0) cls+=" rank1";
@@ -276,8 +277,9 @@ function render(){
         html+=`
         <div class="${cls}">
             <div class="club">
-                PLAYER: <span class="name">${name}</span> 
-                (<span class="id">${id}</span>)
+                <span class="player-label">Player :</span>
+                <span class="player-name">${name}</span>
+                <span class="player-id">(${id})</span>
             </div>
 
             <div class="grid">
@@ -318,6 +320,11 @@ function downloadCard(btn){
     });
 }
 
+// INIT (⚡ PARALLEL LOAD)
+async function init(){
+    await Promise.all([loadMembers(), loadMatches()]);
+    render();
+}
 init();
 
 </script>

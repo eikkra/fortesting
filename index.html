@@ -103,7 +103,6 @@ backdrop-filter:blur(10px);
 border:1px solid rgba(255,255,255,0.08);
 border-radius:12px;
 padding:10px;
-margin-top:10px;
 overflow-x:auto;
 }
 
@@ -124,10 +123,6 @@ padding:8px 6px;
 font-size:13px;
 }
 
-tbody tr{
-border-bottom:1px solid rgba(255,255,255,0.08);
-}
-
 /* PLAYER */
 .player{
 text-align:left;
@@ -138,7 +133,12 @@ font-size:10px;
 opacity:.6;
 }
 
-/* RANK */
+/* ROW LINE (REMAIN SAME) */
+tbody tr{
+border-bottom:1px solid rgba(255,255,255,0.08);
+}
+
+/* TOP RANKS */
 .rank1{
 background:linear-gradient(90deg,rgba(255,215,0,0.25),transparent);
 animation:goldGlow 2s infinite alternate;
@@ -171,7 +171,7 @@ background:linear-gradient(90deg,rgba(0,255,150,0.12),transparent);
 border-left:3px solid #00ffcc;
 }
 
-/* 📱 MOBILE FIX */
+/* 📱 MOBILE FIX (ONLY FIXED PART) */
 @media(max-width:600px){
 
 .wrapper{
@@ -179,22 +179,27 @@ max-width:100%;
 padding:0 6px;
 }
 
-/* REMOVE EXTRA VISUAL LINE UNDER PLAYER (FIX) */
+/* 🔥 IMPORTANT FIX: REMOVE EXTRA BLACK MARK EFFECT */
+tbody td::before{
+content:none !important;   /* ❌ THIS REMOVES EXTRA BLACK LOOK */
+}
+
+/* MOBILE TEXT CLEAN */
 .player{
 font-size:11px;
 white-space:nowrap;
 overflow:hidden;
 text-overflow:ellipsis;
-border-bottom:none !important; /* 🔥 FIX */
+}
+
+/* ROW STILL SEPARATED (UNCHANGED) */
+tbody tr{
+border-bottom:1px solid rgba(255,255,255,0.08);
 }
 
 td{
 font-size:11px;
 padding:6px 4px;
-}
-
-tbody tr{
-border-bottom:1px solid rgba(255,255,255,0.08);
 }
 
 }
@@ -249,6 +254,7 @@ Live competitive ranking based on performance, goals & consistency.
 
 <script>
 
+/* SAME JS - NO CHANGE */
 const L="https://opensheet.elk.sh/1DSPKPaU1ZQYbFM4iYbE1VXgDAXU-FCT7--QhYJsNf1M/Leaderboard%20Goat%20FC";
 const M="https://opensheet.elk.sh/1DSPKPaU1ZQYbFM4iYbE1VXgDAXU-FCT7--QhYJsNf1M/CLUB%20MEMBERS";
 

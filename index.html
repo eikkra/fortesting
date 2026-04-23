@@ -142,7 +142,6 @@ body{
         margin-bottom:12px;
     }
 }
-
 </style>
 </head>
 
@@ -157,23 +156,43 @@ Official performance dashboard showing wins, goals, win rate and match stats (Ap
 </div>
 
 <div class="search">
-<input type="text" id="search" placeholder="Search Club ID..." oninput="render()">
+<input type="text" id="search" placeholder="Search Name or Club ID..." oninput="render()">
 </div>
 
 <div id="data"></div>
 
 <script>
 
-const URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv";
+// 🔥 CSV LINKS
+const MATCH_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv";
+const MEMBER_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv";
 
 let players={};
+let members={};
 
 function normalize(id){
     return (id||"").toLowerCase().replace(/[^a-z0-9]/g,'');
 }
 
-async function load(){
-    let text = await fetch(URL + "&t=" + Date.now()).then(r=>r.text());
+// LOAD MEMBERS (Name Mapping)
+async function loadMembers(){
+    let text = await fetch(MEMBER_URL).then(r=>r.text());
+    let rows = text.split("\n").slice(1);
+
+    rows.forEach(r=>{
+        let c=r.split(",");
+        let name=c[0];
+        let clubId=c[1];
+
+        if(clubId){
+            members[normalize(clubId)] = name;
+        }
+    });
+}
+
+// LOAD MATCH DATA
+async function loadMatches(){
+    let text = await fetch(MATCH_URL + "&t=" + Date.now()).then(r=>r.text());
     let rows = text.split("\n").slice(1);
 
     rows.forEach(r=>{
@@ -191,8 +210,6 @@ async function load(){
         update(P1,P1S,P2S,type);
         update(P2,P2S,P1S,type);
     });
-
-    render();
 }
 
 function update(id,scored,conceded,type){
@@ -226,6 +243,7 @@ function update(id,scored,conceded,type){
     p.rate=(p.gs/p.match);
 }
 
+// RENDER
 function render(){
 
     let q=normalize(document.getElementById("search").value);
@@ -237,7 +255,9 @@ function render(){
 
     sorted.forEach(([id,p],index)=>{
 
-        if(q && !normalize(id).includes(q)) return;
+        let name = members[normalize(id)] || "Unknown Player";
+
+        if(q && !(normalize(id).includes(q) || normalize(name).includes(q))) return;
 
         let cls="card";
         if(index===0) cls+=" rank1";
@@ -247,7 +267,7 @@ function render(){
 
         html+=`
         <div class="${cls}">
-            <div class="club">PLAYER ID: ${id}</div>
+            <div class="club">PLAYER NAME: ${name} (${id})</div>
 
             <div class="grid">
                 <div class="box">🟢 Win : ${p.win}</div>
@@ -260,7 +280,7 @@ function render(){
 
                 <div class="box">⚽ Scored : ${p.gs}</div>
                 <div class="box">🥅 Conceded : ${p.gc}</div>
-                <div class="box">📈 Difference : ${p.diff}</div>
+                <div class="box">📈 Diff : ${p.diff}</div>
 
                 <div class="box">👑 7+ Goals : ${p.seven}</div>
                 <div class="box">🤝 Friendly : ${p.friendly}</div>
@@ -276,10 +296,9 @@ function render(){
     document.getElementById("data").innerHTML=html;
 }
 
-// DOWNLOAD IMAGE
+// DOWNLOAD
 function downloadCard(btn){
     let card = btn.closest(".card");
-
     html2canvas(card).then(canvas=>{
         let link=document.createElement("a");
         link.download="GOAT_FC_STATS.jpg";
@@ -288,7 +307,14 @@ function downloadCard(btn){
     });
 }
 
-load();
+// INIT
+async function init(){
+    await loadMembers();
+    await loadMatches();
+    render();
+}
+
+init();
 
 </script>
 

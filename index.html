@@ -5,121 +5,147 @@
 
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Oswald', sans-serif;
-      background: linear-gradient(135deg, #020617, #0f172a);
-      color: white;
-      text-align: center;
-      overflow-x: hidden;
-    }
+<style>
 
-    body.light {
-      background: linear-gradient(135deg, #001a0f, #003d26);
-    }
+body{
+margin:0;
+font-family:'Oswald',sans-serif;
+background:linear-gradient(135deg,#020617,#0f172a);
+color:white;
+text-align:center;
+}
 
-    .header {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
-      padding-top: 15px;
-    }
+body.light{
+background:linear-gradient(135deg,#001a0f,#003d26);
+}
 
-    .logo {
-      width: 55px;
-      animation: float 3s infinite;
-      filter: drop-shadow(0 0 12px #00ffcc);
-    }
+/* HEADER */
+.header{
+display:flex;
+justify-content:center;
+align-items:center;
+gap:10px;
+padding-top:10px;
+}
 
-    h1 {
-      margin: 0;
-      color: #00ffcc;
-    }
+.logo{
+width:50px;
+animation:float 3s infinite;
+}
 
-    .slogan {
-      font-size: 12px;
-      margin-bottom: 10px;
-    }
+@keyframes float{
+50%{transform:translateY(-5px);}
+}
 
-    .tabs { margin: 10px; }
+h1{
+margin:0;
+color:#00ffcc;
+font-size:18px;
+}
 
-    button {
-      padding: 6px 12px;
-      border-radius: 15px;
-      border: none;
-      background: #1f2937;
-      color: white;
-      margin: 3px;
-      cursor: pointer;
-    }
+.slogan{
+font-size:11px;
+margin-bottom:8px;
+}
 
-    button.active {
-      background: linear-gradient(to right,#00ffcc,#00c3ff);
-      color: black;
-    }
+/* BUTTON */
+.tabs{margin:8px;}
 
-    .card {
-      width: 98%;
-      margin: auto;
-      background: rgba(255,255,255,0.05);
-      border-radius: 10px;
-      padding: 6px;
-    }
+button{
+padding:6px 10px;
+border:none;
+border-radius:15px;
+background:#1f2937;
+color:white;
+font-size:12px;
+}
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
+button.active{
+background:#00ffcc;
+color:black;
+}
 
-    th, td {
-      padding: 6px;
-      font-size: 11px;
-      white-space: nowrap;
-    }
+/* STATS */
+.stats{
+display:flex;
+justify-content:center;
+flex-wrap:wrap;
+gap:6px;
+margin-bottom:8px;
+}
 
-    th { color: #00ffcc; }
+.stat{
+background:rgba(0,255,200,0.08);
+padding:6px 10px;
+border-radius:8px;
+font-size:11px;
+}
 
-    .rank1-row { background: rgba(255,215,0,0.15); }
-    .rank2-row { background: rgba(192,192,192,0.15); }
-    .rank3-row { background: rgba(205,127,50,0.15); }
+/* TABLE */
+.card{
+width:98%;
+margin:auto;
+}
 
-    .top10 {
-      background: rgba(0,255,150,0.08);
-      border-left: 3px solid #00ffcc;
-    }
+table{
+width:100%;
+border-collapse:collapse;
+}
 
-    .toggle {
-      margin: 8px;
-      font-size: 12px;
-      cursor: pointer;
-    }
+th,td{
+font-size:11px;
+padding:6px;
+}
 
-    /* 📱 MOBILE PERFECT */
-    @media(max-width:600px){
-      th,td { font-size: 10px; padding: 5px; }
-      .logo { width: 45px; }
-      h1 { font-size: 16px; }
-    }
+th{color:#00ffcc;}
 
-  </style>
+.player{
+display:flex;
+flex-direction:column;
+align-items:flex-start;
+}
+
+.id{
+font-size:9px;
+opacity:.6;
+}
+
+/* RANK */
+.rank1{background:rgba(255,215,0,0.2);}
+.rank2{background:rgba(192,192,192,0.2);}
+.rank3{background:rgba(205,127,50,0.2);}
+.top10{background:rgba(0,255,150,0.08);}
+
+/* MOBILE */
+@media(max-width:600px){
+th,td{font-size:10px;padding:5px;}
+h1{font-size:16px;}
+.logo{width:40px;}
+}
+
+</style>
 </head>
 
 <body>
 
 <div class="header">
-  <img src="https://i.imgur.com/LY3Bb9m.png" class="logo">
-  <h1>GOAT FC LEADERBOARD</h1>
+<img src="https://i.imgur.com/LY3Bb9m.png" class="logo">
+<h1>GOAT FC LEADERBOARD</h1>
 </div>
 
 <div class="slogan">⚡ BE THE GAME CHANGER! ⚡</div>
 
-<div class="toggle" onclick="document.body.classList.toggle('light')">🌗 Theme</div>
-
 <div class="tabs">
-  <button onclick="loadData('overall')" class="active" id="overallBtn">Overall</button>
-  <button onclick="loadData('monthly')" id="monthlyBtn">Monthly</button>
+<button onclick="loadData('overall')" id="overallBtn" class="active">Overall</button>
+<button onclick="loadData('monthly')" id="monthlyBtn">Monthly</button>
+</div>
+
+<!-- 🔥 STATS BACK -->
+<div class="stats">
+<div class="stat">Match: <span id="m">0</span></div>
+<div class="stat">Goal: <span id="g">0</span></div>
+<div class="stat">Points: <span id="p">0</span></div>
+<div class="stat">Per Match: <span id="pm">0</span></div>
 </div>
 
 <div class="card">
@@ -128,7 +154,6 @@
 <tr>
 <th>#</th>
 <th>Player</th>
-<th>ID</th>
 <th>Pts</th>
 <th>M</th>
 <th>Win%</th>
@@ -143,76 +168,89 @@
 
 <script>
 
-const LEADERBOARD = "https://opensheet.elk.sh/1DSPKPaU1ZQYbFM4iYbE1VXgDAXU-FCT7--QhYJsNf1M/Leaderboard%20Goat%20FC";
-const MEMBERS = "https://opensheet.elk.sh/1DSPKPaU1ZQYbFM4iYbE1VXgDAXU-FCT7--QhYJsNf1M/CLUB%20MEMBERS";
+const L="https://opensheet.elk.sh/1DSPKPaU1ZQYbFM4iYbE1VXgDAXU-FCT7--QhYJsNf1M/Leaderboard%20Goat%20FC";
+const M="https://opensheet.elk.sh/1DSPKPaU1ZQYbFM4iYbE1VXgDAXU-FCT7--QhYJsNf1M/CLUB%20MEMBERS";
 
-let currentType="overall";
+let type="overall";
 
-async function loadData(type){
+async function loadData(t){
 
-currentType=type;
+type=t;
 
 document.getElementById("overallBtn").classList.remove("active");
 document.getElementById("monthlyBtn").classList.remove("active");
-document.getElementById(type+"Btn").classList.add("active");
+document.getElementById(t+"Btn").classList.add("active");
 
-let [leaderData, memberData] = await Promise.all([
-fetch(LEADERBOARD).then(r=>r.json()),
-fetch(MEMBERS).then(r=>r.json())
-]);
+let [ld,md]=await Promise.all([fetch(L).then(r=>r.json()),fetch(M).then(r=>r.json())]);
 
-// 🔥 create ID → NAME map
-let memberMap = {};
-memberData.forEach(m=>{
-memberMap[m["Club ID Number"]?.trim()] = m["Full Name"];
+let map={};
+md.forEach(x=>{
+if(x["Club ID Number"])
+map[x["Club ID Number"].trim()]=x["Full Name"];
 });
 
 let tbody=document.getElementById("table");
 tbody.innerHTML="";
 
+let totalM=0,totalG=0,totalP=0;
+
+// 🔥 FILTER ONLY VALID MEMBERS
+ld=ld.filter(r=>map[r["Club_ID"]?.trim()]);
+
 // SORT
-leaderData.sort((a,b)=>
-type==="overall"
-? (a["Overall Rank"]||999)-(b["Overall Rank"]||999)
-: (a["Monthly Rank"]||999)-(b["Monthly Rank"]||999)
+ld.sort((a,b)=>
+t==="overall"
+?(a["Overall Rank"]||999)-(b["Overall Rank"]||999)
+:(a["Monthly Rank"]||999)-(b["Monthly Rank"]||999)
 );
 
-leaderData.forEach((row,index)=>{
+ld.forEach((r,i)=>{
 
-let clubID = row["Club_ID"]?.trim();
+let cls=i==0?"rank1":i==1?"rank2":i==2?"rank3":i<10?"top10":"";
 
-// 🔥 MATCH NAME
-let playerName = memberMap[clubID] || "Reserve ID";
+let m=t==="overall"?+r["Overall_PL"]:+r["Monthly_PL"];
+let gf=t==="overall"?+r["Total GF"]:+r["Montly GF"];
+let pt=t==="overall"?+r["Overall_Point"]:+r["Monthly_Point"];
 
-let cls = index==0?"rank1-row":index==1?"rank2-row":index==2?"rank3-row":index<10?"top10":"";
+totalM+=m||0;
+totalG+=gf||0;
+totalP+=pt||0;
 
-let match = type==="overall"?row["Overall_PL"]:row["Monthly_PL"];
-let gf = type==="overall"?row["Total GF"]:row["Montly GF"];
-let point = type==="overall"?row["Overall_Point"]:row["Monthly_Point"];
-let win = ((type==="overall"?row["Overall_Win%"]:row["Monthly_Win%"])||0)*100;
-let ga = type==="overall"?row["Total GA"]:row["Montly GA"];
-let gd = type==="overall"?row["Total GD"]:row["Montly GD"];
+let win=(+((t==="overall"?r["Overall_Win%"]:r["Monthly_Win%"]))||0)*100;
+if(!isFinite(win)) win=0;
+
+let ga=t==="overall"?r["Total GA"]:r["Montly GA"];
+let gd=t==="overall"?r["Total GD"]:r["Montly GD"];
 
 tbody.innerHTML+=`
 <tr class="${cls}">
-<td>${index+1}</td>
-<td>${playerName}</td>
-<td>${clubID}</td>
-<td>${point||0}</td>
-<td>${match||0}</td>
+<td>${i+1}</td>
+<td class="player">
+${map[r["Club_ID"]]}
+<div class="id">${r["Club_ID"]}</div>
+</td>
+<td>${pt||0}</td>
+<td>${m||0}</td>
 <td>${win.toFixed(1)}%</td>
 <td>${gf||0}</td>
 <td>${ga||0}</td>
 <td>${gd||0}</td>
-</tr>
-`;
-
+</tr>`;
 });
+
+// 🔥 STATS
+let match=Math.round(totalM/2);
+let per=match?(totalG/match).toFixed(2):0;
+
+document.getElementById("m").innerText=match;
+document.getElementById("g").innerText=totalG;
+document.getElementById("p").innerText=totalP;
+document.getElementById("pm").innerText=per;
 
 }
 
 loadData("overall");
-setInterval(()=>loadData(currentType),30000);
+setInterval(()=>loadData(type),30000);
 
 </script>
 

@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GOAT FC STATISTICS</title>
+<link rel="icon" type="image/png" href="https://i.imgur.com/LY3Bb9m.png">
 
-<!-- 🔥 BETTER GAMING FONT -->
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
@@ -33,7 +33,11 @@ body{
     font-size:22px;
     margin:0;
     color:#00f5ff;
-    letter-spacing:1px;
+    letter-spacing:0.5px; /* 🔥 fixed spacing */
+    text-shadow:
+        0 0 6px #00f5ff,
+        0 0 12px #00f5ff,
+        0 0 18px #00f5ff;
 }
 .desc{
     width:100%;
@@ -105,6 +109,7 @@ body{
     padding:8px;
     border-radius:10px;
     font-size:13px;
+    font-weight:600; /* 🔥 bold stats */
     background:rgba(0,245,255,0.06);
     border:1px solid rgba(0,245,255,0.3);
     box-shadow:0 0 4px rgba(0,245,255,0.4);
@@ -152,39 +157,19 @@ Official performance dashboard showing wins, goals, win rate and match stats (Ap
 
 <script>
 
-// URLs
 const MATCH_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv";
 const MEMBER_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv";
 
-let players={}, members={};
+let players={}, members={}, cache={};
 
-// ⚡ CACHE
-const cache={};
-
-// 🔒 PRO CSV PARSER
 function parseCSV(text){
-    const rows=[];
-    let current=[], value="", insideQuotes=false;
-
+    const rows=[]; let current=[], value="", inside=false;
     for(let i=0;i<text.length;i++){
-        let char=text[i];
-
-        if(char === '"'){
-            if(insideQuotes && text[i+1] === '"'){
-                value += '"'; i++;
-            } else insideQuotes=!insideQuotes;
-        }
-        else if(char === ',' && !insideQuotes){
-            current.push(value); value="";
-        }
-        else if((char === '\n' || char === '\r') && !insideQuotes){
-            if(value || current.length){
-                current.push(value);
-                rows.push(current);
-                current=[]; value="";
-            }
-        }
-        else value+=char;
+        let c=text[i];
+        if(c=='"'){ if(inside && text[i+1]=='"'){value+='"';i++;} else inside=!inside;}
+        else if(c==',' && !inside){current.push(value); value="";}
+        else if((c=='\n'||c=='\r')&&!inside){if(value||current.length){current.push(value);rows.push(current);current=[];value="";}}
+        else value+=c;
     }
     return rows;
 }
@@ -193,86 +178,54 @@ function normalize(id){
     return (id||"").toLowerCase().replace(/[^a-z0-9]/g,'');
 }
 
-// ⚡ FAST FETCH
 async function getData(url){
     if(cache[url]) return cache[url];
-    let res = await fetch(url + "&t=" + Date.now());
-    let text = await res.text();
-    cache[url]=text;
-    return text;
+    let t=await fetch(url+"&t="+Date.now()).then(r=>r.text());
+    cache[url]=t;
+    return t;
 }
 
-// LOAD MEMBERS
 async function loadMembers(){
-    let text = await getData(MEMBER_URL);
-    let rows = parseCSV(text).slice(1);
-
+    let rows=parseCSV(await getData(MEMBER_URL)).slice(1);
     rows.forEach(c=>{
-        let name=c[0];
-        let clubId=c[1];
-        if(clubId){
-            members[normalize(clubId)] = name;
-        }
+        if(c[1]) members[normalize(c[1])] = c[0];
     });
 }
 
-// LOAD MATCHES
 async function loadMatches(){
-    let text = await getData(MATCH_URL);
-    let rows = parseCSV(text).slice(1);
-
+    let rows=parseCSV(await getData(MATCH_URL)).slice(1);
     rows.forEach(c=>{
-        let P1 = c[0];
-        let P2 = c[1];
-        let type = c[2];
-        let P1S = Number(c[3]);
-        let P2S = Number(c[4]);
-        let approved = (c[9]||"").toLowerCase();
-
-        if(approved !== "yes") return;
-
-        update(P1,P1S,P2S,type);
-        update(P2,P2S,P1S,type);
+        if((c[9]||"").toLowerCase()!=="yes") return;
+        update(c[0],+c[3],+c[4],c[2]);
+        update(c[1],+c[4],+c[3],c[2]);
     });
 }
 
-function update(id,scored,conceded,type){
-    if(!players[id]){
-        players[id]={match:0,win:0,loss:0,draw:0,gs:0,gc:0,diff:0,rate:0,seven:0,friendly:0,other:0};
-    }
-
+function update(id,s,c,t){
+    if(!players[id]) players[id]={match:0,win:0,loss:0,draw:0,gs:0,gc:0,diff:0,rate:0,seven:0,friendly:0,other:0};
     let p=players[id];
-    p.match++; p.gs+=scored; p.gc+=conceded; p.diff=p.gs-p.gc;
-
-    if(type==="Friendly") p.friendly++; else p.other++;
-
-    if(scored>conceded) p.win++;
-    else if(scored<conceded) p.loss++;
-    else p.draw++;
-
-    if(scored>=7) p.seven++;
-
+    p.match++; p.gs+=s; p.gc+=c; p.diff=p.gs-p.gc;
+    if(t==="Friendly") p.friendly++; else p.other++;
+    if(s>c) p.win++; else if(s<c) p.loss++; else p.draw++;
+    if(s>=7) p.seven++;
     p.winp=(p.win/p.match)*100;
     p.rate=(p.gs/p.match);
 }
 
-// RENDER
 function render(){
     let q=normalize(document.getElementById("search").value);
-
     let sorted=Object.entries(players).sort((a,b)=>b[1].win-a[1].win);
 
     let html="";
-    sorted.forEach(([id,p],index)=>{
-
-        let name = members[normalize(id)] || "Unknown Player";
-        if(q && !(normalize(id).includes(q) || normalize(name).includes(q))) return;
+    sorted.forEach(([id,p],i)=>{
+        let name=members[normalize(id)]||"Unknown Player";
+        if(q && !(normalize(id).includes(q)||normalize(name).includes(q))) return;
 
         let cls="card";
-        if(index===0) cls+=" rank1";
-        else if(index===1) cls+=" rank2";
-        else if(index===2) cls+=" rank3";
-        else if(index<10) cls+=" top10";
+        if(i===0) cls+=" rank1";
+        else if(i===1) cls+=" rank2";
+        else if(i===2) cls+=" rank3";
+        else if(i<10) cls+=" top10";
 
         html+=`
         <div class="${cls}">
@@ -286,18 +239,15 @@ function render(){
                 <div class="box">🟢 Win : ${p.win}</div>
                 <div class="box">🔴 Loss : ${p.loss}</div>
                 <div class="box">🟡 Draw : ${p.draw}</div>
-
                 <div class="box">🎮 Match : ${p.match}</div>
                 <div class="box">📊 Win% : ${p.winp.toFixed(1)}</div>
                 <div class="box">⚽ Rate : ${p.rate.toFixed(2)}</div>
-
-                <div class="box">⚽ Scored : ${p.gs}</div>
+                <div class="box">⚽ Goals : ${p.gs}</div>
                 <div class="box">🥅 Conceded : ${p.gc}</div>
                 <div class="box">📈 Diff : ${p.diff}</div>
-
                 <div class="box">👑 7+ Goals : ${p.seven}</div>
                 <div class="box">🤝 Friendly : ${p.friendly}</div>
-                <div class="box">🏆 Tournament : ${p.other}</div>
+                <div class="box">🏆 Tour : ${p.other}</div>
             </div>
 
             <div class="download">
@@ -309,20 +259,17 @@ function render(){
     document.getElementById("data").innerHTML=html;
 }
 
-// DOWNLOAD
 function downloadCard(btn){
-    let card = btn.closest(".card");
-    html2canvas(card).then(canvas=>{
-        let link=document.createElement("a");
-        link.download="GOAT_FC_STATS.jpg";
-        link.href=canvas.toDataURL("image/jpeg");
-        link.click();
+    html2canvas(btn.closest(".card")).then(c=>{
+        let a=document.createElement("a");
+        a.download="GOAT_FC_STATS.jpg";
+        a.href=c.toDataURL("image/jpeg");
+        a.click();
     });
 }
 
-// INIT (⚡ PARALLEL LOAD)
 async function init(){
-    await Promise.all([loadMembers(), loadMatches()]);
+    await Promise.all([loadMembers(),loadMatches()]);
     render();
 }
 init();

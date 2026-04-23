@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Goat FC Leaderboard</title>
+<title>Goat FC Leaderboard</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
 
@@ -15,49 +15,42 @@ color:white;
 text-align:center;
 }
 
-body.light{
-background:linear-gradient(135deg,#001a0f,#003d26);
-}
-
 /* HEADER */
 .header{
 display:flex;
 justify-content:center;
 align-items:center;
-gap:10px;
-padding-top:10px;
+gap:8px;
+padding:10px;
 }
 
 .logo{
-width:50px;
-animation:float 3s infinite;
-}
-
-@keyframes float{
-50%{transform:translateY(-5px);}
+width:45px;
 }
 
 h1{
 margin:0;
+font-size:20px;
 color:#00ffcc;
-font-size:18px;
 }
 
-.slogan{
+/* DESCRIPTION */
+.desc{
 font-size:11px;
+opacity:.8;
 margin-bottom:8px;
 }
 
 /* BUTTON */
-.tabs{margin:8px;}
+.tabs{margin:6px;}
 
 button{
-padding:6px 10px;
+padding:5px 10px;
 border:none;
-border-radius:15px;
+border-radius:12px;
 background:#1f2937;
 color:white;
-font-size:12px;
+font-size:11px;
 }
 
 button.active{
@@ -75,15 +68,20 @@ margin-bottom:8px;
 }
 
 .stat{
-background:rgba(0,255,200,0.08);
-padding:6px 10px;
+padding:5px 10px;
 border-radius:8px;
-font-size:11px;
+background:rgba(0,255,200,0.08);
+animation:glow 2s infinite alternate;
+}
+
+@keyframes glow{
+from{box-shadow:0 0 4px #00ffcc;}
+to{box-shadow:0 0 10px #00ffcc;}
 }
 
 /* TABLE */
 .card{
-width:98%;
+width:95%;
 margin:auto;
 }
 
@@ -93,16 +91,15 @@ border-collapse:collapse;
 }
 
 th,td{
+padding:5px;
 font-size:11px;
-padding:6px;
 }
 
 th{color:#00ffcc;}
 
 .player{
-display:flex;
-flex-direction:column;
-align-items:flex-start;
+text-align:left;
+line-height:1.2;
 }
 
 .id{
@@ -116,11 +113,22 @@ opacity:.6;
 .rank3{background:rgba(205,127,50,0.2);}
 .top10{background:rgba(0,255,150,0.08);}
 
-/* MOBILE */
+/* 📱 MOBILE */
 @media(max-width:600px){
-th,td{font-size:10px;padding:5px;}
+
 h1{font-size:16px;}
-.logo{width:40px;}
+.logo{width:35px;}
+
+th,td{
+font-size:10px;
+padding:4px;
+}
+
+.stat{
+font-size:10px;
+padding:4px 6px;
+}
+
 }
 
 </style>
@@ -133,14 +141,14 @@ h1{font-size:16px;}
 <h1>GOAT FC LEADERBOARD</h1>
 </div>
 
-<div class="slogan">⚡ BE THE GAME CHANGER! ⚡</div>
+<div class="desc">Competitive ranking system for Goat FC players based on performance, goals, and match activity.</div>
 
 <div class="tabs">
 <button onclick="loadData('overall')" id="overallBtn" class="active">Overall</button>
 <button onclick="loadData('monthly')" id="monthlyBtn">Monthly</button>
 </div>
 
-<!-- 🔥 STATS BACK -->
+<!-- STATS -->
 <div class="stats">
 <div class="stat">Match: <span id="m">0</span></div>
 <div class="stat">Goal: <span id="g">0</span></div>
@@ -181,12 +189,50 @@ document.getElementById("overallBtn").classList.remove("active");
 document.getElementById("monthlyBtn").classList.remove("active");
 document.getElementById(t+"Btn").classList.add("active");
 
-let [ld,md]=await Promise.all([fetch(L).then(r=>r.json()),fetch(M).then(r=>r.json())]);
+let [ld,md]=await Promise.all([
+fetch(L).then(r=>r.json()),
+fetch(M).then(r=>r.json())
+]);
 
+// MAP
 let map={};
 md.forEach(x=>{
 if(x["Club ID Number"])
 map[x["Club ID Number"].trim()]=x["Full Name"];
+});
+
+// FILTER ONLY VALID
+ld=ld.filter(r=>map[r["Club_ID"]?.trim()]);
+
+// 🔥 SMART SORT
+ld.sort((a,b)=>{
+
+let A_pt=+(t==="overall"?a["Overall_Point"]:a["Monthly_Point"])||0;
+let B_pt=+(t==="overall"?b["Overall_Point"]:b["Monthly_Point"])||0;
+
+let A_m=+(t==="overall"?a["Overall_PL"]:a["Monthly_PL"])||0;
+let B_m=+(t==="overall"?b["Overall_PL"]:b["Monthly_PL"])||0;
+
+// 0 match last
+if(A_m===0 && B_m>0) return 1;
+if(B_m===0 && A_m>0) return -1;
+
+// POINT
+if(B_pt!==A_pt) return B_pt-A_pt;
+
+// GD
+let A_gd=+(t==="overall"?a["Total GD"]:a["Montly GD"])||0;
+let B_gd=+(t==="overall"?b["Total GD"]:b["Montly GD"])||0;
+if(B_gd!==A_gd) return B_gd-A_gd;
+
+// GF
+let A_gf=+(t==="overall"?a["Total GF"]:a["Montly GF"])||0;
+let B_gf=+(t==="overall"?b["Total GF"]:b["Montly GF"])||0;
+if(B_gf!==A_gf) return B_gf-A_gf;
+
+// MATCH
+return B_m-A_m;
+
 });
 
 let tbody=document.getElementById("table");
@@ -194,27 +240,17 @@ tbody.innerHTML="";
 
 let totalM=0,totalG=0,totalP=0;
 
-// 🔥 FILTER ONLY VALID MEMBERS
-ld=ld.filter(r=>map[r["Club_ID"]?.trim()]);
-
-// SORT
-ld.sort((a,b)=>
-t==="overall"
-?(a["Overall Rank"]||999)-(b["Overall Rank"]||999)
-:(a["Monthly Rank"]||999)-(b["Monthly Rank"]||999)
-);
-
 ld.forEach((r,i)=>{
 
 let cls=i==0?"rank1":i==1?"rank2":i==2?"rank3":i<10?"top10":"";
 
-let m=t==="overall"?+r["Overall_PL"]:+r["Monthly_PL"];
-let gf=t==="overall"?+r["Total GF"]:+r["Montly GF"];
-let pt=t==="overall"?+r["Overall_Point"]:+r["Monthly_Point"];
+let m=+(t==="overall"?r["Overall_PL"]:r["Monthly_PL"])||0;
+let gf=+(t==="overall"?r["Total GF"]:r["Montly GF"])||0;
+let pt=+(t==="overall"?r["Overall_Point"]:r["Monthly_Point"])||0;
 
-totalM+=m||0;
-totalG+=gf||0;
-totalP+=pt||0;
+totalM+=m;
+totalG+=gf;
+totalP+=pt;
 
 let win=(+((t==="overall"?r["Overall_Win%"]:r["Monthly_Win%"]))||0)*100;
 if(!isFinite(win)) win=0;
@@ -229,16 +265,16 @@ tbody.innerHTML+=`
 ${map[r["Club_ID"]]}
 <div class="id">${r["Club_ID"]}</div>
 </td>
-<td>${pt||0}</td>
-<td>${m||0}</td>
+<td>${pt}</td>
+<td>${m}</td>
 <td>${win.toFixed(1)}%</td>
-<td>${gf||0}</td>
-<td>${ga||0}</td>
-<td>${gd||0}</td>
+<td>${gf}</td>
+<td>${ga}</td>
+<td>${gd}</td>
 </tr>`;
 });
 
-// 🔥 STATS
+// STATS
 let match=Math.round(totalM/2);
 let per=match?(totalG/match).toFixed(2):0;
 

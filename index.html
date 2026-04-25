@@ -10,12 +10,12 @@
 <style>
 :root{
     --bg:#050816;
-    --card:#0c1329;
+    --card:#0d1329;
     --card2:#101935;
     --accent:#00f0ff;
     --accent2:#ff00c8;
     --text:#fff;
-    --muted:#9bb0d4;
+    --muted:#94a7d0;
     --gold:#FFD700;
     --silver:#C0C0C0;
     --bronze:#CD7F32;
@@ -25,8 +25,8 @@
 
 body{
     background:
-    radial-gradient(circle at top left,#0d1f45 0%,#050816 40%),
-    radial-gradient(circle at bottom right,#250028 0%,#050816 55%);
+    radial-gradient(circle at top left,#10244f 0%,#050816 45%),
+    radial-gradient(circle at bottom right,#2b0034 0%,#050816 55%);
     font-family:'Rajdhani',sans-serif;
     color:var(--text);
     padding:14px;
@@ -37,68 +37,58 @@ body{
     margin:auto;
 }
 
-/* HEADER */
 .header{
     display:flex;
-    align-items:center;
     justify-content:center;
-    gap:12px;
+    align-items:center;
+    gap:10px;
+    flex-wrap:nowrap;
     margin-bottom:8px;
-    flex-wrap:wrap;
 }
 
 .header img{
-    width:42px;
-    height:42px;
-    object-fit:contain;
+    width:38px;
+    height:38px;
 }
 
 .header h1{
-    font-family:'Orbitron',sans-serif;
-    font-size:1.5rem;
+    font-family:'Orbitron';
+    font-size:1.35rem;
     background:linear-gradient(90deg,#00f0ff,#ff00c8);
     -webkit-background-clip:text;
     -webkit-text-fill-color:transparent;
+    white-space:nowrap;
 }
 
 .desc{
     text-align:center;
     color:var(--muted);
-    margin-bottom:20px;
-    font-size:.92rem;
+    font-size:.88rem;
+    margin-bottom:18px;
 }
 
-/* GRID */
 .manager-grid{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
     gap:16px;
 }
 
-/* CARD */
 .manager-card{
     background:linear-gradient(145deg,var(--card),var(--card2));
-    border:1px solid rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.07);
     border-radius:18px;
-    padding:16px;
+    padding:14px;
     position:relative;
-    box-shadow:0 8px 25px rgba(0,0,0,.35);
-    transition:.3s;
+    box-shadow:0 8px 24px rgba(0,0,0,.35);
 }
 
-.manager-card:hover{
-    transform:translateY(-4px);
-    box-shadow:0 12px 28px rgba(0,240,255,.12);
-}
-
-/* RANK */
 .rank{
     position:absolute;
-    top:12px;
-    right:12px;
-    padding:5px 10px;
+    top:10px;
+    right:10px;
+    padding:4px 10px;
     border-radius:999px;
-    font-size:.75rem;
+    font-size:.72rem;
     font-family:'Orbitron';
     font-weight:700;
 }
@@ -107,68 +97,100 @@ body{
 .rank2{background:var(--silver);color:#000;}
 .rank3{background:var(--bronze);color:#000;}
 
-/* TEAM INFO */
 .team-top{
     display:flex;
     align-items:center;
-    gap:12px;
-    margin-bottom:14px;
+    gap:10px;
+    margin-bottom:12px;
 }
 
 .team-logo{
-    width:58px;
-    height:58px;
+    width:54px;
+    height:54px;
     border-radius:14px;
-    object-fit:cover;
     border:2px solid var(--accent);
+    object-fit:cover;
 }
 
 .team-info h3{
-    font-size:1.1rem;
+    font-size:1rem;
     margin-bottom:2px;
 }
 
 .team-info p{
     color:var(--accent);
-    font-size:.88rem;
+    font-size:.85rem;
 }
 
-/* PLAYERS */
 .players-grid{
     display:grid;
     grid-template-columns:repeat(3,1fr);
-    gap:10px;
-    margin-bottom:14px;
+    gap:8px;
+    margin-bottom:12px;
 }
 
 .player-box{
     background:rgba(255,255,255,.04);
     border:1px solid rgba(255,255,255,.06);
-    padding:10px;
     border-radius:12px;
-    font-size:.78rem;
-    line-height:1.4;
+    padding:8px;
+    font-size:.72rem;
 }
 
 .player-id{
-    color:var(--accent);
     font-weight:700;
-    margin-bottom:4px;
-    font-size:.82rem;
+    color:var(--accent);
+    font-size:.78rem;
+    margin-bottom:2px;
 }
 
-/* SUMMARY */
+.player-name{
+    font-size:.65rem;
+    color:#ff8ae2;
+    margin-bottom:6px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.stat-row{
+    display:flex;
+    gap:4px;
+    margin-bottom:4px;
+}
+
+.stat-pill{
+    flex:1;
+    background:rgba(0,240,255,.08);
+    border:1px solid rgba(0,240,255,.12);
+    border-radius:6px;
+    text-align:center;
+    padding:3px 2px;
+    font-size:.62rem;
+}
+
+.line-stat{
+    background:rgba(255,255,255,.03);
+    padding:4px 6px;
+    border-radius:6px;
+    margin-bottom:4px;
+    text-align:center;
+    font-size:.65rem;
+}
+
 .summary{
     border:1px solid rgba(255,255,255,.08);
-    border-radius:14px;
+    border-radius:12px;
     overflow:hidden;
 }
 
 .summary-title{
     background:rgba(0,240,255,.12);
-    padding:8px 12px;
+    padding:7px;
+    text-align:center;
     font-weight:700;
     color:var(--accent);
+    font-size:.85rem;
     border-bottom:1px solid rgba(255,255,255,.08);
 }
 
@@ -179,36 +201,33 @@ body{
 
 .summary-grid div{
     text-align:center;
-    padding:10px 4px;
+    padding:8px 4px;
     border-right:1px solid rgba(255,255,255,.08);
-    border-bottom:1px solid rgba(255,255,255,.08);
-    font-size:.82rem;
+    font-size:.72rem;
 }
 
-.summary-grid div:nth-child(4n){
+.summary-grid div:last-child{
     border-right:none;
 }
 
 .summary-grid b{
     display:block;
-    font-size:1rem;
-    color:#fff;
+    font-size:.9rem;
 }
 
-/* MOBILE */
 @media(max-width:768px){
 
-    .header{
-        gap:8px;
+    .manager-grid{
+        grid-template-columns:1fr;
     }
 
     .header h1{
-        font-size:1.1rem;
+        font-size:1.05rem;
     }
 
     .header img{
-        width:34px;
-        height:34px;
+        width:32px;
+        height:32px;
     }
 
     .players-grid{
@@ -216,7 +235,12 @@ body{
     }
 
     .summary-grid{
-        grid-template-columns:repeat(2,1fr);
+        grid-template-columns:repeat(4,1fr)!important;
+    }
+
+    .summary-grid div{
+        font-size:.65rem;
+        padding:7px 2px;
     }
 }
 </style>
@@ -243,42 +267,54 @@ body{
 <script>
 const POINTS_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv";
 const MANAGERS_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=467352529&single=true&output=csv";
+const MEMBERS_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv";
 
 function parseCSV(text){
-    const rows=text.trim().split("\n");
-    return rows.map(r=>r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v=>v.replace(/^"|"$/g,"").trim()));
+    return text.trim().split("\n").map(r =>
+        r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/)
+         .map(v=>v.replace(/^"|"$/g,"").trim())
+    );
 }
 
 function toDate(v){ return new Date(v); }
 
-async function loadData(){
+async function loadAll(){
 
-    const [pRes,mRes]=await Promise.all([
+    const [pRes,mRes,cRes]=await Promise.all([
         fetch(POINTS_URL),
-        fetch(MANAGERS_URL)
+        fetch(MANAGERS_URL),
+        fetch(MEMBERS_URL)
     ]);
 
     const pCSV=parseCSV(await pRes.text());
     const mCSV=parseCSV(await mRes.text());
+    const cCSV=parseCSV(await cRes.text());
 
     const pHead=pCSV.shift();
     const mHead=mCSV.shift();
+    const cHead=cCSV.shift();
 
     const matches=pCSV.map(r=>Object.fromEntries(pHead.map((h,i)=>[h,r[i]])));
     const managers=mCSV.map(r=>Object.fromEntries(mHead.map((h,i)=>[h,r[i]])));
+    const members=cCSV.map(r=>Object.fromEntries(cHead.map((h,i)=>[h,r[i]])));
 
-    const cards=[];
+    const nameMap={};
+    members.forEach(m=>{
+        nameMap[m["Club ID Number"]]=m["Full Name"];
+    });
+
+    const output=[];
 
     for(const manager of managers){
 
-        const playerIds=manager["Player IDs"].split(",").map(x=>x.trim()).slice(0,6);
+        const ids=manager["Player IDs"].split(",").map(x=>x.trim()).slice(0,6);
         const start=toDate(manager["Start Match Date"]);
         const end=toDate(manager["End Match Date"]);
 
-        const playerStats={};
+        const stats={};
 
-        playerIds.forEach(id=>{
-            playerStats[id]={match:0,pts:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,winPct:0};
+        ids.forEach(id=>{
+            stats[id]={match:0,pts:0,w:0,d:0,l:0,gf:0,ga:0};
         });
 
         for(const m of matches){
@@ -287,10 +323,10 @@ async function loadData(){
             if(m.Match_Type.toLowerCase()!=="league") continue;
 
             const md=toDate(m.Match_Date);
-            if(md<start || md>end) continue;
+            if(md<start||md>end) continue;
 
-            if(playerStats[m.P1_ID]){
-                const s=playerStats[m.P1_ID];
+            if(stats[m.P1_ID]){
+                let s=stats[m.P1_ID];
                 s.match++;
                 s.pts+=+m.P1_Point;
                 s.gf+=+m.P1_Goal;
@@ -300,8 +336,8 @@ async function loadData(){
                 else s.l++;
             }
 
-            if(playerStats[m.P2_ID]){
-                const s=playerStats[m.P2_ID];
+            if(stats[m.P2_ID]){
+                let s=stats[m.P2_ID];
                 s.match++;
                 s.pts+=+m.P2_Point;
                 s.gf+=+m.P2_Goal;
@@ -314,8 +350,8 @@ async function loadData(){
 
         let total={match:0,pts:0,w:0,gd:0};
 
-        const players=playerIds.map(id=>{
-            const s=playerStats[id];
+        const players=ids.map(id=>{
+            const s=stats[id];
             s.gd=s.gf-s.ga;
             s.winPct=s.match?((s.w/s.match)*100).toFixed(0):0;
 
@@ -324,28 +360,30 @@ async function loadData(){
             total.w+=s.w;
             total.gd+=s.gd;
 
-            return {id,...s};
+            return{
+                id,
+                name:nameMap[id]||"Unknown",
+                ...s
+            };
         });
 
         total.winPct=total.match?((total.w/total.match)*100).toFixed(0):0;
 
-        cards.push({...manager,players,total});
+        output.push({...manager,players,total});
     }
 
-    cards.sort((a,b)=>
+    output.sort((a,b)=>
         b.total.pts-a.total.pts ||
         b.total.gd-a.total.gd ||
         b.total.winPct-a.total.winPct
     );
 
-    render(cards);
+    render(output);
 }
 
 function render(data){
 
-    const grid=document.getElementById("managerGrid");
-
-    grid.innerHTML=data.map((m,i)=>`
+    document.getElementById("managerGrid").innerHTML=data.map((m,i)=>`
         <div class="manager-card">
 
             ${i<3?`<div class="rank rank${i+1}">${i+1}${["st","nd","rd"][i]}</div>`:""}
@@ -362,11 +400,16 @@ function render(data){
                 ${m.players.map(p=>`
                     <div class="player-box">
                         <div class="player-id">${p.id}</div>
-                        Match: ${p.match}<br>
-                        PTS: ${p.pts}<br>
-                        W-D-L: ${p.w}-${p.d}-${p.l}<br>
-                        GF-GA-GD: ${p.gf}-${p.ga}-${p.gd}<br>
-                        Win%: ${p.winPct}%
+                        <div class="player-name">${p.name}</div>
+
+                        <div class="stat-row">
+                            <div class="stat-pill">M ${p.match}</div>
+                            <div class="stat-pill">PTS ${p.pts}</div>
+                            <div class="stat-pill">W% ${p.winPct}</div>
+                        </div>
+
+                        <div class="line-stat">W-D-L: ${p.w}-${p.d}-${p.l}</div>
+                        <div class="line-stat">GF-GA-GD: ${p.gf}-${p.ga}-${p.gd}</div>
                     </div>
                 `).join("")}
             </div>
@@ -385,7 +428,7 @@ function render(data){
     `).join("");
 }
 
-loadData();
+loadAll();
 </script>
 
 </body>

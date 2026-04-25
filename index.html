@@ -14,17 +14,16 @@
     --card:#0d1329;
     --card2:#101935;
     --accent:#00f0ff;
-    --accent2:#ff00c8;
+    --pink:#ff00c8;
     --gold:#FFD700;
     --silver:#C0C0C0;
     --bronze:#CD7F32;
     --green:#00ff88;
     --text:#fff;
+    --muted:#93a6cf;
 }
 
-/* GLOBAL */
-*{margin:0;padding:0;box-sizing:border-box}
-
+/* BACKGROUND */
 body{
     background:
     radial-gradient(circle at top left,#10244f 0%,#050816 45%),
@@ -33,8 +32,6 @@ body{
     color:var(--text);
     padding:14px;
 }
-
-.container{max-width:1600px;margin:auto;}
 
 /* HEADER */
 .header{
@@ -51,15 +48,14 @@ body{
     font-family:'Orbitron';
     font-size:1.25rem;
     letter-spacing:1px;
-    background:linear-gradient(90deg,#00f0ff,#ff00c8);
+    background:linear-gradient(90deg,#00f0ff,#ff00c8,#00ff88);
     -webkit-background-clip:text;
     -webkit-text-fill-color:transparent;
 }
 
-/* DESCRIPTION */
 .desc{
     text-align:center;
-    color:#93a6d6;
+    color:var(--muted);
     font-size:.85rem;
     margin-bottom:18px;
 }
@@ -71,75 +67,78 @@ body{
     gap:16px;
 }
 
-/* CARD */
+/* CARD WITH RGB GLOW */
 .manager-card{
+    position:relative;
     background:linear-gradient(145deg,var(--card),var(--card2));
     border-radius:18px;
     padding:14px;
-    position:relative;
     overflow:hidden;
-    box-shadow:0 8px 24px rgba(0,0,0,.35);
+    border:1px solid rgba(255,255,255,.08);
+    box-shadow:0 10px 25px rgba(0,0,0,.4);
 }
 
-/* RGB BORDER ANIMATION */
+/* RGB glow animation */
 .manager-card::before{
     content:"";
     position:absolute;
-    inset:0;
-    padding:1px;
-    border-radius:18px;
+    inset:-2px;
     background:linear-gradient(90deg,#00f0ff,#ff00c8,#00ff88,#00f0ff);
-    background-size:300% 300%;
+    z-index:0;
+    filter:blur(10px);
+    opacity:.25;
     animation:rgb 6s linear infinite;
-    -webkit-mask:
-        linear-gradient(#000 0 0) content-box,
-        linear-gradient(#000 0 0);
-    -webkit-mask-composite:xor;
-    mask-composite:exclude;
-    pointer-events:none;
-    opacity:.35;
 }
 
 @keyframes rgb{
-    0%{background-position:0% 50%}
-    100%{background-position:300% 50%}
+    0%{transform:rotate(0deg)}
+    100%{transform:rotate(360deg)}
+}
+
+.manager-card > *{
+    position:relative;
+    z-index:1;
 }
 
 /* TOP RANK BADGES */
-.rank{
+.rank-badge{
     position:absolute;
     top:10px;
     right:10px;
-    font-size:.7rem;
     font-family:'Orbitron';
-    padding:4px 8px;
+    font-size:.7rem;
+    padding:5px 9px;
     border-radius:999px;
     display:flex;
     align-items:center;
-    gap:4px;
+    gap:5px;
     background:rgba(255,255,255,.08);
-    backdrop-filter:blur(6px);
 }
 
-.rank1{border:1px solid var(--gold);}
-.rank2{border:1px solid var(--silver);}
-.rank3{border:1px solid var(--bronze);}
+.rank-badge span{
+    font-size:.9rem;
+}
+
+/* COLORS */
+.top1{border:1px solid var(--gold);}
+.top2{border:1px solid var(--silver);}
+.top3{border:1px solid var(--bronze);}
 
 /* DOWNLOAD ICON */
 .download-icon{
     position:absolute;
-    top:42px;
+    top:40px;
     right:12px;
+    font-size:1rem;
     cursor:pointer;
-    width:18px;
-    height:18px;
-    opacity:.85;
+    padding:4px 6px;
+    border-radius:8px;
+    background:rgba(0,240,255,.1);
     transition:.2s;
 }
-
 .download-icon:hover{
     transform:scale(1.15);
-    filter:drop-shadow(0 0 6px #00f0ff);
+    background:rgba(255,0,200,.15);
 }
 
 /* TEAM HEADER */
@@ -147,25 +146,30 @@ body{
     display:flex;
     align-items:center;
     gap:10px;
-    margin-bottom:12px;
+    margin-bottom:10px;
 }
 
 .team-logo{
-    width:54px;
-    height:54px;
+    width:52px;
+    height:52px;
     border-radius:14px;
-    object-fit:cover;
     border:2px solid var(--accent);
 }
 
-.team-info h3{font-size:1rem;}
-.team-info p{color:var(--accent);font-size:.82rem;}
+.team-info h3{
+    font-size:1rem;
+    font-family:'Orbitron';
+}
 
-/* TEAM STRENGTH */
+.team-info p{
+    color:var(--accent);
+    font-size:.82rem;
+}
+
 .team-strength{
-    font-size:.7rem;
+    font-size:.72rem;
+    color:#ffcc66;
     margin-top:2px;
-    color:#ffd36b;
 }
 
 /* PLAYERS */
@@ -181,7 +185,7 @@ body{
     border:1px solid rgba(0,255,136,.25);
     border-radius:12px;
     padding:8px;
-    font-size:.72rem;
+    font-size:.7rem;
 }
 
 .player-box.best-player{
@@ -189,8 +193,16 @@ body{
     box-shadow:0 0 10px rgba(255,215,0,.12);
 }
 
-.player-id{color:var(--accent);font-weight:700;font-size:.78rem;}
-.player-name{color:#ff8ae2;font-size:.62rem;margin-bottom:5px;}
+.player-id{
+    color:var(--accent);
+    font-weight:700;
+}
+
+.player-name{
+    font-size:.62rem;
+    color:#ff88dd;
+    margin-bottom:5px;
+}
 
 /* STATS */
 .stat-row{
@@ -202,60 +214,74 @@ body{
 .stat-pill{
     flex:1;
     text-align:center;
-    font-size:.58rem;
-    padding:3px 2px;
+    font-size:.6rem;
+    padding:3px;
     border-radius:6px;
     background:rgba(0,240,255,.08);
-    border:1px solid rgba(0,240,255,.12);
+    border:1px solid rgba(0,240,255,.15);
 }
 
-/* SUMMARY */
+/* LINE */
+.line-stat{
+    text-align:center;
+    font-size:.62rem;
+    background:rgba(255,255,255,.03);
+    margin-bottom:4px;
+    padding:4px;
+    border-radius:6px;
+}
+
+/* TEAM SUMMARY */
 .summary{
+    border:1px solid rgba(255,255,255,.1);
     border-radius:12px;
     overflow:hidden;
-    border:1px solid rgba(255,255,255,.08);
 }
 
 .summary-title{
     text-align:center;
     padding:7px;
-    font-size:.82rem;
+    font-size:.8rem;
+    font-weight:700;
     color:var(--accent);
-    background:rgba(0,240,255,.12);
+    background:rgba(0,240,255,.1);
 }
 
-/* NEW STYLE SUMMARY */
 .summary-grid{
-    display:flex;
-    justify-content:space-around;
-    padding:8px 4px;
-    font-size:.7rem;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
 }
 
-.sum-item{
+.summary-grid div{
     text-align:center;
-    padding:4px 8px;
-    border-radius:8px;
+    padding:8px 2px;
+    font-size:.7rem;
+    border-right:1px solid rgba(255,255,255,.08);
 }
 
-.sum-m{color:#00f0ff;}
-.sum-p{color:#ff00c8;}
-.sum-g{color:#00ff88;}
-.sum-w{color:#ffd36b;}
+.summary-grid div:last-child{border-right:none;}
 
-/* RESPONSIVE */
+/* NEW COLOR STYLE TEXT INSIDE SUMMARY */
+.summary-grid b{
+    display:block;
+    font-size:.9rem;
+    color:#fff;
+}
+
+/* MOBILE */
 @media(max-width:768px){
     .manager-grid{grid-template-columns:1fr;}
     .players-grid{grid-template-columns:repeat(2,1fr);}
 }
 </style>
 </head>
+
 <body>
 
 <div class="container">
 
 <div class="header">
-    <img src="https://i.imgur.com/LY3Bb9m.png">
+    <img src="https://i.imgur.com/LY3Bb9m.png" crossorigin="anonymous">
     <h1>GOAT FC MANAGERS</h1>
 </div>
 
@@ -271,105 +297,107 @@ const MANAGERS_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4
 const MEMBERS_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv";
 
 function parseCSV(t){
-    return t.trim().split("\n").map(r=>r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v=>v.replace(/"/g,"").trim()));
+return t.trim().split("\n").map(r=>r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v=>v.replace(/^"|"$/g,"")));
 }
 
 async function load(){
-const [p,m,c]=await Promise.all([
-fetch(POINTS_URL).then(r=>r.text()),
-fetch(MANAGERS_URL).then(r=>r.text()),
-fetch(MEMBERS_URL).then(r=>r.text())
-]);
+const [p,m,c]=await Promise.all([fetch(POINTS_URL),fetch(MANAGERS_URL),fetch(MEMBERS_URL)]);
 
-const matches=parseCSV(p), managers=parseCSV(m), members=parseCSV(c);
+const pm=parseCSV(await p.text()), mm=parseCSV(await m.text()), cm=parseCSV(await c.text());
 
-const ph=matches.shift(), mh=managers.shift(), ch=members.shift();
+const ph=pm.shift(), mh=mm.shift(), ch=cm.shift();
 
 const nameMap={};
-members.forEach(r=>{
+cm.forEach(r=>{
 const o=Object.fromEntries(ch.map((h,i)=>[h,r[i]]));
 nameMap[o["Club ID Number"]]=o["Full Name"];
 });
 
-const matchObjs=matches.map(r=>Object.fromEntries(ph.map((h,i)=>[h,r[i]])));
+const matches=pm.map(r=>Object.fromEntries(ph.map((h,i)=>[h,r[i]])));
 
-const out=[];
+const res=[];
 
-for(const row of managers){
-const m=Object.fromEntries(mh.map((h,i)=>[h,row[i]]));
-const ids=m["Player IDs"].split(",").slice(0,6);
+for(const r of mm){
+const m=Object.fromEntries(mh.map((h,i)=>[h,r[i]]));
+const ids=m["Player IDs"].split(",").map(x=>x.trim()).slice(0,6);
 
-const stats={}, total={match:0,pts:0,w:0,gd:0};
+const stats={}, start=new Date(m["Start Match Date"]), end=new Date(m["End Match Date"]);
 
 ids.forEach(id=>stats[id]={match:0,pts:0,w:0,d:0,l:0,gf:0,ga:0});
 
-for(const x of matchObjs){
-if(x.Approved!=="yes") continue;
+for(const x of matches){
+if(x.Approved.toLowerCase()!=="yes") continue;
 
 if(stats[x.P1_ID]){
 let s=stats[x.P1_ID];
 s.match++;s.pts+=+x.P1_Point;s.gf+=+x.P1_Goal;s.ga+=+x.P2_Goal;
-x.P1_Point==3?s.w++:x.P1_Point==1?s.d++:s.l++;
+if(+x.P1_Point===3)s.w++;else if(+x.P1_Point===1)s.d++;else s.l++;
 }
 
 if(stats[x.P2_ID]){
 let s=stats[x.P2_ID];
 s.match++;s.pts+=+x.P2_Point;s.gf+=+x.P2_Goal;s.ga+=+x.P1_Goal;
-x.P2_Point==3?s.w++:x.P2_Point==1?s.d++:s.l++;
+if(+x.P2_Point===3)s.w++;else if(+x.P2_Point===1)s.d++;else s.l++;
 }
 }
+
+let total={match:0,pts:0,w:0,gd:0};
 
 const players=ids.map(id=>{
 const s=stats[id];
 s.gd=s.gf-s.ga;
-total.match+=s.match;total.pts+=s.pts;total.w+=s.w;total.gd+=s.gd;
-return{id,name:nameMap[id]||"Unknown",...s};
+s.winPct=s.match?Math.round((s.w/s.match)*100):0;
+
+total.match+=s.match;
+total.pts+=s.pts;
+total.w+=s.w;
+total.gd+=s.gd;
+
+return {id,name:nameMap[id]||"Unknown",...s};
 });
 
 total.winPct=total.match?Math.round((total.w/total.match)*100):0;
 
-out.push({...m,players,total});
+res.push({...m,players,total});
 }
 
-out.sort((a,b)=>b.total.pts-a.total.pts||b.total.gd-a.total.gd||b.total.winPct-a.total.winPct);
+res.sort((a,b)=>b.total.pts-a.total.pts || b.total.gd-a.total.gd);
 
-render(out);
+render(res);
 }
 
-function render(data){
-document.getElementById("managerGrid").innerHTML=data.map((m,i)=>`
-<div class="manager-card" id="card-${i}">
+function render(d){
+document.getElementById("managerGrid").innerHTML=d.map((m,i)=>{
 
-<div class="rank rank${i<3?i+1:0}">
-${i==0?"🥇":i==1?"🥈":i==2?"🥉":"#"+(i+1)}
-</div>
+const best=m.players.reduce((b,p,i,a)=>p.pts>a[b].pts?i:b,0);
 
-<svg class="download-icon" onclick="download('card-${i}','${m["Team Name"]}')"
-viewBox="0 0 24 24" fill="none" stroke="#00f0ff" stroke-width="2">
-<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-<polyline points="7 10 12 15 17 10"/>
-<line x1="12" y1="15" x2="12" y2="3"/>
-</svg>
+return `
+<div class="manager-card ${i===0?'top1':i===1?'top2':i===2?'top3':''}" id="c${i}">
+
+<div class="rank-badge">${i+1===1?'🥇':i+1===2?'🥈':i+1===3?'🥉':'#'+(i+1)}</div>
+<div class="download-icon" onclick="downloadCard('c${i}','${m["Team Name"]}')">⬇️</div>
 
 <div class="team-top">
 <img class="team-logo" src="${m["Team Logo"]}" crossorigin="anonymous">
-<div>
-<div class="team-info h3">${m["Team Name"]}</div>
-<div class="team-info p">${m["Manager Name"]}</div>
+<div class="team-info">
+<h3>${m["Team Name"]}</h3>
+<p>${m["Manager Name"]}</p>
 <div class="team-strength">Strength: ${m.total.pts+m.total.gd}</div>
 </div>
 </div>
 
 <div class="players-grid">
-${m.players.map((p,i)=>`
-<div class="player-box ${i==0?'best-player':''}">
+${m.players.map((p,idx)=>`
+<div class="player-box ${idx===best?'best-player':''}">
 <div class="player-id">${p.id}</div>
 <div class="player-name">${p.name}</div>
 <div class="stat-row">
 <div class="stat-pill">M ${p.match}</div>
 <div class="stat-pill">PTS ${p.pts}</div>
-<div class="stat-pill">W% ${p.match?Math.round(p.w/p.match*100):0}</div>
+<div class="stat-pill">W% ${p.winPct}</div>
 </div>
+<div class="line-stat">W-D-L ${p.w}-${p.d}-${p.l}</div>
+<div class="line-stat">GF-GA-GD ${p.gf}-${p.ga}-${p.gd}</div>
 </div>
 `).join("")}
 </div>
@@ -377,25 +405,26 @@ ${m.players.map((p,i)=>`
 <div class="summary">
 <div class="summary-title">Team Summary</div>
 <div class="summary-grid">
-<div class="sum-item sum-m">M ${m.total.match}</div>
-<div class="sum-item sum-p">PTS ${m.total.pts}</div>
-<div class="sum-item sum-g">GD ${m.total.gd}</div>
-<div class="sum-item sum-w">W% ${m.total.winPct}</div>
+<div><b>${m.total.match}</b>Match</div>
+<div><b>${m.total.pts}</b>PTS</div>
+<div><b>${m.total.gd}</b>GD</div>
+<div><b>${m.total.winPct}%</b>Win%</div>
 </div>
 </div>
 
-</div>
-`).join("");
+</div>`;
+}).join("");
 }
 
-function download(id,name){
+function downloadCard(id,name){
 html2canvas(document.getElementById(id),{
 useCORS:true,
+backgroundColor:null,
 scale:2
 }).then(c=>{
 let a=document.createElement("a");
 a.download=name+".jpg";
-a.href=c.toDataURL("image/jpeg");
+a.href=c.toDataURL("image/jpeg",1);
 a.click();
 });
 }

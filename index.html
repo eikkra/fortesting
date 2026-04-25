@@ -2,337 +2,387 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>GOAT FC MANAGERS</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
 
 <style>
+:root{
+    --bg:#050816;
+    --card:#0d1329;
+    --card2:#101935;
+    --accent:#00f0ff;
+    --accent2:#ff00c8;
+    --gold:#FFD700;
+    --silver:#C0C0C0;
+    --bronze:#CD7F32;
+    --text:#ffffff;
+    --muted:#9db0d6;
+}
+
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
 }
+
 body{
-    font-family:'Orbitron',sans-serif;
-    background:#050816;
-    color:#fff;
-    min-height:100vh;
+    background:
+    radial-gradient(circle at top left,#0d1f45 0%,#050816 40%),
+    radial-gradient(circle at bottom right,#24002b 0%,#050816 50%);
+    font-family:'Rajdhani',sans-serif;
+    color:var(--text);
     padding:20px;
+    min-height:100vh;
 }
 
-/* HEADER */
+.container{
+    max-width:1600px;
+    margin:auto;
+}
+
 .header{
     text-align:center;
     margin-bottom:30px;
 }
+
 .header img{
-    width:90px;
-    margin-bottom:15px;
-    filter:drop-shadow(0 0 15px #00f7ff);
-}
-.header h1{
-    font-size:38px;
-    color:#00f7ff;
-    text-shadow:0 0 15px #00f7ff;
-}
-.header p{
-    max-width:850px;
-    margin:15px auto 0;
-    color:#9ca3af;
-    line-height:1.7;
-    font-size:14px;
+    width:85px;
+    margin-bottom:10px;
+    animation:float 3s ease-in-out infinite;
 }
 
-/* GRID */
+.header h1{
+    font-family:'Orbitron',sans-serif;
+    font-size:2.3rem;
+    background:linear-gradient(90deg,#00f0ff,#ff00c8);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.header p{
+    color:var(--muted);
+    margin-top:8px;
+    font-size:1rem;
+}
+
 .manager-grid{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(380px,1fr));
-    gap:25px;
+    grid-template-columns:repeat(auto-fit,minmax(360px,1fr));
+    gap:24px;
 }
 
-/* CARD */
 .manager-card{
-    background:linear-gradient(145deg,#0f172a,#111827);
-    border:1px solid rgba(0,247,255,.2);
-    border-radius:20px;
-    padding:20px;
-    box-shadow:0 0 25px rgba(0,247,255,.12);
-    transition:.3s;
+    background:linear-gradient(145deg,var(--card),var(--card2));
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:24px;
+    padding:22px;
+    position:relative;
+    overflow:hidden;
+    box-shadow:0 10px 30px rgba(0,0,0,0.4);
+    transition:.35s;
 }
+
 .manager-card:hover{
     transform:translateY(-6px);
-    box-shadow:0 0 35px rgba(0,247,255,.3);
+    box-shadow:0 15px 35px rgba(0,240,255,0.15);
 }
 
-/* TOP */
-.manager-top{
-    text-align:center;
-    margin-bottom:20px;
+.rank-badge{
+    position:absolute;
+    top:16px;
+    right:16px;
+    padding:7px 14px;
+    border-radius:999px;
+    font-weight:700;
+    font-size:.9rem;
+    font-family:'Orbitron';
 }
+
+.rank-1{background:var(--gold);color:#000;}
+.rank-2{background:var(--silver);color:#000;}
+.rank-3{background:var(--bronze);color:#000;}
+
+.team-header{
+    text-align:center;
+    margin-bottom:18px;
+}
+
 .team-logo{
     width:90px;
     height:90px;
-    border-radius:18px;
     object-fit:cover;
-    margin-bottom:10px;
-    border:2px solid #00f7ff;
+    border-radius:20px;
+    border:2px solid var(--accent);
+    box-shadow:0 0 20px rgba(0,240,255,.35);
 }
+
 .team-name{
-    font-size:22px;
-    color:#00f7ff;
+    font-size:1.45rem;
+    font-weight:700;
+    margin-top:12px;
+}
+
+.manager-name{
+    color:var(--accent);
+    font-size:1rem;
+}
+
+.players{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-top:20px;
+}
+
+.player{
+    background:rgba(255,255,255,0.03);
+    border:1px solid rgba(255,255,255,.05);
+    padding:12px 14px;
+    border-radius:14px;
+}
+
+.player-top{
+    display:flex;
+    justify-content:space-between;
+    font-weight:700;
     margin-bottom:6px;
 }
-.manager-name{
-    color:#d1d5db;
-    font-size:14px;
-}
-.rank-badge{
-    display:inline-block;
-    margin-top:10px;
-    padding:6px 14px;
-    border-radius:30px;
-    background:linear-gradient(90deg,#00f7ff,#7c3aed);
-    font-size:12px;
-    font-weight:700;
-}
 
-/* PLAYER BOX */
-.player-box{
-    background:#0b1220;
-    border:1px solid rgba(255,255,255,.08);
-    border-radius:14px;
-    padding:14px;
-    margin-bottom:12px;
-}
-.player-id{
-    font-size:15px;
-    color:#00f7ff;
-    margin-bottom:10px;
-}
-.stats-grid{
+.player-stats{
     display:grid;
-    grid-template-columns:repeat(4,1fr);
+    grid-template-columns:repeat(3,1fr);
     gap:8px;
-}
-.stat{
-    background:#111827;
-    padding:8px;
-    border-radius:10px;
-    text-align:center;
-}
-.stat label{
-    display:block;
-    font-size:10px;
-    color:#9ca3af;
-    margin-bottom:4px;
-}
-.stat span{
-    font-size:13px;
-    font-weight:700;
+    font-size:.88rem;
+    color:var(--muted);
 }
 
-/* SUMMARY */
 .summary{
-    margin-top:20px;
+    margin-top:18px;
     padding:16px;
-    border-radius:16px;
-    background:linear-gradient(90deg,#111827,#0f172a);
-    border:1px solid rgba(124,58,237,.3);
+    border-radius:18px;
+    background:linear-gradient(90deg,#00f0ff15,#ff00c815);
+    border:1px solid rgba(255,255,255,0.08);
 }
-.summary h3{
-    margin-bottom:12px;
-    color:#a78bfa;
-    font-size:15px;
+
+.summary h4{
+    margin-bottom:10px;
+    color:var(--accent);
 }
+
 .summary-grid{
     display:grid;
     grid-template-columns:repeat(4,1fr);
     gap:10px;
-}
-.summary .stat{
-    background:#1f2937;
+    text-align:center;
+    font-size:.9rem;
 }
 
 .loading{
     text-align:center;
-    font-size:18px;
-    color:#00f7ff;
-    margin-top:50px;
+    padding:80px;
+    font-size:1.2rem;
+    color:var(--muted);
 }
 
-/* MOBILE */
+@keyframes float{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-8px);}
+}
+
 @media(max-width:768px){
     .manager-grid{
         grid-template-columns:1fr;
     }
-    .stats-grid,.summary-grid{
+
+    .player-stats{
+        grid-template-columns:1fr;
+    }
+
+    .summary-grid{
         grid-template-columns:repeat(2,1fr);
     }
+
     .header h1{
-        font-size:28px;
+        font-size:1.7rem;
     }
 }
 </style>
 </head>
 <body>
 
-<div class="header">
-    <img src="https://i.imgur.com/LY3Bb9m.png" alt="GOAT FC">
-    <h1>GOAT FC MANAGERS</h1>
-    <p>
-        Official Monthly Manager Ranking System of GOAT FC. Rankings are calculated based on all approved League Tournament matches of players under each manager. Higher Total Points, Goal Difference, and Win Percentage determine superior managerial performance.
-    </p>
-</div>
+<div class="container">
 
-<div id="managerContainer" class="manager-grid">
-    <div class="loading">Loading Manager Profiles...</div>
+    <div class="header">
+        <img src="https://i.imgur.com/LY3Bb9m.png" alt="GOAT FC">
+        <h1>GOAT FC MANAGERS</h1>
+        <p>Official Club Manager Ranking Based on League Performance of Registered Squad Members</p>
+    </div>
+
+    <div id="managerGrid" class="manager-grid">
+        <div class="loading">Loading Manager Profiles...</div>
+    </div>
+
 </div>
 
 <script>
-const pointsCSV =
-'https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv';
+const POINTS_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv";
 
-const managersCSV =
-'https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=467352529&single=true&output=csv';
+const MANAGERS_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=467352529&single=true&output=csv";
 
 function parseCSV(text){
-    const rows=text.trim().split('\n');
-    const headers=rows[0].split(',');
-    return rows.slice(1).map(row=>{
-        const values=row.split(',');
-        let obj={};
-        headers.forEach((h,i)=>obj[h.trim()]=values[i]?.trim());
-        return obj;
-    });
+    const rows = text.trim().split('\n');
+    return rows.map(row =>
+        row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/)
+           .map(v => v.replace(/^"|"$/g,'').trim())
+    );
 }
 
-function currentMonthYear(dateStr){
-    const d=new Date(dateStr);
-    const now=new Date();
-    return d.getMonth()===now.getMonth() && d.getFullYear()===now.getFullYear();
+function toDate(d){
+    return new Date(d);
 }
 
-function calcPlayerStats(playerId,matches){
-    let stats={
-        match:0,points:0,gf:0,ga:0,gd:0,win:0,draw:0,loss:0,winPct:0
+function calculatePlayerStats(playerId,matches,start,end){
+    const stats={
+        match:0,pts:0,w:0,d:0,l:0,gf:0,ga:0,gd:0
     };
 
     matches.forEach(m=>{
-        let isP1=m.P1_ID===playerId;
-        let isP2=m.P2_ID===playerId;
-        if(!isP1 && !isP2) return;
+        if(m.Approved.toLowerCase()!=="yes") return;
+        if(m.Match_Type.toLowerCase()!=="league") return;
 
-        stats.match++;
+        const md=toDate(m.Match_Date);
+        if(md<start || md>end) return;
 
-        let gf=isP1?+m.P1_Goal:+m.P2_Goal;
-        let ga=isP1?+m.P2_Goal:+m.P1_Goal;
-        let pts=isP1?+m.P1_Point:+m.P2_Point;
+        if(m.P1_ID===playerId){
+            stats.match++;
+            stats.pts+=+m.P1_Point;
+            stats.gf+=+m.P1_Goal;
+            stats.ga+=+m.P2_Goal;
 
-        stats.points+=pts;
-        stats.gf+=gf;
-        stats.ga+=ga;
+            if(+m.P1_Point===3) stats.w++;
+            else if(+m.P1_Point===1) stats.d++;
+            else stats.l++;
+        }
 
-        if(pts===3) stats.win++;
-        else if(pts===1) stats.draw++;
-        else stats.loss++;
+        if(m.P2_ID===playerId){
+            stats.match++;
+            stats.pts+=+m.P2_Point;
+            stats.gf+=+m.P2_Goal;
+            stats.ga+=+m.P1_Goal;
+
+            if(+m.P2_Point===3) stats.w++;
+            else if(+m.P2_Point===1) stats.d++;
+            else stats.l++;
+        }
     });
 
     stats.gd=stats.gf-stats.ga;
-    stats.winPct=stats.match?((stats.win/stats.match)*100).toFixed(1):0;
+    stats.winPct=stats.match?((stats.w/stats.match)*100).toFixed(1):0;
 
     return stats;
 }
 
 async function loadManagers(){
-    const [pointsRes,managersRes]=await Promise.all([
-        fetch(pointsCSV),
-        fetch(managersCSV)
+
+    const [pointsRes,managerRes]=await Promise.all([
+        fetch(POINTS_URL),
+        fetch(MANAGERS_URL)
     ]);
 
-    const points=parseCSV(await pointsRes.text());
-    const managers=parseCSV(await managersRes.text());
+    const pointsCSV=parseCSV(await pointsRes.text());
+    const managersCSV=parseCSV(await managerRes.text());
 
-    const validMatches=points.filter(m=>
-        m.Match_Type==="League Tournament" &&
-        m.Approved?.toLowerCase()==="yes" &&
-        currentMonthYear(m.Match_Date)
-    );
+    const pointHeaders=pointsCSV.shift();
+    const managerHeaders=managersCSV.shift();
 
-    let managerStats=[];
+    const matches=pointsCSV.map(r=>Object.fromEntries(pointHeaders.map((h,i)=>[h,r[i]])));
+    const managers=managersCSV.map(r=>Object.fromEntries(managerHeaders.map((h,i)=>[h,r[i]])));
 
-    managers.forEach(mgr=>{
-        const playerIds=mgr["Player IDs"].split(',').map(x=>x.trim());
+    const processed=[];
 
-        let playersData=[];
-        let totalMatch=0,totalPoints=0,totalGD=0,totalWinPct=0;
+    managers.forEach(manager=>{
 
-        playerIds.forEach(id=>{
-            const s=calcPlayerStats(id,validMatches);
+        const playerIds=manager["Player IDs"].split(',').map(v=>v.trim());
 
-            totalMatch+=s.match;
-            totalPoints+=s.points;
-            totalGD+=s.gd;
-            totalWinPct+=parseFloat(s.winPct);
+        const start=toDate(manager["Start Match Date"]);
+        const end=toDate(manager["End Match Date"]);
 
-            playersData.push({id,...s});
+        let total={
+            match:0,pts:0,w:0,d:0,l:0,gf:0,ga:0,gd:0
+        };
+
+        const players=playerIds.slice(0,6).map(id=>{
+            const s=calculatePlayerStats(id,matches,start,end);
+
+            total.match+=s.match;
+            total.pts+=s.pts;
+            total.w+=s.w;
+            total.d+=s.d;
+            total.l+=s.l;
+            total.gf+=s.gf;
+            total.ga+=s.ga;
+            total.gd+=s.gd;
+
+            return {id,...s};
         });
 
-        const avgWinPct=playerIds.length?(totalWinPct/playerIds.length).toFixed(1):0;
+        total.winPct=total.match?((total.w/total.match)*100).toFixed(1):0;
 
-        managerStats.push({
-            ...mgr,
-            playersData,
-            totalMatch,
-            totalPoints,
-            totalGD,
-            avgWinPct
+        processed.push({
+            ...manager,
+            players,
+            total
         });
     });
 
-    managerStats.sort((a,b)=>
-        b.totalPoints-a.totalPoints ||
-        b.totalGD-a.totalGD ||
-        b.avgWinPct-a.avgWinPct
+    processed.sort((a,b)=>
+        b.total.pts-a.total.pts ||
+        b.total.gd-a.total.gd ||
+        b.total.winPct-a.total.winPct
     );
 
-    renderManagers(managerStats);
+    renderManagers(processed);
 }
 
 function renderManagers(managers){
-    const container=document.getElementById('managerContainer');
 
-    container.innerHTML=managers.map((mgr,index)=>`
+    const grid=document.getElementById('managerGrid');
+
+    grid.innerHTML=managers.map((m,i)=>`
         <div class="manager-card">
-            <div class="manager-top">
-                <img class="team-logo" src="${mgr["Team Logo"]}" alt="">
-                <div class="team-name">${mgr["Team Name"]}</div>
-                <div class="manager-name">${mgr["Manager Name"]}</div>
-                <div class="rank-badge">Rank #${index+1}</div>
+            ${i<3?`<div class="rank-badge rank-${i+1}">${i+1}${['st','nd','rd'][i]}</div>`:''}
+
+            <div class="team-header">
+                <img class="team-logo" src="${m["Team Logo"]}" alt="">
+                <div class="team-name">${m["Team Name"]}</div>
+                <div class="manager-name">${m["Manager Name"]}</div>
             </div>
 
-            ${mgr.playersData.map(p=>`
-                <div class="player-box">
-                    <div class="player-id">${p.id}</div>
-                    <div class="stats-grid">
-                        <div class="stat"><label>Match</label><span>${p.match}</span></div>
-                        <div class="stat"><label>PTS</label><span>${p.points}</span></div>
-                        <div class="stat"><label>GF</label><span>${p.gf}</span></div>
-                        <div class="stat"><label>GA</label><span>${p.ga}</span></div>
-                        <div class="stat"><label>GD</label><span>${p.gd}</span></div>
-                        <div class="stat"><label>W-D-L</label><span>${p.win}-${p.draw}-${p.loss}</span></div>
-                        <div class="stat"><label>Win%</label><span>${p.winPct}%</span></div>
+            <div class="players">
+                ${m.players.map(p=>`
+                    <div class="player">
+                        <div class="player-top">
+                            <span>${p.id}</span>
+                            <span>${p.pts} PTS</span>
+                        </div>
+                        <div class="player-stats">
+                            <span>Match: ${p.match}</span>
+                            <span>W-D-L: ${p.w}-${p.d}-${p.l}</span>
+                            <span>GF-GA-GD: ${p.gf}-${p.ga}-${p.gd}</span>
+                        </div>
                     </div>
-                </div>
-            `).join('')}
+                `).join('')}
+            </div>
 
             <div class="summary">
-                <h3>Manager Summary</h3>
+                <h4>Manager Summary</h4>
                 <div class="summary-grid">
-                    <div class="stat"><label>Total Match</label><span>${mgr.totalMatch}</span></div>
-                    <div class="stat"><label>Total PTS</label><span>${mgr.totalPoints}</span></div>
-                    <div class="stat"><label>Total GD</label><span>${mgr.totalGD}</span></div>
-                    <div class="stat"><label>Avg Win%</label><span>${mgr.avgWinPct}%</span></div>
+                    <div><b>${m.total.match}</b><br>Match</div>
+                    <div><b>${m.total.pts}</b><br>PTS</div>
+                    <div><b>${m.total.gd}</b><br>GD</div>
+                    <div><b>${m.total.winPct}%</b><br>Win%</div>
                 </div>
             </div>
         </div>

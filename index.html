@@ -22,6 +22,7 @@
     --muted:#94a7d0;
     --text:#fff;
 }
+
 *{margin:0;padding:0;box-sizing:border-box}
 
 body{
@@ -97,7 +98,7 @@ body{
     right:14px;
     cursor:pointer;
     font-size:.9rem;
-    opacity:.8;
+    opacity:.85;
 }
 
 .team-top{
@@ -132,23 +133,21 @@ body{
 }
 
 .player-box{
-    background:
-        linear-gradient(135deg,
-            rgba(0,240,255,.10),
-            rgba(255,0,200,.06),
-            rgba(0,255,136,.05));
+    background:rgba(255,255,255,.045);
     border:1px solid rgba(0,255,136,.35);
     border-radius:12px;
     padding:8px;
     font-size:.72rem;
     box-shadow:
-        inset 0 0 10px rgba(0,240,255,.08),
-        0 0 10px rgba(0,240,255,.04);
+        inset 0 0 10px rgba(0,240,255,.03),
+        0 0 8px rgba(0,240,255,.04);
 }
 
 .player-box.best-player{
     border:1px solid var(--gold);
-    box-shadow:0 0 10px rgba(255,215,0,.14);
+    box-shadow:
+        0 0 12px rgba(255,215,0,.15),
+        inset 0 0 8px rgba(255,215,0,.05);
 }
 
 .player-id{
@@ -171,9 +170,11 @@ body{
     grid-template-columns:repeat(3,1fr);
     gap:4px;
     margin-bottom:4px;
+    width:100%;
 }
 
 .stat-pill{
+    min-width:0;
     background:rgba(0,240,255,.08);
     border:1px solid rgba(0,240,255,.12);
     border-radius:6px;
@@ -214,10 +215,9 @@ body{
 
 .summary-grid div{
     text-align:center;
-    padding:10px 3px;
+    padding:10px 4px;
     border-right:1px solid rgba(255,255,255,.08);
     background:rgba(255,255,255,.02);
-    font-size:.66rem;
 }
 
 .summary-grid div:last-child{border-right:none;}
@@ -225,13 +225,15 @@ body{
 .summary-grid b{
     display:block;
     font-size:.95rem;
+    color:#ffffff;
     margin-bottom:3px;
 }
 
-.summary-grid div:nth-child(1) b{color:#00f0ff;}
-.summary-grid div:nth-child(2) b{color:#00ff88;}
-.summary-grid div:nth-child(3) b{color:#ffcc00;}
-.summary-grid div:nth-child(4) b{color:#ff66cc;}
+.summary-grid span{
+    font-size:.65rem;
+    color:#7dd3fc;
+    font-weight:600;
+}
 
 @media(max-width:768px){
     .manager-grid{grid-template-columns:1fr;}
@@ -293,7 +295,6 @@ async function loadData(){
         const end=new Date(manager["End Match Date"]);
 
         const stats={}, strength={pts:0,goals:0};
-
         ids.forEach(id=>stats[id]={match:0,pts:0,w:0,d:0,l:0,gf:0,ga:0});
 
         for(const m of matchObjs){
@@ -325,12 +326,10 @@ async function loadData(){
             const s=stats[id];
             s.gd=s.gf-s.ga;
             s.winPct=s.match?Math.round((s.w/s.match)*100):0;
-
             total.match+=s.match;
             total.pts+=s.pts;
             total.w+=s.w;
             total.gd+=s.gd;
-
             return {id,name:nameMap[id]||"Unknown",...s};
         });
 
@@ -383,10 +382,10 @@ function render(data){
             <div class="summary">
                 <div class="summary-title">Team Summary</div>
                 <div class="summary-grid">
-                    <div><b>${m.total.match}</b>Match</div>
-                    <div><b>${m.total.pts}</b>PTS</div>
-                    <div><b>${m.total.gd}</b>GD</div>
-                    <div><b>${m.total.winPct}%</b>Win%</div>
+                    <div><b>${m.total.match}</b><span>Match</span></div>
+                    <div><b>${m.total.pts}</b><span>PTS</span></div>
+                    <div><b>${m.total.gd}</b><span>GD</span></div>
+                    <div><b>${m.total.winPct}%</b><span>Win%</span></div>
                 </div>
             </div>
         </div>`;

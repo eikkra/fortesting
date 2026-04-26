@@ -96,7 +96,6 @@ body{
     right:14px;
     cursor:pointer;
     font-size:.9rem;
-    opacity:.8;
 }
 
 .team-top{
@@ -131,21 +130,19 @@ body{
 }
 
 .player-box{
-    background:rgba(255,255,255,.035);
+    background:linear-gradient(145deg,
+        rgba(0,240,255,.08),
+        rgba(255,0,200,.04),
+        rgba(255,255,255,.03)
+    );
     border:1px solid rgba(0,255,136,.35);
     border-radius:12px;
     padding:8px;
-    font-size:.72rem;
-    box-shadow:
-        inset 0 0 8px rgba(0,240,255,.05),
-        0 0 10px rgba(0,240,255,.05);
 }
 
 .player-box.best-player{
     border:1px solid var(--gold);
-    box-shadow:
-        inset 0 0 8px rgba(255,215,0,.08),
-        0 0 10px rgba(255,215,0,.08);
+    box-shadow:0 0 10px rgba(255,215,0,.12);
 }
 
 .player-id{
@@ -213,8 +210,8 @@ body{
     text-align:center;
     padding:10px 4px;
     border-right:1px solid rgba(255,255,255,.08);
-    font-size:.68rem;
     background:rgba(255,255,255,.02);
+    font-size:.68rem;
 }
 
 .summary-grid div:last-child{border-right:none;}
@@ -227,12 +224,13 @@ body{
 
 .summary-grid div:nth-child(1) b{color:#00f0ff;}
 .summary-grid div:nth-child(2) b{color:#00ff88;}
-.summary-grid div:nth-child(3) b{color:#ffb84d;}
-.summary-grid div:nth-child(4) b{color:#ff5ca8;}
+.summary-grid div:nth-child(3) b{color:#ffae00;}
+.summary-grid div:nth-child(4) b{color:#ff6ad5;}
 
 @media(max-width:768px){
     .manager-grid{grid-template-columns:1fr;}
     .players-grid{grid-template-columns:repeat(2,1fr);}
+    .summary-grid{grid-template-columns:repeat(4,1fr);}
 }
 </style>
 </head>
@@ -277,6 +275,7 @@ async function loadData(){
     });
 
     const matchObjs=matches.map(r=>Object.fromEntries(pHead.map((h,i)=>[h,r[i]])));
+
     const result=[];
 
     for(const row of managers){
@@ -292,7 +291,6 @@ async function loadData(){
 
         for(const m of matchObjs){
             if(m.Approved.toLowerCase()!=="yes") continue;
-
             if(stats[m.P1_ID]){strength.pts+=+m.P1_Point; strength.goals+=+m.P1_Goal;}
             if(stats[m.P2_ID]){strength.pts+=+m.P2_Point; strength.goals+=+m.P2_Goal;}
 
@@ -334,6 +332,7 @@ async function loadData(){
     }
 
     result.sort((a,b)=>b.total.pts-a.total.pts||b.total.gd-a.total.gd||b.total.winPct-a.total.winPct);
+
     render(result);
 }
 

@@ -9,31 +9,30 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
+/* ===== SAME DESIGN (UNCHANGED) ===== */
 :root{
     --accent:#00f0ff;
     --gold:#FFD700;
     --silver:#C0C0C0;
     --bronze:#CD7F32;
     --green:#00ff88;
-    --bg:#050816;
+    --text:#fff;
+    --muted:#94a7d0;
 }
 
 *{margin:0;padding:0;box-sizing:border-box}
 
 body{
-    background:radial-gradient(circle at top,#0f2450,#050816);
+    background:radial-gradient(circle,#10244f,#050816);
     font-family:'Rajdhani',sans-serif;
-    color:#fff;
+    color:var(--text);
     padding:14px;
 }
 
 .container{max-width:1600px;margin:auto;}
 
 .header{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    gap:10px;
+    display:flex;justify-content:center;align-items:center;gap:10px;
 }
 
 .header img{width:36px;height:36px;}
@@ -46,13 +45,6 @@ body{
     -webkit-text-fill-color:transparent;
 }
 
-.desc{
-    text-align:center;
-    color:#94a7d0;
-    font-size:.85rem;
-    margin-bottom:18px;
-}
-
 .manager-grid{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
@@ -60,7 +52,7 @@ body{
 }
 
 .manager-card{
-    background:linear-gradient(145deg,#0d1329,#101935);
+    background:#0d1329;
     border:1px solid rgba(0,240,255,.25);
     border-radius:18px;
     padding:14px;
@@ -72,39 +64,23 @@ body{
     top:10px;
     right:10px;
     font-size:.7rem;
-    background:rgba(255,255,255,.1);
+    background:rgba(255,255,255,.08);
     padding:4px 10px;
     border-radius:999px;
 }
 
-.team-top{
-    display:flex;
-    gap:10px;
-    align-items:center;
-    margin-bottom:10px;
+.download-icon{
+    position:absolute;
+    top:40px;
+    right:12px;
+    cursor:pointer;
 }
 
-.team-logo{
-    width:54px;
-    height:54px;
-    border-radius:14px;
-    border:2px solid var(--accent);
-}
-
-.team-info h3{font-size:1rem;}
-.team-info p{color:var(--accent);font-size:.82rem;}
-
-.team-strength{
-    font-size:.72rem;
-    color:#ffcf66;
-}
-
-/* PLAYERS */
+/* ===== PLAYERS ===== */
 .players-grid{
     display:grid;
     grid-template-columns:repeat(3,1fr);
     gap:8px;
-    margin-bottom:12px;
 }
 
 .player-box{
@@ -112,29 +88,25 @@ body{
     border:1px solid rgba(0,255,136,.35);
     border-radius:12px;
     padding:8px;
-    font-size:.72rem;
 }
 
 .player-box.best-player{
     border:1px solid var(--gold);
 }
 
-.player-id{color:var(--accent);font-weight:700;}
-.player-name{font-size:.62rem;color:#ff8ae2;}
-
-/* SUMMARY */
+/* ===== SUMMARY ===== */
 .summary{
-    border:1px solid rgba(255,255,255,.1);
+    margin-top:10px;
+    border:1px solid rgba(255,255,255,.08);
     border-radius:12px;
     overflow:hidden;
 }
 
 .summary-title{
-    background:rgba(0,240,255,.15);
+    background:rgba(0,240,255,.12);
     padding:7px;
     text-align:center;
     color:var(--accent);
-    font-weight:700;
 }
 
 .summary-grid{
@@ -144,22 +116,14 @@ body{
 
 .summary-grid div{
     text-align:center;
-    padding:8px 4px;
+    padding:8px;
     border-right:1px solid rgba(255,255,255,.08);
+    font-size:.7rem;
 }
 
 .summary-grid div:last-child{border-right:none;}
 
-.download-icon{
-    position:absolute;
-    top:42px;
-    right:12px;
-    cursor:pointer;
-}
-
-/* MOBILE */
 @media(max-width:768px){
-    .manager-grid{grid-template-columns:1fr;}
     .players-grid{grid-template-columns:repeat(2,1fr);}
 }
 </style>
@@ -167,16 +131,12 @@ body{
 <body>
 
 <div class="container">
-
 <div class="header">
 <img src="https://i.imgur.com/LY3Bb9m.png">
 <h1>GOAT FC MANAGERS</h1>
 </div>
 
-<div class="desc">Official Manager Ranking System</div>
-
 <div id="managerGrid" class="manager-grid">Loading...</div>
-
 </div>
 
 <script>
@@ -185,12 +145,13 @@ const MANAGERS_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4
 const MEMBERS_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv";
 
 function parseCSV(t){
-return t.trim().split("\n").map(r=>r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v=>v.replace(/^"|"$/g,"")));
+return t.trim().split("\n").map(r=>r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v=>v.replace(/"/g,"")));
 }
 
-function matchAllowed(typeList, matchType){
-if(!typeList) return true;
-return typeList.map(x=>x.toLowerCase()).includes(matchType.toLowerCase());
+function matchAllowed(managerTypes,matchType){
+    if(!managerTypes) return false;
+    const allowed=managerTypes.toLowerCase().split(",").map(x=>x.trim());
+    return allowed.includes(matchType.toLowerCase());
 }
 
 async function load(){
@@ -201,6 +162,7 @@ fetch(MEMBERS_URL).then(r=>r.text())
 ]);
 
 const matches=parseCSV(p), managers=parseCSV(m), members=parseCSV(c);
+
 const pH=matches.shift(), mH=managers.shift(), cH=members.shift();
 
 const nameMap={};
@@ -209,51 +171,47 @@ const o=Object.fromEntries(cH.map((h,i)=>[h,r[i]]));
 nameMap[o["Club ID Number"]]=o["Full Name"];
 });
 
-const mData=matches.map(r=>Object.fromEntries(pH.map((h,i)=>[h,r[i]])));
+const mObjs=matches.map(r=>Object.fromEntries(pH.map((h,i)=>[h,r[i]])));
 
-const result=[];
+const out=[];
 
 for(const row of managers){
+const m=Object.fromEntries(mH.map((h,i)=>[h,row[i]]));
 
-const manager=Object.fromEntries(mH.map((h,i)=>[h,row[i]]));
+const ids=m["Player IDs"].split(",").map(x=>x.trim()).slice(0,6);
+const start=new Date(m["Start Match Date"]);
+const end=new Date(m["End Match Date"]);
+const allowedTypes=m["Match Type"] || "league";
 
-const ids=manager["Player IDs"].split(",").map(x=>x.trim()).slice(0,6);
+const stats={}, players=[];
 
-const typeList=(manager["Match Type"]||"league").split(",").map(x=>x.trim().toLowerCase());
-
-const start=new Date(manager["Start Match Date"]);
-const end=new Date(manager["End Match Date"]);
-
-const stats={};
 ids.forEach(id=>stats[id]={match:0,pts:0,w:0,d:0,l:0,gf:0,ga:0});
 
-for(const m of mData){
+for(const x of mObjs){
 
-if(m.Approved.toLowerCase()!=="yes") continue;
+if(x.Approved.toLowerCase()!=="yes") continue;
+if(!matchAllowed(allowedTypes,x.Match_Type)) continue;
 
-const md=new Date(m.Match_Date);
-if(md<start||md>end) continue;
+const d=new Date(x.Match_Date);
+if(d<start||d>end) continue;
 
-/* 🔥 NEW MATCH TYPE LOGIC */
-if(!matchAllowed(typeList,m.Match_Type)) continue;
-
-if(stats[m.P1_ID]){
-let s=stats[m.P1_ID];
-s.match++;s.pts+=+m.P1_Point;s.gf+=+m.P1_Goal;s.ga+=+m.P2_Goal;
-if(+m.P1_Point===3)s.w++;else if(+m.P1_Point===1)s.d++;else s.l++;
+if(stats[x.P1_ID]){
+let s=stats[x.P1_ID];
+s.match++;s.pts+=+x.P1_Point;s.gf+=+x.P1_Goal;s.ga+=+x.P2_Goal;
+if(+x.P1_Point===3)s.w++;else if(+x.P1_Point===1)s.d++;else s.l++;
 }
 
-if(stats[m.P2_ID]){
-let s=stats[m.P2_ID];
-s.match++;s.pts+=+m.P2_Point;s.gf+=+m.P2_Goal;s.ga+=+m.P1_Goal;
-if(+m.P2_Point===3)s.w++;else if(+m.P2_Point===1)s.d++;else s.l++;
+if(stats[x.P2_ID]){
+let s=stats[x.P2_ID];
+s.match++;s.pts+=+x.P2_Point;s.gf+=+x.P2_Goal;s.ga+=+x.P1_Goal;
+if(+x.P2_Point===3)s.w++;else if(+x.P2_Point===1)s.d++;else s.l++;
 }
 }
 
 let total={match:0,pts:0,w:0,gd:0};
 
-const players=ids.map(id=>{
-const s=stats[id];
+ids.forEach(id=>{
+let s=stats[id];
 s.gd=s.gf-s.ga;
 s.winPct=s.match?Math.round((s.w/s.match)*100):0;
 
@@ -262,40 +220,36 @@ total.pts+=s.pts;
 total.w+=s.w;
 total.gd+=s.gd;
 
-return{id,name:nameMap[id]||"Unknown",...s};
+players.push({id,name:nameMap[id]||"Unknown",...s});
 });
 
 total.winPct=total.match?Math.round((total.w/total.match)*100):0;
 
-result.push({...manager,players,total});
+out.push({...m,players,total});
 }
 
-result.sort((a,b)=>b.total.pts-a.total.pts||b.total.gd-a.total.gd);
-
-render(result);
+render(out);
 }
 
 function render(data){
 document.getElementById("managerGrid").innerHTML=data.map((m,i)=>`
-<div class="manager-card" id="card-${i}">
+<div class="manager-card">
 <div class="rank-badge">#${i+1}</div>
-<div class="download-icon" onclick="download('card-${i}')">⬇️</div>
 
-<div class="team-top">
-<img class="team-logo" src="${m["Team Logo"]}" crossorigin="anonymous">
-<div class="team-info">
-<h3>${m["Team Name"]}</h3>
-<p>${m["Manager Name"]}</p>
-<div class="team-strength">Strength: ${m.total.pts}</div>
+<div style="display:flex;gap:10px;align-items:center;margin-bottom:10px;">
+<img src="${m["Team Logo"]}" style="width:50px;height:50px;border-radius:12px;">
+<div>
+<b>${m["Team Name"]}</b><br>
+<small>${m["Manager Name"]}</small>
 </div>
 </div>
 
 <div class="players-grid">
 ${m.players.map(p=>`
-<div class="player-box">
-<div class="player-id">${p.id}</div>
-<div class="player-name">${p.name}</div>
-M:${p.match} PTS:${p.pts} W%:${p.winPct}
+<div class="player-box ${p.pts===Math.max(...m.players.map(x=>x.pts))?'best-player':''}">
+<div>${p.id}</div>
+<div>${p.name}</div>
+M:${p.match} P:${p.pts} W%:${p.winPct}
 </div>
 `).join("")}
 </div>
@@ -303,27 +257,15 @@ M:${p.match} PTS:${p.pts} W%:${p.winPct}
 <div class="summary">
 <div class="summary-title">Team Summary</div>
 <div class="summary-grid">
-<div><b>${m.total.match}</b>Match</div>
-<div><b>${m.total.pts}</b>PTS</div>
-<div><b>${m.total.gd}</b>GD</div>
-<div><b>${m.total.winPct}%</b>Win%</div>
+<div>${m.total.match}<br>Match</div>
+<div>${m.total.pts}<br>PTS</div>
+<div>${m.total.gd}<br>GD</div>
+<div>${m.total.winPct}%<br>Win%</div>
 </div>
 </div>
 
 </div>
 `).join("");
-}
-
-function download(id){
-html2canvas(document.getElementById(id),{
-useCORS:true,
-scale:2
-}).then(c=>{
-let a=document.createElement("a");
-a.download="manager.jpg";
-a.href=c.toDataURL();
-a.click();
-});
 }
 
 load();

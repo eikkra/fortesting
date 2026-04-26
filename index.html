@@ -10,11 +10,21 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
+:root{
+--bg1:#050816;
+--bg2:#020617;
+--neon:#00ffcc;
+--pink:#ff00cc;
+--lime:#a3ff12;
+--glass:rgba(255,255,255,0.05);
+}
+
 body{
 margin:0;
 font-family:'Rajdhani',sans-serif;
-background:radial-gradient(circle at top,#050816,#020617);
+background:radial-gradient(circle at top,var(--bg1),var(--bg2));
 color:#fff;
+overflow-x:hidden;
 }
 
 header{
@@ -22,8 +32,7 @@ text-align:center;
 padding:18px;
 font-size:28px;
 font-weight:700;
-letter-spacing:2px;
-background:linear-gradient(90deg,#ff00cc,#00ffff,#ffcc00);
+background:linear-gradient(90deg,var(--pink),var(--neon),var(--lime));
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
 }
@@ -37,7 +46,7 @@ flex-wrap:wrap;
 }
 
 .tab-btn{
-padding:10px 18px;
+padding:10px 16px;
 border:none;
 border-radius:10px;
 cursor:pointer;
@@ -46,23 +55,21 @@ color:#fff;
 transition:0.3s;
 }
 .tab-btn.active{
-background:linear-gradient(90deg,#ff00cc,#00ffff);
+background:linear-gradient(90deg,var(--pink),var(--neon));
 color:#000;
 font-weight:700;
 }
 
-.container{padding:15px;}
-
+.container{padding:10px;}
 .card{
-background:rgba(17,24,39,0.9);
+background:var(--glass);
 border:1px solid #1f2937;
 border-radius:14px;
-padding:15px;
-margin-bottom:15px;
-box-shadow:0 0 18px rgba(0,255,255,0.15);
+padding:12px;
+margin-bottom:12px;
+box-shadow:0 0 20px rgba(0,255,200,0.08);
+backdrop-filter:blur(8px);
 }
-
-.center{text-align:center;}
 
 select,button{
 padding:10px;
@@ -73,7 +80,7 @@ margin:5px;
 
 button{
 cursor:pointer;
-background:linear-gradient(90deg,#ff00cc,#00ffff);
+background:linear-gradient(90deg,var(--pink),var(--neon));
 color:#000;
 font-weight:700;
 }
@@ -81,9 +88,9 @@ font-weight:700;
 /* FIXTURE */
 .round-title{
 text-align:center;
-margin:15px 0;
-font-size:20px;
-color:#00ffff;
+margin:18px 0;
+font-size:18px;
+color:var(--neon);
 font-weight:700;
 }
 
@@ -97,52 +104,88 @@ margin-bottom:20px;
 border:1px solid #1f2937;
 padding:8px;
 text-align:center;
-font-size:14px;
-}
-
-.team-logo{width:28px;height:28px;border-radius:50%;object-fit:cover;}
-.badge{padding:4px 8px;border-radius:8px;background:#1f2937;font-size:12px;}
-
-/* LINEUP */
-.vs-header{
-text-align:center;
-font-size:24px;
-margin-bottom:10px;
-color:#00ffff;
-font-weight:700;
-}
-
-.lineup-grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:15px;
+font-size:13px;
 }
 
 .team-box{
+display:flex;
+flex-direction:column;
+align-items:center;
+}
+
+.team-logo{
+width:40px;
+height:40px;
+border-radius:50%;
+object-fit:cover;
+}
+
+.team-name{
+font-size:12px;
+margin-top:4px;
+text-align:center;
+}
+
+.badge{
+padding:4px 8px;
+border-radius:8px;
+background:#1f2937;
+font-size:12px;
+}
+
+/* LINEUP */
+.vs-title{
+text-align:center;
+font-size:22px;
+margin-bottom:10px;
+color:var(--neon);
+font-weight:700;
+}
+
+.lineup-wrapper{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+}
+
+.team-panel{
 background:#0b1220;
 padding:10px;
 border-radius:12px;
 }
 
-.player{
+.slot{
 display:flex;
 align-items:center;
-gap:10px;
-padding:6px;
-border:1px solid #1f2937;
-border-radius:8px;
+gap:6px;
 margin-bottom:6px;
-cursor:grab;
 }
 
-.player img{width:35px;height:35px;border-radius:50%;}
+.slot select{
+flex:1;
+}
 
-.check{
-margin-right:6px;
+.player-pool{
+background:#111827;
+padding:6px;
+border-radius:10px;
+margin-top:6px;
+}
+
+.player-item{
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:5px;
+border-bottom:1px solid #1f2937;
+}
+
+.player-item input{
+transform:scale(1.2);
 }
 
 @media(max-width:768px){
-.lineup-grid{grid-template-columns:1fr;}
+.lineup-wrapper{grid-template-columns:1fr;}
 }
 </style>
 </head>
@@ -151,36 +194,32 @@ margin-right:6px;
 <header>⚡ GOAT FC LEAGUE SYSTEM ⚡</header>
 
 <div class="tabs">
-<button class="tab-btn active" onclick="showTab('fixture')">Fixture Center</button>
-<button class="tab-btn" onclick="showTab('lineup')">Lineup Planner</button>
+<button class="tab-btn active" onclick="showTab('fixture')">Fixture</button>
+<button class="tab-btn" onclick="showTab('lineup')">Lineup</button>
 </div>
 
 <div class="container">
 
 <!-- FIXTURE -->
 <div id="fixture">
-<div class="card center">
-<h3>League Fixtures (Round Robin)</h3>
-<button onclick="generateRounds()">Generate Fixtures</button>
+<div class="card">
+<button onclick="generateRoundRobin()">Generate Fixture</button>
 <button onclick="downloadFixture()">Download</button>
 </div>
-
 <div id="fixtureArea"></div>
 </div>
 
 <!-- LINEUP -->
 <div id="lineup" style="display:none;">
-<div class="card center">
-<h3>Match Lineup Planner</h3>
+<div class="card">
 <select id="teamA"></select>
 <select id="teamB"></select>
-<button onclick="loadPlayers()">Load Players</button>
-<button onclick="downloadLineup()">Download</button>
+<button onclick="loadLineup()">Load Match</button>
 </div>
 
 <div class="card">
-<div class="vs-header" id="vsHeader">TEAM A vs TEAM B</div>
-<div class="lineup-grid" id="lineupBox"></div>
+<div class="vs-title" id="vs">TEAM A VS TEAM B</div>
+<div class="lineup-wrapper" id="lineupBox"></div>
 </div>
 </div>
 
@@ -220,10 +259,10 @@ b.innerHTML+=`<option>${t.name}</option>`;
 });
 }
 
-/* ---------------- ROUND ROBIN ---------------- */
-function generateRounds(){
+/* ---------------- FAIR ROUND ROBIN ---------------- */
+function generateRoundRobin(){
 let arr=[...teams];
-if(arr.length%2) arr.push({name:"BYE"});
+if(arr.length%2!==0) arr.push({name:"BYE"});
 let n=arr.length;
 rounds=[];
 
@@ -233,7 +272,8 @@ for(let i=0;i<n/2;i++){
 let home=arr[i];
 let away=arr[n-1-i];
 if(home.name!=="BYE" && away.name!=="BYE"){
-round.push({home,away});
+if(r%2===0) round.push({home,away});
+else round.push({home:away,away:home});
 }
 }
 arr.splice(1,0,arr.pop());
@@ -248,14 +288,13 @@ box.innerHTML="";
 
 rounds.forEach((r,i)=>{
 let html=`<div class='round-title'>ROUND ${i+1}</div>`;
-html+=`<table class='fixture-table'>
-<tr><th>Home</th><th>Away</th><th>Group</th></tr>`;
+html+=`<table class='fixture-table'><tr><th>HOME</th><th>AWAY</th><th>GROUP</th></tr>`;
 
 r.forEach(f=>{
 html+=`<tr>
-<td><img class='team-logo' src='${f.home.logo}'> ${f.home.name}</td>
-<td><img class='team-logo' src='${f.away.logo}'> ${f.away.name}</td>
-<td><a class='badge' href='${f.home.link}' target='_blank'>Join</a></td>
+<td class='team-box'><img class='team-logo' src='${f.home.logo}'><div class='team-name'>${f.home.name}</div></td>
+<td class='team-box'><img class='team-logo' src='${f.away.logo}'><div class='team-name'>${f.away.name}</div></td>
+<td><a class='badge' href='${f.home.link}' target='_blank'>JOIN</a></td>
 </tr>`;
 });
 html+=`</table>`;
@@ -263,53 +302,56 @@ box.innerHTML+=html;
 });
 }
 
-/* ---------------- LINEUP DRAG ---------------- */
-function loadPlayers(){
+/* ---------------- LINEUP SYSTEM ---------------- */
+function loadLineup(){
 let A=document.getElementById("teamA").value;
 let B=document.getElementById("teamB").value;
 
 let tA=teams.find(t=>t.name===A);
 let tB=teams.find(t=>t.name===B);
 
+document.getElementById("vs").innerText=`${A} VS ${B}`;
+
 let box=document.getElementById("lineupBox");
-let vs=document.getElementById("vsHeader");
-vs.innerText=`${A} VS ${B}`;
 box.innerHTML="";
 
 [tA,tB].forEach(team=>{
-let div=document.createElement("div");
-div.className="team-box";
+let panel=document.createElement("div");
+panel.className="team-panel";
+panel.innerHTML=`<h4>${team.name}</h4>`;
 
-team.players.forEach(pid=>{
-let pl=players.find(p=>p["Club ID Number"]===pid);
-if(pl){
-div.innerHTML+=`
-<div class='player' draggable='true' ondragstart='drag(event)'>
-<input type='checkbox' class='check'>
-<img src='${pl["Profile Picture"]}'>
-<div>${pl["Full Name"]}<br><small>${pid}</small></div>
+// 6 slots
+for(let i=0;i<6;i++){
+panel.innerHTML+=`
+<div class='slot'>
+<select>
+<option>Select Player</option>
+${team.players.map(pid=>{
+let p=players.find(x=>x["Club ID Number"]===pid);
+return p?`<option>${p["Full Name"]} (${pid})</option>`:"";
+}).join("")}
+</select>
 </div>`;
 }
-});
 
-box.appendChild(div);
+// pool
+panel.innerHTML+=`<div class='player-pool'>${team.players.map(pid=>{
+let p=players.find(x=>x["Club ID Number"]===pid);
+if(!p)return "";
+return `<div class='player-item'>${p["Full Name"]}<input type='checkbox'></div>`;
+}).join("")}</div>`;
+
+box.appendChild(panel);
 });
 }
-
-function drag(ev){ev.dataTransfer.setData("text",ev.target.outerHTML);}
 
 function showTab(t){
 document.getElementById("fixture").style.display=t==='fixture'?'block':'none';
 document.getElementById("lineup").style.display=t==='lineup'?'block':'none';
 }
 
-function downloadFixture(){
-html2canvas(document.getElementById("fixtureArea")).then(c=>{let a=document.createElement("a");a.href=c.toDataURL();a.download="fixture.png";a.click();});
-}
-
-function downloadLineup(){
-html2canvas(document.getElementById("lineupBox")).then(c=>{let a=document.createElement("a");a.href=c.toDataURL();a.download="lineup.png";a.click();});
-}
+function downloadFixture(){html2canvas(document.getElementById("fixtureArea")).then(c=>{let a=document.createElement("a");a.href=c.toDataURL();a.download="fixture.png";a.click();});}
+function downloadLineup(){html2canvas(document.getElementById("lineupBox")).then(c=>{let a=document.createElement("a");a.href=c.toDataURL();a.download="lineup.png";a.click();});}
 
 loadData();
 

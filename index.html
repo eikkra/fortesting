@@ -5,136 +5,28 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>GOAT FC League System</title>
 
-<!-- Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
-
-<!-- Libraries -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
-body{
-margin:0;
-font-family:'Rajdhani',sans-serif;
-background:radial-gradient(circle at top,#0f172a,#020617);
-color:#fff;
-overflow-x:hidden;
-}
-
-header{
-padding:20px;
-text-align:center;
-font-size:26px;
-font-weight:700;
-letter-spacing:2px;
-background:linear-gradient(90deg,#ff00cc,#3333ff,#00ffcc);
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
-}
-
-.tabs{
-display:flex;
-justify-content:center;
-gap:10px;
-margin:10px;
-}
-
-.tab-btn{
-padding:10px 20px;
-border:none;
-cursor:pointer;
-background:#111827;
-color:#fff;
-border-radius:8px;
-transition:0.3s;
-}
-.tab-btn.active{
-background:linear-gradient(90deg,#ff00cc,#00ffff);
-color:#000;
-font-weight:700;
-}
-
-.container{
-padding:15px;
-}
-
-.card{
-background:#0b1220;
-border:1px solid #1f2937;
-border-radius:12px;
-padding:15px;
-margin-bottom:15px;
-box-shadow:0 0 10px rgba(0,255,255,0.1);
-}
-
-select,button{
-padding:10px;
-border-radius:8px;
-border:none;
-margin:5px;
-}
-
-button{
-cursor:pointer;
-background:linear-gradient(90deg,#ff00cc,#00ffff);
-color:#000;
-font-weight:700;
-}
-
-.fixture-table{
-width:100%;
-border-collapse:collapse;
-}
-
-.fixture-table th, .fixture-table td{
-border:1px solid #1f2937;
-padding:8px;
-text-align:center;
-font-size:14px;
-}
-
-.team-logo{
-width:30px;
-height:30px;
-border-radius:50%;
-object-fit:cover;
-}
-
-.badge{
-padding:4px 8px;
-border-radius:6px;
-font-size:12px;
-background:#1f2937;
-}
-
-.grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:10px;
-}
-
-.player-card{
-background:#111827;
-padding:10px;
-border-radius:10px;
-display:flex;
-align-items:center;
-gap:10px;
-}
-
-.player-card img{
-width:40px;
-height:40px;
-border-radius:50%;
-}
-
-.download-btn{
-margin-top:10px;
-}
-
-@media(max-width:768px){
-.grid{grid-template-columns:1fr;}
-}
+body{margin:0;font-family:'Rajdhani',sans-serif;background:radial-gradient(circle at top,#0f172a,#020617);color:#fff;}
+header{padding:20px;text-align:center;font-size:26px;font-weight:700;letter-spacing:2px;background:linear-gradient(90deg,#ff00cc,#3333ff,#00ffcc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.tabs{display:flex;justify-content:center;gap:10px;margin:10px;flex-wrap:wrap;}
+.tab-btn{padding:10px 20px;border:none;cursor:pointer;background:#111827;color:#fff;border-radius:8px;transition:0.3s;}
+.tab-btn.active{background:linear-gradient(90deg,#ff00cc,#00ffff);color:#000;font-weight:700;}
+.container{padding:15px;}
+.card{background:#0b1220;border:1px solid #1f2937;border-radius:12px;padding:15px;margin-bottom:15px;box-shadow:0 0 10px rgba(0,255,255,0.1);}
+select,button{padding:10px;border-radius:8px;border:none;margin:5px;}
+button{cursor:pointer;background:linear-gradient(90deg,#ff00cc,#00ffff);color:#000;font-weight:700;}
+.fixture-table{width:100%;border-collapse:collapse;}
+.fixture-table th,.fixture-table td{border:1px solid #1f2937;padding:8px;text-align:center;font-size:14px;}
+.team-logo{width:30px;height:30px;border-radius:50%;object-fit:cover;}
+.badge{padding:4px 8px;border-radius:6px;font-size:12px;background:#1f2937;}
+.player-card{background:#111827;padding:10px;border-radius:10px;display:flex;align-items:center;gap:10px;}
+.player-card img{width:40px;height:40px;border-radius:50%;}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:768px){.grid{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
@@ -148,10 +40,10 @@ margin-top:10px;
 
 <div class="container">
 
-<!-- FIXTURE TAB -->
+<!-- FIXTURE -->
 <div id="fixture">
 <div class="card">
-<h3>League Fixture Generator</h3>
+<h3>League Fixture Generator (Round Robin)</h3>
 <select id="teamFilter"></select>
 <button onclick="generateFixture()">Generate Fixture</button>
 <button onclick="downloadFixture()">Download</button>
@@ -162,7 +54,7 @@ margin-top:10px;
 </div>
 </div>
 
-<!-- LINEUP TAB -->
+<!-- LINEUP -->
 <div id="lineup" style="display:none;">
 <div class="card">
 <h3>Matchup Planner</h3>
@@ -182,16 +74,13 @@ margin-top:10px;
 const managersURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=467352529&single=true&output=csv";
 const membersURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv";
 
-let teams = [];
-let players = [];
-let fixtures = [];
+let teams=[],players=[],fixtures=[];
 
 async function loadData(){
+const m=await fetch(managersURL).then(r=>r.text());
+const mm=Papa.parse(m,{header:true}).data;
 
-const m = await fetch(managersURL).then(r=>r.text());
-const mm = Papa.parse(m,{header:true}).data;
-
-teams = mm.map(t=>({
+teams=mm.map(t=>({
 name:t["Team Name"],
 logo:t["Team Logo"],
 manager:t["Manager Name"],
@@ -199,60 +88,70 @@ players:(t["Player IDs"]||"").split(",").map(x=>x.trim()),
 link:t["Match Group Link"]
 }));
 
-const p = await fetch(membersURL).then(r=>r.text());
-players = Papa.parse(p,{header:true}).data;
+const p=await fetch(membersURL).then(r=>r.text());
+players=Papa.parse(p,{header:true}).data;
 
 populateTeams();
 }
 
 function populateTeams(){
-let sel = document.getElementById("teamFilter");
-let a = document.getElementById("teamA");
-let b = document.getElementById("teamB");
-
-sel.innerHTML="";
-a.innerHTML="";
-b.innerHTML="";
-
+let sel=document.getElementById("teamFilter");
+let a=document.getElementById("teamA");
+let b=document.getElementById("teamB");
+sel.innerHTML="";a.innerHTML="";b.innerHTML="";
 teams.forEach(t=>{
-sel.innerHTML += `<option>${t.name}</option>`;
-a.innerHTML += `<option>${t.name}</option>`;
-b.innerHTML += `<option>${t.name}</option>`;
+sel.innerHTML+=`<option>${t.name}</option>`;
+a.innerHTML+=`<option>${t.name}</option>`;
+b.innerHTML+=`<option>${t.name}</option>`;
 });
 }
 
+/* ---------------- ROUND ROBIN FIXTURE LOGIC ---------------- */
 function generateFixture(){
 fixtures=[];
-for(let i=0;i<teams.length;i++){
-for(let j=0;j<teams.length;j++){
-if(i!==j){
-fixtures.push({home:teams[i],away:teams[j]});
+let arr=[...teams];
+if(arr.length%2!==0) arr.push({name:"BYE"});
+
+let n=arr.length;
+let rounds=n-1;
+
+for(let r=0;r<rounds;r++){
+for(let i=0;i<n/2;i++){
+let home=arr[i];
+let away=arr[n-1-i];
+if(home.name!=="BYE" && away.name!=="BYE"){
+if(r%2===0){
+fixtures.push({home,away});
+}else{
+fixtures.push({home:away,away:home});
 }
 }
+}
+arr.splice(1,0,arr.pop());
 }
 renderFixture();
 }
 
 function renderFixture(){
 let table=document.getElementById("fixtureTable");
-table.innerHTML=`<tr><th>Home</th><th>Away</th><th>Group Link</th></tr>`;
+table.innerHTML=`<tr><th>Home</th><th>Away</th><th>Group Link (Home)</th></tr>`;
+
 fixtures.forEach(f=>{
-table.innerHTML += `
+table.innerHTML+=`
 <tr>
 <td><img class='team-logo' src='${f.home.logo}'> ${f.home.name}</td>
 <td><img class='team-logo' src='${f.away.logo}'> ${f.away.name}</td>
-<td><a href='${f.home.link}' target='_blank' class='badge'>Join</a></td>
+<td><a class='badge' href='${f.home.link}' target='_blank'>Join</a></td>
 </tr>`;
 });
 }
 
+/* ---------------- LINEUP ---------------- */
 function loadPlayers(){
 let A=document.getElementById("teamA").value;
 let B=document.getElementById("teamB").value;
-
 let tA=teams.find(t=>t.name===A);
 let tB=teams.find(t=>t.name===B);
-
 let area=document.getElementById("playerArea");
 area.innerHTML="";
 
@@ -260,13 +159,10 @@ area.innerHTML="";
 team.players.forEach(pid=>{
 let pl=players.find(p=>p["Club ID Number"]===pid);
 if(pl){
-area.innerHTML += `
+area.innerHTML+=`
 <div class='player-card'>
 <img src='${pl["Profile Picture"]}'>
-<div>
-<b>${pl["Full Name"]}</b><br>
-<small>${pid}</small>
-</div>
+<div><b>${pl["Full Name"]}</b><br><small>${pid}</small></div>
 <input type='checkbox'>
 </div>`;
 }
@@ -274,32 +170,21 @@ area.innerHTML += `
 });
 }
 
-function showTab(tab){
-document.getElementById("fixture").style.display = tab==='fixture'?'block':'none';
-document.getElementById("lineup").style.display = tab==='lineup'?'block':'none';
+function showTab(t){
+document.getElementById("fixture").style.display=t==='fixture'?'block':'none';
+document.getElementById("lineup").style.display=t==='lineup'?'block':'none';
 }
 
 function downloadFixture(){
-html2canvas(document.getElementById("fixtureArea")).then(canvas=>{
-let a=document.createElement("a");
-a.href=canvas.toDataURL();
-a.download="fixture.png";
-a.click();
-});
+html2canvas(document.getElementById("fixtureArea")).then(c=>{let a=document.createElement("a");a.href=c.toDataURL();a.download="fixture.png";a.click();});
 }
 
 function downloadLineup(){
-html2canvas(document.getElementById("playerArea")).then(canvas=>{
-let a=document.createElement("a");
-a.href=canvas.toDataURL();
-a.download="lineup.png";
-a.click();
-});
+html2canvas(document.getElementById("playerArea")).then(c=>{let a=document.createElement("a");a.href=c.toDataURL();a.download="lineup.png";a.click();});
 }
 
 loadData();
 
 </script>
-
 </body>
 </html>

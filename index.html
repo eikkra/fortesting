@@ -2,71 +2,101 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Goat FC Competition Center</title>
+<title>GOAT FC Competition Center</title>
 
-<!-- Gaming Font -->
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
-body {
+body{
   margin:0;
-  font-family: 'Orbitron', sans-serif;
-  background: #0a0a0a;
+  font-family:'Orbitron',sans-serif;
+  background:#050505;
   color:white;
 }
 
-/* RGB Glow */
-.glow {
-  text-shadow: 0 0 5px red, 0 0 10px blue, 0 0 20px lime;
-}
-
-/* Tabs */
-.tabs {
+.tabs{
   display:flex;
   background:#111;
 }
-.tab {
-  padding:15px;
+.tab{
+  padding:12px 20px;
   cursor:pointer;
 }
-.tab.active {
+.tab.active{
   background:#222;
 }
 
-/* Fixture Card */
-.match {
+.container{
+  padding:10px;
+}
+
+/* RGB effect */
+.glow{
+  text-shadow:0 0 5px red,0 0 10px blue,0 0 20px lime;
+}
+
+/* Match Card */
+.match{
   display:flex;
   justify-content:space-between;
   align-items:center;
+  margin:10px 0;
   padding:15px;
-  margin:10px;
-  border:1px solid #333;
-  border-radius:10px;
+  border-radius:12px;
   background:#111;
+  border:1px solid #333;
 }
 
-.team {
+.team{
   display:flex;
   align-items:center;
   gap:10px;
 }
 
-.team img {
+.team img{
   width:40px;
 }
 
-.score {
-  font-size:20px;
-  padding:10px;
-  border:1px solid #444;
+.score{
+  padding:10px 15px;
   border-radius:10px;
+  border:1px solid #444;
+  font-size:18px;
+}
+
+.live{
+  color:lime;
+  font-size:12px;
 }
 
 /* Responsive */
 @media(max-width:600px){
-  .match{
-    flex-direction:column;
-  }
+  .match{flex-direction:column;}
+}
+
+/* Player Box */
+.players{
+  display:flex;
+  justify-content:space-between;
+  margin-top:15px;
+}
+
+.player{
+  margin:5px;
+}
+
+canvas{
+  margin-top:20px;
+  background:black;
+}
+
+button{
+  margin-top:10px;
+  padding:10px;
+  background:#222;
+  color:white;
+  border:none;
+  cursor:pointer;
 }
 </style>
 </head>
@@ -75,62 +105,67 @@ body {
 
 <div class="tabs">
   <div class="tab active" onclick="showTab('fixture')">Fixtures</div>
-  <div class="tab" onclick="showTab('team')">Team VS</div>
+  <div class="tab" onclick="showTab('vs')">Team VS</div>
 </div>
 
-<div id="fixture"></div>
-<div id="team" style="display:none;"></div>
+<div id="fixture" class="container"></div>
+<div id="vs" class="container" style="display:none;"></div>
 
 <script>
 
-// ====== CSV LINKS ======
-const clubURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=467352529&single=true&output=csv";
-
-const pointsURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv";
-
-const membersURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv";
-
+// ===== CSV LINKS =====
+const clubURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=467352529&output=csv";
+const pointsURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&output=csv";
+const membersURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&output=csv";
 
 // ===== CSV PARSER =====
 function parseCSV(text){
-  return text.split("\n").slice(1).map(r=>r.split(","));
+  return text.trim().split("\n").slice(1).map(r=>r.split(","));
 }
 
-// ===== FETCH DATA =====
-async function loadData(){
-  const club = await fetch(clubURL).then(r=>r.text());
-  const teams = parseCSV(club);
+// ===== GLOBAL DATA =====
+let teams=[], matches=[], members=[];
 
-  const points = await fetch(pointsURL).then(r=>r.text());
-  const matches = parseCSV(points);
+// ===== LOAD =====
+async function load(){
+  teams = parseCSV(await fetch(clubURL).then(r=>r.text()));
+  matches = parseCSV(await fetch(pointsURL).then(r=>r.text()));
+  members = parseCSV(await fetch(membersURL).then(r=>r.text()));
 
-  generateFixtures(teams, matches);
-  generateTeamVS(teams);
+  createFixture();
+  createVS();
 }
 
-// ===== FIXTURE GENERATOR =====
-function generateFixtures(teams, matches){
+//////////////////////////////////////////////////
+// 🔥 FIXTURE SYSTEM (ROUND ROBIN)
+//////////////////////////////////////////////////
 
-  let container = document.getElementById("fixture");
-  container.innerHTML = "";
+function createFixture(){
+  let box = document.getElementById("fixture");
+  box.innerHTML="";
 
   for(let i=0;i<teams.length;i++){
     for(let j=i+1;j<teams.length;j++){
 
-      let home = teams[i];
-      let away = teams[j];
+      let home = (i+j)%2===0 ? teams[i] : teams[j];
+      let away = (i+j)%2===0 ? teams[j] : teams[i];
 
-      let scoreA = calcScore(home[3], matches);
-      let scoreB = calcScore(away[3], matches);
+      let scoreA = getScore(home, away);
+      let scoreB = getScore(away, home);
 
-      container.innerHTML += `
+      let isLive = checkLive(home);
+
+      box.innerHTML += `
       <div class="match">
         <div class="team">
           <img src="${home[1]}">
           ${home[0]}
         </div>
 
-        <div class="score glow">${scoreA} - ${scoreB}</div>
+        <div class="score glow">
+          ${scoreA} - ${scoreB}
+          ${isLive ? "<div class='live'>LIVE</div>" : ""}
+        </div>
 
         <div class="team">
           ${away[0]}
@@ -141,57 +176,132 @@ function generateFixtures(teams, matches){
   }
 }
 
-// ===== SCORE CALC =====
-function calcScore(playerIds, matches){
-  let ids = playerIds.split("-");
+//////////////////////////////////////////////////
+// 🔥 SCORE CALCULATION (FILTERED)
+//////////////////////////////////////////////////
+
+function getScore(team, opponent){
+
+  let ids = team[3].split("-");
+  let type = team[6];
+  let start = new Date(team[4]);
+  let end = new Date(team[5]);
+
   let total = 0;
 
   matches.forEach(m=>{
-    ids.forEach(id=>{
-      if(m[0] === id){
-        total += Number(m[5]); // point column
+    let player = m[0];
+    let date = new Date(m[11]);
+    let matchType = m[2];
+
+    if(ids.includes(player) && matchType===type){
+      if(date>=start && date<=end){
+        total += Number(m[5]);
       }
-    });
+    }
   });
 
   return total;
 }
 
-// ===== TEAM VS TAB =====
-function generateTeamVS(teams){
-  let container = document.getElementById("team");
+//////////////////////////////////////////////////
+// 🔥 LIVE MATCH CHECK
+//////////////////////////////////////////////////
+
+function checkLive(team){
+  let now = new Date();
+  let start = new Date(team[4]);
+  let end = new Date(team[5]);
+  return now>=start && now<=end;
+}
+
+//////////////////////////////////////////////////
+// 🔥 TEAM VS SYSTEM
+//////////////////////////////////////////////////
+
+function createVS(){
+
+  let box = document.getElementById("vs");
 
   let options = teams.map(t=>`<option>${t[0]}</option>`).join("");
 
-  container.innerHTML = `
-    <select id="t1">${options}</select>
+  box.innerHTML = `
+    <select id="team1">${options}</select>
     VS
-    <select id="t2">${options}</select>
-
-    <button onclick="showPlayers()">Show Players</button>
+    <select id="team2">${options}</select>
+    <button onclick="loadPlayers()">Load</button>
 
     <div id="players"></div>
+
+    <canvas id="canvas" width="400" height="200"></canvas>
+    <button onclick="downloadImage()">Download JPG</button>
   `;
 }
 
-// ===== SHOW PLAYERS =====
-function showPlayers(){
-  let t1 = document.getElementById("t1").value;
-  let t2 = document.getElementById("t2").value;
+function loadPlayers(){
 
-  document.getElementById("players").innerHTML =
-  `<h3>${t1} vs ${t2}</h3>
-   <p>Select players (coming next step)</p>`;
+  let t1 = teams.find(t=>t[0]==document.getElementById("team1").value);
+  let t2 = teams.find(t=>t[0]==document.getElementById("team2").value);
+
+  let p1 = getMembers(t1);
+  let p2 = getMembers(t2);
+
+  let html = `<div class="players">`;
+
+  html += `<div>${p1.map(p=>`<div><input type="checkbox">${p}</div>`).join("")}</div>`;
+  html += `<div>${p2.map(p=>`<div><input type="checkbox">${p}</div>`).join("")}</div>`;
+
+  html += `</div><button onclick="generateImage()">Generate Image</button>`;
+
+  document.getElementById("players").innerHTML = html;
 }
 
-// ===== TAB SWITCH =====
+function getMembers(team){
+  let ids = team[3].split("-");
+  return members
+    .filter(m=>ids.includes(m[0]))
+    .map(m=>m[1] || m[0]);
+}
+
+//////////////////////////////////////////////////
+// 🔥 IMAGE GENERATOR
+//////////////////////////////////////////////////
+
+function generateImage(){
+  let canvas = document.getElementById("canvas");
+  let ctx = canvas.getContext("2d");
+
+  ctx.fillStyle="black";
+  ctx.fillRect(0,0,400,200);
+
+  ctx.fillStyle="lime";
+  ctx.font="20px Orbitron";
+
+  let t1 = document.getElementById("team1").value;
+  let t2 = document.getElementById("team2").value;
+
+  ctx.fillText(t1,50,100);
+  ctx.fillText("VS",180,100);
+  ctx.fillText(t2,250,100);
+}
+
+function downloadImage(){
+  let link = document.createElement("a");
+  link.download="match.jpg";
+  link.href = document.getElementById("canvas").toDataURL();
+  link.click();
+}
+
+//////////////////////////////////////////////////
+// TAB
+//////////////////////////////////////////////////
+
 function showTab(tab){
   document.getElementById("fixture").style.display = tab==="fixture"?"block":"none";
-  document.getElementById("team").style.display = tab==="team"?"block":"none";
+  document.getElementById("vs").style.display = tab==="vs"?"block":"none";
 }
 
-// INIT
-loadData();
+load();
 
 </script>
 

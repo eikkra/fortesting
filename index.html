@@ -100,9 +100,7 @@ body{
     cursor:pointer;
     font-size:.9rem;
     opacity:.8;
-    transition:.2s;
 }
-.download-icon:hover{opacity:1;transform:scale(1.1);}
 
 .team-top{
     display:flex;
@@ -136,11 +134,14 @@ body{
 }
 
 .player-box{
-    background:rgba(255,255,255,.04);
+    background:
+        linear-gradient(135deg,rgba(0,240,255,.06),rgba(255,0,200,.05)),
+        rgba(255,255,255,.04);
     border:1px solid rgba(0,255,136,.35);
     border-radius:12px;
     padding:8px;
     font-size:.72rem;
+    box-shadow:inset 0 0 8px rgba(0,240,255,.04);
 }
 
 .player-box.best-player{
@@ -163,21 +164,25 @@ body{
     text-overflow:ellipsis;
 }
 
+/* FORCE SINGLE ROW */
 .stat-row{
-    display:flex;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
     gap:4px;
     margin-bottom:4px;
+    width:100%;
 }
 
 .stat-pill{
-    flex:1;
+    min-width:0;
     background:rgba(0,240,255,.08);
     border:1px solid rgba(0,240,255,.12);
     border-radius:6px;
     text-align:center;
-    padding:3px 2px;
-    font-size:.58rem;
+    padding:3px 1px;
+    font-size:.56rem;
     white-space:nowrap;
+    overflow:hidden;
 }
 
 .line-stat{
@@ -197,11 +202,10 @@ body{
 
 .summary-title{
     background:rgba(0,240,255,.12);
-    padding:7px;
+    padding:8px;
     text-align:center;
     font-weight:700;
     color:var(--accent);
-    font-size:.82rem;
     border-bottom:1px solid rgba(255,255,255,.08);
 }
 
@@ -212,11 +216,20 @@ body{
 
 .summary-grid div{
     text-align:center;
-    padding:8px 4px;
+    padding:10px 4px;
     border-right:1px solid rgba(255,255,255,.08);
     font-size:.7rem;
+    background:rgba(255,255,255,.02);
 }
+
 .summary-grid div:last-child{border-right:none;}
+
+.summary-grid b{
+    display:block;
+    font-size:.95rem;
+    color:#fff;
+    margin-bottom:3px;
+}
 
 @media(max-width:768px){
     .manager-grid{grid-template-columns:1fr;}
@@ -233,9 +246,7 @@ body{
         <h1>GOAT FC MANAGERS</h1>
     </div>
 
-    <div class="desc">
-        Official Manager Ranking Based On Registered Squad League Performance
-    </div>
+    <div class="desc">Official Manager Ranking Based On Registered Squad Performance</div>
 
     <div id="managerGrid" class="manager-grid">Loading...</div>
 </div>
@@ -274,6 +285,7 @@ async function loadData(){
     for(const row of managers){
         const manager=Object.fromEntries(mHead.map((h,i)=>[h,row[i]]));
         const ids=manager["Player IDs"].split(",").map(x=>x.trim()).slice(0,6);
+        const allowedTypes=(manager["Match Type"]||"League").split(",").map(t=>t.trim().toLowerCase());
 
         const start=new Date(manager["Start Match Date"]);
         const end=new Date(manager["End Match Date"]);
@@ -285,19 +297,12 @@ async function loadData(){
         for(const m of matchObjs){
             if(m.Approved.toLowerCase()!=="yes") continue;
 
-            if(stats[m.P1_ID]){
-                strength.pts += +m.P1_Point;
-                strength.goals += +m.P1_Goal;
-            }
-            if(stats[m.P2_ID]){
-                strength.pts += +m.P2_Point;
-                strength.goals += +m.P2_Goal;
-            }
-
-            if(m.Match_Type.toLowerCase()!=="league") continue;
+            if(stats[m.P1_ID]){strength.pts+=+m.P1_Point; strength.goals+=+m.P1_Goal;}
+            if(stats[m.P2_ID]){strength.pts+=+m.P2_Point; strength.goals+=+m.P2_Goal;}
 
             const md=new Date(m.Match_Date);
             if(md<start||md>end) continue;
+            if(!allowedTypes.includes(m.Match_Type.toLowerCase())) continue;
 
             if(stats[m.P1_ID]){
                 let s=stats[m.P1_ID];
@@ -329,36 +334,23 @@ async function loadData(){
 
         total.winPct=total.match?Math.round((total.w/total.match)*100):0;
 
-        result.push({
-            ...manager,
-            players,
-            total,
-            teamStrength: strength.pts + strength.goals
-        });
+        result.push({...manager,players,total,teamStrength:strength.pts+strength.goals});
     }
 
-    result.sort((a,b)=>
-        b.total.pts-a.total.pts ||
-        b.total.gd-a.total.gd ||
-        b.total.winPct-a.total.winPct
-    );
+    result.sort((a,b)=>b.total.pts-a.total.pts||b.total.gd-a.total.gd||b.total.winPct-a.total.winPct);
 
     render(result);
 }
 
 function render(data){
-    const grid=document.getElementById("managerGrid");
-
-    grid.innerHTML=data.map((m,i)=>{
-
+    document.getElementById("managerGrid").innerHTML=data.map((m,i)=>{
         const bestIndex=m.players.reduce((best,p,idx,arr)=>
-            p.pts>arr[best].pts || (p.pts===arr[best].pts && p.winPct>arr[best].winPct) ? idx : best
-        ,0);
+            p.pts>arr[best].pts||(p.pts===arr[best].pts&&p.winPct>arr[best].winPct)?idx:best,0);
 
         return `
         <div class="manager-card ${i===0?'top1':i===1?'top2':i===2?'top3':''}" id="card-${i}">
             <div class="rank-badge">#${i+1}</div>
-            <div class="download-icon" onclick="downloadCard('card-${i}','${m["Team Name"]}')">🖨️</div>
+            <div class="download-icon" onclick="downloadCard('card-${i}','${m["Team Name"]}')">🖨</div>
 
             <div class="team-top">
                 <img class="team-logo" src="${m["Team Logo"]}" crossorigin="anonymous">
@@ -371,20 +363,19 @@ function render(data){
 
             <div class="players-grid">
                 ${m.players.map((p,idx)=>`
-                    <div class="player-box ${idx===bestIndex?'best-player':''}">
-                        <div class="player-id">${p.id}</div>
-                        <div class="player-name">${p.name}</div>
+                <div class="player-box ${idx===bestIndex?'best-player':''}">
+                    <div class="player-id">${p.id}</div>
+                    <div class="player-name">${p.name}</div>
 
-                        <div class="stat-row">
-                            <div class="stat-pill">M ${p.match}</div>
-                            <div class="stat-pill">PTS ${p.pts}</div>
-                            <div class="stat-pill">W% ${p.winPct}</div>
-                        </div>
-
-                        <div class="line-stat">W-D-L: ${p.w}-${p.d}-${p.l}</div>
-                        <div class="line-stat">GF-GA-GD: ${p.gf}-${p.ga}-${p.gd}</div>
+                    <div class="stat-row">
+                        <div class="stat-pill">M ${p.match}</div>
+                        <div class="stat-pill">PTS ${p.pts}</div>
+                        <div class="stat-pill">W% ${p.winPct}</div>
                     </div>
-                `).join("")}
+
+                    <div class="line-stat">W-D-L: ${p.w}-${p.d}-${p.l}</div>
+                    <div class="line-stat">GF-GA-GD: ${p.gf}-${p.ga}-${p.gd}</div>
+                </div>`).join("")}
             </div>
 
             <div class="summary">
@@ -401,9 +392,7 @@ function render(data){
 }
 
 function downloadCard(cardId,fileName){
-    const card=document.getElementById(cardId);
-
-    html2canvas(card,{
+    html2canvas(document.getElementById(cardId),{
         useCORS:true,
         allowTaint:false,
         backgroundColor:null,

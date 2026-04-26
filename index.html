@@ -4,15 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GOAT FC Managers</title>
+<link rel="icon" type="image/png" href="https://i.imgur.com/LY3Bb9m.png">
 
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
 :root{
+    --bg:#050816;
     --card:#0d1329;
     --card2:#101935;
     --accent:#00f0ff;
+    --accent2:#ff00c8;
     --gold:#FFD700;
     --silver:#C0C0C0;
     --bronze:#CD7F32;
@@ -96,6 +99,7 @@ body{
     right:14px;
     cursor:pointer;
     font-size:.9rem;
+    opacity:.8;
 }
 
 .team-top{
@@ -130,14 +134,14 @@ body{
 }
 
 .player-box{
-    background:linear-gradient(145deg,
-        rgba(0,240,255,.08),
-        rgba(255,0,200,.04),
-        rgba(255,255,255,.03)
-    );
+    background:
+        linear-gradient(135deg,rgba(0,240,255,.06),rgba(255,0,200,.05)),
+        rgba(255,255,255,.04);
     border:1px solid rgba(0,255,136,.35);
     border-radius:12px;
     padding:8px;
+    font-size:.72rem;
+    box-shadow:inset 0 0 8px rgba(0,240,255,.04);
 }
 
 .player-box.best-player{
@@ -160,14 +164,17 @@ body{
     text-overflow:ellipsis;
 }
 
+/* FORCE SINGLE ROW */
 .stat-row{
     display:grid;
     grid-template-columns:repeat(3,1fr);
     gap:4px;
     margin-bottom:4px;
+    width:100%;
 }
 
 .stat-pill{
+    min-width:0;
     background:rgba(0,240,255,.08);
     border:1px solid rgba(0,240,255,.12);
     border-radius:6px;
@@ -175,6 +182,7 @@ body{
     padding:3px 1px;
     font-size:.56rem;
     white-space:nowrap;
+    overflow:hidden;
 }
 
 .line-stat{
@@ -210,8 +218,8 @@ body{
     text-align:center;
     padding:10px 4px;
     border-right:1px solid rgba(255,255,255,.08);
+    font-size:.7rem;
     background:rgba(255,255,255,.02);
-    font-size:.68rem;
 }
 
 .summary-grid div:last-child{border-right:none;}
@@ -219,13 +227,9 @@ body{
 .summary-grid b{
     display:block;
     font-size:.95rem;
+    color:#fff;
     margin-bottom:3px;
 }
-
-.summary-grid div:nth-child(1) b{color:#00f0ff;}
-.summary-grid div:nth-child(2) b{color:#00ff88;}
-.summary-grid div:nth-child(3) b{color:#ffae00;}
-.summary-grid div:nth-child(4) b{color:#ff6ad5;}
 
 @media(max-width:768px){
     .manager-grid{grid-template-columns:1fr;}
@@ -287,10 +291,12 @@ async function loadData(){
         const end=new Date(manager["End Match Date"]);
 
         const stats={}, strength={pts:0,goals:0};
+
         ids.forEach(id=>stats[id]={match:0,pts:0,w:0,d:0,l:0,gf:0,ga:0});
 
         for(const m of matchObjs){
             if(m.Approved.toLowerCase()!=="yes") continue;
+
             if(stats[m.P1_ID]){strength.pts+=+m.P1_Point; strength.goals+=+m.P1_Goal;}
             if(stats[m.P2_ID]){strength.pts+=+m.P2_Point; strength.goals+=+m.P2_Goal;}
 
@@ -344,7 +350,7 @@ function render(data){
         return `
         <div class="manager-card ${i===0?'top1':i===1?'top2':i===2?'top3':''}" id="card-${i}">
             <div class="rank-badge">#${i+1}</div>
-            <div class="download-icon" onclick="downloadCard('card-${i}','${m["Team Name"]}')">⬇️</div>
+            <div class="download-icon" onclick="downloadCard('card-${i}','${m["Team Name"]}')">🖨</div>
 
             <div class="team-top">
                 <img class="team-logo" src="${m["Team Logo"]}" crossorigin="anonymous">

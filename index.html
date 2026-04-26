@@ -133,14 +133,17 @@ body{
 }
 
 .player-box{
+    position:relative;
     background:
-        linear-gradient(135deg,rgba(0,240,255,.06),rgba(255,0,200,.05)),
+        linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.01)),
         rgba(255,255,255,.04);
     border:1px solid rgba(0,255,136,.35);
     border-radius:12px;
     padding:8px;
     font-size:.72rem;
-    box-shadow:inset 0 0 8px rgba(0,240,255,.04);
+    box-shadow:
+        inset 0 1px 8px rgba(255,255,255,.05),
+        0 0 10px rgba(0,240,255,.03);
 }
 
 .player-box.best-player{
@@ -163,7 +166,6 @@ body{
     text-overflow:ellipsis;
 }
 
-/* FORCE SINGLE ROW */
 .stat-row{
     display:grid;
     grid-template-columns:repeat(3,1fr);
@@ -173,7 +175,6 @@ body{
 }
 
 .stat-pill{
-    min-width:0;
     background:rgba(0,240,255,.08);
     border:1px solid rgba(0,240,255,.12);
     border-radius:6px;
@@ -181,7 +182,6 @@ body{
     padding:3px 1px;
     font-size:.56rem;
     white-space:nowrap;
-    overflow:hidden;
 }
 
 .line-stat{
@@ -194,18 +194,20 @@ body{
 }
 
 .summary{
-    border:1px solid rgba(255,255,255,.08);
     border-radius:12px;
     overflow:hidden;
+    background:linear-gradient(90deg,rgba(0,240,255,.10),rgba(255,0,200,.08));
+    border:1px solid rgba(0,240,255,.15);
 }
 
 .summary-title{
-    background:rgba(0,240,255,.12);
-    padding:8px;
+    background:rgba(255,255,255,.04);
+    padding:7px;
     text-align:center;
     font-weight:700;
     color:var(--accent);
-    border-bottom:1px solid rgba(255,255,255,.08);
+    font-size:.82rem;
+    border-bottom:1px solid rgba(255,255,255,.06);
 }
 
 .summary-grid{
@@ -217,8 +219,7 @@ body{
     text-align:center;
     padding:10px 4px;
     border-right:1px solid rgba(255,255,255,.08);
-    font-size:.7rem;
-    background:rgba(255,255,255,.02);
+    font-size:.68rem;
 }
 
 .summary-grid div:last-child{border-right:none;}
@@ -226,14 +227,13 @@ body{
 .summary-grid b{
     display:block;
     font-size:.95rem;
+    margin-bottom:2px;
     color:#fff;
-    margin-bottom:3px;
 }
 
 @media(max-width:768px){
     .manager-grid{grid-template-columns:1fr;}
     .players-grid{grid-template-columns:repeat(2,1fr);}
-    .summary-grid{grid-template-columns:repeat(4,1fr);}
 }
 </style>
 </head>
@@ -290,14 +290,13 @@ async function loadData(){
         const end=new Date(manager["End Match Date"]);
 
         const stats={}, strength={pts:0,goals:0};
-
         ids.forEach(id=>stats[id]={match:0,pts:0,w:0,d:0,l:0,gf:0,ga:0});
 
         for(const m of matchObjs){
             if(m.Approved.toLowerCase()!=="yes") continue;
 
-            if(stats[m.P1_ID]){strength.pts+=+m.P1_Point; strength.goals+=+m.P1_Goal;}
-            if(stats[m.P2_ID]){strength.pts+=+m.P2_Point; strength.goals+=+m.P2_Goal;}
+            if(stats[m.P1_ID]){strength.pts+=+m.P1_Point;strength.goals+=+m.P1_Goal;}
+            if(stats[m.P2_ID]){strength.pts+=+m.P2_Point;strength.goals+=+m.P2_Goal;}
 
             const md=new Date(m.Match_Date);
             if(md<start||md>end) continue;
@@ -305,13 +304,13 @@ async function loadData(){
 
             if(stats[m.P1_ID]){
                 let s=stats[m.P1_ID];
-                s.match++; s.pts+=+m.P1_Point; s.gf+=+m.P1_Goal; s.ga+=+m.P2_Goal;
+                s.match++;s.pts+=+m.P1_Point;s.gf+=+m.P1_Goal;s.ga+=+m.P2_Goal;
                 if(+m.P1_Point===3)s.w++; else if(+m.P1_Point===1)s.d++; else s.l++;
             }
 
             if(stats[m.P2_ID]){
                 let s=stats[m.P2_ID];
-                s.match++; s.pts+=+m.P2_Point; s.gf+=+m.P2_Goal; s.ga+=+m.P1_Goal;
+                s.match++;s.pts+=+m.P2_Point;s.gf+=+m.P2_Goal;s.ga+=+m.P1_Goal;
                 if(+m.P2_Point===3)s.w++; else if(+m.P2_Point===1)s.d++; else s.l++;
             }
         }

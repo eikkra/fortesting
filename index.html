@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GOAT FC Match Fixture</title>
+<title>Match Schedule & Fixture</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
 :root{
@@ -13,10 +13,9 @@
     --card:#0d1f16;
     --green:#00ff88;
     --green2:#00d96f;
-    --border:rgba(0,255,136,.22);
-    --text:#e9fff4;
+    --text:#eafff2;
     --muted:#8ab39c;
-    --shadow:0 0 20px rgba(0,255,136,.18);
+    --border:rgba(0,255,136,.20);
 }
 
 *{
@@ -28,116 +27,85 @@
 body{
     font-family:'Poppins',sans-serif;
     background:
-        radial-gradient(circle at top left,#0d2517 0%,#07110b 40%,#030805 100%);
+        radial-gradient(circle at top left,#10281c 0%,#07110b 50%,#030805 100%);
     color:var(--text);
-    min-height:100vh;
     padding:20px;
 }
 
 .container{
-    max-width:1200px;
+    max-width:1100px;
     margin:auto;
 }
 
-/* HEADER */
-.header{
-    text-align:center;
-    margin-bottom:30px;
-}
-
-.logo{
-    width:85px;
-    height:85px;
-    object-fit:contain;
-    margin-bottom:10px;
-    filter:drop-shadow(0 0 12px rgba(0,255,136,.4));
-}
-
-.club-name{
-    font-family:'Orbitron',sans-serif;
-    font-size:34px;
-    font-weight:800;
-    color:var(--green);
-    text-shadow:0 0 18px rgba(0,255,136,.45);
-}
-
 .title{
-    font-size:16px;
-    color:var(--muted);
-    margin-top:6px;
-    letter-spacing:1px;
+    text-align:center;
+    font-family:'Orbitron',sans-serif;
+    font-size:28px;
+    color:var(--green);
+    margin-bottom:25px;
+    text-shadow:0 0 14px rgba(0,255,136,.4);
 }
 
-/* ROUND SELECTOR */
-.round-selector{
+/* ROUND SELECT */
+.round-wrap{
     display:flex;
     justify-content:center;
-    margin-bottom:25px;
+    margin-bottom:20px;
 }
 
 select{
     background:var(--card);
     color:var(--green);
     border:1px solid var(--border);
-    padding:14px 18px;
-    border-radius:14px;
-    font-size:15px;
-    font-weight:600;
-    outline:none;
-    box-shadow:var(--shadow);
-    cursor:pointer;
+    padding:12px 18px;
+    border-radius:12px;
+    font-weight:700;
+    font-size:14px;
+    width:220px;
 }
 
-/* FIXTURE GRID */
+/* MATCH CARD */
 .fixture-grid{
     display:grid;
-    gap:18px;
+    gap:16px;
 }
 
 .match-card{
-    background:linear-gradient(135deg,#0d1f16,#10281c);
+    background:linear-gradient(145deg,#0d1f16,#11281c);
     border:1px solid var(--border);
     border-radius:18px;
-    padding:18px;
-    box-shadow:var(--shadow);
-    transition:.25s ease;
+    padding:16px;
+    box-shadow:0 0 20px rgba(0,255,136,.08);
 }
 
-.match-card:hover{
-    transform:translateY(-3px);
-    box-shadow:0 0 30px rgba(0,255,136,.25);
-}
-
-.match-main{
+.match-row{
     display:grid;
-    grid-template-columns:1fr auto 1fr;
+    grid-template-columns:1fr 60px 1fr;
     align-items:center;
-    gap:12px;
+    gap:10px;
 }
 
 .team{
     display:flex;
     align-items:center;
-    gap:12px;
+    gap:10px;
     min-width:0;
 }
 
 .team.away{
     justify-content:flex-end;
-    text-align:right;
 }
 
 .team img{
-    width:54px;
-    height:54px;
+    width:42px;
+    height:42px;
+    border-radius:12px;
     object-fit:cover;
-    border-radius:14px;
-    border:2px solid rgba(255,255,255,.08);
     background:#fff;
 }
 
 .team-name{
-    font-size:17px;
+    font-size:14px;
     font-weight:700;
     white-space:nowrap;
     overflow:hidden;
@@ -145,66 +113,109 @@ select{
 }
 
 .vs{
-    font-family:'Orbitron',sans-serif;
-    font-size:22px;
-    font-weight:800;
-    color:var(--green);
-    text-shadow:0 0 12px rgba(0,255,136,.45);
-    min-width:70px;
     text-align:center;
+    font-family:'Orbitron';
+    color:var(--green);
+    font-size:18px;
+    font-weight:800;
 }
 
-.match-meta{
+.btn-row{
     margin-top:14px;
     display:flex;
-    justify-content:center;
+    gap:10px;
 }
 
-.join-btn{
+.btn{
+    flex:1;
+    text-align:center;
+    padding:10px;
+    border-radius:10px;
+    font-weight:700;
+    font-size:13px;
     text-decoration:none;
+    cursor:pointer;
+    border:none;
+}
+
+.group-btn{
+    background:#13271d;
+    color:var(--green);
+    border:1px solid var(--border);
+}
+
+.fixture-btn{
     background:linear-gradient(90deg,var(--green),var(--green2));
     color:#03140a;
-    font-weight:700;
-    padding:10px 18px;
+}
+
+/* MODAL */
+.modal{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.75);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    z-index:999;
+}
+
+.modal-content{
+    background:#09150f;
+    border:1px solid var(--border);
+    width:100%;
+    max-width:700px;
+    border-radius:18px;
+    padding:20px;
+}
+
+.modal textarea{
+    width:100%;
+    height:400px;
+    background:#07110b;
+    border:1px solid var(--border);
+    color:#dfffea;
     border-radius:12px;
+    padding:14px;
+    resize:none;
     font-size:14px;
-    box-shadow:0 0 15px rgba(0,255,136,.35);
-    transition:.2s ease;
 }
 
-.join-btn:hover{
-    transform:scale(1.05);
+.copy-btn{
+    margin-top:12px;
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:12px;
+    background:var(--green);
+    color:#03140a;
+    font-weight:800;
+    cursor:pointer;
 }
 
-.home-label{
-    font-size:12px;
-    color:var(--muted);
-    text-align:center;
-    margin-top:10px;
-}
-
-/* MOBILE */
 @media(max-width:768px){
-    .club-name{
-        font-size:26px;
-    }
-
-    .team-name{
-        font-size:14px;
+    .match-row{
+        grid-template-columns:1fr 45px 1fr;
+        gap:6px;
     }
 
     .team img{
-        width:44px;
-        height:44px;
+        width:34px;
+        height:34px;
+    }
+
+    .team-name{
+        font-size:12px;
     }
 
     .vs{
-        font-size:18px;
-        min-width:50px;
+        font-size:14px;
     }
 
-    .match-card{
-        padding:14px;
+    .btn{
+        font-size:12px;
+        padding:9px;
     }
 }
 </style>
@@ -212,146 +223,178 @@ select{
 <body>
 
 <div class="container">
+    <div class="title">MATCH SCHEDULE & FIXTURE</div>
 
-    <div class="header">
-        <img class="logo" src="https://i.imgur.com/LY3Bb9m.png" alt="GOAT FC Logo">
-        <div class="club-name">GOAT FC</div>
-        <div class="title">MATCH FIXTURE</div>
-    </div>
-
-    <div class="round-selector">
+    <div class="round-wrap">
         <select id="roundSelect"></select>
     </div>
 
-    <div class="fixture-grid" id="fixtureGrid">
-        Loading Fixture...
-    </div>
+    <div id="fixtureGrid" class="fixture-grid"></div>
+</div>
 
+<div class="modal" id="fixtureModal">
+    <div class="modal-content">
+        <textarea id="fixtureText"></textarea>
+        <button class="copy-btn" onclick="copyFixture()">COPY FIXTURE</button>
+    </div>
 </div>
 
 <script>
-const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=467352529&single=true&output=csv";
+const CLUB_MANAGERS_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=467352529&single=true&output=csv";
+const CLUB_MEMBERS_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv";
 
 let fixtures = [];
+let membersMap = {};
 
-async function fetchCSV(){
-    const res = await fetch(CSV_URL);
+async function fetchCSV(url){
+    const res = await fetch(url);
     const text = await res.text();
+    return text.trim().split("\n").map(r=>r.split(","));
+}
 
-    const rows = text.trim().split("\n").map(r=>r.split(","));
+async function loadMembers(){
+    const rows = await fetchCSV(CLUB_MEMBERS_CSV);
+    rows.shift();
 
-    const headers = rows.shift();
+    rows.forEach(r=>{
+        membersMap[r[1]?.trim()] = r[0]?.trim();
+    });
+}
 
-    return rows.map(row=>({
-        teamName: row[0]?.trim(),
-        teamLogo: row[1]?.trim(),
-        managerName: row[2]?.trim(),
-        playerIds: row[3]?.trim(),
-        startDate: row[4]?.trim(),
-        endDate: row[5]?.trim(),
-        matchType: row[6]?.trim(),
-        matchGroup: row[7]?.trim()
+async function loadTeams(){
+    const rows = await fetchCSV(CLUB_MANAGERS_CSV);
+    rows.shift();
+
+    return rows.map(r=>({
+        teamName:r[0]?.trim(),
+        teamLogo:r[1]?.trim(),
+        playerIDs:r[3]?.trim(),
+        matchGroup:r[7]?.trim()
     }));
 }
 
-/* ROUND ROBIN GENERATOR */
-function generateFixtures(teams){
+function generateRoundRobin(teams){
+    let arr=[...teams];
+    const rounds=arr.length-1;
+    const matchesPerRound=arr.length/2;
+    let all=[];
 
-    let arr = [...teams];
+    for(let r=0;r<rounds;r++){
+        let round=[];
 
-    if(arr.length % 2 !== 0){
-        arr.push({bye:true});
-    }
+        for(let i=0;i<matchesPerRound;i++){
+            let t1=arr[i];
+            let t2=arr[arr.length-1-i];
 
-    const rounds = arr.length - 1;
-    const matchesPerRound = arr.length / 2;
+            const flip=(r+i)%2===0;
 
-    let allRounds = [];
-
-    for(let round=0; round<rounds; round++){
-
-        let roundMatches = [];
-
-        for(let i=0; i<matchesPerRound; i++){
-
-            const t1 = arr[i];
-            const t2 = arr[arr.length-1-i];
-
-            if(!t1.bye && !t2.bye){
-
-                const homeAwayFlip = (round + i) % 2 === 0;
-
-                roundMatches.push({
-                    home: homeAwayFlip ? t1 : t2,
-                    away: homeAwayFlip ? t2 : t1
-                });
-            }
+            round.push({
+                home:flip?t1:t2,
+                away:flip?t2:t1
+            });
         }
 
-        allRounds.push(roundMatches);
-
+        all.push(round);
         arr.splice(1,0,arr.pop());
     }
 
-    return allRounds;
+    return all;
 }
 
 function renderRound(roundIndex){
-
-    const grid = document.getElementById("fixtureGrid");
-    grid.innerHTML = "";
+    const grid=document.getElementById("fixtureGrid");
+    grid.innerHTML="";
 
     fixtures[roundIndex].forEach(match=>{
-
-        grid.innerHTML += `
-            <div class="match-card">
-                <div class="match-main">
-
-                    <div class="team home">
-                        <img src="${match.home.teamLogo}" alt="">
-                        <div class="team-name">${match.home.teamName}</div>
-                    </div>
-
-                    <div class="vs">VS</div>
-
-                    <div class="team away">
-                        <div class="team-name">${match.away.teamName}</div>
-                        <img src="${match.away.teamLogo}" alt="">
-                    </div>
-
+        grid.innerHTML+=`
+        <div class="match-card">
+            <div class="match-row">
+                <div class="team">
+                    <img src="${match.home.teamLogo}">
+                    <div class="team-name">${match.home.teamName}</div>
                 </div>
 
-                <div class="match-meta">
-                    <a href="${match.home.matchGroup}" target="_blank" class="join-btn">
-                        JOIN MATCH GROUP
-                    </a>
-                </div>
+                <div class="vs">VS</div>
 
-                <div class="home-label">
-                    Home Team: ${match.home.teamName}
+                <div class="team away">
+                    <div class="team-name">${match.away.teamName}</div>
+                    <img src="${match.away.teamLogo}">
                 </div>
             </div>
+
+            <div class="btn-row">
+                <a href="${match.home.matchGroup}" target="_blank" class="btn group-btn">Match Group</a>
+                <button class="btn fixture-btn" onclick='generateFixture(${JSON.stringify(match.home)},${JSON.stringify(match.away)})'>
+                    Fixture Generate
+                </button>
+            </div>
+        </div>
         `;
     });
 }
 
+function getPlayers(ids){
+    return ids.split(",").map((id,i)=>
+        membersMap[id.trim()] || `Player ${i+1}`
+    );
+}
+
+function generateFixture(home,away){
+    const hp=getPlayers(home.playerIDs);
+    const ap=getPlayers(away.playerIDs);
+
+    const text=`
+${home.teamName} (Home) VS ${away.teamName} (Away)
+
+First Day: 12:00 AM
+1. ${hp[0]} VS ${ap[0]}
+2. ${hp[1]} VS ${ap[1]}
+
+Last Day: 12:00 AM
+3. ${hp[2]} VS ${ap[2]}
+4. ${hp[3]} VS ${ap[3]}
+
+Sub Player List:
+${hp[4]} (Home)
+${hp[5]} (Home)
+
+${ap[4]} (Away)
+${ap[5]} (Away)
+
+Tournament Rules:
+https://docs.google.com/document/d/1T7p7AjuFfk-DtVbJgdGFcwsH0ipDfG3wg05qv8Y0fJ4/edit
+`;
+
+    document.getElementById("fixtureText").value=text.trim();
+    document.getElementById("fixtureModal").style.display="flex";
+}
+
+function copyFixture(){
+    const txt=document.getElementById("fixtureText");
+    txt.select();
+    document.execCommand("copy");
+    alert("Fixture Copied!");
+}
+
+document.getElementById("fixtureModal").addEventListener("click",e=>{
+    if(e.target.id==="fixtureModal"){
+        e.target.style.display="none";
+    }
+});
+
 async function init(){
+    await loadMembers();
+    const teams=await loadTeams();
 
-    const teams = await fetchCSV();
+    fixtures=generateRoundRobin(teams);
 
-    fixtures = generateFixtures(teams);
+    const select=document.getElementById("roundSelect");
 
-    const roundSelect = document.getElementById("roundSelect");
-
-    fixtures.forEach((_,i)=>{
-        roundSelect.innerHTML += `
-            <option value="${i}">Round ${i+1}</option>
-        `;
+    fixtures.forEach((r,i)=>{
+        select.innerHTML+=`<option value="${i}">Round ${i+1}</option>`;
     });
 
-    roundSelect.addEventListener("change",e=>{
-        renderRound(+e.target.value);
-    });
+    select.addEventListener("change",e=>renderRound(e.target.value));
 
     renderRound(0);
 }

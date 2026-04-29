@@ -24,52 +24,51 @@ body{
     font-family:Poppins;
     background:radial-gradient(circle,#0b1f15,#020705);
     color:#eafff2;
-    padding:12px;
+    padding:10px;
 }
 
-.container{max-width:950px;margin:auto;}
+.container{max-width:900px;margin:auto;}
 
 .title{
     text-align:center;
     font-family:Orbitron;
-    font-size:24px;
+    font-size:22px;
     color:var(--green);
-    margin-bottom:18px;
+    margin-bottom:16px;
 }
 
-/* SELECT */
 select{
     width:100%;
-    padding:11px;
+    padding:10px;
     border-radius:10px;
     background:var(--card);
     border:1px solid var(--border);
     color:var(--green);
-    margin-bottom:14px;
+    margin-bottom:12px;
 }
 
 /* CARD */
 .match-card{
     background:linear-gradient(145deg,#0d1f16,#11281c);
     border:1px solid var(--border);
-    border-radius:14px;
-    padding:12px;
-    margin-bottom:12px;
+    border-radius:12px;
+    padding:10px;
+    margin-bottom:10px;
 }
 
-/* ROW FIX */
+/* ROW */
 .match-row{
     display:grid;
     grid-template-columns:1fr auto 1fr;
     align-items:center;
-    gap:6px;
+    gap:5px;
 }
 
 /* TEAM */
 .team{
     display:flex;
     align-items:center;
-    gap:6px;
+    gap:5px;
     overflow:hidden;
 }
 
@@ -78,8 +77,8 @@ select{
 }
 
 .team img{
-    width:28px;
-    height:28px;
+    width:26px;
+    height:26px;
     border-radius:6px;
     object-fit:cover;
     background:#fff;
@@ -87,21 +86,20 @@ select{
 }
 
 .team-name{
-    font-size:12px;
+    font-size:11px;
     font-weight:700;
     white-space:nowrap;
     overflow:hidden;
     text-overflow:ellipsis;
-    max-width:90px;
+    max-width:85px;
 }
 
-/* TAG FIX */
+/* TAG */
 .tag{
-    font-size:9px;
-    padding:2px 6px;
+    font-size:8px;
+    padding:2px 5px;
     border-radius:6px;
     display:inline-block;
-    width:auto;
 }
 
 .home-tag{
@@ -114,46 +112,43 @@ select{
     color:var(--away);
 }
 
-/* VS PERFECT CENTER */
+/* VS */
 .vs{
     font-family:Orbitron;
-    font-size:14px;
+    font-size:13px;
     color:var(--green);
     text-align:center;
-    min-width:40px;
+    min-width:35px;
 }
 
-/* BUTTON AREA */
+/* BUTTON ROW FIX */
 .btn-row{
-    margin-top:10px;
     display:flex;
-    justify-content:center;
+    gap:6px;
+    margin-top:8px;
 }
 
-/* MATCH GROUP CENTER */
-.group-btn{
-    display:inline-block;
-    padding:9px 16px;
+.btn{
+    flex:1;
+    padding:8px;
     border-radius:8px;
-    font-size:12px;
+    font-size:11px;
     font-weight:700;
+    text-align:center;
     text-decoration:none;
+    border:none;
+    cursor:pointer;
+}
+
+/* MATCH GROUP */
+.group-btn{
     background:rgba(0,255,136,.1);
     color:var(--green);
     border:1px solid var(--border);
-    box-shadow:0 0 10px rgba(0,255,136,.2);
-    text-align:center;
 }
 
 /* FIXTURE BTN */
 .fixture-btn{
-    margin-top:8px;
-    width:100%;
-    padding:9px;
-    border:none;
-    border-radius:8px;
-    font-size:12px;
-    font-weight:700;
     background:linear-gradient(90deg,var(--green),var(--green2));
     color:#03140a;
 }
@@ -166,21 +161,21 @@ select{
     display:none;
     justify-content:center;
     align-items:center;
-    padding:15px;
+    padding:10px;
 }
 
 .modal-box{
     background:#08150f;
     border:1px solid var(--border);
-    padding:14px;
-    border-radius:12px;
+    padding:12px;
+    border-radius:10px;
     width:100%;
     max-width:600px;
 }
 
 textarea{
     width:100%;
-    height:360px;
+    height:340px;
     background:#06110b;
     color:#dffff0;
     border:1px solid var(--border);
@@ -190,7 +185,7 @@ textarea{
 }
 
 .copy-btn{
-    margin-top:10px;
+    margin-top:8px;
     width:100%;
     padding:10px;
     background:var(--green);
@@ -308,12 +303,9 @@ function render(r){
             </div>
 
             <div class="btn-row">
-                <a href="${m.home.link}" target="_blank" class="group-btn">Match Group</a>
+                <a href="${m.home.link}" target="_blank" class="btn group-btn">Match Group</a>
+                <button class="btn fixture-btn" onclick='gen(${JSON.stringify(m.home)},${JSON.stringify(m.away)})'>Fixture Generate</button>
             </div>
-
-            <button class="fixture-btn" onclick='gen(${JSON.stringify(m.home)},${JSON.stringify(m.away)})'>
-                Fixture Generate
-            </button>
 
         </div>`;
     });
@@ -330,16 +322,13 @@ function gen(h,a){
 
 ${h.name} (Home) VS ${a.name} (Away)
 
-
 First Day: 12:00 AM
 1. ${hp[0]} VS ${ap[0]}
 2. ${hp[1]} VS ${ap[1]}
 
-
 Last Day: 12:00 AM
 3. ${hp[2]} VS ${ap[2]}
 4. ${hp[3]} VS ${ap[3]}
-
 
 Sub Player List:
 ${hp[4]} (Home)

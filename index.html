@@ -5,137 +5,129 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Match Schedule & Fixture</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
 :root{
-    --bg:#07110b;
+    --bg:#06110b;
     --card:#0d1f16;
     --green:#00ff88;
-    --green2:#00d96f;
-    --text:#eafff2;
-    --muted:#8ab39c;
-    --border:rgba(0,255,136,.20);
+    --green2:#00cc66;
+    --home:#00ffcc;
+    --away:#ff4d6d;
+    --border:rgba(0,255,136,.2);
 }
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
+*{margin:0;padding:0;box-sizing:border-box;}
 
 body{
-    font-family:'Poppins',sans-serif;
-    background:
-        radial-gradient(circle at top left,#10281c 0%,#07110b 50%,#030805 100%);
-    color:var(--text);
-    padding:20px;
+    font-family:Poppins;
+    background:radial-gradient(circle,#0b1f15,#020705);
+    color:#eafff2;
+    padding:15px;
 }
 
-.container{
-    max-width:1100px;
-    margin:auto;
-}
+.container{max-width:1000px;margin:auto;}
 
 .title{
     text-align:center;
-    font-family:'Orbitron',sans-serif;
-    font-size:28px;
+    font-family:Orbitron;
+    font-size:26px;
     color:var(--green);
-    margin-bottom:25px;
-    text-shadow:0 0 14px rgba(0,255,136,.4);
-}
-
-/* ROUND SELECT */
-.round-wrap{
-    display:flex;
-    justify-content:center;
     margin-bottom:20px;
 }
 
+/* SELECT */
 select{
+    width:100%;
+    padding:12px;
+    border-radius:10px;
     background:var(--card);
-    color:var(--green);
     border:1px solid var(--border);
-    padding:12px 18px;
-    border-radius:12px;
-    font-weight:700;
-    font-size:14px;
-    width:220px;
+    color:var(--green);
+    margin-bottom:15px;
 }
 
-/* MATCH CARD */
-.fixture-grid{
-    display:grid;
-    gap:16px;
-}
-
+/* CARD */
 .match-card{
     background:linear-gradient(145deg,#0d1f16,#11281c);
     border:1px solid var(--border);
-    border-radius:18px;
-    padding:16px;
-    box-shadow:0 0 20px rgba(0,255,136,.08);
+    border-radius:14px;
+    padding:12px;
+    margin-bottom:12px;
 }
 
+/* ROW FIXED MOBILE */
 .match-row{
-    display:grid;
-    grid-template-columns:1fr 60px 1fr;
+    display:flex;
     align-items:center;
-    gap:10px;
+    justify-content:space-between;
+    gap:6px;
 }
 
+/* TEAM */
 .team{
     display:flex;
     align-items:center;
-    gap:10px;
-    min-width:0;
-}
-
-.team.away{
-    justify-content:flex-end;
+    gap:6px;
+    max-width:42%;
 }
 
 .team img{
-    width:42px;
-    height:42px;
-    border-radius:12px;
-    object-fit:cover;
+    width:30px;
+    height:30px;
+    border-radius:8px;
     background:#fff;
 }
 
 .team-name{
-    font-size:14px;
+    font-size:12px;
     font-weight:700;
     white-space:nowrap;
     overflow:hidden;
     text-overflow:ellipsis;
 }
 
-.vs{
-    text-align:center;
-    font-family:'Orbitron';
-    color:var(--green);
-    font-size:18px;
-    font-weight:800;
+/* TAG */
+.tag{
+    font-size:9px;
+    padding:2px 5px;
+    border-radius:6px;
+    margin-top:2px;
 }
 
+.home-tag{
+    background:rgba(0,255,204,.1);
+    color:var(--home);
+}
+
+.away-tag{
+    background:rgba(255,77,109,.1);
+    color:var(--away);
+}
+
+/* VS */
+.vs{
+    font-family:Orbitron;
+    font-size:14px;
+    color:var(--green);
+}
+
+/* BUTTONS */
 .btn-row{
-    margin-top:14px;
     display:flex;
-    gap:10px;
+    gap:6px;
+    margin-top:10px;
 }
 
 .btn{
     flex:1;
-    text-align:center;
-    padding:10px;
-    border-radius:10px;
+    padding:8px;
+    border-radius:8px;
+    font-size:11px;
     font-weight:700;
-    font-size:13px;
-    text-decoration:none;
-    cursor:pointer;
     border:none;
+    cursor:pointer;
 }
 
 .group-btn{
@@ -146,205 +138,174 @@ select{
 
 .fixture-btn{
     background:linear-gradient(90deg,var(--green),var(--green2));
-    color:#03140a;
+    color:#032014;
 }
 
 /* MODAL */
 .modal{
     position:fixed;
     inset:0;
-    background:rgba(0,0,0,.75);
+    background:rgba(0,0,0,.8);
     display:none;
-    align-items:center;
     justify-content:center;
-    padding:20px;
-    z-index:999;
+    align-items:center;
+    padding:15px;
 }
 
-.modal-content{
-    background:#09150f;
+.modal-box{
+    background:#08150f;
     border:1px solid var(--border);
-    width:100%;
-    max-width:700px;
-    border-radius:18px;
-    padding:20px;
-}
-
-.modal textarea{
-    width:100%;
-    height:400px;
-    background:#07110b;
-    border:1px solid var(--border);
-    color:#dfffea;
+    padding:15px;
     border-radius:12px;
-    padding:14px;
-    resize:none;
-    font-size:14px;
+    width:100%;
+    max-width:600px;
+}
+
+textarea{
+    width:100%;
+    height:350px;
+    background:#06110b;
+    color:#dffff0;
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:10px;
+    font-size:12px;
 }
 
 .copy-btn{
-    margin-top:12px;
+    margin-top:10px;
     width:100%;
-    padding:12px;
-    border:none;
-    border-radius:12px;
+    padding:10px;
     background:var(--green);
-    color:#03140a;
+    border:none;
+    border-radius:8px;
     font-weight:800;
-    cursor:pointer;
-}
-
-@media(max-width:768px){
-    .match-row{
-        grid-template-columns:1fr 45px 1fr;
-        gap:6px;
-    }
-
-    .team img{
-        width:34px;
-        height:34px;
-    }
-
-    .team-name{
-        font-size:12px;
-    }
-
-    .vs{
-        font-size:14px;
-    }
-
-    .btn{
-        font-size:12px;
-        padding:9px;
-    }
 }
 </style>
 </head>
+
 <body>
 
 <div class="container">
     <div class="title">MATCH SCHEDULE & FIXTURE</div>
-
-    <div class="round-wrap">
-        <select id="roundSelect"></select>
-    </div>
-
-    <div id="fixtureGrid" class="fixture-grid"></div>
+    <select id="roundSelect"></select>
+    <div id="fixture"></div>
 </div>
 
-<div class="modal" id="fixtureModal">
-    <div class="modal-content">
-        <textarea id="fixtureText"></textarea>
-        <button class="copy-btn" onclick="copyFixture()">COPY FIXTURE</button>
+<div class="modal" id="modal">
+    <div class="modal-box">
+        <textarea id="output"></textarea>
+        <button class="copy-btn" onclick="copyText()">COPY</button>
     </div>
 </div>
 
 <script>
-const CLUB_MANAGERS_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=467352529&single=true&output=csv";
-const CLUB_MEMBERS_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv";
+const TEAM_CSV="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=467352529&single=true&output=csv";
+const MEMBER_CSV="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv";
 
-let fixtures = [];
-let membersMap = {};
+let fixtures=[],members={};
 
-async function fetchCSV(url){
-    const res = await fetch(url);
-    const text = await res.text();
-    return text.trim().split("\n").map(r=>r.split(","));
+async function getCSV(url){
+    let r=await fetch(url);
+    let t=await r.text();
+    return t.trim().split("\n").map(r=>r.split(","));
 }
 
-async function loadMembers(){
-    const rows = await fetchCSV(CLUB_MEMBERS_CSV);
-    rows.shift();
+async function load(){
+    let m=await getCSV(MEMBER_CSV);
+    m.shift();
+    m.forEach(r=>members[r[1]]=r[0]);
 
-    rows.forEach(r=>{
-        membersMap[r[1]?.trim()] = r[0]?.trim();
-    });
-}
-
-async function loadTeams(){
-    const rows = await fetchCSV(CLUB_MANAGERS_CSV);
-    rows.shift();
-
-    return rows.map(r=>({
-        teamName:r[0]?.trim(),
-        teamLogo:r[1]?.trim(),
-        playerIDs:r[3]?.trim(),
-        matchGroup:r[7]?.trim()
+    let t=await getCSV(TEAM_CSV);
+    t.shift();
+    let teams=t.map(r=>({
+        name:r[0],
+        logo:r[1],
+        ids:r[3],
+        link:r[7]
     }));
+
+    fixtures=doubleRoundRobin(teams);
+    initUI();
 }
 
-function generateRoundRobin(teams){
+/* DOUBLE ROUND ROBIN */
+function doubleRoundRobin(teams){
+    let n=teams.length;
+    let rounds=n-1;
+    let half=n/2;
     let arr=[...teams];
-    const rounds=arr.length-1;
-    const matchesPerRound=arr.length/2;
-    let all=[];
+    let first=[];
 
     for(let r=0;r<rounds;r++){
-        let round=[];
-
-        for(let i=0;i<matchesPerRound;i++){
+        let matches=[];
+        for(let i=0;i<half;i++){
             let t1=arr[i];
-            let t2=arr[arr.length-1-i];
-
-            const flip=(r+i)%2===0;
-
-            round.push({
-                home:flip?t1:t2,
-                away:flip?t2:t1
-            });
+            let t2=arr[n-1-i];
+            let flip=(r+i)%2===0;
+            matches.push({home:flip?t1:t2,away:flip?t2:t1});
         }
-
-        all.push(round);
+        first.push(matches);
         arr.splice(1,0,arr.pop());
     }
 
-    return all;
+    let second=first.map(round=>round.map(m=>({home:m.away,away:m.home})));
+    return [...first,...second];
 }
 
-function renderRound(roundIndex){
-    const grid=document.getElementById("fixtureGrid");
-    grid.innerHTML="";
+function initUI(){
+    let select=document.getElementById("roundSelect");
+    fixtures.forEach((_,i)=>{
+        select.innerHTML+=`<option value="${i}">Round ${i+1}</option>`;
+    });
+    select.onchange=e=>render(e.target.value);
+    render(0);
+}
 
-    fixtures[roundIndex].forEach(match=>{
-        grid.innerHTML+=`
+function render(r){
+    let box=document.getElementById("fixture");
+    box.innerHTML="";
+    fixtures[r].forEach(m=>{
+        box.innerHTML+=`
         <div class="match-card">
             <div class="match-row">
                 <div class="team">
-                    <img src="${match.home.teamLogo}">
-                    <div class="team-name">${match.home.teamName}</div>
+                    <img src="${m.home.logo}">
+                    <div>
+                        <div class="team-name">${m.home.name}</div>
+                        <div class="tag home-tag">HOME</div>
+                    </div>
                 </div>
 
                 <div class="vs">VS</div>
 
-                <div class="team away">
-                    <div class="team-name">${match.away.teamName}</div>
-                    <img src="${match.away.teamLogo}">
+                <div class="team">
+                    <div style="text-align:right">
+                        <div class="team-name">${m.away.name}</div>
+                        <div class="tag away-tag">AWAY</div>
+                    </div>
+                    <img src="${m.away.logo}">
                 </div>
             </div>
 
             <div class="btn-row">
-                <a href="${match.home.matchGroup}" target="_blank" class="btn group-btn">Match Group</a>
-                <button class="btn fixture-btn" onclick='generateFixture(${JSON.stringify(match.home)},${JSON.stringify(match.away)})'>
-                    Fixture Generate
-                </button>
+                <a href="${m.home.link}" target="_blank" class="btn group-btn">Match Group</a>
+                <button class="btn fixture-btn" onclick='gen(${JSON.stringify(m.home)},${JSON.stringify(m.away)})'>Fixture Generate</button>
             </div>
-        </div>
-        `;
+        </div>`;
     });
 }
 
-function getPlayers(ids){
-    return ids.split(",").map((id,i)=>
-        membersMap[id.trim()] || `Player ${i+1}`
-    );
+function players(ids){
+    return ids.split(",").map((id,i)=>members[id.trim()]||("Player "+(i+1)));
 }
 
-function generateFixture(home,away){
-    const hp=getPlayers(home.playerIDs);
-    const ap=getPlayers(away.playerIDs);
+function gen(h,a){
+    let hp=players(h.ids), ap=players(a.ids);
 
-    const text=`
-${home.teamName} (Home) VS ${away.teamName} (Away)
+    let txt=`Powered by GOAT FC
+
+${h.name} (Home) VS ${a.name} (Away)
 
 First Day: 12:00 AM
 1. ${hp[0]} VS ${ap[0]}
@@ -361,45 +322,24 @@ ${hp[5]} (Home)
 ${ap[4]} (Away)
 ${ap[5]} (Away)
 
-Tournament Rules:
-https://docs.google.com/document/d/1T7p7AjuFfk-DtVbJgdGFcwsH0ipDfG3wg05qv8Y0fJ4/edit
+www.goatfcbd.com
 `;
 
-    document.getElementById("fixtureText").value=text.trim();
-    document.getElementById("fixtureModal").style.display="flex";
+    document.getElementById("output").value=txt;
+    document.getElementById("modal").style.display="flex";
 }
 
-function copyFixture(){
-    const txt=document.getElementById("fixtureText");
-    txt.select();
+function copyText(){
+    let t=document.getElementById("output");
+    t.select();
     document.execCommand("copy");
-    alert("Fixture Copied!");
 }
 
-document.getElementById("fixtureModal").addEventListener("click",e=>{
-    if(e.target.id==="fixtureModal"){
-        e.target.style.display="none";
-    }
-});
+document.getElementById("modal").onclick=e=>{
+    if(e.target.id==="modal") e.target.style.display="none";
+};
 
-async function init(){
-    await loadMembers();
-    const teams=await loadTeams();
-
-    fixtures=generateRoundRobin(teams);
-
-    const select=document.getElementById("roundSelect");
-
-    fixtures.forEach((r,i)=>{
-        select.innerHTML+=`<option value="${i}">Round ${i+1}</option>`;
-    });
-
-    select.addEventListener("change",e=>renderRound(e.target.value));
-
-    renderRound(0);
-}
-
-init();
+load();
 </script>
 
 </body>

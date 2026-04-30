@@ -8,7 +8,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif}
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Orbitron',sans-serif;
+}
 
 body{
     background:#050008;
@@ -19,7 +24,7 @@ body{
     padding:15px;
 }
 
-.header{text-align:center;margin-bottom:20px}
+.header{text-align:center;margin-bottom:20px;}
 .logo{
     width:75px;
     filter:drop-shadow(0 0 10px cyan);
@@ -41,10 +46,9 @@ body{
 .card{
     border-radius:18px;
     overflow:hidden;
-    background:rgba(255,255,255,.04);
+    background:rgba(255,255,255,.05);
     border:1px solid rgba(255,255,255,.08);
-    box-shadow:0 0 20px rgba(0,255,255,.12);
-    backdrop-filter:blur(12px);
+    box-shadow:0 0 20px rgba(0,255,255,.15);
 }
 
 .card-head{
@@ -55,7 +59,7 @@ body{
     font-size:17px;
 }
 
-.players{padding:12px}
+.players{padding:12px;}
 
 .player{
     display:flex;
@@ -74,7 +78,6 @@ body{
     display:flex;
     justify-content:space-between;
     margin:7px 0;
-    font-size:14px;
 }
 
 .remain{
@@ -94,17 +97,17 @@ body{
 .alert{
     background:red;
     box-shadow:0 0 10px red,0 0 20px red;
-    animation:blink .7s infinite;
+    animation:blink .8s infinite;
 }
 
 @keyframes blink{
-    50%{opacity:.25}
+    50%{opacity:.25;}
 }
 
 .loading{
     text-align:center;
     color:cyan;
-    padding:50px 0;
+    padding:40px 0;
 }
 </style>
 </head>
@@ -119,25 +122,29 @@ body{
 <div id="grid" class="grid"></div>
 
 <script>
-const CSV_URL =
-"https://docs.google.com/spreadsheets/d/e/2PACX-1vTPyxMtkK2IgbGLlmqXBmNRYcwk6USIMs-88NMmGB98_TWcUQdG4CyC6QbNnT17SXiUwYIIVqRsbhQC/pub?gid=1013280552&single=true&output=csv";
+const SHEET_ID = "1TJ4rnD5p9D309JDgvC8VxbZwQ-KtELWZcS8F7tP8Uq4";
+const GID = "1013280552";
 
-fetch(CSV_URL + "&t=" + Date.now())
-.then(r=>r.text())
-.then(text=>{
+const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?gid=${GID}&tqx=out:json`;
 
-    const rows = text.trim().split("\n").map(r =>
-        r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c=>c.replace(/^"|"$/g,'').trim())
-    );
+fetch(url)
+.then(res=>res.text())
+.then(rep=>{
+
+    const json = JSON.parse(rep.substr(47).slice(0,-2));
+    const rows = json.table.rows;
+
+    const getCell = (r,c)=>{
+        return rows[r]?.c?.[c]?.v ?? "";
+    }
 
     const TEAM_BLOCKS = [
-        {titleRow:0,nameCol:1,priceCol:2},
-        {titleRow:0,nameCol:5,priceCol:6},
-        {titleRow:0,nameCol:9,priceCol:10},
-
-        {titleRow:13,nameCol:1,priceCol:2},
-        {titleRow:13,nameCol:5,priceCol:6},
-        {titleRow:13,nameCol:9,priceCol:10},
+        {r:0,c:1},
+        {r:0,c:5},
+        {r:0,c:9},
+        {r:13,c:1},
+        {r:13,c:5},
+        {r:13,c:9}
     ];
 
     const grid = document.getElementById("grid");
@@ -145,16 +152,15 @@ fetch(CSV_URL + "&t=" + Date.now())
 
     TEAM_BLOCKS.forEach(block=>{
 
-        const teamName = rows[block.titleRow][block.nameCol];
+        const teamName = getCell(block.r, block.c);
         if(!teamName) return;
 
         let players = [];
         let used = 0;
 
         for(let i=2;i<=7;i++){
-            const row = rows[block.titleRow+i] || [];
-            const player = row[block.nameCol] || "";
-            const price = parseInt(row[block.priceCol]) || 0;
+            const player = getCell(block.r+i, block.c);
+            const price = parseInt(getCell(block.r+i, block.c+1)) || 0;
 
             if(player){
                 players.push({player,price});
@@ -162,8 +168,8 @@ fetch(CSV_URL + "&t=" + Date.now())
             }
         }
 
-        const total = parseInt(rows[block.titleRow+9]?.[block.priceCol]) || 0;
-        const remaining = parseInt(rows[block.titleRow+10]?.[block.priceCol]) || (total-used);
+        const total = parseInt(getCell(block.r+9, block.c+1)) || 0;
+        const remaining = parseInt(getCell(block.r+10, block.c+1)) || (total-used);
 
         const card = document.createElement("div");
         card.className="card";
@@ -181,8 +187,8 @@ fetch(CSV_URL + "&t=" + Date.now())
             </div>
 
             <div class="stats">
-                <div class="stat"><span>Used</span><span>${used}</span></div>
-                <div class="stat"><span>Total</span><span>${total}</span></div>
+                <div class="stat"><span>Used CP</span><span>${used}</span></div>
+                <div class="stat"><span>Total Budget</span><span>${total}</span></div>
                 <div class="stat remain">
                     <span>Remaining</span>
                     <span>
@@ -199,7 +205,7 @@ fetch(CSV_URL + "&t=" + Date.now())
 
 })
 .catch(err=>{
-    document.getElementById("loading").innerHTML="Failed to Load Sheet";
+    document.getElementById("loading").innerHTML="Failed to Load Data";
     console.error(err);
 });
 </script>

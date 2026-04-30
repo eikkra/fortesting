@@ -5,109 +5,147 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GOAT FC BID</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:'Orbitron',sans-serif;
+    font-family:'Oswald',sans-serif;
 }
 
 body{
-    background:#050008;
-    background-image:
-    radial-gradient(circle at 20% 20%,#2b0044 0%,transparent 35%),
-    radial-gradient(circle at 80% 0%,#001a44 0%,transparent 30%);
+    background:#0a0014;
     color:#fff;
-    padding:15px;
+    padding:12px;
 }
 
-.header{text-align:center;margin-bottom:20px;}
-.logo{
-    width:75px;
-    filter:drop-shadow(0 0 10px cyan);
+.header{
+    text-align:center;
+    margin-bottom:20px;
 }
+
+.logo{
+    width:80px;
+    filter:drop-shadow(0 0 12px cyan);
+}
+
 .title{
     font-size:28px;
-    font-weight:900;
+    font-weight:700;
     margin-top:8px;
-    background:linear-gradient(90deg,#00f7ff,#ff00ea,#00ff66);
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
+    color:#00ffff;
+    text-shadow:0 0 10px #00ffff;
 }
 
-.grid{
+.bid-grid{
     display:grid;
-    gap:16px;
+    grid-template-columns:repeat(2,1fr);
+    gap:14px;
 }
 
-.card{
-    border-radius:18px;
-    overflow:hidden;
-    background:rgba(255,255,255,.05);
-    border:1px solid rgba(255,255,255,.08);
-    box-shadow:0 0 20px rgba(0,255,255,.15);
+@media(min-width:768px){
+    .bid-grid{
+        grid-template-columns:repeat(3,1fr);
+    }
 }
 
-.card-head{
-    background:linear-gradient(90deg,#ff00ea,#6a00ff);
-    padding:12px;
+.team-box{
+    border:2px solid #111;
+    box-shadow:0 0 15px rgba(0,255,255,.25);
+}
+
+.team-name{
+    background:#ff00ff;
+    color:#000;
     text-align:center;
-    font-weight:800;
+    font-weight:700;
+    padding:6px;
     font-size:17px;
 }
 
-.players{padding:12px;}
+.bid-table{
+    width:100%;
+    border-collapse:collapse;
+    table-layout:fixed;
+}
 
-.player{
-    display:flex;
-    justify-content:space-between;
-    padding:8px 0;
-    border-bottom:1px solid rgba(255,255,255,.07);
+.bid-table td,
+.bid-table th{
+    border:1px solid #111;
+    text-align:center;
+    padding:5px 4px;
     font-size:13px;
+    font-weight:600;
 }
 
-.stats{
-    padding:12px;
-    background:rgba(0,0,0,.35);
+.sn-head,.player-head,.price-head{
+    background:#00ff00;
+    color:#000;
 }
 
-.stat{
-    display:flex;
-    justify-content:space-between;
-    margin:7px 0;
+.sn-col{
+    background:#f3d66b;
+    color:#000;
+    width:16%;
 }
 
-.remain{
-    font-weight:900;
-    font-size:16px;
+.player-col{
+    background:#95c27c;
+    color:#000;
+    width:54%;
 }
 
-.light{
-    width:12px;
-    height:12px;
+.price-col{
+    background:#c89ab7;
+    color:#000;
+    width:30%;
+}
+
+.used-label{
+    background:#660033;
+}
+
+.used-value{
+    background:#ffff00;
+    color:#000;
+}
+
+.total-label{
+    background:#00d9e8;
+    color:#000;
+}
+
+.total-value{
+    background:#00ff00;
+    color:#000;
+}
+
+.rem-label{
+    background:#5a1200;
+    color:#00ff00;
+}
+
+.rem-value{
+    background:#ff0000;
+    color:#fff;
+    position:relative;
+}
+
+.alert-light{
+    width:10px;
+    height:10px;
     border-radius:50%;
-    display:inline-block;
-    margin-left:8px;
-    background:#333;
-}
-
-.alert{
     background:red;
-    box-shadow:0 0 10px red,0 0 20px red;
+    display:inline-block;
+    margin-left:6px;
+    box-shadow:0 0 8px red;
     animation:blink .8s infinite;
 }
 
 @keyframes blink{
     50%{opacity:.25;}
-}
-
-.loading{
-    text-align:center;
-    color:cyan;
-    padding:40px 0;
 }
 </style>
 </head>
@@ -118,27 +156,24 @@ body{
     <div class="title">GOAT FC BID</div>
 </div>
 
-<div id="loading" class="loading">Loading Bid Data...</div>
-<div id="grid" class="grid"></div>
+<div id="bidGrid" class="bid-grid"></div>
 
 <script>
 const SHEET_ID = "1TJ4rnD5p9D309JDgvC8VxbZwQ-KtELWZcS8F7tP8Uq4";
 const GID = "1013280552";
 
-const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?gid=${GID}&tqx=out:json`;
+const API = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?gid=${GID}&tqx=out:json`;
 
-fetch(url)
+fetch(API)
 .then(res=>res.text())
-.then(rep=>{
+.then(txt=>{
 
-    const json = JSON.parse(rep.substr(47).slice(0,-2));
+    const json = JSON.parse(txt.substr(47).slice(0,-2));
     const rows = json.table.rows;
 
-    const getCell = (r,c)=>{
-        return rows[r]?.c?.[c]?.v ?? "";
-    }
+    const getCell = (r,c)=>rows[r]?.c?.[c]?.v ?? "";
 
-    const TEAM_BLOCKS = [
+    const TEAM_POSITIONS = [
         {r:0,c:1},
         {r:0,c:5},
         {r:0,c:9},
@@ -147,66 +182,72 @@ fetch(url)
         {r:13,c:9}
     ];
 
-    const grid = document.getElementById("grid");
-    document.getElementById("loading").style.display="none";
+    const bidGrid = document.getElementById("bidGrid");
 
-    TEAM_BLOCKS.forEach(block=>{
+    TEAM_POSITIONS.forEach(pos=>{
 
-        const teamName = getCell(block.r, block.c);
+        const teamName = getCell(pos.r,pos.c);
         if(!teamName) return;
 
-        let players = [];
-        let used = 0;
+        let playerRows = "";
 
-        for(let i=2;i<=7;i++){
-            const player = getCell(block.r+i, block.c);
-            const price = parseInt(getCell(block.r+i, block.c+1)) || 0;
+        for(let i=1;i<=6;i++){
 
-            if(player){
-                players.push({player,price});
-                used += price;
-            }
+            const player = getCell(pos.r+i+1,pos.c);
+            const price = getCell(pos.r+i+1,pos.c+1) || "";
+
+            playerRows += `
+            <tr>
+                <td class="sn-col">${i}</td>
+                <td class="player-col">${player}</td>
+                <td class="price-col">${price}</td>
+            </tr>`;
         }
 
-        const total = parseInt(getCell(block.r+9, block.c+1)) || 0;
-        const remaining = parseInt(getCell(block.r+10, block.c+1)) || (total-used);
+        const used = getCell(pos.r+8,pos.c+1) || 0;
+        const total = getCell(pos.r+9,pos.c+1) || 0;
+        const remaining = parseInt(getCell(pos.r+10,pos.c+1)) || 0;
 
-        const card = document.createElement("div");
-        card.className="card";
+        const warning = remaining < 250
+            ? '<span class="alert-light"></span>'
+            : '';
 
-        card.innerHTML=`
-            <div class="card-head">${teamName}</div>
+        const box = document.createElement("div");
+        box.className = "team-box";
 
-            <div class="players">
-                ${players.map(p=>`
-                    <div class="player">
-                        <span>${p.player}</span>
-                        <span>${p.price} CP</span>
-                    </div>
-                `).join("")}
-            </div>
+        box.innerHTML = `
+            <div class="team-name">${teamName}</div>
 
-            <div class="stats">
-                <div class="stat"><span>Used CP</span><span>${used}</span></div>
-                <div class="stat"><span>Total Budget</span><span>${total}</span></div>
-                <div class="stat remain">
-                    <span>Remaining</span>
-                    <span>
-                        ${remaining}
-                        <span class="light ${remaining<250?'alert':''}"></span>
-                    </span>
-                </div>
-            </div>
+            <table class="bid-table">
+                <tr>
+                    <th class="sn-head">SN</th>
+                    <th class="player-head">Player</th>
+                    <th class="price-head">Price (CP)</th>
+                </tr>
+
+                ${playerRows}
+
+                <tr>
+                    <td colspan="2" class="used-label">Used</td>
+                    <td class="used-value">${used}</td>
+                </tr>
+
+                <tr>
+                    <td colspan="2" class="total-label">Total</td>
+                    <td class="total-value">${total}</td>
+                </tr>
+
+                <tr>
+                    <td colspan="2" class="rem-label">Remaining Balance</td>
+                    <td class="rem-value">${remaining}${warning}</td>
+                </tr>
+            </table>
         `;
 
-        grid.appendChild(card);
+        bidGrid.appendChild(box);
 
     });
 
-})
-.catch(err=>{
-    document.getElementById("loading").innerHTML="Failed to Load Data";
-    console.error(err);
 });
 </script>
 

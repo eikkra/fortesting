@@ -3,251 +3,203 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>GOAT FC BID Tournament</title>
+<title>GOAT FC BID</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
 
 <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Orbitron',sans-serif;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif}
 
 body{
-    background:
-    radial-gradient(circle at top left,#1a0033,#050008 60%);
+    background:#050008;
+    background-image:
+    radial-gradient(circle at 20% 20%,#2b0044 0%,transparent 35%),
+    radial-gradient(circle at 80% 0%,#001a44 0%,transparent 30%);
     color:#fff;
-    min-height:100vh;
     padding:15px;
 }
 
-.header{
-    text-align:center;
-    margin-bottom:25px;
-}
-
+.header{text-align:center;margin-bottom:20px}
 .logo{
-    width:80px;
-    height:80px;
-    object-fit:contain;
-    margin-bottom:10px;
-    filter:drop-shadow(0 0 12px #00f7ff);
+    width:75px;
+    filter:drop-shadow(0 0 10px cyan);
 }
-
-.header h1{
+.title{
     font-size:28px;
     font-weight:900;
-    background:linear-gradient(90deg,#00f7ff,#ff00ea,#00ff6a);
+    margin-top:8px;
+    background:linear-gradient(90deg,#00f7ff,#ff00ea,#00ff66);
     -webkit-background-clip:text;
     -webkit-text-fill-color:transparent;
-    animation:rgbText 3s linear infinite;
-}
-
-@keyframes rgbText{
-    0%{filter:hue-rotate(0deg);}
-    100%{filter:hue-rotate(360deg);}
 }
 
 .grid{
     display:grid;
-    grid-template-columns:1fr;
-    gap:18px;
+    gap:16px;
 }
 
-.team-card{
-    background:rgba(255,255,255,0.05);
-    border:1px solid rgba(255,255,255,0.08);
-    backdrop-filter:blur(15px);
-    border-radius:20px;
+.card{
+    border-radius:18px;
     overflow:hidden;
-    box-shadow:
-    0 0 15px rgba(0,255,255,.25),
-    inset 0 0 15px rgba(255,255,255,.03);
-    animation:borderGlow 4s linear infinite;
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.08);
+    box-shadow:0 0 20px rgba(0,255,255,.12);
+    backdrop-filter:blur(12px);
 }
 
-@keyframes borderGlow{
-    0%{box-shadow:0 0 15px #00f7ff;}
-    33%{box-shadow:0 0 15px #ff00ea;}
-    66%{box-shadow:0 0 15px #00ff6a;}
-    100%{box-shadow:0 0 15px #00f7ff;}
-}
-
-.team-header{
+.card-head{
     background:linear-gradient(90deg,#ff00ea,#6a00ff);
-    padding:14px;
+    padding:12px;
     text-align:center;
-    font-size:18px;
     font-weight:800;
+    font-size:17px;
 }
 
-.players{
-    padding:14px;
-}
+.players{padding:12px}
 
-.player-row{
+.player{
     display:flex;
     justify-content:space-between;
     padding:8px 0;
-    border-bottom:1px solid rgba(255,255,255,0.08);
+    border-bottom:1px solid rgba(255,255,255,.07);
     font-size:13px;
 }
 
-.player-row:last-child{
-    border:none;
-}
-
 .stats{
-    padding:14px;
+    padding:12px;
     background:rgba(0,0,0,.35);
-    border-top:1px solid rgba(255,255,255,.06);
 }
 
 .stat{
     display:flex;
     justify-content:space-between;
-    margin-bottom:8px;
+    margin:7px 0;
     font-size:14px;
 }
 
-.remaining{
+.remain{
     font-weight:900;
     font-size:16px;
 }
 
-.warning-light{
-    width:14px;
-    height:14px;
+.light{
+    width:12px;
+    height:12px;
     border-radius:50%;
     display:inline-block;
     margin-left:8px;
     background:#333;
 }
 
-.warning-active{
+.alert{
     background:red;
-    box-shadow:
-    0 0 10px red,
-    0 0 20px red;
-    animation:blink .8s infinite;
+    box-shadow:0 0 10px red,0 0 20px red;
+    animation:blink .7s infinite;
 }
 
 @keyframes blink{
-    0%,100%{opacity:1;}
-    50%{opacity:.25;}
+    50%{opacity:.25}
 }
 
 .loading{
     text-align:center;
-    margin-top:50px;
-    font-size:18px;
-    color:#00f7ff;
+    color:cyan;
+    padding:50px 0;
 }
 </style>
 </head>
 <body>
 
 <div class="header">
-    <img class="logo" src="https://i.imgur.com/LY3Bb9m.png" alt="GOAT FC Logo">
-    <h1>GOAT FC BID</h1>
+    <img class="logo" src="https://i.imgur.com/LY3Bb9m.png">
+    <div class="title">GOAT FC BID</div>
 </div>
 
 <div id="loading" class="loading">Loading Bid Data...</div>
-<div id="bidGrid" class="grid"></div>
+<div id="grid" class="grid"></div>
 
 <script>
-const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTPyxMtkK2IgbGLlmqXBmNRYcwk6USIMs-88NMmGB98_TWcUQdG4CyC6QbNnT17SXiUwYIIVqRsbhQC/pub?gid=1013280552&single=true&output=csv";
+const CSV_URL =
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vTPyxMtkK2IgbGLlmqXBmNRYcwk6USIMs-88NMmGB98_TWcUQdG4CyC6QbNnT17SXiUwYIIVqRsbhQC/pub?gid=1013280552&single=true&output=csv";
 
-fetch(CSV_URL)
-.then(res => res.text())
-.then(csv => {
-    document.getElementById("loading").style.display = "none";
+fetch(CSV_URL + "&t=" + Date.now())
+.then(r=>r.text())
+.then(text=>{
 
-    const rows = csv.split("\n").map(r => r.split(","));
-    const grid = document.getElementById("bidGrid");
+    const rows = text.trim().split("\n").map(r =>
+        r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c=>c.replace(/^"|"$/g,'').trim())
+    );
 
-    const teamBlocks = [
-        {nameCol:1, playerCol:1, priceCol:2},
-        {nameCol:5, playerCol:5, priceCol:6},
-        {nameCol:9, playerCol:9, priceCol:10}
+    const TEAM_BLOCKS = [
+        {titleRow:0,nameCol:1,priceCol:2},
+        {titleRow:0,nameCol:5,priceCol:6},
+        {titleRow:0,nameCol:9,priceCol:10},
+
+        {titleRow:13,nameCol:1,priceCol:2},
+        {titleRow:13,nameCol:5,priceCol:6},
+        {titleRow:13,nameCol:9,priceCol:10},
     ];
 
-    let teams = [];
+    const grid = document.getElementById("grid");
+    document.getElementById("loading").style.display="none";
 
-    function parseSection(startRow){
-        teamBlocks.forEach(block=>{
-            const teamName = rows[startRow]?.[block.nameCol]?.trim();
-            if(!teamName) return;
+    TEAM_BLOCKS.forEach(block=>{
 
-            let players = [];
-            let used = 0;
+        const teamName = rows[block.titleRow][block.nameCol];
+        if(!teamName) return;
 
-            for(let i=2;i<=7;i++){
-                const player = rows[startRow+i]?.[block.playerCol]?.trim();
-                const price = parseInt(rows[startRow+i]?.[block.priceCol]) || 0;
+        let players = [];
+        let used = 0;
 
-                if(player){
-                    players.push({name:player, price});
-                    used += price;
-                }
+        for(let i=2;i<=7;i++){
+            const row = rows[block.titleRow+i] || [];
+            const player = row[block.nameCol] || "";
+            const price = parseInt(row[block.priceCol]) || 0;
+
+            if(player){
+                players.push({player,price});
+                used += price;
             }
+        }
 
-            const total = parseInt(rows[startRow+9]?.[block.priceCol]) || 0;
-            const remaining = parseInt(rows[startRow+10]?.[block.priceCol]) || total-used;
-
-            teams.push({
-                teamName,
-                players,
-                used,
-                total,
-                remaining
-            });
-        });
-    }
-
-    parseSection(0);
-    parseSection(13);
-
-    teams.forEach(team=>{
-        const warningClass = team.remaining < 250 ? "warning-active" : "";
+        const total = parseInt(rows[block.titleRow+9]?.[block.priceCol]) || 0;
+        const remaining = parseInt(rows[block.titleRow+10]?.[block.priceCol]) || (total-used);
 
         const card = document.createElement("div");
-        card.className = "team-card";
+        card.className="card";
 
-        card.innerHTML = `
-            <div class="team-header">${team.teamName}</div>
+        card.innerHTML=`
+            <div class="card-head">${teamName}</div>
 
             <div class="players">
-                ${team.players.map(p=>`
-                    <div class="player-row">
-                        <span>${p.name}</span>
+                ${players.map(p=>`
+                    <div class="player">
+                        <span>${p.player}</span>
                         <span>${p.price} CP</span>
                     </div>
                 `).join("")}
             </div>
 
             <div class="stats">
-                <div class="stat"><span>Used CP</span><span>${team.used}</span></div>
-                <div class="stat"><span>Total Budget</span><span>${team.total}</span></div>
-                <div class="stat remaining">
+                <div class="stat"><span>Used</span><span>${used}</span></div>
+                <div class="stat"><span>Total</span><span>${total}</span></div>
+                <div class="stat remain">
                     <span>Remaining</span>
                     <span>
-                        ${team.remaining}
-                        <span class="warning-light ${warningClass}"></span>
+                        ${remaining}
+                        <span class="light ${remaining<250?'alert':''}"></span>
                     </span>
                 </div>
             </div>
         `;
 
         grid.appendChild(card);
+
     });
 
 })
 .catch(err=>{
-    document.getElementById("loading").innerHTML = "Failed to Load Sheet Data";
+    document.getElementById("loading").innerHTML="Failed to Load Sheet";
     console.error(err);
 });
 </script>

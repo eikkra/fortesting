@@ -9,14 +9,13 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Noto Sans Bengali',sans-serif;background:radial-gradient(circle at top,#12213f,#050816 70%);color:#fff;padding:18px}
 .container{max-width:1200px;margin:auto}
-.header{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:16px;text-align:center;background:#10182c;padding:20px;border-radius:22px;border:1px solid #00ff99;box-shadow:0 0 25px rgba(0,255,153,.15);margin-bottom:20px}
-.logo-box{padding:10px;border-radius:18px;background:#0c1426;border:1px solid #00d9ff;box-shadow:0 0 18px rgba(0,217,255,.25)}
-.logo{width:70px;height:70px;border-radius:14px}
+.header{display:flex;justify-content:center;align-items:center;gap:16px;flex-wrap:wrap;text-align:center;background:#10182c;padding:20px;border-radius:22px;border:1px solid #00ff99;box-shadow:0 0 25px rgba(0,255,153,.15);margin-bottom:20px}
+.logo{width:72px;height:72px;border-radius:16px;filter:drop-shadow(0 0 8px #00ff99) drop-shadow(0 0 14px #00d9ff)}
 .title{font-family:'Orbitron',sans-serif;font-size:clamp(24px,4vw,42px);background:linear-gradient(90deg,#00ff99,#00d9ff,#ff00d4,#00ff99);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-size:300%;animation:rgb 5s linear infinite}
 @keyframes rgb{to{background-position:300%}}
 .subtitle{color:#b9c4d8;font-size:14px}
-.tabs{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px}
-.tab-btn{padding:13px 22px;border:none;border-radius:14px;background:#16213a;color:#fff;cursor:pointer;font-weight:700;transition:.3s;box-shadow:0 0 0 transparent}
+.tabs{display:flex;justify-content:center;align-items:center;gap:12px;flex-wrap:nowrap;margin-bottom:20px}
+.tab-btn{flex:1;max-width:280px;padding:13px 16px;border:none;border-radius:14px;background:#16213a;color:#fff;cursor:pointer;font-weight:700;transition:.3s;box-shadow:0 0 0 transparent}
 .tab-btn:hover{transform:translateY(-2px);box-shadow:0 0 18px rgba(0,255,153,.25)}
 .tab-btn.active{background:linear-gradient(135deg,#00ff99,#00d9ff);color:#041018;box-shadow:0 0 20px rgba(0,255,153,.35)}
 .tab-content{display:none}.tab-content.active{display:block}
@@ -25,16 +24,21 @@ body{font-family:'Noto Sans Bengali',sans-serif;background:radial-gradient(circl
 .rule-item{padding:14px 0;border-bottom:1px solid rgba(255,255,255,.08);line-height:1.9}
 .rule-item:last-child{border-bottom:none}
 .room-setting{margin-top:24px;padding-top:20px;border-top:1px solid rgba(0,255,153,.18)}
-.room-table{width:100%;border-collapse:collapse;display:block;overflow:auto;margin-top:12px}
-.room-table th,.room-table td{border:1px solid #28456b;padding:12px;text-align:center;min-width:120px}
-.room-table th{background:#16213a}
+.room-table-wrap{max-width:720px;margin:auto;background:#0d1424;padding:12px;border-radius:16px;border:1px solid rgba(0,217,255,.25);overflow-x:auto}
+.room-table{width:100%;border-collapse:collapse;font-size:14px}
+.room-table th,.room-table td{border:1px solid #28456b;padding:10px;text-align:center}
+.room-table th{background:#16213a;color:#00ff99}
+.room-table td:first-child{color:#ffd54a;font-weight:700}
 .note{margin-top:14px;padding:14px;background:#0b1426;border-left:4px solid #00d9ff}
+@media(max-width:768px){
+.tabs{gap:8px}.tab-btn{padding:12px 10px;font-size:13px}.room-table{font-size:12px}.logo{width:60px;height:60px}
+}
 </style>
 </head>
 <body>
 <div class="container">
 <div class="header">
-<div class="logo-box"><img class="logo" src="https://i.imgur.com/LY3Bb9m.png" alt="Logo"></div>
+<img class="logo" src="https://i.imgur.com/LY3Bb9m.png" alt="Logo">
 <div>
 <div class="title">MATCH RULES</div>
 <div class="subtitle">Official Tournament & Friendly Match Guidelines</div>
@@ -46,38 +50,32 @@ body{font-family:'Noto Sans Bengali',sans-serif;background:radial-gradient(circl
 </div>
 <div id="tour" class="tab-content active"><div class="card">
 <div class="section-title">🏆 GOAT FC Tournament Rules</div>
-<div class="rule-item">১) রেজিস্ট্রেশন তথ্য ও অ্যাকাউন্ট ভেরিফিকেশন: টুর্নামেন্টে অংশগ্রহণের সময় যে Konami ID, Device ও Facebook ID দিয়ে রেজিস্ট্রেশন করা হবে, সম্পূর্ণ টুর্নামেন্টে সেই তথ্য দিয়েই খেলতে হবে।</div>
-<div class="rule-item">২) ম্যাচ টাইমিং ও ডেডলাইন: Priority Time-এর মধ্যে রেসপন্স করতে হবে, না হলে 1-0 Loss গণ্য হবে।</div>
-<div class="rule-item">৩) ম্যাচ ভিডিও প্রমাণ (Mandatory): Winner ভিডিও দিবে, Draw হলে উভয় প্লেয়ার দিবে।</div>
-<div class="rule-item">৪) Disconnected Match Policy: ম্যাচ 93 মিনিট পূর্ণ করে Final Result Update করতে হবে।</div>
-<div class="rule-item">৫) Fixture / Formation / Sub Rules: Home Team Fixture দিবে; নির্ধারিত Swap/Sub Follow করতে হবে।</div>
-<div class="rule-item">৬) Score Submission Rules: Score Submit শেষে Match Logs চেক করতে হবে।</div>
-<div class="rule-item">৭) অভিযোগ ও আচরণবিধি: প্রমাণ ছাড়া অভিযোগ গ্রহণযোগ্য নয়।</div>
-<div class="rule-item">৮) Sportsmanship & Respect: সবাই সম্মান বজায় রেখে খেলবে।</div>
+<div class="rule-item">১) রেজিস্ট্রেশন তথ্য ও অ্যাকাউন্ট ভেরিফিকেশন: এখানে আপনার Rules Edit করুন</div>
+<div class="rule-item">২) ম্যাচ টাইমিং ও ডেডলাইন: এখানে আপনার Rules Edit করুন</div>
+<div class="rule-item">৩) ম্যাচ ভিডিও প্রমাণ (Mandatory): এখানে আপনার Rules Edit করুন</div>
+<div class="rule-item">৪) Disconnected Match Policy: এখানে আপনার Rules Edit করুন</div>
+<div class="rule-item">৫) Fixture / Formation / Sub Rules: এখানে আপনার Rules Edit করুন</div>
+<div class="rule-item">৬) Score Submission Rules: এখানে আপনার Rules Edit করুন</div>
+<div class="rule-item">৭) অভিযোগ ও আচরণবিধি: এখানে আপনার Rules Edit করুন</div>
+<div class="rule-item">৮) Sportsmanship & Respect: এখানে আপনার Rules Edit করুন</div>
 <div class="room-setting">
 <div class="section-title">🎯 Match Room Setting</div>
-<div style="margin-bottom:10px;color:#b9c4d8;font-weight:600">Match Type: <span style="color:#00ff99">STANDARD</span></div>
+<div style="margin-bottom:10px;color:#b9c4d8;font-weight:600;text-align:center">⚽ Match Type: <span style="color:#00ff99">STANDARD</span></div>
+<div class="room-table-wrap">
 <table class="room-table">
-<tr><th>Setting</th><th>Round</th><th>Knockout</th><th>Final</th></tr>
-<tr><td>⏱ Match Time</td><td>8 Min</td><td>8 Min</td><td>10 Min</td></tr>
-<tr><td>🤕 Injuries</td><td>ON</td><td>ON</td><td>ON</td></tr>
-<tr><td>🎯 ET / PK</td><td>OFF</td><td>ON</td><td>ON</td></tr>
-<tr><td>🔄 Sub / Int</td><td>5 / 3</td><td>5 / 3</td><td>5 / 3</td></tr>
-<tr><td>🏠 Home / Away</td><td>NORMAL</td><td>NORMAL</td><td>NORMAL</td></tr>
+<tr><th>⚙️ Setting</th><th>🏁 Round</th><th>🔥 Knockout</th><th>🏆 Final</th></tr>
+<tr><td>⏱ Time</td><td>8m</td><td>8m</td><td>10m</td></tr>
+<tr><td>🤕 Injury</td><td>ON</td><td>ON</td><td>ON</td></tr>
+<tr><td>🎯 ET/PK</td><td>OFF</td><td>ON</td><td>ON</td></tr>
+<tr><td>🔄 Sub</td><td>5/3</td><td>5/3</td><td>5/3</td></tr>
+<tr><td>🏠 H/A</td><td>N</td><td>N</td><td>N</td></tr>
 </table>
+</div>
 </div>
 </div></div>
 <div id="friendly" class="tab-content"><div class="card">
 <div class="section-title">🤝 Friendly Match Rules</div>
-<div class="rule-item">১) ম্যাচ শেষে বিজয়ী প্লেয়ার মূল গ্রুপে স্ক্রিনশট পোস্ট করবে, যেখানে উভয় প্লেয়ারের Club ID দৃশ্যমান থাকবে। এরপর একই স্ক্রিনশট Score Box-এ submit করতে হবে।</div>
-<div class="rule-item">২) জয়ী প্লেয়ার স্কোর submit করবে। ম্যাচ ড্র হলে যে কোড তৈরি করবে, সেই submit করবে।</div>
-<div class="rule-item">৩) Incomplete ম্যাচ Full Time (93min) পর্যন্ত খেলে মোট স্কোর যোগ করে Final Score Screenshot গ্রুপে দিতে হবে।</div>
-<div class="rule-item">৪) একই প্লেয়ারের সাথে মাসে সর্বোচ্চ ৫টি ম্যাচ খেলা যাবে। সকলের সাথে খেলে skill development নিশ্চিত করাই আমাদের লক্ষ্য।</div>
-<div class="rule-item">৫) প্রতি মাসে একজন প্লেয়ার সর্বোচ্চ ৫০টি ম্যাচ খেলতে পারবে (Friendly + Tournament মিলিয়ে)।</div>
-<div class="rule-item">৬) ৫০ ম্যাচ পূর্ণ হলে পরবর্তী প্রতিপক্ষকে আগে থেকেই জানাতে হবে যে ম্যাচটি count হবে না।</div>
-<div class="rule-item">৭) প্রতিটি ম্যাচ শেষে Match Log-এ স্কোর সঠিকভাবে submit হয়েছে কিনা অবশ্যই যাচাই করতে হবে।</div>
-<div class="rule-item">৮) Friendly Match নিয়ে গ্রুপে তর্ক-বিতর্ক করা যাবে না। Feedback inbox-এ জানাতে হবে।</div>
-<div class="note">Important Notes: একই প্লেয়ারের সাথে ৫টির বেশি ম্যাচ খেললে ২টি Win Match বাতিল হবে। ভুল Club ID submit করলে Details উল্লেখ করতে হবে।</div>
+<div class="rule-item">এখানে আপনার Friendly Match Rules Edit করুন</div>
 </div></div>
 </div>
 <script>

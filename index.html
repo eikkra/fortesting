@@ -23,7 +23,7 @@ body{
   align-items:center;
   justify-content:center;
   flex-wrap:wrap;
-  gap:12px;
+  gap:10px;
   text-align:center;
   padding:14px;
   border-radius:18px;
@@ -33,8 +33,8 @@ body{
 }
 
 .logo{
-  width:60px;
-  height:60px;
+  width:58px;
+  height:58px;
   animation:rgbGlow 3s linear infinite;
   filter:drop-shadow(0 0 6px #00ff99)
          drop-shadow(0 0 10px #00d9ff)
@@ -61,7 +61,7 @@ body{
 .subtitle{
   width:100%;
   text-align:center;
-  margin-top:6px;
+  margin-top:4px;
   color:#b9c4d8;
   font-size:13px;
 }
@@ -83,7 +83,7 @@ body{
   font-weight:700;
   cursor:pointer;
   font-size:12px;
-  min-width:160px;
+  min-width:150px;
   transition:.3s;
 }
 .tab-btn.active{
@@ -118,7 +118,7 @@ body{
 }
 .rule-item:last-child{border-bottom:none}
 
-/* ROOM SETTING (COMPACT MOBILE CARD STYLE) */
+/* ROOM SETTING */
 .room-setting{
   margin-top:14px;
   padding-top:12px;
@@ -160,9 +160,13 @@ body{
   color:#00ff99;
 }
 
+/* MOBILE FIX CARD STYLE */
 @media(max-width:768px){
   .tab-btn{min-width:140px;font-size:11px}
-  .logo{width:52px;height:52px}
+  .logo{width:50px;height:50px}
+  .card{padding:12px}
+  .room-wrap{padding:4px}
+  .room-table{font-size:10px}
 }
 
 </style>
@@ -171,7 +175,7 @@ body{
 
 <div class="container">
 
-<!-- HEADER -->
+<!-- HEADER ROW -->
 <div class="header">
 <img class="logo" src="https://i.imgur.com/LY3Bb9m.png">
 <div class="title">MATCH RULES</div>
@@ -207,12 +211,12 @@ body{
 
 <div class="room-wrap">
 <table class="room-table">
-<tr><th>⚙️ Setting</th><th>Round</th><th>KO</th><th>Final</th></tr>
-<tr><td>⏱ Time</td><td>8m</td><td>8m</td><td>10m</td></tr>
-<tr><td>🤕 Injury</td><td>ON</td><td>ON</td><td>ON</td></tr>
-<tr><td>🎯 ET/PK</td><td>OFF</td><td>ON</td><td>ON</td></tr>
-<tr><td>🔄 Sub</td><td>5/3</td><td>5/3</td><td>5/3</td></tr>
-<tr><td>🏠 H/A</td><td>NORMAL</td><td>NORMAL</td><td>NORMAL</td></tr>
+<tr><th>⚙️</th><th>Round</th><th>KO</th><th>Final</th></tr>
+<tr><td>⏱</td><td>8m</td><td>8m</td><td>10m</td></tr>
+<tr><td>🤕</td><td>ON</td><td>ON</td><td>ON</td></tr>
+<tr><td>🎯</td><td>OFF</td><td>ON</td><td>ON</td></tr>
+<tr><td>🔄</td><td>5/3</td><td>5/3</td><td>5/3</td></tr>
+<tr><td>🏠</td><td>NORMAL</td><td>NORMAL</td><td>NORMAL</td></tr>
 </table>
 </div>
 

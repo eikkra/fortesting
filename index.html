@@ -11,11 +11,10 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{
   font-family:'Hind Siliguri',sans-serif;
-  background:radial-gradient(circle at top,#0e1a33,#050816 70%);
+  background:radial-gradient(circle at top,#0d1a33,#050816 70%);
   color:#fff;
   padding:14px;
 }
-
 .container{max-width:1200px;margin:auto}
 
 /* HEADER */
@@ -23,21 +22,19 @@ body{
   display:flex;
   align-items:center;
   justify-content:center;
-  gap:14px;
   flex-wrap:wrap;
+  gap:12px;
   text-align:center;
   padding:14px;
   border-radius:18px;
   background:rgba(16,24,44,.65);
   border:1px solid rgba(0,255,153,.25);
   box-shadow:0 0 18px rgba(0,255,153,.12);
-  margin-bottom:10px;
 }
 
-/* LOGO RGB GLOW (NO BOX) */
 .logo{
-  width:62px;
-  height:62px;
+  width:60px;
+  height:60px;
   animation:rgbGlow 3s linear infinite;
   filter:drop-shadow(0 0 6px #00ff99)
          drop-shadow(0 0 10px #00d9ff)
@@ -50,7 +47,6 @@ body{
   100%{filter:drop-shadow(0 0 6px #00ff99)}
 }
 
-/* TITLE */
 .title{
   font-family:'Orbitron',sans-serif;
   font-size:clamp(22px,4vw,40px);
@@ -63,20 +59,20 @@ body{
 @keyframes rgb{to{background-position:300%}}
 
 .subtitle{
+  width:100%;
   text-align:center;
+  margin-top:6px;
   color:#b9c4d8;
   font-size:13px;
-  margin-top:6px;
 }
 
-/* TABS FULL WIDTH MOBILE */
+/* TABS */
 .tabs{
   display:flex;
   justify-content:center;
-  align-items:center;
   gap:10px;
   flex-wrap:wrap;
-  margin:12px 0;
+  margin:14px 0;
 }
 .tab-btn{
   padding:10px 14px;
@@ -86,15 +82,14 @@ body{
   color:#fff;
   font-weight:700;
   cursor:pointer;
-  transition:.3s;
   font-size:12px;
   min-width:160px;
-  text-align:center;
+  transition:.3s;
 }
 .tab-btn.active{
   background:linear-gradient(135deg,#00ff99,#00d9ff);
   color:#041018;
-  box-shadow:0 0 18px rgba(0,255,153,.35);
+  box-shadow:0 0 16px rgba(0,255,153,.35);
 }
 
 .tab-content{display:none}
@@ -102,7 +97,7 @@ body{
 
 /* CARD */
 .card{
-  background:rgba(16,24,44,.85);
+  background:rgba(16,24,44,.88);
   padding:16px;
   border-radius:16px;
   border:1px solid rgba(29,53,87,.7);
@@ -123,25 +118,25 @@ body{
 }
 .rule-item:last-child{border-bottom:none}
 
-/* ROOM SETTING */
+/* ROOM SETTING (COMPACT MOBILE CARD STYLE) */
 .room-setting{
   margin-top:14px;
   padding-top:12px;
-  border-top:1px solid rgba(0,255,153,.18);
+  border-top:1px solid rgba(0,255,153,.2);
 }
 
 .room-type{
   text-align:center;
   font-size:12px;
-  margin-bottom:8px;
+  margin-bottom:10px;
   color:#b9c4d8;
   font-weight:700;
 }
 .room-type span{color:#00ff99}
 
-.room-table-wrap{
+.room-wrap{
   overflow-x:auto;
-  border-radius:12px;
+  border-radius:14px;
   border:1px solid rgba(0,217,255,.25);
   background:#0b1426;
   padding:6px;
@@ -149,14 +144,14 @@ body{
 
 .room-table{
   width:100%;
-  min-width:500px;
+  min-width:520px;
   border-collapse:collapse;
   font-size:11px;
 }
 
 .room-table th,.room-table td{
   border:1px solid #28456b;
-  padding:7px;
+  padding:8px;
   text-align:center;
 }
 
@@ -179,10 +174,8 @@ body{
 <!-- HEADER -->
 <div class="header">
 <img class="logo" src="https://i.imgur.com/LY3Bb9m.png">
-<div>
 <div class="title">MATCH RULES</div>
 <div class="subtitle">Official Competitive Gaming Rules & Regulations</div>
-</div>
 </div>
 
 <!-- TABS -->
@@ -209,16 +202,17 @@ body{
 <!-- ROOM SETTING -->
 <div class="room-setting">
 <div class="section-title">🎯 Match Room Setting</div>
+
 <div class="room-type">⚽ Match Type: <span>STANDARD</span></div>
 
-<div class="room-table-wrap">
+<div class="room-wrap">
 <table class="room-table">
-<tr><th>⚙️</th><th>Round</th><th>KO</th><th>Final</th></tr>
+<tr><th>⚙️ Setting</th><th>Round</th><th>KO</th><th>Final</th></tr>
 <tr><td>⏱ Time</td><td>8m</td><td>8m</td><td>10m</td></tr>
 <tr><td>🤕 Injury</td><td>ON</td><td>ON</td><td>ON</td></tr>
 <tr><td>🎯 ET/PK</td><td>OFF</td><td>ON</td><td>ON</td></tr>
 <tr><td>🔄 Sub</td><td>5/3</td><td>5/3</td><td>5/3</td></tr>
-<tr><td>🏠 H/A</td><td>N</td><td>N</td><td>N</td></tr>
+<tr><td>🏠 H/A</td><td>NORMAL</td><td>NORMAL</td><td>NORMAL</td></tr>
 </table>
 </div>
 
@@ -240,7 +234,7 @@ body{
 <div class="rule-item">৫) Max 50 matches/month।</div>
 <div class="rule-item">৬) Warning mandatory।</div>
 <div class="rule-item">৭) Match log verify।</div>
-<div class="rule-item">৮) Group argument not allowed।</div>
+<div class="rule-item">৮) Group-এ তর্ক নিষিদ্ধ।</div>
 
 </div>
 </div>

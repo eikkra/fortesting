@@ -319,14 +319,15 @@ function gen(h,a){
     const ap=players(a.ids);
 
     const txt=`Powered by GOAT FC
+Manager's Showdown
 
 ${h.name} (Home) 🆚 ${a.name} (Away)
 
-First Lag: 11:00 PM
+First Battle: 11:00 PM
 1️⃣ ${hp[0] || 'undefined'} 🆚 ${ap[0] || 'undefined'}
 2️⃣ ${hp[1] || 'undefined'} 🆚 ${ap[1] || 'undefined'}
 
-Last Lag: 12:00 AM
+Final Battle: 12:00 AM
 3️⃣ ${hp[2] || 'undefined'} 🆚 ${ap[2] || 'undefined'}
 4️⃣ ${hp[3] || 'undefined'} 🆚 ${ap[3] || 'undefined'}
 
@@ -337,8 +338,8 @@ Sub Player List:
 ↕️ ${ap[4] || 'undefined'} (Away)
 ↕️ ${ap[5] || 'undefined'} (Away)
 
-📍Tournament Rules: www.goatfcbd.com/rules
-Visit: www.goatfcbd.com`;
+📛Tournament Rules: www.goatfcbd.com/rules
+🌐Visit: www.goatfcbd.com`;
 
     document.getElementById("output").value = txt;
     document.getElementById("modal").style.display = "flex";

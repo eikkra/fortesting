@@ -1,255 +1,362 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MATCH RULES</title>
+<title>Match Schedule & Fixture</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
+:root{
+    --green:#00ff88;
+    --green2:#00cc66;
+    --home:#00ffd0;
+    --away:#ff4d6d;
+    --border:rgba(0,255,136,.2);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
 body{
-  font-family:'Noto Sans Bengali',sans-serif;
-  background:radial-gradient(circle at top,#0b1a33,#050816 70%);
-  color:#fff;
-  padding:12px;
+    font-family:Poppins;
+    background:radial-gradient(circle,#0b1f15,#020705);
+    color:#eafff2;
+    padding:12px;
 }
-.container{max-width:1200px;margin:auto}
-
-/* HEADER */
-.header{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:12px;
-  flex-wrap:wrap;
-  text-align:center;
-  padding:14px;
-  border-radius:18px;
-  background:rgba(16,24,44,.75);
-  border:1px solid rgba(0,255,153,.25);
-  box-shadow:0 0 18px rgba(0,255,153,.12);
-}
-
-.logo{
-  width:52px;
-  height:52px;
-  animation:glow 3s infinite linear;
-  filter:drop-shadow(0 0 6px #00ff99)
-         drop-shadow(0 0 10px #00d9ff)
-         drop-shadow(0 0 14px #ff00d4);
-}
-@keyframes glow{
-  0%{filter:drop-shadow(0 0 6px #00ff99)}
-  50%{filter:drop-shadow(0 0 12px #00d9ff)}
-  100%{filter:drop-shadow(0 0 6px #ff00d4)}
-}
-
+.container{max-width:950px;margin:auto;}
 .title{
-  font-family:'Orbitron',sans-serif;
-  font-size:clamp(22px,4vw,38px);
-  background:linear-gradient(90deg,#00ff99,#00d9ff,#ff00d4,#00ff99);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  background-size:300%;
-  animation:rgb 5s linear infinite;
+    text-align:center;
+    font-family:Orbitron;
+    font-size:22px;
+    color:var(--green);
+    margin-bottom:16px;
 }
-@keyframes rgb{to{background-position:300%}}
-
-.subtitle{
-  width:100%;
-  text-align:center;
-  color:#b9c4d8;
-  font-size:13px;
-  margin-top:4px;
+select{
+    width:100%;
+    padding:10px;
+    border-radius:10px;
+    background:#0d1f16;
+    border:1px solid var(--border);
+    color:var(--green);
+    margin-bottom:14px;
 }
-
-/* TABS */
-.tabs{
-  display:flex;
-  justify-content:center;
-  gap:10px;
-  flex-wrap:wrap;
-  margin:14px 0;
+.match-card{
+    background:linear-gradient(145deg,#0d1f16,#11281c);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:12px;
+    margin-bottom:12px;
 }
-.tab-btn{
-  padding:10px 14px;
-  border:none;
-  border-radius:999px;
-  background:#16213a;
-  color:#fff;
-  font-weight:700;
-  cursor:pointer;
-  font-size:12px;
-  min-width:160px;
-  transition:.3s;
+.match-row{
+    display:grid;
+    grid-template-columns:1fr auto 1fr;
+    align-items:center;
+    gap:6px;
 }
-.tab-btn.active{
-  background:linear-gradient(135deg,#00ff99,#00d9ff);
-  color:#041018;
-  box-shadow:0 0 18px rgba(0,255,153,.35);
+.team{
+    display:flex;
+    align-items:center;
+    gap:6px;
 }
-
-.tab-content{display:none}
-.tab-content.active{display:block}
-
-.card{
-  background:rgba(16,24,44,.88);
-  padding:16px;
-  border-radius:16px;
-  border:1px solid rgba(29,53,87,.7);
+.team.right{justify-content:flex-end;}
+.team img{
+    width:26px;
+    height:26px;
+    border-radius:6px;
+    background:#fff;
+    flex-shrink:0;
 }
-
-.section-title{
-  color:#00ff99;
-  font-size:18px;
-  margin-bottom:10px;
-  font-weight:800;
+.team-info{
+    display:flex;
+    flex-direction:column;
 }
-
-.rule-item{
-  padding:10px 0;
-  border-bottom:1px solid rgba(255,255,255,.08);
-  line-height:1.8;
-  font-size:13px;
+.team-name{
+    font-size:11px;
+    font-weight:700;
+    line-height:1.2;
+    word-break:break-word;
 }
-.rule-item:last-child{border-bottom:none}
-
-/* ROOM MOBILE CARD */
-.room-setting{
-  margin-top:14px;
-  border-top:1px solid rgba(0,255,153,.2);
-  padding-top:14px;
+.tag{
+    font-size:9px;
+    margin-top:2px;
 }
-.room-type{
-  text-align:center;
-  font-size:13px;
-  margin-bottom:10px;
-  color:#b9c4d8;
+.home-tag{color:var(--home);}
+.away-tag{color:var(--away);}
+.vs{
+    font-family:Orbitron;
+    font-size:13px;
+    color:var(--green);
+    text-align:center;
+    min-width:35px;
 }
-.room-type span{color:#00ff99;font-weight:700}
-
-.room-wrap{
-  display:flex;
-  overflow-x:auto;
-  scroll-snap-type:x mandatory;
-  gap:10px;
+.btn-row{
+    display:flex;
+    gap:6px;
+    margin-top:10px;
 }
-.room-card{
-  min-width:92%;
-  scroll-snap-align:center;
-  background:#0b1426;
-  border:1px solid rgba(0,217,255,.25);
-  border-radius:14px;
-  padding:10px;
+.btn{
+    flex:1;
+    padding:8px;
+    border-radius:8px;
+    font-size:11px;
+    font-weight:700;
+    border:none;
+    cursor:pointer;
+    text-align:center;
 }
-.room-table{
-  width:100%;
-  border-collapse:collapse;
-  font-size:11px;
+.group-btn{
+    background:rgba(0,255,136,.1);
+    color:var(--green);
+    border:1px solid var(--border);
+    text-decoration:none;
 }
-.room-table th,.room-table td{
-  border:1px solid #28456b;
-  padding:8px;
-  text-align:center;
+.fixture-btn{
+    background:linear-gradient(90deg,var(--green),var(--green2));
+    color:#03140a;
 }
-.room-table th{
-  background:#16213a;
-  color:#00ff99;
+.modal{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.8);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    padding:15px;
 }
-
-/* MOBILE */
-@media(max-width:768px){
-  .tab-btn{min-width:140px;font-size:11px}
-  .logo{width:46px;height:46px}
+.modal-box{
+    background:#08150f;
+    border:1px solid var(--border);
+    padding:14px;
+    border-radius:12px;
+    width:100%;
+    max-width:600px;
 }
-
+textarea{
+    width:100%;
+    height:360px;
+    background:#06110b;
+    color:#dffff0;
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:10px;
+    font-size:12px;
+}
+.copy-btn{
+    margin-top:10px;
+    width:100%;
+    padding:10px;
+    background:var(--green);
+    border:none;
+    border-radius:8px;
+    font-weight:800;
+}
 </style>
 </head>
 <body>
 
 <div class="container">
-
-<!-- HEADER ROW -->
-<div class="header">
-<img class="logo" src="https://i.imgur.com/LY3Bb9m.png">
-<div class="title">MATCH RULES</div>
-<div class="subtitle">Official Competitive Gaming Rulebook</div>
+    <div class="title">MATCH SCHEDULE & FIXTURE</div>
+    <select id="roundSelect"></select>
+    <div id="fixture"></div>
 </div>
 
-<!-- TABS -->
-<div class="tabs">
-<button class="tab-btn active" onclick="openTab('tour',this)">🏆 Tournament Rules</button>
-<button class="tab-btn" onclick="openTab('friendly',this)">🤝 Friendly Rules</button>
-</div>
-
-<!-- TOURNAMENT -->
-<div id="tour" class="tab-content active">
-<div class="card">
-
-<div class="section-title">🏆 GOAT FC Tournament Rules</div>
-
-<div class="rule-item">১) Registration info must be same Konami ID, Device & FB ID.</div>
-<div class="rule-item">২) Priority Time miss = 1-0 loss.</div>
-<div class="rule-item">৩) Match video proof mandatory.</div>
-<div class="rule-item">৪) Disconnect → continue till 93 min.</div>
-<div class="rule-item">৫) Fixture & Sub rules follow.</div>
-<div class="rule-item">৬) Score submit must verify.</div>
-<div class="rule-item">৭) Admin decision final.</div>
-<div class="rule-item">৮) Respect & sportsmanship required.</div>
-
-<!-- ROOM SETTING TAB STYLE -->
-<div class="room-setting">
-<div class="section-title">🎯 Match Room Setting</div>
-<div class="room-type">⚽ Match Type: <span>STANDARD</span></div>
-
-<div class="room-wrap">
-
-<div class="room-card">
-<table class="room-table">
-<tr><th>⚙️ Setting</th><th>🏁 Round</th><th>🔥 Knockout</th><th>🏆 Final</th></tr>
-<tr><td>⏱ Time</td><td>8</td><td>8</td><td>10</td></tr>
-<tr><td>🤕 Injury</td><td>ON</td><td>ON</td><td>ON</td></tr>
-<tr><td>🎯 ET/PK</td><td>OFF</td><td>ON</td><td>ON</td></tr>
-<tr><td>🔄 Sub</td><td>5/3</td><td>5/3</td><td>5/3</td></tr>
-<tr><td>🏠 H/A</td><td>N</td><td>N</td><td>N</td></tr>
-</table>
-</div>
-
-</div>
-</div>
-
-</div>
-</div>
-
-<!-- FRIENDLY -->
-<div id="friendly" class="tab-content">
-<div class="card">
-
-<div class="section-title">🤝 Friendly Match Rules</div>
-
-<div class="rule-item">১) Screenshot with Club ID submit.</div>
-<div class="rule-item">২) Winner submits score.</div>
-<div class="rule-item">৩) 93 min full match count.</div>
-<div class="rule-item">৪) Max 5 matches per opponent.</div>
-<div class="rule-item">৫) Max 50 matches/month.</div>
-<div class="rule-item">৬) Must inform after limit.</div>
-<div class="rule-item">৭) Match log verify.</div>
-<div class="rule-item">৮) No group argument.</div>
-
-</div>
-</div>
-
+<div class="modal" id="modal">
+    <div class="modal-box">
+        <textarea id="output"></textarea>
+        <button class="copy-btn" onclick="copyText()">COPY</button>
+    </div>
 </div>
 
 <script>
-function openTab(id,btn){
- document.querySelectorAll('.tab-content').forEach(x=>x.classList.remove('active'));
- document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));
- document.getElementById(id).classList.add('active');
- btn.classList.add('active');
+const TEAM_CSV="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=467352529&single=true&output=csv";
+const MEMBER_CSV="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv";
+
+let fixtures=[], members={};
+
+/* PROPER CSV PARSER */
+function parseCSV(text){
+    const rows=[];
+    let row=[], cell='', inQuotes=false;
+
+    for(let i=0;i<text.length;i++){
+        const char=text[i];
+        const next=text[i+1];
+
+        if(char === '"'){
+            if(inQuotes && next === '"'){
+                cell += '"';
+                i++;
+            }else{
+                inQuotes = !inQuotes;
+            }
+        }
+        else if(char === ',' && !inQuotes){
+            row.push(cell.trim());
+            cell='';
+        }
+        else if((char === '\n' || char === '\r') && !inQuotes){
+            if(cell || row.length){
+                row.push(cell.trim());
+                rows.push(row);
+                row=[];
+                cell='';
+            }
+        }
+        else{
+            cell += char;
+        }
+    }
+
+    if(cell || row.length){
+        row.push(cell.trim());
+        rows.push(row);
+    }
+
+    return rows;
 }
+
+async function getCSV(url){
+    const res = await fetch(url);
+    const text = await res.text();
+    return parseCSV(text);
+}
+
+async function load(){
+    const memberRows = await getCSV(MEMBER_CSV);
+    memberRows.shift();
+
+    memberRows.forEach(r=>{
+        const clubId = (r[1] || '').trim();
+        const fullName = (r[0] || '').trim();
+        if(clubId) members[clubId] = fullName;
+    });
+
+    const teamRows = await getCSV(TEAM_CSV);
+    teamRows.shift();
+
+    const teams = teamRows.map(r=>({
+        name:r[0] || '',
+        logo:r[1] || '',
+        ids:r[3] || '',
+        link:r[7] || ''
+    }));
+
+    fixtures = doubleRoundRobin(teams);
+    initUI();
+}
+
+function doubleRoundRobin(teams){
+    let n=teams.length, arr=[...teams], rounds=n-1, half=n/2, first=[];
+
+    for(let r=0;r<rounds;r++){
+        let matches=[];
+        for(let i=0;i<half;i++){
+            let t1=arr[i], t2=arr[n-1-i];
+            let flip=(r+i)%2===0;
+            matches.push({home:flip?t1:t2, away:flip?t2:t1});
+        }
+        first.push(matches);
+        arr.splice(1,0,arr.pop());
+    }
+
+    return [...first, ...first.map(round=>round.map(m=>({home:m.away, away:m.home})))];
+}
+
+function initUI(){
+    const select=document.getElementById("roundSelect");
+    fixtures.forEach((_,i)=>{
+        select.innerHTML += `<option value="${i}">Round ${i+1}</option>`;
+    });
+    select.onchange=e=>render(e.target.value);
+    render(0);
+}
+
+function render(r){
+    const box=document.getElementById("fixture");
+    box.innerHTML='';
+
+    fixtures[r].forEach(m=>{
+        box.innerHTML += `
+        <div class="match-card">
+            <div class="match-row">
+                <div class="team">
+                    <img src="${m.home.logo}">
+                    <div class="team-info">
+                        <div class="team-name">${m.home.name}</div>
+                        <span class="tag home-tag">HOME</span>
+                    </div>
+                </div>
+
+                <div class="vs">VS</div>
+
+                <div class="team right">
+                    <div class="team-info" style="text-align:right">
+                        <div class="team-name">${m.away.name}</div>
+                        <span class="tag away-tag">AWAY</span>
+                    </div>
+                    <img src="${m.away.logo}">
+                </div>
+            </div>
+
+            <div class="btn-row">
+                <a href="${m.home.link}" target="_blank" class="btn group-btn">Match Group</a>
+                <button class="btn fixture-btn" onclick='gen(${JSON.stringify(m.home)},${JSON.stringify(m.away)})'>
+                    Fixture Generate
+                </button>
+            </div>
+        </div>`;
+    });
+}
+
+function players(ids){
+    return ids.split(",").map(id=>{
+        const clean=id.trim().replace(/^"|"$/g,'');
+        return members[clean] || "undefined";
+    });
+}
+
+function gen(h,a){
+    const hp=players(h.ids);
+    const ap=players(a.ids);
+
+    const txt=`Powered by GOAT FC
+
+${h.name} (Home) VS ${a.name} (Away)
+
+First Day: 12:00 AM
+1. ${hp[0] || 'undefined'} VS ${ap[0] || 'undefined'}
+2. ${hp[1] || 'undefined'} VS ${ap[1] || 'undefined'}
+
+Last Day: 12:00 AM
+3. ${hp[2] || 'undefined'} VS ${ap[2] || 'undefined'}
+4. ${hp[3] || 'undefined'} VS ${ap[3] || 'undefined'}
+
+Sub Player List:
+${hp[4] || 'undefined'} (Home)
+${hp[5] || 'undefined'} (Home)
+
+${ap[4] || 'undefined'} (Away)
+${ap[5] || 'undefined'} (Away)
+
+Tournament Rules:
+https://docs.google.com/document/d/1T7p7AjuFfk-DtVbJgdGFcwsH0ipDfG3wg05qv8Y0fJ4/edit
+
+Visit: www.goatfcbd.com`;
+
+    document.getElementById("output").value = txt;
+    document.getElementById("modal").style.display = "flex";
+}
+
+function copyText(){
+    const t=document.getElementById("output");
+    t.select();
+    document.execCommand("copy");
+}
+
+document.getElementById("modal").onclick=e=>{
+    if(e.target.id==="modal") e.target.style.display="none";
+};
+
+load();
 </script>
 
 </body>

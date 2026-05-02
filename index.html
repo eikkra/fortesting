@@ -5,15 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MATCH RULES</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{
-  font-family:'Hind Siliguri',sans-serif;
-  background:radial-gradient(circle at top,#0d1a33,#050816 70%);
+  font-family:'Noto Sans Bengali',sans-serif;
+  background:radial-gradient(circle at top,#0b1a33,#050816 70%);
   color:#fff;
-  padding:14px;
+  padding:12px;
 }
 .container{max-width:1200px;margin:auto}
 
@@ -22,34 +22,33 @@ body{
   display:flex;
   align-items:center;
   justify-content:center;
+  gap:12px;
   flex-wrap:wrap;
-  gap:10px;
   text-align:center;
   padding:14px;
   border-radius:18px;
-  background:rgba(16,24,44,.65);
+  background:rgba(16,24,44,.75);
   border:1px solid rgba(0,255,153,.25);
   box-shadow:0 0 18px rgba(0,255,153,.12);
 }
 
 .logo{
-  width:58px;
-  height:58px;
-  animation:rgbGlow 3s linear infinite;
+  width:52px;
+  height:52px;
+  animation:glow 3s infinite linear;
   filter:drop-shadow(0 0 6px #00ff99)
          drop-shadow(0 0 10px #00d9ff)
          drop-shadow(0 0 14px #ff00d4);
 }
-@keyframes rgbGlow{
+@keyframes glow{
   0%{filter:drop-shadow(0 0 6px #00ff99)}
-  33%{filter:drop-shadow(0 0 10px #00d9ff)}
-  66%{filter:drop-shadow(0 0 10px #ff00d4)}
-  100%{filter:drop-shadow(0 0 6px #00ff99)}
+  50%{filter:drop-shadow(0 0 12px #00d9ff)}
+  100%{filter:drop-shadow(0 0 6px #ff00d4)}
 }
 
 .title{
   font-family:'Orbitron',sans-serif;
-  font-size:clamp(22px,4vw,40px);
+  font-size:clamp(22px,4vw,38px);
   background:linear-gradient(90deg,#00ff99,#00d9ff,#ff00d4,#00ff99);
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
@@ -61,9 +60,9 @@ body{
 .subtitle{
   width:100%;
   text-align:center;
-  margin-top:4px;
   color:#b9c4d8;
   font-size:13px;
+  margin-top:4px;
 }
 
 /* TABS */
@@ -83,19 +82,18 @@ body{
   font-weight:700;
   cursor:pointer;
   font-size:12px;
-  min-width:150px;
+  min-width:160px;
   transition:.3s;
 }
 .tab-btn.active{
   background:linear-gradient(135deg,#00ff99,#00d9ff);
   color:#041018;
-  box-shadow:0 0 16px rgba(0,255,153,.35);
+  box-shadow:0 0 18px rgba(0,255,153,.35);
 }
 
 .tab-content{display:none}
 .tab-content.active{display:block}
 
-/* CARD */
 .card{
   background:rgba(16,24,44,.88);
   padding:16px;
@@ -112,61 +110,59 @@ body{
 
 .rule-item{
   padding:10px 0;
-  border-bottom:1px solid rgba(255,255,255,.07);
-  line-height:1.75;
+  border-bottom:1px solid rgba(255,255,255,.08);
+  line-height:1.8;
   font-size:13px;
 }
 .rule-item:last-child{border-bottom:none}
 
-/* ROOM SETTING */
+/* ROOM MOBILE CARD */
 .room-setting{
   margin-top:14px;
-  padding-top:12px;
   border-top:1px solid rgba(0,255,153,.2);
+  padding-top:14px;
 }
-
 .room-type{
   text-align:center;
-  font-size:12px;
+  font-size:13px;
   margin-bottom:10px;
   color:#b9c4d8;
-  font-weight:700;
 }
-.room-type span{color:#00ff99}
+.room-type span{color:#00ff99;font-weight:700}
 
 .room-wrap{
+  display:flex;
   overflow-x:auto;
-  border-radius:14px;
-  border:1px solid rgba(0,217,255,.25);
-  background:#0b1426;
-  padding:6px;
+  scroll-snap-type:x mandatory;
+  gap:10px;
 }
-
+.room-card{
+  min-width:92%;
+  scroll-snap-align:center;
+  background:#0b1426;
+  border:1px solid rgba(0,217,255,.25);
+  border-radius:14px;
+  padding:10px;
+}
 .room-table{
   width:100%;
-  min-width:520px;
   border-collapse:collapse;
   font-size:11px;
 }
-
 .room-table th,.room-table td{
   border:1px solid #28456b;
   padding:8px;
   text-align:center;
 }
-
 .room-table th{
   background:#16213a;
   color:#00ff99;
 }
 
-/* MOBILE FIX CARD STYLE */
+/* MOBILE */
 @media(max-width:768px){
   .tab-btn{min-width:140px;font-size:11px}
-  .logo{width:50px;height:50px}
-  .card{padding:12px}
-  .room-wrap{padding:4px}
-  .room-table{font-size:10px}
+  .logo{width:46px;height:46px}
 }
 
 </style>
@@ -179,13 +175,13 @@ body{
 <div class="header">
 <img class="logo" src="https://i.imgur.com/LY3Bb9m.png">
 <div class="title">MATCH RULES</div>
-<div class="subtitle">Official Competitive Gaming Rules & Regulations</div>
+<div class="subtitle">Official Competitive Gaming Rulebook</div>
 </div>
 
 <!-- TABS -->
 <div class="tabs">
 <button class="tab-btn active" onclick="openTab('tour',this)">🏆 Tournament Rules</button>
-<button class="tab-btn" onclick="openTab('friendly',this)">🤝 Friendly Match Rules</button>
+<button class="tab-btn" onclick="openTab('friendly',this)">🤝 Friendly Rules</button>
 </div>
 
 <!-- TOURNAMENT -->
@@ -194,32 +190,34 @@ body{
 
 <div class="section-title">🏆 GOAT FC Tournament Rules</div>
 
-<div class="rule-item">১) Registration অনুযায়ী Konami ID, Device ও FB ID ব্যবহার করতে হবে।</div>
-<div class="rule-item">২) Priority Time miss করলে 1-0 Loss হবে।</div>
-<div class="rule-item">৩) Match Video proof mandatory।</div>
-<div class="rule-item">৪) Disconnect হলে 93 min continue করতে হবে।</div>
-<div class="rule-item">৫) Fixture & Sub rules follow করতে হবে।</div>
-<div class="rule-item">৬) Score submit পরে verify করতে হবে।</div>
-<div class="rule-item">৭) Admin decision final।</div>
-<div class="rule-item">৮) Sportsmanship must follow।</div>
+<div class="rule-item">১) Registration info must be same Konami ID, Device & FB ID.</div>
+<div class="rule-item">২) Priority Time miss = 1-0 loss.</div>
+<div class="rule-item">৩) Match video proof mandatory.</div>
+<div class="rule-item">৪) Disconnect → continue till 93 min.</div>
+<div class="rule-item">৫) Fixture & Sub rules follow.</div>
+<div class="rule-item">৬) Score submit must verify.</div>
+<div class="rule-item">৭) Admin decision final.</div>
+<div class="rule-item">৮) Respect & sportsmanship required.</div>
 
-<!-- ROOM SETTING -->
+<!-- ROOM SETTING TAB STYLE -->
 <div class="room-setting">
 <div class="section-title">🎯 Match Room Setting</div>
-
 <div class="room-type">⚽ Match Type: <span>STANDARD</span></div>
 
 <div class="room-wrap">
+
+<div class="room-card">
 <table class="room-table">
-<tr><th>⚙️</th><th>Round</th><th>KO</th><th>Final</th></tr>
-<tr><td>⏱</td><td>8m</td><td>8m</td><td>10m</td></tr>
-<tr><td>🤕</td><td>ON</td><td>ON</td><td>ON</td></tr>
-<tr><td>🎯</td><td>OFF</td><td>ON</td><td>ON</td></tr>
-<tr><td>🔄</td><td>5/3</td><td>5/3</td><td>5/3</td></tr>
-<tr><td>🏠</td><td>NORMAL</td><td>NORMAL</td><td>NORMAL</td></tr>
+<tr><th>⚙️ Setting</th><th>🏁 Round</th><th>🔥 Knockout</th><th>🏆 Final</th></tr>
+<tr><td>⏱ Time</td><td>8</td><td>8</td><td>10</td></tr>
+<tr><td>🤕 Injury</td><td>ON</td><td>ON</td><td>ON</td></tr>
+<tr><td>🎯 ET/PK</td><td>OFF</td><td>ON</td><td>ON</td></tr>
+<tr><td>🔄 Sub</td><td>5/3</td><td>5/3</td><td>5/3</td></tr>
+<tr><td>🏠 H/A</td><td>N</td><td>N</td><td>N</td></tr>
 </table>
 </div>
 
+</div>
 </div>
 
 </div>
@@ -231,14 +229,14 @@ body{
 
 <div class="section-title">🤝 Friendly Match Rules</div>
 
-<div class="rule-item">১) Screenshot + Club ID submit বাধ্যতামূলক।</div>
-<div class="rule-item">২) Winner submit করবে।</div>
-<div class="rule-item">৩) 93min full match count হবে।</div>
-<div class="rule-item">৪) Max 5 matches per opponent/month।</div>
-<div class="rule-item">৫) Max 50 matches/month।</div>
-<div class="rule-item">৬) Warning mandatory।</div>
-<div class="rule-item">৭) Match log verify।</div>
-<div class="rule-item">৮) Group-এ তর্ক নিষিদ্ধ।</div>
+<div class="rule-item">১) Screenshot with Club ID submit.</div>
+<div class="rule-item">২) Winner submits score.</div>
+<div class="rule-item">৩) 93 min full match count.</div>
+<div class="rule-item">৪) Max 5 matches per opponent.</div>
+<div class="rule-item">৫) Max 50 matches/month.</div>
+<div class="rule-item">৬) Must inform after limit.</div>
+<div class="rule-item">৭) Match log verify.</div>
+<div class="rule-item">৮) No group argument.</div>
 
 </div>
 </div>

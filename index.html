@@ -140,7 +140,7 @@ Live approved match logs filtered by tournament type and date range.
 <input type="date" id="startDate">
 <input type="date" id="endDate">
 
-<button onclick="applyFilter()">Filter</button>
+<button onclick="applyFilter()filtered = filtered.sort((a,b)=> b.date - a.date);">Filter</button>
 </div>
 
 <div class="container">
@@ -231,7 +231,7 @@ async function loadData(){
 }
 
 // FILTER
-function applyFilter()filtered = filtered.sort((a,b)=> b.date - a.date);{
+function applyFilter(){
     const type = document.getElementById("matchType").value;
     const start = document.getElementById("startDate").value ? new Date(document.getElementById("startDate").value) : null;
     const end = document.getElementById("endDate").value ? new Date(document.getElementById("endDate").value) : null;

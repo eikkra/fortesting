@@ -8,236 +8,114 @@
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif;}
-
 body{
-background:
-radial-gradient(circle at top left,#2a0000,#050505 60%),
-linear-gradient(135deg,#080808,#111);
-min-height:100vh;
-padding:20px;
+margin:0;
+font-family:'Orbitron',sans-serif;
+background:#050505;
+color:white;
 display:flex;
 justify-content:center;
 align-items:center;
-color:#fff;
-overflow-x:hidden;
+min-height:100vh;
+padding:20px;
 }
 
 .container{
 width:100%;
 max-width:700px;
+background:linear-gradient(135deg,#ff0000,#000,#ff0000);
 padding:3px;
-border-radius:28px;
-background:linear-gradient(135deg,#ff0000,#ff7300,#ff00c8,#ff0000);
-background-size:400% 400%;
-animation:rgbBorder 8s linear infinite;
-box-shadow:
-0 0 20px #ff000066,
-0 0 50px #ff000044;
+border-radius:25px;
+animation:rgb 6s linear infinite;
+}
+
+@keyframes rgb{
+0%{filter:hue-rotate(0deg);}
+100%{filter:hue-rotate(360deg);}
 }
 
 .inner{
-background:rgba(8,8,8,.96);
-padding:28px;
-border-radius:25px;
-backdrop-filter:blur(15px);
-}
-
-@keyframes rgbBorder{
-0%{background-position:0% 50%;}
-100%{background-position:400% 50%;}
+background:#0a0a0a;
+padding:25px;
+border-radius:22px;
 }
 
 .logo{
-width:95px;
+width:90px;
 display:block;
 margin:auto;
-filter:
-drop-shadow(0 0 8px red)
-drop-shadow(0 0 16px #ff0000);
 }
 
-.title{
-text-align:center;
-margin:16px 0 25px;
-font-size:24px;
-font-weight:900;
-color:#fff;
-text-shadow:
-0 0 8px #ff0000,
-0 0 18px #ff0000;
-}
-
-.form-group{margin-bottom:18px;}
-
-label{
-display:block;
-margin-bottom:8px;
-font-size:13px;
-color:#ff9f9f;
-}
+h2{text-align:center;color:red}
 
 input,select{
 width:100%;
-padding:14px;
-border-radius:14px;
-border:1px solid #333;
+padding:12px;
+margin-top:6px;
+margin-bottom:15px;
+border-radius:10px;
+border:none;
 background:#111;
-color:#fff;
-outline:none;
-font-size:14px;
-transition:.25s;
-}
-
-input:focus,select:focus{
-border-color:#ff0000;
-box-shadow:
-0 0 12px #ff000088,
-inset 0 0 10px #ff000022;
-}
-
-.score-row{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:15px;
-}
-
-.preview{
-width:100%;
-margin-top:12px;
-border-radius:14px;
-display:none;
-border:1px solid #333;
-}
-
-.checkbox{
-display:flex;
-gap:10px;
-font-size:12px;
-align-items:flex-start;
-margin-top:8px;
-}
-
-.checkbox input{
-width:auto;
-margin-top:3px;
+color:white;
 }
 
 button{
 width:100%;
-padding:15px;
+padding:14px;
+background:red;
 border:none;
-border-radius:15px;
-font-size:15px;
-font-weight:700;
+border-radius:12px;
+color:white;
+font-weight:bold;
 cursor:pointer;
-background:linear-gradient(90deg,#ff0000,#b30000,#ff4d4d);
-color:#fff;
-box-shadow:
-0 0 15px #ff000088,
-0 0 35px #ff000044;
-transition:.25s;
 }
 
-button:hover{
-transform:translateY(-2px);
-box-shadow:
-0 0 20px #ff0000,
-0 0 40px #ff000088;
-}
-
-.status{
-text-align:center;
-margin-top:15px;
-font-size:13px;
+.preview{
+width:100%;
+margin-top:10px;
 display:none;
+border-radius:10px;
 }
 
-.closed{
-display:none;
-padding:18px;
-text-align:center;
-font-size:15px;
-color:#ff5c5c;
-border:1px solid #ff000044;
-border-radius:16px;
-background:#1a0000;
-box-shadow:0 0 20px #ff000022 inset;
-}
-
-@media(max-width:600px){
-.score-row{
-grid-template-columns:1fr;
-}
-.inner{
-padding:20px;
-}
-.title{
-font-size:20px;
-}
-}
+.status{text-align:center;margin-top:10px}
 </style>
 </head>
+
 <body>
 
 <div class="container">
 <div class="inner">
 
 <img src="https://i.imgur.com/LY3Bb9m.png" class="logo">
-<div class="title">GOAT FC SCORE SUBMIT</div>
+<h2>GOAT FC SCORE SUBMIT</h2>
 
-<div class="closed" id="closedBox">
-🚫 Score Submission is Currently Closed
-</div>
+<form id="form">
 
-<form id="scoreForm">
-
-<div class="form-group">
 <label>Your Club ID</label>
-<select name="yourClub" id="yourClub" required></select>
-</div>
+<select id="yourClub"></select>
 
-<div class="form-group">
 <label>Opponent Club ID</label>
-<select name="opponentClub" id="opponentClub" required></select>
-</div>
+<select id="opponentClub"></select>
 
-<div class="form-group">
 <label>Match Type</label>
-<select name="matchType" required>
-<option value="">Select Match Type</option>
+<select id="matchType">
 <option>Friendly</option>
 <option>Solo</option>
 <option>League</option>
 <option>CO-Op</option>
 </select>
-</div>
 
-<div class="score-row">
-<div class="form-group">
-<label>Your Goal Score</label>
-<input type="number" name="yourGoal" min="0" required>
-</div>
+<label>Your Goal</label>
+<input type="number" id="yourGoal">
 
-<div class="form-group">
-<label>Opponent Goal Score</label>
-<input type="number" name="opponentGoal" min="0" required>
-</div>
-</div>
+<label>Opponent Goal</label>
+<input type="number" id="opponentGoal">
 
-<div class="form-group">
-<label>Screenshot Upload</label>
-<input type="file" id="screenshot" accept="image/*" required>
+<label>Screenshot</label>
+<input type="file" id="file">
 <img id="preview" class="preview">
-</div>
 
-<div class="checkbox">
-<input type="checkbox" required>
-<span>I confirm that the submitted score and screenshot are authentic.</span>
-</div>
-
-<br>
-<button type="submit">SUBMIT SCORE</button>
+<button type="submit">SUBMIT</button>
 
 <div class="status" id="status"></div>
 
@@ -247,51 +125,49 @@ font-size:20px;
 </div>
 
 <script>
-const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzXXjGdxcq6XA3RffSWW-QiC5-loMdzhwN1RCDa90lOfxoDgUAnZTeu7R4dd0UMG8xK/exec";
+const scriptURL="YOUR_SCRIPT_URL";
 
-function toBase64(file){
-  return new Promise((resolve,reject)=>{
-    const reader=new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload=()=>resolve(reader.result);
-    reader.onerror=error=>reject(error);
-  });
+const yourClub=document.getElementById("yourClub");
+const opponentClub=document.getElementById("opponentClub");
+
+for(let i=1;i<=128;i++){
+let id="GFC-"+String(i).padStart(3,'0');
+yourClub.innerHTML+=`<option>${id}</option>`;
+opponentClub.innerHTML+=`<option>${id}</option>`;
 }
 
-document.getElementById("scoreForm").addEventListener("submit",async function(e){
-e.preventDefault();
+let base64Image="";
 
-const status=document.getElementById("status");
-status.style.display="block";
-status.innerHTML="Uploading...";
+document.getElementById("file").addEventListener("change",function(){
+const file=this.files[0];
+const reader=new FileReader();
 
-const file=document.getElementById("screenshot").files[0];
-const base64Image=await toBase64(file);
-
-const payload={
-  yourClub:this.yourClub.value,
-  opponentClub:this.opponentClub.value,
-  matchType:this.matchType.value,
-  yourGoal:this.yourGoal.value,
-  opponentGoal:this.opponentGoal.value,
-  image:base64Image
-};
-
-try{
-await fetch(SCRIPT_URL,{
-method:"POST",
-body:JSON.stringify(payload)
+reader.onload=function(){
+base64Image=reader.result;
+document.getElementById("preview").src=base64Image;
+document.getElementById("preview").style.display="block";
+}
+reader.readAsDataURL(file);
 });
 
-status.style.color="#00ff99";
-status.innerHTML="✅ Score Submitted Successfully!";
-this.reset();
-document.getElementById("preview").style.display="none";
+document.getElementById("form").addEventListener("submit",async(e)=>{
+e.preventDefault();
 
-}catch(err){
-status.style.color="#ff4444";
-status.innerHTML="❌ Submission Failed";
-}
+document.getElementById("status").innerText="Submitting...";
+
+await fetch(scriptURL,{
+method:"POST",
+body:JSON.stringify({
+yourClub:yourClub.value,
+opponentClub:opponentClub.value,
+matchType:matchType.value,
+yourGoal:yourGoal.value,
+opponentGoal:opponentGoal.value,
+image:base64Image
+})
+});
+
+document.getElementById("status").innerText="Submitted Successfully!";
 });
 </script>
 

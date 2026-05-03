@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GOAT FC MATCH LOGS</title>
-<link rel="icon" type="image/png" href="https://i.imgur.com/LY3Bb9m.png">
 
 <style>
 body{
@@ -14,7 +13,6 @@ body{
     color:#e2e8f0;
 }
 
-/* HEADER */
 .header{
     display:flex;
     justify-content:center;
@@ -22,27 +20,16 @@ body{
     gap:10px;
     padding:10px;
 }
-.header img{ width:40px; }
-
 .header h1{
     color:#00f5ff;
-    text-shadow:0 0 15px #00f5ff,0 0 25px #00f5ff;
+    text-shadow:0 0 15px #00f5ff;
     font-size:20px;
 }
 
-/* DESC */
-.desc{
-    text-align:center;
-    font-size:12px;
-    color:#94a3b8;
-}
-
-/* FILTER */
 .filter-box{
     display:flex;
     justify-content:center;
     gap:6px;
-    flex-wrap:nowrap;
     padding:10px;
     overflow-x:auto;
 }
@@ -62,7 +49,6 @@ button{
     font-weight:bold;
 }
 
-/* TABLE */
 .container{
     max-height:75vh;
     overflow:auto;
@@ -78,53 +64,30 @@ thead{
     position:sticky;
     top:0;
     background:#020617;
-    z-index:10;
 }
 
 th{
     color:#00f5ff;
     padding:8px;
     border-bottom:2px solid #00f5ff;
-    white-space:nowrap;
 }
 
 td{
     padding:8px;
     text-align:center;
-    white-space:nowrap;
 }
 
-tr{
-    border-bottom:1px solid #0f172a;
-}
-
-/* RESULT COLORS */
 .win{color:#22c55e;}
 .loss{color:#ef4444;}
 .draw{color:#facc15;}
-
-/* GOLD EFFECT */
-.gold{
-    color:gold;
-    text-shadow:0 0 10px gold;
-}
-
-/* MOBILE */
-@media(max-width:768px){
-    th,td{font-size:11px;}
-}
+.gold{color:gold;}
 </style>
 </head>
 
 <body>
 
 <div class="header">
-    <img src="https://i.imgur.com/LY3Bb9m.png">
     <h1>GOAT FC MATCH LOG</h1>
-</div>
-
-<div class="desc">
-Live approved match logs filtered by tournament type and date range.
 </div>
 
 <div class="filter-box">
@@ -155,7 +118,6 @@ Live approved match logs filtered by tournament type and date range.
 <th>Points</th>
 </tr>
 </thead>
-
 <tbody id="tableBody"></tbody>
 </table>
 </div>
@@ -166,27 +128,32 @@ const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0X
 
 let allData = [];
 
-// SAFE DATE PARSER
+// ✅ FIXED DATE PARSER (NO TIMEZONE ISSUE)
 function parseDate(str){
     if(!str) return null;
-    try{
-        let d = str.split(" ")[0];
-        let p = d.split("/");
-        if(p.length !== 3) return null;
-        return new Date(p[2], p[0]-1, p[1]);
-    }catch{
-        return null;
-    }
+    let d = str.split(" ")[0];
+    let p = d.split("/");
+    if(p.length !== 3) return null;
+
+    // create local date (no UTC shift)
+    return new Date(p[2], p[0]-1, p[1], 12); 
 }
 
-// SHORT TYPE
+// ✅ FORMAT WITHOUT ISO (NO SHIFT)
+function formatDate(d){
+    let y = d.getFullYear();
+    let m = String(d.getMonth()+1).padStart(2,'0');
+    let day = String(d.getDate()).padStart(2,'0');
+    return `${y}-${m}-${day}`;
+}
+
 function shortType(t){
     if(t==="Solo Tournament") return "Solo";
     if(t==="Bid Tournament") return "Bid";
     return t;
 }
 
-// FAST + SAFE CSV PARSER
+// FAST CSV PARSER
 function fastCSV(csv){
     const lines = csv.split("\n");
     const result = [];
@@ -199,63 +166,47 @@ function fastCSV(csv){
         if(!date) continue;
 
         result.push({
-            date: date,
+            date,
             type: r[2],
             p1: r[0],
             p2: r[1],
-            s1: Number(r[3]) || 0,
-            s2: Number(r[4]) || 0,
-            pt1: Number(r[5]) || 0,
-            pt2: Number(r[6]) || 0,
-            approved: (r[9] || "").trim().toLowerCase()
+            s1: +r[3] || 0,
+            s2: +r[4] || 0,
+            pt1: +r[5] || 0,
+            pt2: +r[6] || 0,
+            approved: (r[9]||"").trim().toLowerCase()
         });
     }
 
     return result;
 }
 
-// LOAD (UPDATED ✅ SORT ADDED)
+// LOAD
 async function loadData(){
-    try{
-        const res = await fetch(CSV_URL, {cache:"no-store"});
-        const text = await res.text();
+    const res = await fetch(CSV_URL, {cache:"no-store"});
+    const text = await res.text();
 
-        allData = fastCSV(text)
-            .filter(r=>r.approved==="yes")
-            .sort((a,b)=> b.date - a.date); // 🔥 NEW LINE (DESC SORT)
+    allData = fastCSV(text)
+        .filter(r => r.approved === "yes")
+        // ✅ SORT NEWEST FIRST
+        .sort((a,b) => b.date - a.date);
 
-        render(allData);
-    }catch(err){
-        console.error("Load Error:", err);
-    }
+    render(allData);
 }
 
 // FILTER
 function applyFilter(){
-    const type = document.getElementById("matchType").value;
-    const start = document.getElementById("startDate").value ? new Date(document.getElementById("startDate").value) : null;
-    const end = document.getElementById("endDate").value ? new Date(document.getElementById("endDate").value) : null;
+    const type = matchType.value;
+    const start = startDate.value ? new Date(startDate.value) : null;
+    const end = endDate.value ? new Date(endDate.value) : null;
 
     let filtered = allData;
 
-    if(type){
-        filtered = filtered.filter(r => r.type === type);
-    }
-
-    if(start){
-        filtered = filtered.filter(r => r.date >= start);
-    }
-
-    if(end){
-        filtered = filtered.filter(r => r.date <= end);
-    }
+    if(type) filtered = filtered.filter(r => r.type === type);
+    if(start) filtered = filtered.filter(r => r.date >= start);
+    if(end) filtered = filtered.filter(r => r.date <= end);
 
     render(filtered);
-}
-
-// FORMAT DATE
-function formatDate(d){
-    return d.toISOString().slice(0,10);
 }
 
 // RENDER

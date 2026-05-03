@@ -3,51 +3,69 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GOAT FC MATCH LOG</title>
+<title>GOAT FC MATCH LOGS</title>
 
 <style>
 body{
     margin:0;
-    font-family:sans-serif;
+    font-family:'Segoe UI',sans-serif;
     background:#020617;
     color:#e2e8f0;
 }
 
-/* HEADER */
+/* HEADER (RESTORED ORIGINAL STYLE) */
 .header{
-    text-align:center;
-    padding:6px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+    padding:10px;
+}
+.header img{
+    width:40px;
 }
 .header h1{
     color:#00f5ff;
-    font-size:14px;
+    text-shadow:0 0 15px #00f5ff,0 0 25px #00f5ff;
+    font-size:18px;
 }
 
-/* FILTER */
+/* DESC */
+.desc{
+    text-align:center;
+    font-size:12px;
+    color:#94a3b8;
+    margin-bottom:5px;
+}
+
+/* FILTER (ORIGINAL STYLE BACK) */
 .filter-box{
     display:flex;
-    gap:4px;
-    padding:6px;
+    justify-content:center;
+    gap:6px;
+    flex-wrap:nowrap;
+    padding:10px;
     overflow-x:auto;
 }
 
 select,input,button{
-    padding:4px;
-    font-size:10px;
-    border-radius:4px;
+    padding:6px;
+    border-radius:6px;
     border:1px solid #00f5ff;
     background:black;
     color:#00f5ff;
+    font-size:11px;
 }
 
 button{
     background:#00f5ff;
     color:black;
+    font-weight:bold;
 }
 
 /* TABLE */
 .container{
-    max-height:80vh;
+    max-height:75vh;
     overflow:auto;
 }
 
@@ -57,21 +75,33 @@ table{
     table-layout:fixed;
 }
 
-th,td{
-    padding:4px;
-    font-size:10px;
-    text-align:center;
-    overflow:hidden;
-    text-overflow:ellipsis;
+thead{
+    position:sticky;
+    top:0;
+    background:#020617;
+    z-index:10;
 }
 
 th{
     color:#00f5ff;
-    border-bottom:1px solid #00f5ff;
+    padding:8px;
+    border-bottom:2px solid #00f5ff;
+    font-size:11px;
 }
 
-tr{
-    border-bottom:1px solid #0f172a;
+td{
+    padding:6px;
+    text-align:center;
+    font-size:10px;
+    white-space:nowrap; /* ✅ NO 2 LINE ISSUE */
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+/* RIGHT ALIGN SCORE + PTS */
+td.score, td.pts{
+    text-align:right;
+    padding-right:10px;
 }
 
 /* COLORS */
@@ -84,10 +114,17 @@ tr{
 
 <body>
 
+<!-- HEADER RESTORED -->
 <div class="header">
+    <img src="https://i.imgur.com/LY3Bb9m.png">
     <h1>GOAT FC MATCH LOG</h1>
 </div>
 
+<div class="desc">
+Live approved match logs filtered by tournament type and date range.
+</div>
+
+<!-- FILTER (UNCHANGED LOOK) -->
 <div class="filter-box">
 <select id="matchType">
 <option value="">All</option>
@@ -101,7 +138,7 @@ tr{
 <input type="date" id="startDate">
 <input type="date" id="endDate">
 
-<button onclick="applyFilter()">Go</button>
+<button onclick="applyFilter()">Filter</button>
 </div>
 
 <div class="container">
@@ -110,12 +147,13 @@ tr{
 <tr>
 <th>Date</th>
 <th>Type</th>
-<th>P1</th>
-<th>P2</th>
+<th>Player 1</th>
+<th>Player 2</th>
 <th>Score</th>
 <th>Pts</th>
 </tr>
 </thead>
+
 <tbody id="tableBody"></tbody>
 </table>
 </div>
@@ -126,41 +164,40 @@ const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0X
 
 let allData = [];
 
-// ✅ FIX DATE (NO SHIFT)
+/* ✅ FIX DATE (NO SHIFT ISSUE) */
 function parseDate(str){
     if(!str) return null;
     let d = str.split(" ")[0];
     let p = d.split("/");
-    if(p.length!==3) return null;
+    if(p.length !== 3) return null;
     return new Date(p[2], p[0]-1, p[1], 12);
 }
 
-// FORMAT
+/* FORMAT */
 function formatDate(d){
-    return `${d.getFullYear()}-${(d.getMonth()+1+"").padStart(2,0)}-${(d.getDate()+"").padStart(2,0)}`;
+    return `${d.getFullYear()}-${(d.getMonth()+1+"").padStart(2,"0")}-${(d.getDate()+"").padStart(2,"0")}`;
 }
 
-// SHORT TYPE
 function shortType(t){
     if(t==="Solo Tournament") return "Solo";
     if(t==="Bid Tournament") return "Bid";
     return t;
 }
 
-// PARSER (WITH INDEX)
+/* FAST PARSER */
 function fastCSV(csv){
     const lines = csv.split("\n");
     const result = [];
 
     for(let i=1;i<lines.length;i++){
         const r = lines[i].split(",");
-        if(r.length<12) continue;
+        if(r.length < 12) continue;
 
         const date = parseDate(r[11]);
         if(!date) continue;
 
         result.push({
-            index:i, // 🔥 important for sorting
+            index:i,
             date,
             type:r[2],
             p1:r[0],
@@ -176,23 +213,23 @@ function fastCSV(csv){
     return result;
 }
 
-// LOAD
+/* LOAD */
 async function loadData(){
-    const res = await fetch(CSV_URL, {cache:"no-store"});
+    const res = await fetch(CSV_URL + "&t=" + Date.now(), {cache:"no-store"});
     const text = await res.text();
 
     allData = fastCSV(text)
         .filter(r=>r.approved==="yes")
-        // ✅ PERFECT SORT
+        // ✅ NEW FIRST
         .sort((a,b)=>{
             if(b.date - a.date !== 0) return b.date - a.date;
-            return b.index - a.index; // latest entry first
+            return b.index - a.index;
         });
 
     render(allData);
 }
 
-// FILTER
+/* FILTER */
 function applyFilter(){
     let data = allData;
 
@@ -207,10 +244,9 @@ function applyFilter(){
     render(data);
 }
 
-// RENDER
+/* RENDER */
 function render(data){
     const tbody = document.getElementById("tableBody");
-
     let html = "";
 
     for(let i=0;i<Math.min(data.length,500);i++){
@@ -229,15 +265,14 @@ function render(data){
             <td>${shortType(r.type)}</td>
             <td class="${p1}">${r.p1}</td>
             <td class="${p2}">${r.p2}</td>
-            <td class="${gold}">${r.s1}-${r.s2}</td>
-            <td>${r.pt1}-${r.pt2}</td>
+            <td class="score ${gold}">${r.s1}-${r.s2}</td>
+            <td class="pts">${r.pt1}-${r.pt2}</td>
         </tr>`;
     }
 
     tbody.innerHTML = html;
 }
 
-// INIT
 loadData();
 
 </script>

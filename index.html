@@ -13,7 +13,7 @@ body{
     color:#e2e8f0;
 }
 
-/* HEADER */
+/* HEADER (UNCHANGED) */
 .header{
     display:flex;
     justify-content:center;
@@ -68,38 +68,29 @@ button{
 table{
     width:100%;
     border-collapse:collapse;
-    table-layout:auto; /* ✅ FIXED (NO CUTTING) */
+    table-layout:fixed;
 }
 
-/* HEADER */
-thead{
-    position:sticky;
-    top:0;
-    background:#020617;
-}
-
+/* HEADER ALIGN CENTER */
 th{
     color:#00f5ff;
-    padding:8px;
-    border-bottom:2px solid #00f5ff;
-    text-align:center;
+    padding:8px 4px;
     font-size:11px;
+    border-bottom:2px solid #00f5ff;
+    text-align:center; /* ✅ perfect alignment */
 }
 
-/* BODY */
+/* BODY CELLS */
 td{
-    padding:6px;
+    padding:6px 4px;
     font-size:10px;
+    font-weight:500; /* ✅ slightly bold */
     text-align:center;
-    white-space:nowrap; /* keep single line */
+    white-space:nowrap;
 }
 
-/* ALIGN FIX (IMPORTANT) */
-td.score, th.score{
-    text-align:right;
-    padding-right:12px;
-}
-td.pts, th.pts{
+/* RIGHT ALIGN ONLY SCORE + POINT */
+td.score, td.point{
     text-align:right;
     padding-right:12px;
 }
@@ -147,8 +138,8 @@ Live approved match logs filtered by tournament type and date range.
 <th>Type</th>
 <th>Player 1</th>
 <th>Player 2</th>
-<th class="score">Score</th>
-<th class="pts">Pts</th>
+<th>Score</th>
+<th>Point</th> <!-- ✅ renamed -->
 </tr>
 </thead>
 
@@ -162,7 +153,7 @@ const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0X
 
 let allData = [];
 
-/* DATE FIX */
+/* ✅ FIX DATE (FULL + NO TRUNCATION) */
 function parseDate(str){
     if(!str) return null;
     let d = str.split(" ")[0];
@@ -171,12 +162,14 @@ function parseDate(str){
     return new Date(p[2], p[0]-1, p[1], 12);
 }
 
-/* FULL DATE (NO CUT) */
+/* FULL DATE DISPLAY (NO CUT) */
 function formatDate(d){
-    return d.toLocaleDateString("en-GB"); 
+    const day = String(d.getDate()).padStart(2,'0');
+    const month = String(d.getMonth()+1).padStart(2,'0');
+    const year = d.getFullYear();
+    return `${day}/${month}/${year}`;  // ✅ FULL visible format
 }
 
-/* TYPE */
 function shortType(t){
     if(t==="Solo Tournament") return "Solo";
     if(t==="Bid Tournament") return "Bid";
@@ -220,8 +213,8 @@ async function loadData(){
     allData = fastCSV(text)
         .filter(r=>r.approved==="yes")
         .sort((a,b)=>{
-            if(b.date - a.date !== 0) return b.date - a.date;
-            return b.index - a.index;
+            if(b.date-a.date!==0) return b.date-a.date;
+            return b.index-a.index;
         });
 
     render(allData);
@@ -245,30 +238,30 @@ function applyFilter(){
 /* RENDER */
 function render(data){
     const tbody = document.getElementById("tableBody");
-    let html="";
+    let html = "";
 
     for(let i=0;i<Math.min(data.length,500);i++){
-        const r=data[i];
+        const r = data[i];
 
         let p1="",p2="";
         if(r.s1>r.s2){p1="win";p2="loss";}
         else if(r.s1<r.s2){p1="loss";p2="win";}
         else{p1="draw";p2="draw";}
 
-        let gold=(r.s1>=7||r.s2>=7)?"gold":"";
+        let gold = (r.s1>=7||r.s2>=7)?"gold":"";
 
-        html+=`
+        html += `
         <tr>
             <td>${formatDate(r.date)}</td>
             <td>${shortType(r.type)}</td>
             <td class="${p1}">${r.p1}</td>
             <td class="${p2}">${r.p2}</td>
             <td class="score ${gold}">${r.s1}-${r.s2}</td>
-            <td class="pts">${r.pt1}-${r.pt2}</td>
+            <td class="point">${r.pt1}-${r.pt2}</td>
         </tr>`;
     }
 
-    tbody.innerHTML=html;
+    tbody.innerHTML = html;
 }
 
 loadData();

@@ -280,30 +280,36 @@ e.preventDefault();
 
 const status=document.getElementById("status");
 status.style.display="block";
-status.style.color="#fff";
 status.innerHTML="Uploading...";
 
-const fd=new FormData();
-fd.append("yourClub",this.yourClub.value);
-fd.append("opponentClub",this.opponentClub.value);
-fd.append("matchType",this.matchType.value);
-fd.append("yourGoal",this.yourGoal.value);
-fd.append("opponentGoal",this.opponentGoal.value);
-fd.append("screenshot",document.getElementById("screenshot").files[0]);
+const file = fileInput.files[0];
+const base64Image = await toBase64(file);
+
+const payload = {
+  yourClub:this.yourClub.value,
+  opponentClub:this.opponentClub.value,
+  matchType:this.matchType.value,
+  yourGoal:this.yourGoal.value,
+  opponentGoal:this.opponentGoal.value,
+  screenshot: base64Image
+};
 
 try{
-await fetch(SCRIPT_URL,{method:"POST",body:fd});
-status.style.color="#00ff99";
+await fetch(SCRIPT_URL,{
+method:"POST",
+contentType:"application/json",
+body: JSON.stringify(payload)
+});
+
 status.innerHTML="✅ Score Submitted Successfully!";
 this.reset();
-preview.style.display="none";
-}
-catch{
-status.style.color="#ff4444";
+document.getElementById("preview").style.display="none";
+
+}catch(err){
 status.innerHTML="❌ Submission Failed";
 }
-});
-</script>
+
+});</script>
 
 </body>
 </html>

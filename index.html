@@ -22,7 +22,6 @@ body{
     padding:10px;
 }
 
-/* MAIN BOARD */
 .container{
     max-width:1200px;
     margin:auto;
@@ -31,11 +30,10 @@ body{
     border-radius:20px;
     padding:14px;
     box-shadow:
-        0 0 20px rgba(0,255,183,0.08),
-        inset 0 0 20px rgba(0,255,183,0.03);
+        0 0 20px rgba(0,255,183,0.06),
+        inset 0 0 20px rgba(0,255,183,0.02);
 }
 
-/* HEADER */
 .header{
     display:flex;
     align-items:center;
@@ -45,7 +43,7 @@ body{
     margin-bottom:14px;
     border-radius:16px;
     background:rgba(255,255,255,0.03);
-    border:1px solid rgba(0,255,183,0.12);
+    border:1px solid rgba(0,255,183,0.08);
 }
 
 .header img{
@@ -53,31 +51,33 @@ body{
     height:42px;
     object-fit:contain;
     filter:
-        drop-shadow(0 0 4px #00ffb7)
-        drop-shadow(0 0 10px #00ffb7)
-        drop-shadow(0 0 18px #00ffb7);
+        drop-shadow(0 0 3px rgba(0,255,183,.45))
+        drop-shadow(0 0 8px rgba(0,140,255,.25));
 }
 
 .header h1{
     font-size:24px;
-    color:#00ffb7;
-    text-shadow:
-        0 0 5px #00ffb7,
-        0 0 12px #00ffb7,
-        0 0 20px #00ffb7;
+    font-weight:900;
+    background:linear-gradient(90deg,#00ffb7,#00d9ff,#7d7dff,#ff4dff);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    text-shadow:0 0 8px rgba(0,255,183,.18);
 }
 
 /* FILTERS */
-.filters{
+.filter-top{
+    margin-bottom:10px;
+}
+.filter-bottom{
     display:grid;
-    grid-template-columns:repeat(3,1fr);
+    grid-template-columns:1fr 1fr;
     gap:8px;
     margin-bottom:14px;
 }
 
 select{
     width:100%;
-    padding:12px 8px;
+    padding:12px 10px;
     border:none;
     border-radius:10px;
     background:#13243b;
@@ -90,36 +90,43 @@ select{
 /* TABLE */
 .tableWrap{
     width:100%;
-    overflow-x:auto;
     border-radius:14px;
+    overflow:hidden;
     border:1px solid rgba(255,255,255,0.06);
 }
 
 table{
     width:100%;
-    min-width:720px;
     border-collapse:collapse;
     background:rgba(255,255,255,0.025);
+    table-layout:fixed;
 }
 
 th{
     background:#00ffb7;
     color:#000;
-    padding:12px 8px;
+    padding:11px 6px;
     font-size:12px;
-    white-space:nowrap;
 }
 
 td{
-    padding:11px 8px;
+    padding:10px 6px;
     text-align:center;
     border-bottom:1px solid rgba(255,255,255,0.06);
-    font-size:12px;
-    white-space:nowrap;
+    font-size:11px;
+    word-break:break-word;
 }
 
-tr:hover{
-    background:rgba(255,255,255,0.04);
+.opponent-name{
+    font-size:11px;
+    font-weight:700;
+    line-height:1.25;
+}
+
+.opponent-id{
+    font-size:9px;
+    opacity:.7;
+    margin-top:2px;
 }
 
 .warning{
@@ -127,9 +134,9 @@ tr:hover{
 }
 
 .badge{
-    padding:5px 8px;
+    padding:4px 6px;
     border-radius:999px;
-    font-size:10px;
+    font-size:9px;
     font-weight:700;
 }
 
@@ -143,7 +150,6 @@ tr:hover{
     color:#ff9b9b;
 }
 
-/* MOBILE OPTIMIZATION */
 @media(max-width:768px){
 
     body{
@@ -157,7 +163,6 @@ tr:hover{
 
     .header{
         padding:10px;
-        gap:8px;
     }
 
     .header img{
@@ -169,29 +174,32 @@ tr:hover{
         font-size:16px;
     }
 
-    .filters{
-        gap:6px;
-    }
-
     select{
-        padding:10px 4px;
+        padding:10px 6px;
         font-size:10px;
-        border-radius:8px;
     }
 
     th{
-        font-size:10px;
-        padding:10px 6px;
+        font-size:9px;
+        padding:9px 4px;
     }
 
     td{
-        font-size:10px;
-        padding:10px 6px;
+        font-size:9px;
+        padding:9px 4px;
+    }
+
+    .opponent-name{
+        font-size:9px;
+    }
+
+    .opponent-id{
+        font-size:8px;
     }
 
     .badge{
-        font-size:9px;
-        padding:4px 6px;
+        font-size:8px;
+        padding:3px 5px;
     }
 }
 </style>
@@ -205,11 +213,13 @@ tr:hover{
         <h1>Rival Tracker</h1>
     </div>
 
-    <div class="filters">
+    <div class="filter-top">
         <select id="playerSelect">
-            <option value="">Player</option>
+            <option value="">Select Player</option>
         </select>
+    </div>
 
+    <div class="filter-bottom">
         <select id="periodFilter">
             <option value="monthly">Monthly</option>
             <option value="overall">Overall</option>
@@ -248,114 +258,86 @@ const MONTHLY_MATCH_LIMIT = 5;
 const MATCH_CSV="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv";
 const MEMBER_CSV="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv";
 
-let matches=[];
-let members={};
+let matches=[], members={};
 
 function clean(v){
     return String(v||"").replace(/^"+|"+$/g,"").replace(/\s+/g," ").trim();
 }
 
 function parseCSV(text){
-    const rows=[];
-    let row=[],cur="",q=false;
-
+    const rows=[]; let row=[],cur="",q=false;
     for(let i=0;i<text.length;i++){
         const c=text[i],n=text[i+1];
-
         if(c=='"'&&q&&n=='"'){cur+='"';i++;}
         else if(c=='"'){q=!q;}
         else if(c==','&&!q){row.push(cur);cur="";}
         else if((c=='\n'||c=='\r')&&!q){
-            if(cur||row.length){
-                row.push(cur);
-                rows.push(row);
-                row=[];cur="";
-            }
-        }
-        else cur+=c;
+            if(cur||row.length){row.push(cur);rows.push(row);}
+            row=[];cur="";
+        } else cur+=c;
     }
-
-    if(cur||row.length){
-        row.push(cur);
-        rows.push(row);
-    }
-
+    if(cur||row.length){row.push(cur);rows.push(row);}
     return rows;
 }
 
 function approved(v){
-    v=clean(v).toLowerCase();
-    return ["yes","true","1","approved"].includes(v);
+    return ["yes","true","1","approved"].includes(clean(v).toLowerCase());
 }
 
 function isCurrentMonth(d){
-    const x=new Date(d);
-    const now=new Date();
-    return !isNaN(x) &&
-        x.getMonth()===now.getMonth() &&
-        x.getFullYear()===now.getFullYear();
+    const x=new Date(d), now=new Date();
+    return !isNaN(x)&&x.getMonth()===now.getMonth()&&x.getFullYear()===now.getFullYear();
 }
 
 async function loadAll(){
-    const [mRes,uRes]=await Promise.all([
-        fetch(MATCH_CSV),
-        fetch(MEMBER_CSV)
-    ]);
-
-    const [mTxt,uTxt]=await Promise.all([
-        mRes.text(),
-        uRes.text()
-    ]);
-
+    const [mRes,uRes]=await Promise.all([fetch(MATCH_CSV),fetch(MEMBER_CSV)]);
+    const [mTxt,uTxt]=await Promise.all([mRes.text(),uRes.text()]);
     loadMembers(uTxt);
     loadMatches(mTxt);
     populatePlayers();
-
     resultTable.innerHTML='<tr><td colspan="6">Select Player</td></tr>';
 }
 
 function loadMembers(csv){
-    const rows=parseCSV(csv);
-    const h=rows[0];
-
+    const rows=parseCSV(csv), h=rows[0];
     rows.slice(1).forEach(r=>{
         const obj={};
         h.forEach((x,i)=>obj[clean(x)]=clean(r[i]));
-
-        const id=obj["Club ID Number"];
-        const name=obj["Full Name"];
-
-        if(id && name && id!="#VALUE!" && name!="#VALUE!"){
-            members[id]=`${name} - ${id}`;
+        const id=obj["Club ID Number"], name=obj["Full Name"];
+        if(id&&name&&id!="#VALUE!"&&name!="#VALUE!"){
+            members[id]={name,id};
         }
     });
 }
 
 function loadMatches(csv){
-    const rows=parseCSV(csv);
-    const h=rows[0];
-
+    const rows=parseCSV(csv), h=rows[0];
     matches=rows.slice(1).map(r=>{
         const obj={};
         h.forEach((x,i)=>obj[clean(x)]=clean(r[i]));
         return obj;
-    }).filter(m=>m.P1_ID && m.P2_ID);
+    }).filter(m=>m.P1_ID&&m.P2_ID);
 }
 
 function populatePlayers(){
-    const ids=[...new Set([
-        ...matches.map(m=>clean(m.P1_ID)),
-        ...matches.map(m=>clean(m.P2_ID))
-    ])].filter(id=>id && id!="#VALUE!");
-
-    ids.sort();
+    const ids=[...new Set([...matches.map(m=>clean(m.P1_ID)),...matches.map(m=>clean(m.P2_ID))])]
+        .filter(id=>id&&id!="#VALUE!")
+        .sort();
 
     ids.forEach(id=>{
         const op=document.createElement("option");
         op.value=id;
-        op.textContent=members[id]||id;
+        op.textContent=members[id]?`${members[id].name} - ${id}`:id;
         playerSelect.appendChild(op);
     });
+}
+
+function renderOpponent(opp){
+    if(!members[opp]) return opp;
+    return `
+        <div class="opponent-name">${members[opp].name}</div>
+        <div class="opponent-id">${opp}</div>
+    `;
 }
 
 function renderData(){
@@ -382,23 +364,18 @@ function renderData(){
     const stats={};
 
     data.forEach(m=>{
-        const p1=clean(m.P1_ID);
-        const p2=clean(m.P2_ID);
+        const p1=clean(m.P1_ID), p2=clean(m.P2_ID);
+        const s1=Number(m.P1_Score)||0, s2=Number(m.P2_Score)||0;
 
         let opp,res;
-
-        const s1=Number(m.P1_Score)||0;
-        const s2=Number(m.P2_Score)||0;
 
         if(p1===player){
             opp=p2;
             res=s1>s2?"win":s1<s2?"loss":"draw";
-        }
-        else if(p2===player){
+        }else if(p2===player){
             opp=p1;
             res=s2>s1?"win":s2<s1?"loss":"draw";
-        }
-        else return;
+        }else return;
 
         if(!stats[opp]) stats[opp]={total:0,win:0,draw:0,loss:0};
 
@@ -408,31 +385,19 @@ function renderData(){
 
     const rows=Object.entries(stats).sort((a,b)=>b[1].total-a[1].total);
 
-    if(!rows.length){
-        resultTable.innerHTML='<tr><td colspan="6">No Data Found</td></tr>';
-        return;
-    }
-
-    resultTable.innerHTML=rows.map(([opp,s])=>{
-        const limitExceeded=
-            periodFilter.value==="monthly" &&
-            s.total>MONTHLY_MATCH_LIMIT;
+    resultTable.innerHTML=rows.length?rows.map(([opp,s])=>{
+        const limit=periodFilter.value==="monthly"&&s.total>MONTHLY_MATCH_LIMIT;
 
         return `
-        <tr class="${limitExceeded?'warning':''}">
-            <td>${members[opp]||opp}</td>
+        <tr class="${limit?'warning':''}">
+            <td>${renderOpponent(opp)}</td>
             <td>${s.total}</td>
             <td>${s.win}</td>
             <td>${s.draw}</td>
             <td>${s.loss}</td>
-            <td>
-                <span class="badge ${limitExceeded?'alert':'ok'}">
-                    ${limitExceeded?'LIMIT':'OK'}
-                </span>
-            </td>
-        </tr>
-        `;
-    }).join("");
+            <td><span class="badge ${limit?'alert':'ok'}">${limit?'LIMIT':'OK'}</span></td>
+        </tr>`;
+    }).join(''):'<tr><td colspan="6">No Data Found</td></tr>';
 }
 
 playerSelect.addEventListener("change",renderData);

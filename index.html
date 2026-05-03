@@ -15,10 +15,10 @@
     font-family:'Orbitron',sans-serif;
 }
 body{
-    background:linear-gradient(135deg,#08111f,#0d1a2d,#121f36);
+    background:linear-gradient(135deg,#050b14,#0b1320,#101b2d);
     color:#fff;
     min-height:100vh;
-    padding:15px;
+    padding:14px;
 }
 .container{
     max-width:1400px;
@@ -28,27 +28,36 @@ body{
     display:flex;
     align-items:center;
     justify-content:center;
-    gap:15px;
-    padding:18px;
+    gap:12px;
+    flex-wrap:nowrap;
+    padding:16px 18px;
     border-radius:18px;
-    background:rgba(255,255,255,0.05);
-    border:1px solid rgba(255,255,255,0.08);
-    box-shadow:0 0 25px rgba(0,255,170,0.12);
+    background:rgba(255,255,255,0.04);
+    border:1px solid rgba(0,255,183,0.2);
+    box-shadow:
+        0 0 15px rgba(0,255,183,0.15),
+        inset 0 0 15px rgba(0,255,183,0.06);
     margin-bottom:20px;
 }
 .header img{
-    width:52px;
-    height:52px;
+    width:48px;
+    height:48px;
+    object-fit:contain;
+    flex-shrink:0;
 }
 .header h1{
     font-size:24px;
     color:#00ffb7;
+    text-shadow:
+        0 0 5px #00ffb7,
+        0 0 15px #00ffb7;
+    white-space:nowrap;
 }
 .filters{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:15px;
-    margin-bottom:20px;
+    gap:14px;
+    margin-bottom:18px;
 }
 select{
     width:100%;
@@ -60,7 +69,7 @@ select{
     font-size:14px;
     outline:none;
 }
-.table-box{
+.tableWrap{
     overflow-x:auto;
     border-radius:16px;
 }
@@ -86,7 +95,7 @@ tr:hover{
     background:rgba(255,255,255,0.04);
 }
 .warning{
-    background:rgba(255,0,0,0.15)!important;
+    background:rgba(255,0,0,0.14)!important;
 }
 .badge{
     padding:6px 10px;
@@ -95,20 +104,27 @@ tr:hover{
     font-weight:700;
 }
 .ok{
-    background:#123d2d;
-    color:#79ffbe;
+    background:#143f2e;
+    color:#75ffba;
 }
 .alert{
-    background:#641818;
-    color:#ff8e8e;
+    background:#661919;
+    color:#ff9b9b;
 }
 @media(max-width:768px){
+    .header{
+        padding:14px 12px;
+    }
     .header h1{
-        font-size:16px;
+        font-size:17px;
+    }
+    .header img{
+        width:38px;
+        height:38px;
     }
     th,td{
-        font-size:11px;
         padding:10px 8px;
+        font-size:11px;
     }
 }
 </style>
@@ -118,8 +134,8 @@ tr:hover{
 <div class="container">
 
     <div class="header">
-        <img src="https://i.imgur.com/LY3Bb9m.png">
-        <h1>GOAT FC Rival Tracker</h1>
+        <img src="https://i.imgur.com/LY3Bb9m.png" alt="GOAT FC">
+        <h1>Rival Tracker</h1>
     </div>
 
     <div class="filters">
@@ -139,15 +155,15 @@ tr:hover{
         </select>
     </div>
 
-    <div class="table-box">
+    <div class="tableWrap">
         <table>
             <thead>
                 <tr>
                     <th>Opponent</th>
-                    <th>Total Match</th>
-                    <th>Wins</th>
-                    <th>Draws</th>
-                    <th>Losses</th>
+                    <th>Matches</th>
+                    <th>Win</th>
+                    <th>Draw</th>
+                    <th>Loss</th>
                     <th>Status</th>
                 </tr>
             </thead>
@@ -160,178 +176,186 @@ tr:hover{
 </div>
 
 <script>
-const MATCH_CSV =
-"https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv";
+const MATCH_CSV="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv";
+const MEMBER_CSV="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv";
 
-const MEMBER_CSV =
-"https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv";
+let matches=[];
+let members={};
 
-let allMatches = [];
-let memberMap = {};
+function clean(v){
+    return String(v||"")
+        .replace(/^"+|"+$/g,"")
+        .replace(/\s+/g," ")
+        .trim();
+}
 
 function parseCSV(text){
-    const rows = [];
-    let row = [];
-    let current = '';
-    let inQuotes = false;
+    const rows=[];
+    let row=[],cur="",q=false;
 
     for(let i=0;i<text.length;i++){
-        const char = text[i];
-        const next = text[i+1];
+        const c=text[i],n=text[i+1];
 
-        if(char === '"' && inQuotes && next === '"'){
-            current += '"';
-            i++;
-        }
-        else if(char === '"'){
-            inQuotes = !inQuotes;
-        }
-        else if(char === ',' && !inQuotes){
-            row.push(current);
-            current = '';
-        }
-        else if((char === '\n' || char === '\r') && !inQuotes){
-            if(current || row.length){
-                row.push(current);
+        if(c=='"'&&q&&n=='"'){cur+='"';i++;}
+        else if(c=='"'){q=!q;}
+        else if(c==','&&!q){row.push(cur);cur="";}
+        else if((c=='\n'||c=='\r')&&!q){
+            if(cur||row.length){
+                row.push(cur);
                 rows.push(row);
-                row = [];
-                current = '';
+                row=[];cur="";
             }
         }
-        else{
-            current += char;
-        }
+        else cur+=c;
     }
 
-    if(current || row.length){
-        row.push(current);
+    if(cur||row.length){
+        row.push(cur);
         rows.push(row);
     }
 
     return rows;
 }
 
-async function loadData(){
+function approved(v){
+    v=clean(v).toLowerCase();
+    return ["yes","true","1","approved"].includes(v);
+}
+
+function validDate(d){
+    const x=new Date(d);
+    return !isNaN(x);
+}
+
+function isCurrentMonth(d){
+    const x=new Date(d);
+    const now=new Date();
+    return x.getMonth()===now.getMonth() &&
+           x.getFullYear()===now.getFullYear();
+}
+
+async function loadAll(){
     try{
-        const [matchRes, memberRes] = await Promise.all([
+        const [mRes,uRes]=await Promise.all([
             fetch(MATCH_CSV),
             fetch(MEMBER_CSV)
         ]);
 
-        const matchText = await matchRes.text();
-        const memberText = await memberRes.text();
+        const [mTxt,uTxt]=await Promise.all([
+            mRes.text(),
+            uRes.text()
+        ]);
 
-        processMembers(memberText);
-        processMatches(matchText);
-
+        loadMembers(uTxt);
+        loadMatches(mTxt);
         populatePlayers();
 
-        document.getElementById("resultTable").innerHTML =
-            `<tr><td colspan="6">Select Player to View Data</td></tr>`;
-    }
-    catch(err){
-        document.getElementById("resultTable").innerHTML =
-            `<tr><td colspan="6">Failed to Load Data</td></tr>`;
+        resultTable.innerHTML='<tr><td colspan="6">Select Player to View Data</td></tr>';
+
+    }catch(err){
         console.error(err);
+        resultTable.innerHTML='<tr><td colspan="6">Load Failed</td></tr>';
     }
 }
 
-function processMembers(csv){
-    const rows = parseCSV(csv);
-    const headers = rows[0];
+function loadMembers(csv){
+    const rows=parseCSV(csv);
+    const h=rows[0];
 
     rows.slice(1).forEach(r=>{
-        const obj = {};
-        headers.forEach((h,i)=>obj[h.trim()] = (r[i]||'').trim());
+        const obj={};
+        h.forEach((x,i)=>obj[clean(x)]=clean(r[i]));
 
-        const id = obj["Club ID Number"];
-        const name = obj["Full Name"];
+        const id=clean(obj["Club ID Number"]);
+        const name=clean(obj["Full Name"]);
 
-        if(id && name){
-            memberMap[id] = `${name} - ${id}`;
+        if(
+            id &&
+            name &&
+            id!="#VALUE!" &&
+            name!="#VALUE!"
+        ){
+            members[id]=`${name} - ${id}`;
         }
     });
 }
 
-function processMatches(csv){
-    const rows = parseCSV(csv);
-    const headers = rows[0];
+function loadMatches(csv){
+    const rows=parseCSV(csv);
+    const h=rows[0];
 
-    allMatches = rows.slice(1).map(r=>{
-        let obj = {};
-        headers.forEach((h,i)=>obj[h.trim()] = (r[i]||'').trim());
+    matches=rows.slice(1).map(r=>{
+        const obj={};
+        h.forEach((x,i)=>obj[clean(x)]=clean(r[i]));
         return obj;
-    }).filter(r=>r.P1_ID && r.P2_ID);
+    }).filter(m=>
+        m.P1_ID &&
+        m.P2_ID &&
+        m.P1_ID!="#VALUE!" &&
+        m.P2_ID!="#VALUE!"
+    );
 }
 
 function populatePlayers(){
-    const players = new Set();
+    const ids=[...new Set([
+        ...matches.map(m=>clean(m.P1_ID)),
+        ...matches.map(m=>clean(m.P2_ID))
+    ])].filter(id=>id && id!="#VALUE!");
 
-    allMatches.forEach(m=>{
-        players.add(m.P1_ID);
-        players.add(m.P2_ID);
+    ids.sort();
+
+    playerSelect.innerHTML='<option value="">Select Player</option>';
+
+    ids.forEach(id=>{
+        const op=document.createElement("option");
+        op.value=id;
+        op.textContent=members[id]||id;
+        playerSelect.appendChild(op);
     });
-
-    const select = document.getElementById("playerSelect");
-
-    [...players].sort().forEach(id=>{
-        const option = document.createElement("option");
-        option.value = id;
-        option.textContent = memberMap[id] || id;
-        select.appendChild(option);
-    });
-}
-
-function validCurrentMonth(dateStr){
-    const d = new Date(dateStr);
-    if(isNaN(d)) return false;
-
-    const now = new Date();
-
-    return d.getMonth()===now.getMonth() &&
-           d.getFullYear()===now.getFullYear();
 }
 
 function renderData(){
-    const player = playerSelect.value;
-    const period = periodFilter.value;
-    const type = typeFilter.value;
-    const tbody = resultTable;
+    const player=clean(playerSelect.value);
+    const period=periodFilter.value;
+    const type=typeFilter.value;
 
     if(!player){
-        tbody.innerHTML=`<tr><td colspan="6">Select Player to View Data</td></tr>`;
+        resultTable.innerHTML='<tr><td colspan="6">Select Player to View Data</td></tr>';
         return;
     }
 
-    let data = allMatches.filter(m=>m.Approved==="Yes" || m.Approved==="TRUE" || m.Approved==="1");
+    let data=matches.filter(m=>approved(m.Approved));
 
     if(period==="monthly"){
-        data = data.filter(m=>validCurrentMonth(m.Match_Date));
+        data=data.filter(m=>validDate(m.Match_Date)&&isCurrentMonth(m.Match_Date));
     }
 
     if(type==="Friendly"){
-        data = data.filter(m=>m.Match_Type==="Friendly");
+        data=data.filter(m=>clean(m.Match_Type)==="Friendly");
     }
 
     if(type==="Tournament"){
-        data = data.filter(m=>m.Match_Type!=="Friendly");
+        data=data.filter(m=>clean(m.Match_Type)!=="Friendly");
     }
 
-    const stats = {};
+    const stats={};
 
     data.forEach(m=>{
+        const p1=clean(m.P1_ID);
+        const p2=clean(m.P2_ID);
+
         let opp,result;
 
-        const p1s = Number(m.P1_Score)||0;
-        const p2s = Number(m.P2_Score)||0;
+        const s1=Number(m.P1_Score)||0;
+        const s2=Number(m.P2_Score)||0;
 
-        if(m.P1_ID===player){
-            opp=m.P2_ID;
-            result=p1s>p2s?"win":p1s<p2s?"loss":"draw";
+        if(p1===player){
+            opp=p2;
+            result=s1>s2?"win":s1<s2?"loss":"draw";
         }
-        else if(m.P2_ID===player){
-            opp=m.P1_ID;
-            result=p2s>p1s?"win":p2s<p1s?"loss":"draw";
+        else if(p2===player){
+            opp=p1;
+            result=s2>s1?"win":s2<s1?"loss":"draw";
         }
         else return;
 
@@ -343,38 +367,38 @@ function renderData(){
         stats[opp][result]++;
     });
 
-    const rows = Object.entries(stats).sort((a,b)=>b[1].total-a[1].total);
+    const rows=Object.entries(stats).sort((a,b)=>b[1].total-a[1].total);
 
     if(!rows.length){
-        tbody.innerHTML=`<tr><td colspan="6">No Match Data Found</td></tr>`;
+        resultTable.innerHTML='<tr><td colspan="6">No Data Found</td></tr>';
         return;
     }
 
-    tbody.innerHTML = rows.map(([opp,s])=>{
-        const exceeded = period==="monthly" && s.total>5;
+    resultTable.innerHTML=rows.map(([opp,s])=>{
+        const limit=period==="monthly" && s.total>5;
 
         return `
-        <tr class="${exceeded?'warning':''}">
-            <td>${memberMap[opp] || opp}</td>
+        <tr class="${limit?'warning':''}">
+            <td>${members[opp]||opp}</td>
             <td>${s.total}</td>
             <td>${s.win}</td>
             <td>${s.draw}</td>
             <td>${s.loss}</td>
             <td>
-                <span class="badge ${exceeded?'alert':'ok'}">
-                    ${exceeded?'LIMIT EXCEEDED':'OK'}
+                <span class="badge ${limit?'alert':'ok'}">
+                    ${limit?'LIMIT EXCEEDED':'OK'}
                 </span>
             </td>
         </tr>
         `;
-    }).join('');
+    }).join("");
 }
 
 playerSelect.addEventListener("change",renderData);
 periodFilter.addEventListener("change",renderData);
 typeFilter.addEventListener("change",renderData);
 
-loadData();
+loadAll();
 </script>
 
 </body>

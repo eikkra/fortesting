@@ -13,7 +13,7 @@ body{
     color:#e2e8f0;
 }
 
-/* HEADER (RESTORED ORIGINAL STYLE) */
+/* HEADER */
 .header{
     display:flex;
     justify-content:center;
@@ -21,9 +21,8 @@ body{
     gap:10px;
     padding:10px;
 }
-.header img{
-    width:40px;
-}
+.header img{ width:40px; }
+
 .header h1{
     color:#00f5ff;
     text-shadow:0 0 15px #00f5ff,0 0 25px #00f5ff;
@@ -38,7 +37,7 @@ body{
     margin-bottom:5px;
 }
 
-/* FILTER (ORIGINAL STYLE BACK) */
+/* FILTER */
 .filter-box{
     display:flex;
     justify-content:center;
@@ -63,16 +62,26 @@ button{
     font-weight:bold;
 }
 
-/* TABLE */
+/* TABLE WRAP */
 .container{
     max-height:75vh;
     overflow:auto;
 }
 
+/* TABLE */
 table{
     width:100%;
     border-collapse:collapse;
     table-layout:fixed;
+}
+
+/* HEADER CENTER FIX */
+th{
+    color:#00f5ff;
+    padding:8px 4px;
+    border-bottom:2px solid #00f5ff;
+    font-size:11px;
+    text-align:center;
 }
 
 thead{
@@ -82,26 +91,24 @@ thead{
     z-index:10;
 }
 
-th{
-    color:#00f5ff;
-    padding:8px;
-    border-bottom:2px solid #00f5ff;
-    font-size:11px;
-}
-
+/* BODY CELLS */
 td{
-    padding:6px;
-    text-align:center;
+    padding:6px 4px;
     font-size:10px;
-    white-space:nowrap; /* ✅ NO 2 LINE ISSUE */
-    overflow:hidden;
-    text-overflow:ellipsis;
+    text-align:center;
+    white-space:nowrap;
 }
 
-/* RIGHT ALIGN SCORE + PTS */
+/* 🔥 FIX DATE NOT CUTTING */
+td.date{
+    white-space:nowrap;
+    overflow:visible;
+}
+
+/* RIGHT SIDE PUSH (Score + Pts) */
 td.score, td.pts{
     text-align:right;
-    padding-right:10px;
+    padding-right:12px;
 }
 
 /* COLORS */
@@ -114,7 +121,6 @@ td.score, td.pts{
 
 <body>
 
-<!-- HEADER RESTORED -->
 <div class="header">
     <img src="https://i.imgur.com/LY3Bb9m.png">
     <h1>GOAT FC MATCH LOG</h1>
@@ -124,7 +130,6 @@ td.score, td.pts{
 Live approved match logs filtered by tournament type and date range.
 </div>
 
-<!-- FILTER (UNCHANGED LOOK) -->
 <div class="filter-box">
 <select id="matchType">
 <option value="">All</option>
@@ -164,7 +169,7 @@ const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0X
 
 let allData = [];
 
-/* ✅ FIX DATE (NO SHIFT ISSUE) */
+/* DATE FIX */
 function parseDate(str){
     if(!str) return null;
     let d = str.split(" ")[0];
@@ -173,9 +178,12 @@ function parseDate(str){
     return new Date(p[2], p[0]-1, p[1], 12);
 }
 
-/* FORMAT */
+/* DISPLAY DATE (NO CUTTING) */
 function formatDate(d){
-    return `${d.getFullYear()}-${(d.getMonth()+1+"").padStart(2,"0")}-${(d.getDate()+"").padStart(2,"0")}`;
+    let y = d.getFullYear();
+    let m = String(d.getMonth()+1).padStart(2,"0");
+    let day = String(d.getDate()).padStart(2,"0");
+    return `${y}-${m}-${day}`;
 }
 
 function shortType(t){
@@ -184,7 +192,7 @@ function shortType(t){
     return t;
 }
 
-/* FAST PARSER */
+/* PARSER */
 function fastCSV(csv){
     const lines = csv.split("\n");
     const result = [];
@@ -220,7 +228,6 @@ async function loadData(){
 
     allData = fastCSV(text)
         .filter(r=>r.approved==="yes")
-        // ✅ NEW FIRST
         .sort((a,b)=>{
             if(b.date - a.date !== 0) return b.date - a.date;
             return b.index - a.index;
@@ -261,7 +268,7 @@ function render(data){
 
         html += `
         <tr>
-            <td>${formatDate(r.date)}</td>
+            <td class="date">${formatDate(r.date)}</td>
             <td>${shortType(r.type)}</td>
             <td class="${p1}">${r.p1}</td>
             <td class="${p2}">${r.p2}</td>

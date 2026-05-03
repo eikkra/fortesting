@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rival Tracker</title>
+<link rel="icon" type="image/png" href="https://i.imgur.com/LY3Bb9m.png">
 
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
 
@@ -14,193 +15,118 @@
     box-sizing:border-box;
     font-family:'Orbitron',sans-serif;
 }
-
 body{
     background:linear-gradient(135deg,#050b14,#0b1320,#101b2d);
     color:#fff;
-    min-height:100vh;
-    padding:10px;
+    padding:8px;
 }
-
 .container{
-    max-width:1200px;
+    max-width:1100px;
     margin:auto;
-    background:rgba(255,255,255,0.035);
-    border:1px solid rgba(0,255,183,0.15);
-    border-radius:20px;
-    padding:14px;
-    box-shadow:
-        0 0 20px rgba(0,255,183,0.06),
-        inset 0 0 20px rgba(0,255,183,0.02);
+    background:rgba(255,255,255,.03);
+    border:1px solid rgba(0,255,183,.12);
+    border-radius:18px;
+    padding:12px;
+    box-shadow:0 0 20px rgba(0,255,183,.05);
 }
-
 .header{
     display:flex;
     align-items:center;
     justify-content:center;
     gap:10px;
-    padding:12px;
-    margin-bottom:14px;
-    border-radius:16px;
-    background:rgba(255,255,255,0.03);
-    border:1px solid rgba(0,255,183,0.08);
+    padding:10px;
+    margin-bottom:12px;
+    border-radius:14px;
+    background:rgba(255,255,255,.03);
 }
-
 .header img{
-    width:42px;
-    height:42px;
-    object-fit:contain;
+    width:38px;
     filter:
-        drop-shadow(0 0 3px rgba(0,255,183,.45))
-        drop-shadow(0 0 8px rgba(0,140,255,.25));
+        drop-shadow(0 0 3px rgba(0,255,183,.35))
+        drop-shadow(0 0 7px rgba(0,140,255,.18));
 }
-
 .header h1{
-    font-size:24px;
+    font-size:20px;
     font-weight:900;
-    background:linear-gradient(90deg,#00ffb7,#00d9ff,#7d7dff,#ff4dff);
+    background:linear-gradient(90deg,#00ffb7,#00d9ff,#8d7dff,#ff59ff);
     -webkit-background-clip:text;
     -webkit-text-fill-color:transparent;
-    text-shadow:0 0 8px rgba(0,255,183,.18);
 }
-
-/* FILTERS */
-.filter-top{
-    margin-bottom:10px;
-}
+.filter-top{margin-bottom:8px;}
 .filter-bottom{
     display:grid;
     grid-template-columns:1fr 1fr;
     gap:8px;
-    margin-bottom:14px;
+    margin-bottom:12px;
 }
-
 select{
     width:100%;
-    padding:12px 10px;
+    padding:10px;
     border:none;
     border-radius:10px;
     background:#13243b;
     color:#fff;
-    font-size:13px;
-    outline:none;
+    font-size:12px;
     text-align:center;
 }
-
-/* TABLE */
 .tableWrap{
-    width:100%;
-    border-radius:14px;
     overflow:hidden;
-    border:1px solid rgba(255,255,255,0.06);
+    border-radius:14px;
+    border:1px solid rgba(255,255,255,.05);
 }
-
 table{
     width:100%;
     border-collapse:collapse;
-    background:rgba(255,255,255,0.025);
     table-layout:fixed;
 }
-
 th{
     background:#00ffb7;
     color:#000;
-    padding:11px 6px;
-    font-size:12px;
+    padding:10px 4px;
+    font-size:11px;
 }
-
 td{
-    padding:10px 6px;
+    padding:8px 4px;
     text-align:center;
-    border-bottom:1px solid rgba(255,255,255,0.06);
-    font-size:11px;
-    word-break:break-word;
+    border-bottom:1px solid rgba(255,255,255,.05);
+    font-size:10px;
 }
-
+.opponent{
+    text-align:left;
+    padding-left:8px;
+}
 .opponent-name{
-    font-size:11px;
+    font-size:10px;
     font-weight:700;
-    line-height:1.25;
+    line-height:1.2;
 }
-
 .opponent-id{
-    font-size:9px;
+    font-size:8px;
     opacity:.7;
-    margin-top:2px;
 }
-
-.warning{
-    background:rgba(255,0,0,0.14)!important;
-}
-
+.warning{background:rgba(255,0,0,.12)!important;}
 .badge{
-    padding:4px 6px;
+    padding:3px 6px;
     border-radius:999px;
-    font-size:9px;
+    font-size:8px;
     font-weight:700;
 }
-
 .ok{
     background:#143f2e;
     color:#75ffba;
 }
-
 .alert{
     background:#661919;
     color:#ff9b9b;
 }
-
 @media(max-width:768px){
-
-    body{
-        padding:6px;
-    }
-
-    .container{
-        padding:10px;
-        border-radius:16px;
-    }
-
-    .header{
-        padding:10px;
-    }
-
-    .header img{
-        width:34px;
-        height:34px;
-    }
-
-    .header h1{
-        font-size:16px;
-    }
-
-    select{
-        padding:10px 6px;
-        font-size:10px;
-    }
-
-    th{
-        font-size:9px;
-        padding:9px 4px;
-    }
-
-    td{
-        font-size:9px;
-        padding:9px 4px;
-    }
-
-    .opponent-name{
-        font-size:9px;
-    }
-
-    .opponent-id{
-        font-size:8px;
-    }
-
-    .badge{
-        font-size:8px;
-        padding:3px 5px;
-    }
+    .header h1{font-size:16px;}
+    .header img{width:32px;}
+    select{font-size:10px;padding:9px 6px;}
+    th{font-size:9px;padding:8px 3px;}
+    td{font-size:9px;padding:7px 3px;}
+    .opponent-name{font-size:9px;}
+    .opponent-id{font-size:7px;}
 }
 </style>
 </head>
@@ -209,7 +135,7 @@ td{
 <div class="container">
 
     <div class="header">
-        <img src="https://i.imgur.com/LY3Bb9m.png" alt="Logo">
+        <img src="https://i.imgur.com/LY3Bb9m.png">
         <h1>Rival Tracker</h1>
     </div>
 
@@ -236,7 +162,7 @@ td{
         <table>
             <thead>
                 <tr>
-                    <th>Opponent</th>
+                    <th style="width:42%">Opponent</th>
                     <th>Match</th>
                     <th>W</th>
                     <th>D</th>
@@ -245,7 +171,7 @@ td{
                 </tr>
             </thead>
             <tbody id="resultTable">
-                <tr><td colspan="6">Loading Data...</td></tr>
+                <tr><td colspan="6">Loading...</td></tr>
             </tbody>
         </table>
     </div>
@@ -260,9 +186,7 @@ const MEMBER_CSV="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0
 
 let matches=[], members={};
 
-function clean(v){
-    return String(v||"").replace(/^"+|"+$/g,"").replace(/\s+/g," ").trim();
-}
+const clean=v=>String(v||"").replace(/^"+|"+$/g,"").trim();
 
 function parseCSV(text){
     const rows=[]; let row=[],cur="",q=false;
@@ -280,12 +204,10 @@ function parseCSV(text){
     return rows;
 }
 
-function approved(v){
-    return ["yes","true","1","approved"].includes(clean(v).toLowerCase());
-}
+const approved=v=>["yes","true","1","approved"].includes(clean(v).toLowerCase());
 
 function isCurrentMonth(d){
-    const x=new Date(d), now=new Date();
+    const x=new Date(d),now=new Date();
     return !isNaN(x)&&x.getMonth()===now.getMonth()&&x.getFullYear()===now.getFullYear();
 }
 
@@ -299,19 +221,21 @@ async function loadAll(){
 }
 
 function loadMembers(csv){
-    const rows=parseCSV(csv), h=rows[0];
+    const rows=parseCSV(csv),h=rows[0];
     rows.slice(1).forEach(r=>{
         const obj={};
         h.forEach((x,i)=>obj[clean(x)]=clean(r[i]));
-        const id=obj["Club ID Number"], name=obj["Full Name"];
-        if(id&&name&&id!="#VALUE!"&&name!="#VALUE!"){
-            members[id]={name,id};
+        if(obj["Club ID Number"]&&obj["Full Name"]&&obj["Club ID Number"]!="#VALUE!"){
+            members[obj["Club ID Number"]]={
+                name:obj["Full Name"],
+                id:obj["Club ID Number"]
+            };
         }
     });
 }
 
 function loadMatches(csv){
-    const rows=parseCSV(csv), h=rows[0];
+    const rows=parseCSV(csv),h=rows[0];
     matches=rows.slice(1).map(r=>{
         const obj={};
         h.forEach((x,i)=>obj[clean(x)]=clean(r[i]));
@@ -320,9 +244,8 @@ function loadMatches(csv){
 }
 
 function populatePlayers(){
-    const ids=[...new Set([...matches.map(m=>clean(m.P1_ID)),...matches.map(m=>clean(m.P2_ID))])]
-        .filter(id=>id&&id!="#VALUE!")
-        .sort();
+    const ids=[...new Set(matches.flatMap(m=>[clean(m.P1_ID),clean(m.P2_ID)]))]
+        .filter(Boolean).sort();
 
     ids.forEach(id=>{
         const op=document.createElement("option");
@@ -332,11 +255,11 @@ function populatePlayers(){
     });
 }
 
-function renderOpponent(opp){
-    if(!members[opp]) return opp;
+function renderOpponent(id){
+    if(!members[id]) return id;
     return `
-        <div class="opponent-name">${members[opp].name}</div>
-        <div class="opponent-id">${opp}</div>
+        <div class="opponent-name">${members[id].name}</div>
+        <div class="opponent-id">${id}</div>
     `;
 }
 
@@ -349,33 +272,20 @@ function renderData(){
 
     let data=matches.filter(m=>approved(m.Approved));
 
-    if(periodFilter.value==="monthly"){
-        data=data.filter(m=>isCurrentMonth(m.Match_Date));
-    }
-
-    if(typeFilter.value==="Friendly"){
-        data=data.filter(m=>clean(m.Match_Type)==="Friendly");
-    }
-
-    if(typeFilter.value==="Tournament"){
-        data=data.filter(m=>clean(m.Match_Type)!=="Friendly");
-    }
+    if(periodFilter.value==="monthly") data=data.filter(m=>isCurrentMonth(m.Match_Date));
+    if(typeFilter.value==="Friendly") data=data.filter(m=>clean(m.Match_Type)==="Friendly");
+    if(typeFilter.value==="Tournament") data=data.filter(m=>clean(m.Match_Type)!=="Friendly");
 
     const stats={};
 
     data.forEach(m=>{
-        const p1=clean(m.P1_ID), p2=clean(m.P2_ID);
-        const s1=Number(m.P1_Score)||0, s2=Number(m.P2_Score)||0;
+        const p1=clean(m.P1_ID),p2=clean(m.P2_ID);
+        const s1=+m.P1_Score||0,s2=+m.P2_Score||0;
 
         let opp,res;
-
-        if(p1===player){
-            opp=p2;
-            res=s1>s2?"win":s1<s2?"loss":"draw";
-        }else if(p2===player){
-            opp=p1;
-            res=s2>s1?"win":s2<s1?"loss":"draw";
-        }else return;
+        if(p1===player){opp=p2;res=s1>s2?"win":s1<s2?"loss":"draw";}
+        else if(p2===player){opp=p1;res=s2>s1?"win":s2<s1?"loss":"draw";}
+        else return;
 
         if(!stats[opp]) stats[opp]={total:0,win:0,draw:0,loss:0};
 
@@ -387,22 +297,21 @@ function renderData(){
 
     resultTable.innerHTML=rows.length?rows.map(([opp,s])=>{
         const limit=periodFilter.value==="monthly"&&s.total>MONTHLY_MATCH_LIMIT;
-
         return `
         <tr class="${limit?'warning':''}">
-            <td>${renderOpponent(opp)}</td>
+            <td class="opponent">${renderOpponent(opp)}</td>
             <td>${s.total}</td>
             <td>${s.win}</td>
             <td>${s.draw}</td>
             <td>${s.loss}</td>
             <td><span class="badge ${limit?'alert':'ok'}">${limit?'LIMIT':'OK'}</span></td>
         </tr>`;
-    }).join(''):'<tr><td colspan="6">No Data Found</td></tr>';
+    }).join(""):'<tr><td colspan="6">No Data Found</td></tr>';
 }
 
-playerSelect.addEventListener("change",renderData);
-periodFilter.addEventListener("change",renderData);
-typeFilter.addEventListener("change",renderData);
+playerSelect.onchange=renderData;
+periodFilter.onchange=renderData;
+typeFilter.onchange=renderData;
 
 loadAll();
 </script>

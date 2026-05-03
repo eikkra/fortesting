@@ -87,10 +87,10 @@ td{font-size:9px;padding:7px 3px;}
 <script>
 const MONTHLY_MATCH_LIMIT = 5;
 
-const MATCH_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv";
-const MEMBER_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv";
+const MATCH_CSV="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv";
+const MEMBER_CSV="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv";
 
-let matches=[], members={};
+let matches=[],members={};
 
 const clean=v=>String(v||"").replace(/^"+|"+$/g,"").trim();
 
@@ -114,7 +114,6 @@ function parseCSV(text){
     return rows;
 }
 
-/* STRICT YES ONLY */
 function approved(v){
     return clean(v).toLowerCase()==="yes";
 }
@@ -139,7 +138,9 @@ function loadMembers(csv){
         const obj={};
         h.forEach((x,i)=>obj[clean(x)]=clean(r[i]));
         const id=obj["Club ID Number"],name=obj["Full Name"];
-        if(isValidClubID(id)&&name) members[id]={name,id};
+        if(isValidClubID(id)&&name){
+            members[id]={name,id};
+        }
     });
 }
 
@@ -149,25 +150,38 @@ function loadMatches(csv){
         const obj={};
         h.forEach((x,i)=>obj[clean(x)]=clean(r[i]));
         return obj;
-    }).filter(m=>isValidClubID(m.P1_ID)&&isValidClubID(m.P2_ID));
+    }).filter(m=>
+        isValidClubID(m.P1_ID)&&
+        isValidClubID(m.P2_ID)
+    );
 }
 
+/* ONLY CURRENT CLUB MEMBERS IN DROPDOWN */
 function populatePlayers(){
-    const ids=[...new Set(matches.flatMap(m=>[m.P1_ID,m.P2_ID]))]
-        .filter(isValidClubID).sort();
+    const activeIDs=[...new Set(
+        matches.flatMap(m=>[m.P1_ID,m.P2_ID])
+    )]
+    .filter(id=>members[id])
+    .sort();
 
     playerSelect.innerHTML='<option value="">Select Player</option>';
 
-    ids.forEach(id=>{
+    activeIDs.forEach(id=>{
         const op=document.createElement("option");
         op.value=id;
-        op.textContent=members[id]?`${members[id].name} - ${id}`:id;
+        op.textContent=`${members[id].name} - ${id}`;
         playerSelect.appendChild(op);
     });
 }
 
 function renderOpponent(id){
-    if(!members[id]) return id;
+    if(!members[id]){
+        return `
+        <div class="opponent-name">${id}</div>
+        <div class="opponent-id">Former/Unknown</div>
+        `;
+    }
+
     return `
     <div class="opponent-name">${members[id].name}</div>
     <div class="opponent-id">${id}</div>
@@ -177,16 +191,21 @@ function renderOpponent(id){
 function renderData(){
     const player=clean(playerSelect.value);
 
-    if(!isValidClubID(player)){
+    if(!members[player]){
         resultTable.innerHTML='<tr><td colspan="6">Select Player</td></tr>';
         return;
     }
 
     let data=matches.filter(m=>approved(m.Approved));
 
-    if(periodFilter.value==="monthly") data=data.filter(m=>isCurrentMonth(m.Match_Date));
-    if(typeFilter.value==="Friendly") data=data.filter(m=>clean(m.Match_Type)==="Friendly");
-    if(typeFilter.value==="Tournament") data=data.filter(m=>clean(m.Match_Type)!=="Friendly");
+    if(periodFilter.value==="monthly")
+        data=data.filter(m=>isCurrentMonth(m.Match_Date));
+
+    if(typeFilter.value==="Friendly")
+        data=data.filter(m=>clean(m.Match_Type)==="Friendly");
+
+    if(typeFilter.value==="Tournament")
+        data=data.filter(m=>clean(m.Match_Type)!=="Friendly");
 
     const stats={};
 
@@ -196,9 +215,13 @@ function renderData(){
 
         let opp,res;
 
-        if(p1===player){opp=p2;res=s1>s2?"win":s1<s2?"loss":"draw";}
-        else if(p2===player){opp=p1;res=s2>s1?"win":s2<s1?"loss":"draw";}
-        else return;
+        if(p1===player){
+            opp=p2;
+            res=s1>s2?"win":s1<s2?"loss":"draw";
+        }else if(p2===player){
+            opp=p1;
+            res=s2>s1?"win":s2<s1?"loss":"draw";
+        }else return;
 
         if(!stats[opp]) stats[opp]={total:0,win:0,draw:0,loss:0};
 

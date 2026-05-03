@@ -13,7 +13,7 @@ body{
     color:#e2e8f0;
 }
 
-/* HEADER (UNCHANGED) */
+/* HEADER */
 .header{
     display:flex;
     justify-content:center;
@@ -71,28 +71,34 @@ table{
     table-layout:fixed;
 }
 
-/* HEADER ALIGN CENTER */
+/* HEADER CENTER PERFECT */
 th{
     color:#00f5ff;
-    padding:8px 4px;
-    font-size:11px;
+    padding:8px;
     border-bottom:2px solid #00f5ff;
-    text-align:center; /* ✅ perfect alignment */
+    font-size:12px;
+    text-align:center;
 }
 
-/* BODY CELLS */
+/* BODY */
 td{
-    padding:6px 4px;
-    font-size:10px;
-    font-weight:500; /* ✅ slightly bold */
-    text-align:center;
+    padding:8px;
+    font-size:12px;
+    font-weight:500;
+    text-align:center; /* ✅ PERFECT CENTER ALIGN */
     white-space:nowrap;
 }
 
-/* RIGHT ALIGN ONLY SCORE + POINT */
+/* SHIFT LEFT SIDE A BIT RIGHT (Type, P1, P2) */
+td.shift{
+    padding-left:10px;
+}
+
+/* RIGHT SIDE ALIGN CLEAN */
 td.score, td.point{
-    text-align:right;
-    padding-right:12px;
+    text-align:center;
+    font-weight:700;
+    font-size:13px;
 }
 
 /* COLORS */
@@ -139,7 +145,7 @@ Live approved match logs filtered by tournament type and date range.
 <th>Player 1</th>
 <th>Player 2</th>
 <th>Score</th>
-<th>Point</th> <!-- ✅ renamed -->
+<th>Point</th>
 </tr>
 </thead>
 
@@ -153,7 +159,7 @@ const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0X
 
 let allData = [];
 
-/* ✅ FIX DATE (FULL + NO TRUNCATION) */
+/* FIX DATE (NO CUT + NO SHIFT) */
 function parseDate(str){
     if(!str) return null;
     let d = str.split(" ")[0];
@@ -162,30 +168,31 @@ function parseDate(str){
     return new Date(p[2], p[0]-1, p[1], 12);
 }
 
-/* FULL DATE DISPLAY (NO CUT) */
+/* FULL DATE FORMAT */
 function formatDate(d){
-    const day = String(d.getDate()).padStart(2,'0');
-    const month = String(d.getMonth()+1).padStart(2,'0');
-    const year = d.getFullYear();
-    return `${day}/${month}/${year}`;  // ✅ FULL visible format
+    let y=d.getFullYear();
+    let m=(d.getMonth()+1+"").padStart(2,"0");
+    let da=(d.getDate()+"").padStart(2,"0");
+    return `${y}-${m}-${da}`;
 }
 
+/* TYPE SHORT */
 function shortType(t){
     if(t==="Solo Tournament") return "Solo";
     if(t==="Bid Tournament") return "Bid";
     return t;
 }
 
-/* PARSER */
+/* CSV */
 function fastCSV(csv){
-    const lines = csv.split("\n");
-    const result = [];
+    const lines=csv.split("\n");
+    const result=[];
 
     for(let i=1;i<lines.length;i++){
-        const r = lines[i].split(",");
+        const r=lines[i].split(",");
         if(r.length<12) continue;
 
-        const date = parseDate(r[11]);
+        const date=parseDate(r[11]);
         if(!date) continue;
 
         result.push({
@@ -201,16 +208,15 @@ function fastCSV(csv){
             approved:(r[9]||"").toLowerCase().trim()
         });
     }
-
     return result;
 }
 
 /* LOAD */
 async function loadData(){
-    const res = await fetch(CSV_URL + "&t=" + Date.now(), {cache:"no-store"});
-    const text = await res.text();
+    const res=await fetch(CSV_URL+"&t="+Date.now());
+    const text=await res.text();
 
-    allData = fastCSV(text)
+    allData=fastCSV(text)
         .filter(r=>r.approved==="yes")
         .sort((a,b)=>{
             if(b.date-a.date!==0) return b.date-a.date;
@@ -222,46 +228,46 @@ async function loadData(){
 
 /* FILTER */
 function applyFilter(){
-    let data = allData;
+    let data=allData;
 
-    const type = matchType.value;
-    const start = startDate.value ? new Date(startDate.value) : null;
-    const end = endDate.value ? new Date(endDate.value) : null;
+    const type=matchType.value;
+    const start=startDate.value?new Date(startDate.value):null;
+    const end=endDate.value?new Date(endDate.value):null;
 
-    if(type) data = data.filter(r=>r.type===type);
-    if(start) data = data.filter(r=>r.date>=start);
-    if(end) data = data.filter(r=>r.date<=end);
+    if(type) data=data.filter(r=>r.type===type);
+    if(start) data=data.filter(r=>r.date>=start);
+    if(end) data=data.filter(r=>r.date<=end);
 
     render(data);
 }
 
 /* RENDER */
 function render(data){
-    const tbody = document.getElementById("tableBody");
-    let html = "";
+    const tbody=document.getElementById("tableBody");
+    let html="";
 
     for(let i=0;i<Math.min(data.length,500);i++){
-        const r = data[i];
+        const r=data[i];
 
         let p1="",p2="";
         if(r.s1>r.s2){p1="win";p2="loss";}
         else if(r.s1<r.s2){p1="loss";p2="win";}
         else{p1="draw";p2="draw";}
 
-        let gold = (r.s1>=7||r.s2>=7)?"gold":"";
+        let gold=(r.s1>=7||r.s2>=7)?"gold":"";
 
-        html += `
+        html+=`
         <tr>
             <td>${formatDate(r.date)}</td>
-            <td>${shortType(r.type)}</td>
-            <td class="${p1}">${r.p1}</td>
-            <td class="${p2}">${r.p2}</td>
+            <td class="shift">${shortType(r.type)}</td>
+            <td class="shift ${p1}">${r.p1}</td>
+            <td class="shift ${p2}">${r.p2}</td>
             <td class="score ${gold}">${r.s1}-${r.s2}</td>
             <td class="point">${r.pt1}-${r.pt2}</td>
         </tr>`;
     }
 
-    tbody.innerHTML = html;
+    tbody.innerHTML=html;
 }
 
 loadData();

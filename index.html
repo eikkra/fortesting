@@ -3,359 +3,306 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Match Schedule & Fixture</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<title>GOAT FC Score Submit</title>
+<link rel="icon" href="https://i.imgur.com/LY3Bb9m.png">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
 
 <style>
-:root{
-    --green:#00ff88;
-    --green2:#00cc66;
-    --home:#00ffd0;
-    --away:#ff4d6d;
-    --border:rgba(0,255,136,.2);
-}
-*{margin:0;padding:0;box-sizing:border-box;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif;}
+
 body{
-    font-family:Poppins;
-    background:radial-gradient(circle,#0b1f15,#020705);
-    color:#eafff2;
-    padding:12px;
+background:
+radial-gradient(circle at top left,#2a0000,#050505 60%),
+linear-gradient(135deg,#080808,#111);
+min-height:100vh;
+padding:20px;
+display:flex;
+justify-content:center;
+align-items:center;
+color:#fff;
+overflow-x:hidden;
 }
-.container{max-width:950px;margin:auto;}
+
+.container{
+width:100%;
+max-width:700px;
+padding:3px;
+border-radius:28px;
+background:linear-gradient(135deg,#ff0000,#ff7300,#ff00c8,#ff0000);
+background-size:400% 400%;
+animation:rgbBorder 8s linear infinite;
+box-shadow:
+0 0 20px #ff000066,
+0 0 50px #ff000044;
+}
+
+.inner{
+background:rgba(8,8,8,.96);
+padding:28px;
+border-radius:25px;
+backdrop-filter:blur(15px);
+}
+
+@keyframes rgbBorder{
+0%{background-position:0% 50%;}
+100%{background-position:400% 50%;}
+}
+
+.logo{
+width:95px;
+display:block;
+margin:auto;
+filter:
+drop-shadow(0 0 8px red)
+drop-shadow(0 0 16px #ff0000);
+}
+
 .title{
-    text-align:center;
-    font-family:Orbitron;
-    font-size:22px;
-    color:var(--green);
-    margin-bottom:16px;
+text-align:center;
+margin:16px 0 25px;
+font-size:24px;
+font-weight:900;
+color:#fff;
+text-shadow:
+0 0 8px #ff0000,
+0 0 18px #ff0000;
 }
-select{
-    width:100%;
-    padding:10px;
-    border-radius:10px;
-    background:#0d1f16;
-    border:1px solid var(--border);
-    color:var(--green);
-    margin-bottom:14px;
+
+.form-group{margin-bottom:18px;}
+
+label{
+display:block;
+margin-bottom:8px;
+font-size:13px;
+color:#ff9f9f;
 }
-.match-card{
-    background:linear-gradient(145deg,#0d1f16,#11281c);
-    border:1px solid var(--border);
-    border-radius:12px;
-    padding:12px;
-    margin-bottom:12px;
+
+input,select{
+width:100%;
+padding:14px;
+border-radius:14px;
+border:1px solid #333;
+background:#111;
+color:#fff;
+outline:none;
+font-size:14px;
+transition:.25s;
 }
-.match-row{
-    display:grid;
-    grid-template-columns:1fr auto 1fr;
-    align-items:center;
-    gap:6px;
+
+input:focus,select:focus{
+border-color:#ff0000;
+box-shadow:
+0 0 12px #ff000088,
+inset 0 0 10px #ff000022;
 }
-.team{
-    display:flex;
-    align-items:center;
-    gap:6px;
+
+.score-row{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:15px;
 }
-.team.right{justify-content:flex-end;}
-.team img{
-    width:26px;
-    height:26px;
-    border-radius:6px;
-    background:#fff;
-    flex-shrink:0;
+
+.preview{
+width:100%;
+margin-top:12px;
+border-radius:14px;
+display:none;
+border:1px solid #333;
 }
-.team-info{
-    display:flex;
-    flex-direction:column;
+
+.checkbox{
+display:flex;
+gap:10px;
+font-size:12px;
+align-items:flex-start;
+margin-top:8px;
 }
-.team-name{
-    font-size:11px;
-    font-weight:700;
-    line-height:1.2;
-    word-break:break-word;
+
+.checkbox input{
+width:auto;
+margin-top:3px;
 }
-.tag{
-    font-size:9px;
-    margin-top:2px;
+
+button{
+width:100%;
+padding:15px;
+border:none;
+border-radius:15px;
+font-size:15px;
+font-weight:700;
+cursor:pointer;
+background:linear-gradient(90deg,#ff0000,#b30000,#ff4d4d);
+color:#fff;
+box-shadow:
+0 0 15px #ff000088,
+0 0 35px #ff000044;
+transition:.25s;
 }
-.home-tag{color:var(--home);}
-.away-tag{color:var(--away);}
-.vs{
-    font-family:Orbitron;
-    font-size:13px;
-    color:var(--green);
-    text-align:center;
-    min-width:35px;
+
+button:hover{
+transform:translateY(-2px);
+box-shadow:
+0 0 20px #ff0000,
+0 0 40px #ff000088;
 }
-.btn-row{
-    display:flex;
-    gap:6px;
-    margin-top:10px;
+
+.status{
+text-align:center;
+margin-top:15px;
+font-size:13px;
+display:none;
 }
-.btn{
-    flex:1;
-    padding:8px;
-    border-radius:8px;
-    font-size:11px;
-    font-weight:700;
-    border:none;
-    cursor:pointer;
-    text-align:center;
+
+.closed{
+display:none;
+padding:18px;
+text-align:center;
+font-size:15px;
+color:#ff5c5c;
+border:1px solid #ff000044;
+border-radius:16px;
+background:#1a0000;
+box-shadow:0 0 20px #ff000022 inset;
 }
-.group-btn{
-    background:rgba(0,255,136,.1);
-    color:var(--green);
-    border:1px solid var(--border);
-    text-decoration:none;
+
+@media(max-width:600px){
+.score-row{
+grid-template-columns:1fr;
 }
-.fixture-btn{
-    background:linear-gradient(90deg,var(--green),var(--green2));
-    color:#03140a;
+.inner{
+padding:20px;
 }
-.modal{
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.8);
-    display:none;
-    justify-content:center;
-    align-items:center;
-    padding:15px;
+.title{
+font-size:20px;
 }
-.modal-box{
-    background:#08150f;
-    border:1px solid var(--border);
-    padding:14px;
-    border-radius:12px;
-    width:100%;
-    max-width:600px;
-}
-textarea{
-    width:100%;
-    height:360px;
-    background:#06110b;
-    color:#dffff0;
-    border:1px solid var(--border);
-    border-radius:8px;
-    padding:10px;
-    font-size:12px;
-}
-.copy-btn{
-    margin-top:10px;
-    width:100%;
-    padding:10px;
-    background:var(--green);
-    border:none;
-    border-radius:8px;
-    font-weight:800;
 }
 </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="title">MATCH SCHEDULE & FIXTURE</div>
-    <select id="roundSelect"></select>
-    <div id="fixture"></div>
+<div class="inner">
+
+<img src="https://i.imgur.com/LY3Bb9m.png" class="logo">
+<div class="title">GOAT FC SCORE SUBMIT</div>
+
+<div class="closed" id="closedBox">
+🚫 Score Submission is Currently Closed
 </div>
 
-<div class="modal" id="modal">
-    <div class="modal-box">
-        <textarea id="output"></textarea>
-        <button class="copy-btn" onclick="copyText()">COPY</button>
-    </div>
+<form id="scoreForm">
+
+<div class="form-group">
+<label>Your Club ID</label>
+<select name="yourClub" id="yourClub" required></select>
+</div>
+
+<div class="form-group">
+<label>Opponent Club ID</label>
+<select name="opponentClub" id="opponentClub" required></select>
+</div>
+
+<div class="form-group">
+<label>Match Type</label>
+<select name="matchType" required>
+<option value="">Select Match Type</option>
+<option>Friendly</option>
+<option>Solo</option>
+<option>League</option>
+<option>CO-Op</option>
+</select>
+</div>
+
+<div class="score-row">
+<div class="form-group">
+<label>Your Goal Score</label>
+<input type="number" name="yourGoal" min="0" required>
+</div>
+
+<div class="form-group">
+<label>Opponent Goal Score</label>
+<input type="number" name="opponentGoal" min="0" required>
+</div>
+</div>
+
+<div class="form-group">
+<label>Screenshot Upload</label>
+<input type="file" id="screenshot" accept="image/*" required>
+<img id="preview" class="preview">
+</div>
+
+<div class="checkbox">
+<input type="checkbox" required>
+<span>I confirm that the submitted score and screenshot are authentic.</span>
+</div>
+
+<br>
+<button type="submit">SUBMIT SCORE</button>
+
+<div class="status" id="status"></div>
+
+</form>
+
+</div>
 </div>
 
 <script>
-const TEAM_CSV="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=467352529&single=true&output=csv";
-const MEMBER_CSV="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv";
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycby78OiX-BtWiBIyi_H2vl89vZ1ddxhQIOdgrI24cR5p4go8AftxJrFgahfODvBCeemc/exec";
 
-let fixtures=[], members={};
+const yourClub=document.getElementById("yourClub");
+const opponentClub=document.getElementById("opponentClub");
 
-/* PROPER CSV PARSER */
-function parseCSV(text){
-    const rows=[];
-    let row=[], cell='', inQuotes=false;
-
-    for(let i=0;i<text.length;i++){
-        const char=text[i];
-        const next=text[i+1];
-
-        if(char === '"'){
-            if(inQuotes && next === '"'){
-                cell += '"';
-                i++;
-            }else{
-                inQuotes = !inQuotes;
-            }
-        }
-        else if(char === ',' && !inQuotes){
-            row.push(cell.trim());
-            cell='';
-        }
-        else if((char === '\n' || char === '\r') && !inQuotes){
-            if(cell || row.length){
-                row.push(cell.trim());
-                rows.push(row);
-                row=[];
-                cell='';
-            }
-        }
-        else{
-            cell += char;
-        }
-    }
-
-    if(cell || row.length){
-        row.push(cell.trim());
-        rows.push(row);
-    }
-
-    return rows;
+for(let i=1;i<=128;i++){
+let id="GFC-"+String(i).padStart(3,'0');
+yourClub.innerHTML+=`<option value="${id}">${id}</option>`;
+opponentClub.innerHTML+=`<option value="${id}">${id}</option>`;
 }
 
-async function getCSV(url){
-    const res = await fetch(url);
-    const text = await res.text();
-    return parseCSV(text);
+document.getElementById("screenshot").addEventListener("change",function(){
+const file=this.files[0];
+if(file){
+document.getElementById("preview").src=URL.createObjectURL(file);
+document.getElementById("preview").style.display="block";
 }
+});
 
-async function load(){
-    const memberRows = await getCSV(MEMBER_CSV);
-    memberRows.shift();
-
-    memberRows.forEach(r=>{
-        const clubId = (r[1] || '').trim();
-        const fullName = (r[0] || '').trim();
-        if(clubId) members[clubId] = fullName;
-    });
-
-    const teamRows = await getCSV(TEAM_CSV);
-    teamRows.shift();
-
-    const teams = teamRows.map(r=>({
-        name:r[0] || '',
-        logo:r[1] || '',
-        ids:r[3] || '',
-        link:r[7] || ''
-    }));
-
-    fixtures = doubleRoundRobin(teams);
-    initUI();
+fetch(SCRIPT_URL+"?mode=status")
+.then(res=>res.text())
+.then(status=>{
+if(status==="OFF"){
+document.getElementById("scoreForm").style.display="none";
+document.getElementById("closedBox").style.display="block";
 }
+});
 
-function doubleRoundRobin(teams){
-    let n=teams.length, arr=[...teams], rounds=n-1, half=n/2, first=[];
+document.getElementById("scoreForm").addEventListener("submit",async function(e){
+e.preventDefault();
 
-    for(let r=0;r<rounds;r++){
-        let matches=[];
-        for(let i=0;i<half;i++){
-            let t1=arr[i], t2=arr[n-1-i];
-            let flip=(r+i)%2===0;
-            matches.push({home:flip?t1:t2, away:flip?t2:t1});
-        }
-        first.push(matches);
-        arr.splice(1,0,arr.pop());
-    }
+const status=document.getElementById("status");
+status.style.display="block";
+status.style.color="#fff";
+status.innerHTML="Uploading...";
 
-    return [...first, ...first.map(round=>round.map(m=>({home:m.away, away:m.home})))];
+const fd=new FormData();
+fd.append("yourClub",this.yourClub.value);
+fd.append("opponentClub",this.opponentClub.value);
+fd.append("matchType",this.matchType.value);
+fd.append("yourGoal",this.yourGoal.value);
+fd.append("opponentGoal",this.opponentGoal.value);
+fd.append("screenshot",document.getElementById("screenshot").files[0]);
+
+try{
+await fetch(SCRIPT_URL,{method:"POST",body:fd});
+status.style.color="#00ff99";
+status.innerHTML="✅ Score Submitted Successfully!";
+this.reset();
+preview.style.display="none";
 }
-
-function initUI(){
-    const select=document.getElementById("roundSelect");
-    fixtures.forEach((_,i)=>{
-        select.innerHTML += `<option value="${i}">Round ${i+1}</option>`;
-    });
-    select.onchange=e=>render(e.target.value);
-    render(0);
+catch{
+status.style.color="#ff4444";
+status.innerHTML="❌ Submission Failed";
 }
-
-function render(r){
-    const box=document.getElementById("fixture");
-    box.innerHTML='';
-
-    fixtures[r].forEach(m=>{
-        box.innerHTML += `
-        <div class="match-card">
-            <div class="match-row">
-                <div class="team">
-                    <img src="${m.home.logo}">
-                    <div class="team-info">
-                        <div class="team-name">${m.home.name}</div>
-                        <span class="tag home-tag">HOME</span>
-                    </div>
-                </div>
-
-                <div class="vs">VS</div>
-
-                <div class="team right">
-                    <div class="team-info" style="text-align:right">
-                        <div class="team-name">${m.away.name}</div>
-                        <span class="tag away-tag">AWAY</span>
-                    </div>
-                    <img src="${m.away.logo}">
-                </div>
-            </div>
-
-            <div class="btn-row">
-                <a href="${m.home.link}" target="_blank" class="btn group-btn">Match Group</a>
-                <button class="btn fixture-btn" onclick='gen(${JSON.stringify(m.home)},${JSON.stringify(m.away)})'>
-                    Fixture Generate
-                </button>
-            </div>
-        </div>`;
-    });
-}
-
-function players(ids){
-    return ids.split(",").map(id=>{
-        const clean=id.trim().replace(/^"|"$/g,'');
-        return members[clean] || "undefined";
-    });
-}
-
-function gen(h,a){
-    const hp=players(h.ids);
-    const ap=players(a.ids);
-
-    const txt=`Powered by GOAT FC
-Manager's Showdown
-
-${h.name} (Home) 🆚 ${a.name} (Away)
-
-First Battle: 11:00 PM
-1️⃣ ${hp[0] || 'undefined'} 🆚 ${ap[0] || 'undefined'}
-2️⃣ ${hp[1] || 'undefined'} 🆚 ${ap[1] || 'undefined'}
-
-Final Battle: 12:00 AM
-3️⃣ ${hp[2] || 'undefined'} 🆚 ${ap[2] || 'undefined'}
-4️⃣ ${hp[3] || 'undefined'} 🆚 ${ap[3] || 'undefined'}
-
-Sub Player List:
-↕️ ${hp[4] || 'undefined'} (Home)
-↕️ ${hp[5] || 'undefined'} (Home)
-
-↕️ ${ap[4] || 'undefined'} (Away)
-↕️ ${ap[5] || 'undefined'} (Away)
-
-📛Tournament Rules: www.goatfcbd.com/rules
-🌐Visit: www.goatfcbd.com`;
-
-    document.getElementById("output").value = txt;
-    document.getElementById("modal").style.display = "flex";
-}
-
-function copyText(){
-    const t=document.getElementById("output");
-    t.select();
-    document.execCommand("copy");
-}
-
-document.getElementById("modal").onclick=e=>{
-    if(e.target.id==="modal") e.target.style.display="none";
-};
-
-load();
+});
 </script>
 
 </body>

@@ -3,172 +3,308 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GOAT FC Score Submit</title>
-<link rel="icon" href="https://i.imgur.com/LY3Bb9m.png">
+<title>GOAT FC Player Match Tracker</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
 
 <style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Orbitron',sans-serif;
+}
 body{
-margin:0;
-font-family:'Orbitron',sans-serif;
-background:#050505;
-color:white;
-display:flex;
-justify-content:center;
-align-items:center;
-min-height:100vh;
-padding:20px;
+    background:linear-gradient(135deg,#0b0f1a,#10192b);
+    color:#fff;
+    min-height:100vh;
+    padding:20px;
 }
-
 .container{
-width:100%;
-max-width:700px;
-background:linear-gradient(135deg,#ff0000,#000,#ff0000);
-padding:3px;
-border-radius:25px;
-animation:rgb 6s linear infinite;
+    max-width:1400px;
+    margin:auto;
 }
-
-@keyframes rgb{
-0%{filter:hue-rotate(0deg);}
-100%{filter:hue-rotate(360deg);}
+.header{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:15px;
+    padding:18px;
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.1);
+    border-radius:18px;
+    margin-bottom:25px;
+    box-shadow:0 0 25px rgba(0,255,180,0.12);
 }
-
-.inner{
-background:#0a0a0a;
-padding:25px;
-border-radius:22px;
+.header img{
+    width:55px;
+    height:55px;
+    object-fit:contain;
 }
-
-.logo{
-width:90px;
-display:block;
-margin:auto;
+.header h1{
+    font-size:24px;
+    color:#00ffb7;
+    text-transform:uppercase;
 }
-
-h2{text-align:center;color:red}
-
-input,select{
-width:100%;
-padding:12px;
-margin-top:6px;
-margin-bottom:15px;
-border-radius:10px;
-border:none;
-background:#111;
-color:white;
+.filters{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:15px;
+    margin-bottom:20px;
 }
-
-button{
-width:100%;
-padding:14px;
-background:red;
-border:none;
-border-radius:12px;
-color:white;
-font-weight:bold;
-cursor:pointer;
+select{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    background:#172338;
+    color:#fff;
+    font-size:14px;
 }
-
-.preview{
-width:100%;
-margin-top:10px;
-display:none;
-border-radius:10px;
+.table-wrap{
+    overflow-x:auto;
+    border-radius:18px;
 }
-
-.status{text-align:center;margin-top:10px}
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:850px;
+    background:rgba(255,255,255,0.03);
+    backdrop-filter:blur(8px);
+}
+th{
+    background:#00ffb7;
+    color:#000;
+    padding:14px;
+    font-size:13px;
+}
+td{
+    padding:14px;
+    text-align:center;
+    border-bottom:1px solid rgba(255,255,255,0.07);
+    font-size:13px;
+}
+tr:hover{
+    background:rgba(255,255,255,0.05);
+}
+.warning{
+    background:rgba(255,0,0,0.18)!important;
+}
+.badge{
+    padding:5px 10px;
+    border-radius:999px;
+    font-size:11px;
+    font-weight:700;
+}
+.ok{
+    background:#0f5132;
+    color:#75ffb2;
+}
+.alert{
+    background:#7f1d1d;
+    color:#ff8f8f;
+}
+@media(max-width:768px){
+    .header h1{
+        font-size:16px;
+    }
+    th,td{
+        padding:10px 8px;
+        font-size:11px;
+    }
+}
 </style>
 </head>
-
 <body>
 
 <div class="container">
-<div class="inner">
 
-<img src="https://i.imgur.com/LY3Bb9m.png" class="logo">
-<h2>GOAT FC SCORE SUBMIT</h2>
+    <div class="header">
+        <img src="https://i.imgur.com/LY3Bb9m.png">
+        <h1>GOAT FC Head to Head Tracker</h1>
+    </div>
 
-<form id="form">
+    <div class="filters">
+        <select id="playerSelect">
+            <option value="">Select Player</option>
+        </select>
 
-<label>Your Club ID</label>
-<select id="yourClub"></select>
+        <select id="periodFilter">
+            <option value="monthly">Current Month</option>
+            <option value="overall">Overall</option>
+        </select>
 
-<label>Opponent Club ID</label>
-<select id="opponentClub"></select>
+        <select id="typeFilter">
+            <option value="all">All Matches</option>
+            <option value="Friendly">Friendly Only</option>
+            <option value="Tournament">Tournament Only</option>
+        </select>
+    </div>
 
-<label>Match Type</label>
-<select id="matchType">
-<option>Friendly</option>
-<option>Solo</option>
-<option>League</option>
-<option>CO-Op</option>
-</select>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Opponent</th>
+                    <th>Total Match</th>
+                    <th>Wins</th>
+                    <th>Draws</th>
+                    <th>Losses</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="resultTable">
+                <tr>
+                    <td colspan="6">Select Player to View Data</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
-<label>Your Goal</label>
-<input type="number" id="yourGoal">
-
-<label>Opponent Goal</label>
-<input type="number" id="opponentGoal">
-
-<label>Screenshot</label>
-<input type="file" id="file">
-<img id="preview" class="preview">
-
-<button type="submit">SUBMIT</button>
-
-<div class="status" id="status"></div>
-
-</form>
-
-</div>
 </div>
 
 <script>
-const scriptURL="YOUR_SCRIPT_URL";
+const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv";
 
-const yourClub=document.getElementById("yourClub");
-const opponentClub=document.getElementById("opponentClub");
+let allData = [];
 
-for(let i=1;i<=128;i++){
-let id="GFC-"+String(i).padStart(3,'0');
-yourClub.innerHTML+=`<option>${id}</option>`;
-opponentClub.innerHTML+=`<option>${id}</option>`;
+async function loadCSV(){
+    const res = await fetch(CSV_URL);
+    const text = await res.text();
+
+    const rows = text.trim().split("\n").map(r=>r.split(","));
+
+    const headers = rows[0];
+    allData = rows.slice(1).map(r=>{
+        let obj = {};
+        headers.forEach((h,i)=>obj[h.trim()] = r[i]?.trim());
+        return obj;
+    });
+
+    populatePlayers();
 }
 
-let base64Image="";
+function populatePlayers(){
+    const players = new Set();
 
-document.getElementById("file").addEventListener("change",function(){
-const file=this.files[0];
-const reader=new FileReader();
+    allData.forEach(r=>{
+        players.add(r.P1_ID);
+        players.add(r.P2_ID);
+    });
 
-reader.onload=function(){
-base64Image=reader.result;
-document.getElementById("preview").src=base64Image;
-document.getElementById("preview").style.display="block";
+    const select = document.getElementById("playerSelect");
+
+    [...players].sort().forEach(p=>{
+        const op = document.createElement("option");
+        op.value = p;
+        op.textContent = p;
+        select.appendChild(op);
+    });
 }
-reader.readAsDataURL(file);
-});
 
-document.getElementById("form").addEventListener("submit",async(e)=>{
-e.preventDefault();
+function isCurrentMonth(dateStr){
+    const d = new Date(dateStr);
+    const now = new Date();
 
-document.getElementById("status").innerText="Submitting...";
+    return d.getMonth()===now.getMonth() &&
+           d.getFullYear()===now.getFullYear();
+}
 
-await fetch(scriptURL,{
-method:"POST",
-body:JSON.stringify({
-yourClub:yourClub.value,
-opponentClub:opponentClub.value,
-matchType:matchType.value,
-yourGoal:yourGoal.value,
-opponentGoal:opponentGoal.value,
-image:base64Image
-})
-});
+function renderData(){
+    const player = document.getElementById("playerSelect").value;
+    const period = document.getElementById("periodFilter").value;
+    const type = document.getElementById("typeFilter").value;
 
-document.getElementById("status").innerText="Submitted Successfully!";
-});
+    const tbody = document.getElementById("resultTable");
+
+    if(!player){
+        tbody.innerHTML=`<tr><td colspan="6">Select Player to View Data</td></tr>`;
+        return;
+    }
+
+    let filtered = allData.filter(r=>r.Approved==="Yes");
+
+    if(period==="monthly"){
+        filtered = filtered.filter(r=>isCurrentMonth(r.Match_Date));
+    }
+
+    if(type==="Friendly"){
+        filtered = filtered.filter(r=>r.Match_Type==="Friendly");
+    }
+
+    if(type==="Tournament"){
+        filtered = filtered.filter(r=>r.Match_Type!=="Friendly");
+    }
+
+    const stats = {};
+
+    filtered.forEach(match=>{
+
+        let opponent=null, result=null;
+
+        if(match.P1_ID===player){
+            opponent=match.P2_ID;
+
+            if(+match.P1_Score > +match.P2_Score) result="win";
+            else if(+match.P1_Score < +match.P2_Score) result="loss";
+            else result="draw";
+        }
+        else if(match.P2_ID===player){
+            opponent=match.P1_ID;
+
+            if(+match.P2_Score > +match.P1_Score) result="win";
+            else if(+match.P2_Score < +match.P1_Score) result="loss";
+            else result="draw";
+        }
+
+        if(!opponent) return;
+
+        if(!stats[opponent]){
+            stats[opponent]={
+                total:0,
+                win:0,
+                draw:0,
+                loss:0
+            };
+        }
+
+        stats[opponent].total++;
+        stats[opponent][result]++;
+    });
+
+    const entries = Object.entries(stats).sort((a,b)=>b[1].total-a[1].total);
+
+    if(entries.length===0){
+        tbody.innerHTML=`<tr><td colspan="6">No Data Found</td></tr>`;
+        return;
+    }
+
+    tbody.innerHTML = entries.map(([opp,s])=>{
+
+        const warning = period==="monthly" && s.total>5;
+
+        return `
+        <tr class="${warning?'warning':''}">
+            <td>${opp}</td>
+            <td>${s.total}</td>
+            <td>${s.win}</td>
+            <td>${s.draw}</td>
+            <td>${s.loss}</td>
+            <td>
+                <span class="badge ${warning?'alert':'ok'}">
+                    ${warning?'LIMIT EXCEEDED':'OK'}
+                </span>
+            </td>
+        </tr>
+        `;
+    }).join("");
+}
+
+document.getElementById("playerSelect").addEventListener("change",renderData);
+document.getElementById("periodFilter").addEventListener("change",renderData);
+document.getElementById("typeFilter").addEventListener("change",renderData);
+
+loadCSV();
 </script>
 
 </body>

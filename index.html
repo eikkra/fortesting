@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GOAT FC Player Match Tracker</title>
+<title>Rival Tracker</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
 
@@ -15,10 +15,10 @@
     font-family:'Orbitron',sans-serif;
 }
 body{
-    background:linear-gradient(135deg,#0b0f1a,#10192b);
+    background:linear-gradient(135deg,#08111f,#0d1a2d,#121f36);
     color:#fff;
     min-height:100vh;
-    padding:20px;
+    padding:15px;
 }
 .container{
     max-width:1400px;
@@ -30,21 +30,19 @@ body{
     justify-content:center;
     gap:15px;
     padding:18px;
-    background:rgba(255,255,255,0.05);
-    border:1px solid rgba(255,255,255,0.1);
     border-radius:18px;
-    margin-bottom:25px;
-    box-shadow:0 0 25px rgba(0,255,180,0.12);
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.08);
+    box-shadow:0 0 25px rgba(0,255,170,0.12);
+    margin-bottom:20px;
 }
 .header img{
-    width:55px;
-    height:55px;
-    object-fit:contain;
+    width:52px;
+    height:52px;
 }
 .header h1{
     font-size:24px;
     color:#00ffb7;
-    text-transform:uppercase;
 }
 .filters{
     display:grid;
@@ -57,20 +55,20 @@ select{
     padding:14px;
     border:none;
     border-radius:12px;
-    background:#172338;
+    background:#13243b;
     color:#fff;
     font-size:14px;
+    outline:none;
 }
-.table-wrap{
+.table-box{
     overflow-x:auto;
-    border-radius:18px;
+    border-radius:16px;
 }
 table{
     width:100%;
-    border-collapse:collapse;
     min-width:850px;
+    border-collapse:collapse;
     background:rgba(255,255,255,0.03);
-    backdrop-filter:blur(8px);
 }
 th{
     background:#00ffb7;
@@ -81,36 +79,36 @@ th{
 td{
     padding:14px;
     text-align:center;
-    border-bottom:1px solid rgba(255,255,255,0.07);
+    border-bottom:1px solid rgba(255,255,255,0.08);
     font-size:13px;
 }
 tr:hover{
-    background:rgba(255,255,255,0.05);
+    background:rgba(255,255,255,0.04);
 }
 .warning{
-    background:rgba(255,0,0,0.18)!important;
+    background:rgba(255,0,0,0.15)!important;
 }
 .badge{
-    padding:5px 10px;
+    padding:6px 10px;
     border-radius:999px;
     font-size:11px;
     font-weight:700;
 }
 .ok{
-    background:#0f5132;
-    color:#75ffb2;
+    background:#123d2d;
+    color:#79ffbe;
 }
 .alert{
-    background:#7f1d1d;
-    color:#ff8f8f;
+    background:#641818;
+    color:#ff8e8e;
 }
 @media(max-width:768px){
     .header h1{
         font-size:16px;
     }
     th,td{
-        padding:10px 8px;
         font-size:11px;
+        padding:10px 8px;
     }
 }
 </style>
@@ -121,7 +119,7 @@ tr:hover{
 
     <div class="header">
         <img src="https://i.imgur.com/LY3Bb9m.png">
-        <h1>GOAT FC Head to Head Tracker</h1>
+        <h1>GOAT FC Rival Tracker</h1>
     </div>
 
     <div class="filters">
@@ -141,7 +139,7 @@ tr:hover{
         </select>
     </div>
 
-    <div class="table-wrap">
+    <div class="table-box">
         <table>
             <thead>
                 <tr>
@@ -154,9 +152,7 @@ tr:hover{
                 </tr>
             </thead>
             <tbody id="resultTable">
-                <tr>
-                    <td colspan="6">Select Player to View Data</td>
-                </tr>
+                <tr><td colspan="6">Loading Data...</td></tr>
             </tbody>
         </table>
     </div>
@@ -164,46 +160,132 @@ tr:hover{
 </div>
 
 <script>
-const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv";
+const MATCH_CSV =
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv";
 
-let allData = [];
+const MEMBER_CSV =
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv";
 
-async function loadCSV(){
-    const res = await fetch(CSV_URL);
-    const text = await res.text();
+let allMatches = [];
+let memberMap = {};
 
-    const rows = text.trim().split("\n").map(r=>r.split(","));
+function parseCSV(text){
+    const rows = [];
+    let row = [];
+    let current = '';
+    let inQuotes = false;
 
+    for(let i=0;i<text.length;i++){
+        const char = text[i];
+        const next = text[i+1];
+
+        if(char === '"' && inQuotes && next === '"'){
+            current += '"';
+            i++;
+        }
+        else if(char === '"'){
+            inQuotes = !inQuotes;
+        }
+        else if(char === ',' && !inQuotes){
+            row.push(current);
+            current = '';
+        }
+        else if((char === '\n' || char === '\r') && !inQuotes){
+            if(current || row.length){
+                row.push(current);
+                rows.push(row);
+                row = [];
+                current = '';
+            }
+        }
+        else{
+            current += char;
+        }
+    }
+
+    if(current || row.length){
+        row.push(current);
+        rows.push(row);
+    }
+
+    return rows;
+}
+
+async function loadData(){
+    try{
+        const [matchRes, memberRes] = await Promise.all([
+            fetch(MATCH_CSV),
+            fetch(MEMBER_CSV)
+        ]);
+
+        const matchText = await matchRes.text();
+        const memberText = await memberRes.text();
+
+        processMembers(memberText);
+        processMatches(matchText);
+
+        populatePlayers();
+
+        document.getElementById("resultTable").innerHTML =
+            `<tr><td colspan="6">Select Player to View Data</td></tr>`;
+    }
+    catch(err){
+        document.getElementById("resultTable").innerHTML =
+            `<tr><td colspan="6">Failed to Load Data</td></tr>`;
+        console.error(err);
+    }
+}
+
+function processMembers(csv){
+    const rows = parseCSV(csv);
     const headers = rows[0];
-    allData = rows.slice(1).map(r=>{
-        let obj = {};
-        headers.forEach((h,i)=>obj[h.trim()] = r[i]?.trim());
-        return obj;
-    });
 
-    populatePlayers();
+    rows.slice(1).forEach(r=>{
+        const obj = {};
+        headers.forEach((h,i)=>obj[h.trim()] = (r[i]||'').trim());
+
+        const id = obj["Club ID Number"];
+        const name = obj["Full Name"];
+
+        if(id && name){
+            memberMap[id] = `${name} - ${id}`;
+        }
+    });
+}
+
+function processMatches(csv){
+    const rows = parseCSV(csv);
+    const headers = rows[0];
+
+    allMatches = rows.slice(1).map(r=>{
+        let obj = {};
+        headers.forEach((h,i)=>obj[h.trim()] = (r[i]||'').trim());
+        return obj;
+    }).filter(r=>r.P1_ID && r.P2_ID);
 }
 
 function populatePlayers(){
     const players = new Set();
 
-    allData.forEach(r=>{
-        players.add(r.P1_ID);
-        players.add(r.P2_ID);
+    allMatches.forEach(m=>{
+        players.add(m.P1_ID);
+        players.add(m.P2_ID);
     });
 
     const select = document.getElementById("playerSelect");
 
-    [...players].sort().forEach(p=>{
-        const op = document.createElement("option");
-        op.value = p;
-        op.textContent = p;
-        select.appendChild(op);
+    [...players].sort().forEach(id=>{
+        const option = document.createElement("option");
+        option.value = id;
+        option.textContent = memberMap[id] || id;
+        select.appendChild(option);
     });
 }
 
-function isCurrentMonth(dateStr){
+function validCurrentMonth(dateStr){
     const d = new Date(dateStr);
+    if(isNaN(d)) return false;
+
     const now = new Date();
 
     return d.getMonth()===now.getMonth() &&
@@ -211,100 +293,88 @@ function isCurrentMonth(dateStr){
 }
 
 function renderData(){
-    const player = document.getElementById("playerSelect").value;
-    const period = document.getElementById("periodFilter").value;
-    const type = document.getElementById("typeFilter").value;
-
-    const tbody = document.getElementById("resultTable");
+    const player = playerSelect.value;
+    const period = periodFilter.value;
+    const type = typeFilter.value;
+    const tbody = resultTable;
 
     if(!player){
         tbody.innerHTML=`<tr><td colspan="6">Select Player to View Data</td></tr>`;
         return;
     }
 
-    let filtered = allData.filter(r=>r.Approved==="Yes");
+    let data = allMatches.filter(m=>m.Approved==="Yes" || m.Approved==="TRUE" || m.Approved==="1");
 
     if(period==="monthly"){
-        filtered = filtered.filter(r=>isCurrentMonth(r.Match_Date));
+        data = data.filter(m=>validCurrentMonth(m.Match_Date));
     }
 
     if(type==="Friendly"){
-        filtered = filtered.filter(r=>r.Match_Type==="Friendly");
+        data = data.filter(m=>m.Match_Type==="Friendly");
     }
 
     if(type==="Tournament"){
-        filtered = filtered.filter(r=>r.Match_Type!=="Friendly");
+        data = data.filter(m=>m.Match_Type!=="Friendly");
     }
 
     const stats = {};
 
-    filtered.forEach(match=>{
+    data.forEach(m=>{
+        let opp,result;
 
-        let opponent=null, result=null;
+        const p1s = Number(m.P1_Score)||0;
+        const p2s = Number(m.P2_Score)||0;
 
-        if(match.P1_ID===player){
-            opponent=match.P2_ID;
-
-            if(+match.P1_Score > +match.P2_Score) result="win";
-            else if(+match.P1_Score < +match.P2_Score) result="loss";
-            else result="draw";
+        if(m.P1_ID===player){
+            opp=m.P2_ID;
+            result=p1s>p2s?"win":p1s<p2s?"loss":"draw";
         }
-        else if(match.P2_ID===player){
-            opponent=match.P1_ID;
-
-            if(+match.P2_Score > +match.P1_Score) result="win";
-            else if(+match.P2_Score < +match.P1_Score) result="loss";
-            else result="draw";
+        else if(m.P2_ID===player){
+            opp=m.P1_ID;
+            result=p2s>p1s?"win":p2s<p1s?"loss":"draw";
         }
+        else return;
 
-        if(!opponent) return;
-
-        if(!stats[opponent]){
-            stats[opponent]={
-                total:0,
-                win:0,
-                draw:0,
-                loss:0
-            };
+        if(!stats[opp]){
+            stats[opp]={total:0,win:0,draw:0,loss:0};
         }
 
-        stats[opponent].total++;
-        stats[opponent][result]++;
+        stats[opp].total++;
+        stats[opp][result]++;
     });
 
-    const entries = Object.entries(stats).sort((a,b)=>b[1].total-a[1].total);
+    const rows = Object.entries(stats).sort((a,b)=>b[1].total-a[1].total);
 
-    if(entries.length===0){
-        tbody.innerHTML=`<tr><td colspan="6">No Data Found</td></tr>`;
+    if(!rows.length){
+        tbody.innerHTML=`<tr><td colspan="6">No Match Data Found</td></tr>`;
         return;
     }
 
-    tbody.innerHTML = entries.map(([opp,s])=>{
-
-        const warning = period==="monthly" && s.total>5;
+    tbody.innerHTML = rows.map(([opp,s])=>{
+        const exceeded = period==="monthly" && s.total>5;
 
         return `
-        <tr class="${warning?'warning':''}">
-            <td>${opp}</td>
+        <tr class="${exceeded?'warning':''}">
+            <td>${memberMap[opp] || opp}</td>
             <td>${s.total}</td>
             <td>${s.win}</td>
             <td>${s.draw}</td>
             <td>${s.loss}</td>
             <td>
-                <span class="badge ${warning?'alert':'ok'}">
-                    ${warning?'LIMIT EXCEEDED':'OK'}
+                <span class="badge ${exceeded?'alert':'ok'}">
+                    ${exceeded?'LIMIT EXCEEDED':'OK'}
                 </span>
             </td>
         </tr>
         `;
-    }).join("");
+    }).join('');
 }
 
-document.getElementById("playerSelect").addEventListener("change",renderData);
-document.getElementById("periodFilter").addEventListener("change",renderData);
-document.getElementById("typeFilter").addEventListener("change",renderData);
+playerSelect.addEventListener("change",renderData);
+periodFilter.addEventListener("change",renderData);
+typeFilter.addEventListener("change",renderData);
 
-loadCSV();
+loadData();
 </script>
 
 </body>

@@ -14,117 +14,184 @@
     box-sizing:border-box;
     font-family:'Orbitron',sans-serif;
 }
+
 body{
     background:linear-gradient(135deg,#050b14,#0b1320,#101b2d);
     color:#fff;
     min-height:100vh;
-    padding:14px;
+    padding:10px;
 }
+
+/* MAIN BOARD */
 .container{
-    max-width:1400px;
+    max-width:1200px;
     margin:auto;
+    background:rgba(255,255,255,0.035);
+    border:1px solid rgba(0,255,183,0.15);
+    border-radius:20px;
+    padding:14px;
+    box-shadow:
+        0 0 20px rgba(0,255,183,0.08),
+        inset 0 0 20px rgba(0,255,183,0.03);
 }
+
+/* HEADER */
 .header{
     display:flex;
     align-items:center;
     justify-content:center;
-    gap:12px;
-    flex-wrap:nowrap;
-    padding:16px 18px;
-    border-radius:18px;
-    background:rgba(255,255,255,0.04);
-    border:1px solid rgba(0,255,183,0.2);
-    box-shadow:
-        0 0 15px rgba(0,255,183,0.15),
-        inset 0 0 15px rgba(0,255,183,0.06);
-    margin-bottom:20px;
+    gap:10px;
+    padding:12px;
+    margin-bottom:14px;
+    border-radius:16px;
+    background:rgba(255,255,255,0.03);
+    border:1px solid rgba(0,255,183,0.12);
 }
+
 .header img{
-    width:48px;
-    height:48px;
+    width:42px;
+    height:42px;
     object-fit:contain;
-    flex-shrink:0;
+    filter:
+        drop-shadow(0 0 4px #00ffb7)
+        drop-shadow(0 0 10px #00ffb7)
+        drop-shadow(0 0 18px #00ffb7);
 }
+
 .header h1{
     font-size:24px;
     color:#00ffb7;
     text-shadow:
         0 0 5px #00ffb7,
-        0 0 15px #00ffb7;
-    white-space:nowrap;
+        0 0 12px #00ffb7,
+        0 0 20px #00ffb7;
 }
+
+/* FILTERS */
 .filters{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:14px;
-    margin-bottom:18px;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+    margin-bottom:14px;
 }
+
 select{
     width:100%;
-    padding:14px;
+    padding:12px 8px;
     border:none;
-    border-radius:12px;
+    border-radius:10px;
     background:#13243b;
     color:#fff;
-    font-size:14px;
+    font-size:13px;
     outline:none;
+    text-align:center;
 }
+
+/* TABLE */
 .tableWrap{
+    width:100%;
     overflow-x:auto;
-    border-radius:16px;
+    border-radius:14px;
+    border:1px solid rgba(255,255,255,0.06);
 }
+
 table{
     width:100%;
-    min-width:850px;
+    min-width:720px;
     border-collapse:collapse;
-    background:rgba(255,255,255,0.03);
+    background:rgba(255,255,255,0.025);
 }
+
 th{
     background:#00ffb7;
     color:#000;
-    padding:14px;
-    font-size:13px;
+    padding:12px 8px;
+    font-size:12px;
+    white-space:nowrap;
 }
+
 td{
-    padding:14px;
+    padding:11px 8px;
     text-align:center;
-    border-bottom:1px solid rgba(255,255,255,0.08);
-    font-size:13px;
+    border-bottom:1px solid rgba(255,255,255,0.06);
+    font-size:12px;
+    white-space:nowrap;
 }
+
 tr:hover{
     background:rgba(255,255,255,0.04);
 }
+
 .warning{
     background:rgba(255,0,0,0.14)!important;
 }
+
 .badge{
-    padding:6px 10px;
+    padding:5px 8px;
     border-radius:999px;
-    font-size:11px;
+    font-size:10px;
     font-weight:700;
 }
+
 .ok{
     background:#143f2e;
     color:#75ffba;
 }
+
 .alert{
     background:#661919;
     color:#ff9b9b;
 }
+
+/* MOBILE OPTIMIZATION */
 @media(max-width:768px){
+
+    body{
+        padding:6px;
+    }
+
+    .container{
+        padding:10px;
+        border-radius:16px;
+    }
+
     .header{
-        padding:14px 12px;
+        padding:10px;
+        gap:8px;
     }
-    .header h1{
-        font-size:17px;
-    }
+
     .header img{
-        width:38px;
-        height:38px;
+        width:34px;
+        height:34px;
     }
-    th,td{
-        padding:10px 8px;
-        font-size:11px;
+
+    .header h1{
+        font-size:16px;
+    }
+
+    .filters{
+        gap:6px;
+    }
+
+    select{
+        padding:10px 4px;
+        font-size:10px;
+        border-radius:8px;
+    }
+
+    th{
+        font-size:10px;
+        padding:10px 6px;
+    }
+
+    td{
+        font-size:10px;
+        padding:10px 6px;
+    }
+
+    .badge{
+        font-size:9px;
+        padding:4px 6px;
     }
 }
 </style>
@@ -134,24 +201,24 @@ tr:hover{
 <div class="container">
 
     <div class="header">
-        <img src="https://i.imgur.com/LY3Bb9m.png" alt="GOAT FC">
+        <img src="https://i.imgur.com/LY3Bb9m.png" alt="Logo">
         <h1>Rival Tracker</h1>
     </div>
 
     <div class="filters">
         <select id="playerSelect">
-            <option value="">Select Player</option>
+            <option value="">Player</option>
         </select>
 
         <select id="periodFilter">
-            <option value="monthly">Current Month</option>
+            <option value="monthly">Monthly</option>
             <option value="overall">Overall</option>
         </select>
 
         <select id="typeFilter">
-            <option value="all">All Matches</option>
-            <option value="Friendly">Friendly Only</option>
-            <option value="Tournament">Tournament Only</option>
+            <option value="all">All Match</option>
+            <option value="Friendly">Friendly</option>
+            <option value="Tournament">Tournament</option>
         </select>
     </div>
 
@@ -160,10 +227,10 @@ tr:hover{
             <thead>
                 <tr>
                     <th>Opponent</th>
-                    <th>Matches</th>
-                    <th>Win</th>
-                    <th>Draw</th>
-                    <th>Loss</th>
+                    <th>Match</th>
+                    <th>W</th>
+                    <th>D</th>
+                    <th>L</th>
                     <th>Status</th>
                 </tr>
             </thead>
@@ -176,6 +243,8 @@ tr:hover{
 </div>
 
 <script>
+const MONTHLY_MATCH_LIMIT = 5;
+
 const MATCH_CSV="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv";
 const MEMBER_CSV="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv";
 
@@ -183,10 +252,7 @@ let matches=[];
 let members={};
 
 function clean(v){
-    return String(v||"")
-        .replace(/^"+|"+$/g,"")
-        .replace(/\s+/g," ")
-        .trim();
+    return String(v||"").replace(/^"+|"+$/g,"").replace(/\s+/g," ").trim();
 }
 
 function parseCSV(text){
@@ -222,40 +288,30 @@ function approved(v){
     return ["yes","true","1","approved"].includes(v);
 }
 
-function validDate(d){
-    const x=new Date(d);
-    return !isNaN(x);
-}
-
 function isCurrentMonth(d){
     const x=new Date(d);
     const now=new Date();
-    return x.getMonth()===now.getMonth() &&
-           x.getFullYear()===now.getFullYear();
+    return !isNaN(x) &&
+        x.getMonth()===now.getMonth() &&
+        x.getFullYear()===now.getFullYear();
 }
 
 async function loadAll(){
-    try{
-        const [mRes,uRes]=await Promise.all([
-            fetch(MATCH_CSV),
-            fetch(MEMBER_CSV)
-        ]);
+    const [mRes,uRes]=await Promise.all([
+        fetch(MATCH_CSV),
+        fetch(MEMBER_CSV)
+    ]);
 
-        const [mTxt,uTxt]=await Promise.all([
-            mRes.text(),
-            uRes.text()
-        ]);
+    const [mTxt,uTxt]=await Promise.all([
+        mRes.text(),
+        uRes.text()
+    ]);
 
-        loadMembers(uTxt);
-        loadMatches(mTxt);
-        populatePlayers();
+    loadMembers(uTxt);
+    loadMatches(mTxt);
+    populatePlayers();
 
-        resultTable.innerHTML='<tr><td colspan="6">Select Player to View Data</td></tr>';
-
-    }catch(err){
-        console.error(err);
-        resultTable.innerHTML='<tr><td colspan="6">Load Failed</td></tr>';
-    }
+    resultTable.innerHTML='<tr><td colspan="6">Select Player</td></tr>';
 }
 
 function loadMembers(csv){
@@ -266,15 +322,10 @@ function loadMembers(csv){
         const obj={};
         h.forEach((x,i)=>obj[clean(x)]=clean(r[i]));
 
-        const id=clean(obj["Club ID Number"]);
-        const name=clean(obj["Full Name"]);
+        const id=obj["Club ID Number"];
+        const name=obj["Full Name"];
 
-        if(
-            id &&
-            name &&
-            id!="#VALUE!" &&
-            name!="#VALUE!"
-        ){
+        if(id && name && id!="#VALUE!" && name!="#VALUE!"){
             members[id]=`${name} - ${id}`;
         }
     });
@@ -288,12 +339,7 @@ function loadMatches(csv){
         const obj={};
         h.forEach((x,i)=>obj[clean(x)]=clean(r[i]));
         return obj;
-    }).filter(m=>
-        m.P1_ID &&
-        m.P2_ID &&
-        m.P1_ID!="#VALUE!" &&
-        m.P2_ID!="#VALUE!"
-    );
+    }).filter(m=>m.P1_ID && m.P2_ID);
 }
 
 function populatePlayers(){
@@ -303,8 +349,6 @@ function populatePlayers(){
     ])].filter(id=>id && id!="#VALUE!");
 
     ids.sort();
-
-    playerSelect.innerHTML='<option value="">Select Player</option>';
 
     ids.forEach(id=>{
         const op=document.createElement("option");
@@ -316,25 +360,22 @@ function populatePlayers(){
 
 function renderData(){
     const player=clean(playerSelect.value);
-    const period=periodFilter.value;
-    const type=typeFilter.value;
-
     if(!player){
-        resultTable.innerHTML='<tr><td colspan="6">Select Player to View Data</td></tr>';
+        resultTable.innerHTML='<tr><td colspan="6">Select Player</td></tr>';
         return;
     }
 
     let data=matches.filter(m=>approved(m.Approved));
 
-    if(period==="monthly"){
-        data=data.filter(m=>validDate(m.Match_Date)&&isCurrentMonth(m.Match_Date));
+    if(periodFilter.value==="monthly"){
+        data=data.filter(m=>isCurrentMonth(m.Match_Date));
     }
 
-    if(type==="Friendly"){
+    if(typeFilter.value==="Friendly"){
         data=data.filter(m=>clean(m.Match_Type)==="Friendly");
     }
 
-    if(type==="Tournament"){
+    if(typeFilter.value==="Tournament"){
         data=data.filter(m=>clean(m.Match_Type)!=="Friendly");
     }
 
@@ -344,27 +385,25 @@ function renderData(){
         const p1=clean(m.P1_ID);
         const p2=clean(m.P2_ID);
 
-        let opp,result;
+        let opp,res;
 
         const s1=Number(m.P1_Score)||0;
         const s2=Number(m.P2_Score)||0;
 
         if(p1===player){
             opp=p2;
-            result=s1>s2?"win":s1<s2?"loss":"draw";
+            res=s1>s2?"win":s1<s2?"loss":"draw";
         }
         else if(p2===player){
             opp=p1;
-            result=s2>s1?"win":s2<s1?"loss":"draw";
+            res=s2>s1?"win":s2<s1?"loss":"draw";
         }
         else return;
 
-        if(!stats[opp]){
-            stats[opp]={total:0,win:0,draw:0,loss:0};
-        }
+        if(!stats[opp]) stats[opp]={total:0,win:0,draw:0,loss:0};
 
         stats[opp].total++;
-        stats[opp][result]++;
+        stats[opp][res]++;
     });
 
     const rows=Object.entries(stats).sort((a,b)=>b[1].total-a[1].total);
@@ -375,18 +414,20 @@ function renderData(){
     }
 
     resultTable.innerHTML=rows.map(([opp,s])=>{
-        const limit=period==="monthly" && s.total>5;
+        const limitExceeded=
+            periodFilter.value==="monthly" &&
+            s.total>MONTHLY_MATCH_LIMIT;
 
         return `
-        <tr class="${limit?'warning':''}">
+        <tr class="${limitExceeded?'warning':''}">
             <td>${members[opp]||opp}</td>
             <td>${s.total}</td>
             <td>${s.win}</td>
             <td>${s.draw}</td>
             <td>${s.loss}</td>
             <td>
-                <span class="badge ${limit?'alert':'ok'}">
-                    ${limit?'LIMIT EXCEEDED':'OK'}
+                <span class="badge ${limitExceeded?'alert':'ok'}">
+                    ${limitExceeded?'LIMIT':'OK'}
                 </span>
             </td>
         </tr>

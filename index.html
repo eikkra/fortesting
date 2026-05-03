@@ -21,11 +21,10 @@ body{
     gap:10px;
     padding:10px;
 }
-.header img{ width:40px; }
-
+.header img{width:40px;}
 .header h1{
     color:#00f5ff;
-    text-shadow:0 0 15px #00f5ff,0 0 25px #00f5ff;
+    text-shadow:0 0 15px #00f5ff;
     font-size:18px;
 }
 
@@ -34,7 +33,6 @@ body{
     text-align:center;
     font-size:12px;
     color:#94a3b8;
-    margin-bottom:5px;
 }
 
 /* FILTER */
@@ -42,7 +40,6 @@ body{
     display:flex;
     justify-content:center;
     gap:6px;
-    flex-wrap:nowrap;
     padding:10px;
     overflow-x:auto;
 }
@@ -62,51 +59,47 @@ button{
     font-weight:bold;
 }
 
-/* TABLE WRAP */
+/* TABLE */
 .container{
     max-height:75vh;
     overflow:auto;
 }
 
-/* TABLE */
 table{
     width:100%;
     border-collapse:collapse;
-    table-layout:fixed;
+    table-layout:auto; /* ✅ FIXED (NO CUTTING) */
 }
 
-/* HEADER CENTER FIX */
-th{
-    color:#00f5ff;
-    padding:8px 4px;
-    border-bottom:2px solid #00f5ff;
-    font-size:11px;
-    text-align:center;
-}
-
+/* HEADER */
 thead{
     position:sticky;
     top:0;
     background:#020617;
-    z-index:10;
 }
 
-/* BODY CELLS */
+th{
+    color:#00f5ff;
+    padding:8px;
+    border-bottom:2px solid #00f5ff;
+    text-align:center;
+    font-size:11px;
+}
+
+/* BODY */
 td{
-    padding:6px 4px;
+    padding:6px;
     font-size:10px;
     text-align:center;
-    white-space:nowrap;
+    white-space:nowrap; /* keep single line */
 }
 
-/* 🔥 FIX DATE NOT CUTTING */
-td.date{
-    white-space:nowrap;
-    overflow:visible;
+/* ALIGN FIX (IMPORTANT) */
+td.score, th.score{
+    text-align:right;
+    padding-right:12px;
 }
-
-/* RIGHT SIDE PUSH (Score + Pts) */
-td.score, td.pts{
+td.pts, th.pts{
     text-align:right;
     padding-right:12px;
 }
@@ -154,8 +147,8 @@ Live approved match logs filtered by tournament type and date range.
 <th>Type</th>
 <th>Player 1</th>
 <th>Player 2</th>
-<th>Score</th>
-<th>Pts</th>
+<th class="score">Score</th>
+<th class="pts">Pts</th>
 </tr>
 </thead>
 
@@ -174,18 +167,16 @@ function parseDate(str){
     if(!str) return null;
     let d = str.split(" ")[0];
     let p = d.split("/");
-    if(p.length !== 3) return null;
+    if(p.length!==3) return null;
     return new Date(p[2], p[0]-1, p[1], 12);
 }
 
-/* DISPLAY DATE (NO CUTTING) */
+/* FULL DATE (NO CUT) */
 function formatDate(d){
-    let y = d.getFullYear();
-    let m = String(d.getMonth()+1).padStart(2,"0");
-    let day = String(d.getDate()).padStart(2,"0");
-    return `${y}-${m}-${day}`;
+    return d.toLocaleDateString("en-GB"); 
 }
 
+/* TYPE */
 function shortType(t){
     if(t==="Solo Tournament") return "Solo";
     if(t==="Bid Tournament") return "Bid";
@@ -199,7 +190,7 @@ function fastCSV(csv){
 
     for(let i=1;i<lines.length;i++){
         const r = lines[i].split(",");
-        if(r.length < 12) continue;
+        if(r.length<12) continue;
 
         const date = parseDate(r[11]);
         if(!date) continue;
@@ -254,21 +245,21 @@ function applyFilter(){
 /* RENDER */
 function render(data){
     const tbody = document.getElementById("tableBody");
-    let html = "";
+    let html="";
 
     for(let i=0;i<Math.min(data.length,500);i++){
-        const r = data[i];
+        const r=data[i];
 
         let p1="",p2="";
         if(r.s1>r.s2){p1="win";p2="loss";}
         else if(r.s1<r.s2){p1="loss";p2="win";}
         else{p1="draw";p2="draw";}
 
-        let gold = (r.s1>=7||r.s2>=7)?"gold":"";
+        let gold=(r.s1>=7||r.s2>=7)?"gold":"";
 
-        html += `
+        html+=`
         <tr>
-            <td class="date">${formatDate(r.date)}</td>
+            <td>${formatDate(r.date)}</td>
             <td>${shortType(r.type)}</td>
             <td class="${p1}">${r.p1}</td>
             <td class="${p2}">${r.p2}</td>
@@ -277,7 +268,7 @@ function render(data){
         </tr>`;
     }
 
-    tbody.innerHTML = html;
+    tbody.innerHTML=html;
 }
 
 loadData();

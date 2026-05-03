@@ -249,31 +249,14 @@ font-size:20px;
 <script>
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzXXjGdxcq6XA3RffSWW-QiC5-loMdzhwN1RCDa90lOfxoDgUAnZTeu7R4dd0UMG8xK/exec";
 
-const yourClub=document.getElementById("yourClub");
-const opponentClub=document.getElementById("opponentClub");
-
-for(let i=1;i<=128;i++){
-let id="GFC-"+String(i).padStart(3,'0');
-yourClub.innerHTML+=`<option value="${id}">${id}</option>`;
-opponentClub.innerHTML+=`<option value="${id}">${id}</option>`;
+function toBase64(file){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload=()=>resolve(reader.result);
+    reader.onerror=error=>reject(error);
+  });
 }
-
-document.getElementById("screenshot").addEventListener("change",function(){
-const file=this.files[0];
-if(file){
-document.getElementById("preview").src=URL.createObjectURL(file);
-document.getElementById("preview").style.display="block";
-}
-});
-
-fetch(SCRIPT_URL+"?mode=status")
-.then(res=>res.text())
-.then(status=>{
-if(status==="OFF"){
-document.getElementById("scoreForm").style.display="none";
-document.getElementById("closedBox").style.display="block";
-}
-});
 
 document.getElementById("scoreForm").addEventListener("submit",async function(e){
 e.preventDefault();
@@ -282,34 +265,35 @@ const status=document.getElementById("status");
 status.style.display="block";
 status.innerHTML="Uploading...";
 
-const file = fileInput.files[0];
-const base64Image = await toBase64(file);
+const file=document.getElementById("screenshot").files[0];
+const base64Image=await toBase64(file);
 
-const payload = {
+const payload={
   yourClub:this.yourClub.value,
   opponentClub:this.opponentClub.value,
   matchType:this.matchType.value,
   yourGoal:this.yourGoal.value,
   opponentGoal:this.opponentGoal.value,
-  screenshot: base64Image
+  image:base64Image
 };
 
 try{
 await fetch(SCRIPT_URL,{
 method:"POST",
-contentType:"application/json",
-body: JSON.stringify(payload)
+body:JSON.stringify(payload)
 });
 
+status.style.color="#00ff99";
 status.innerHTML="✅ Score Submitted Successfully!";
 this.reset();
 document.getElementById("preview").style.display="none";
 
 }catch(err){
+status.style.color="#ff4444";
 status.innerHTML="❌ Submission Failed";
 }
-
-});</script>
+});
+</script>
 
 </body>
 </html>

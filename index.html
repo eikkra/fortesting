@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GOAT FC MATCH LOGS</title>
+<link rel="icon" type="image/png" href="https://i.imgur.com/LY3Bb9m.png">
 
 <style>
 body{
@@ -21,7 +22,8 @@ body{
     gap:10px;
     padding:10px;
 }
-.header img{width:40px;}
+.header img{ width:40px; }
+
 .header h1{
     color:#00f5ff;
     text-shadow:0 0 15px #00f5ff;
@@ -59,49 +61,66 @@ button{
     font-weight:bold;
 }
 
-/* TABLE */
+/* TABLE WRAPPER */
 .container{
     max-height:75vh;
     overflow:auto;
 }
 
+/* TABLE */
 table{
     width:100%;
     border-collapse:collapse;
     table-layout:fixed;
 }
 
-/* HEADER CENTER PERFECT */
+/* HEADER STICKY */
+thead{
+    position:sticky;
+    top:0;
+    background:#020617;
+    z-index:10;
+}
+
 th{
     color:#00f5ff;
-    padding:8px;
+    padding:10px 4px;
+    font-size:11px;
     border-bottom:2px solid #00f5ff;
-    font-size:12px;
     text-align:center;
 }
 
-/* BODY */
+/* BODY CELLS */
 td{
-    padding:8px;
-    font-size:11px;
-    font-weight:500;
-    text-align:center; /* ✅ PERFECT CENTER ALIGN */
+    padding:6px 4px;
+    font-size:10px;
+    text-align:center;   /* ✅ ALL CENTER */
     white-space:nowrap;
 }
 
-/* SHIFT LEFT SIDE A BIT RIGHT (Type, P1, P2) */
-td.shift{
-    padding-left:10px;
+/* DATE COLOR */
+.date{
+    color:#38bdf8;
+    font-weight:600;
 }
 
-/* RIGHT SIDE ALIGN CLEAN */
+/* SCORE + POINT STYLE */
+.score{
+    font-weight:700;
+    font-size:11px;
+}
+
+.point{
+    font-weight:700;
+    font-size:11px;
+}
+
+/* RIGHT SIDE SLIGHT PUSH (VISUAL BALANCE) */
 td.score, td.point{
     text-align:center;
-    font-weight:700;
-    font-size:12px;
 }
 
-/* COLORS */
+/* RESULT COLORS */
 .win{color:#22c55e;}
 .loss{color:#ef4444;}
 .draw{color:#facc15;}
@@ -117,7 +136,7 @@ td.score, td.point{
 </div>
 
 <div class="desc">
-Live approved match logs filtered by tournament type and date range.
+Live approved match logs filtered by Match type and date range.
 </div>
 
 <div class="filter-box">
@@ -159,40 +178,39 @@ const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0X
 
 let allData = [];
 
-/* FIX DATE (NO CUT + NO SHIFT) */
+/* FIX DATE (NO TRUNCATION / NO SHIFT) */
 function parseDate(str){
     if(!str) return null;
     let d = str.split(" ")[0];
     let p = d.split("/");
-    if(p.length!==3) return null;
+    if(p.length !== 3) return null;
     return new Date(p[2], p[0]-1, p[1], 12);
 }
 
-/* FULL DATE FORMAT */
+/* FORMAT SAFE */
 function formatDate(d){
-    let y=d.getFullYear();
-    let m=(d.getMonth()+1+"").padStart(2,"0");
-    let da=(d.getDate()+"").padStart(2,"0");
-    return `${y}-${m}-${da}`;
+    let y = d.getFullYear();
+    let m = String(d.getMonth()+1).padStart(2,'0');
+    let day = String(d.getDate()).padStart(2,'0');
+    return `${y}-${m}-${day}`;
 }
 
-/* TYPE SHORT */
 function shortType(t){
     if(t==="Solo Tournament") return "Solo";
     if(t==="Bid Tournament") return "Bid";
     return t;
 }
 
-/* CSV */
+/* CSV PARSER */
 function fastCSV(csv){
-    const lines=csv.split("\n");
-    const result=[];
+    const lines = csv.split("\n");
+    const result = [];
 
     for(let i=1;i<lines.length;i++){
-        const r=lines[i].split(",");
-        if(r.length<12) continue;
+        const r = lines[i].split(",");
+        if(r.length < 12) continue;
 
-        const date=parseDate(r[11]);
+        const date = parseDate(r[11]);
         if(!date) continue;
 
         result.push({
@@ -208,19 +226,20 @@ function fastCSV(csv){
             approved:(r[9]||"").toLowerCase().trim()
         });
     }
+
     return result;
 }
 
 /* LOAD */
 async function loadData(){
-    const res=await fetch(CSV_URL+"&t="+Date.now());
-    const text=await res.text();
+    const res = await fetch(CSV_URL + "&t=" + Date.now(), {cache:"no-store"});
+    const text = await res.text();
 
-    allData=fastCSV(text)
+    allData = fastCSV(text)
         .filter(r=>r.approved==="yes")
         .sort((a,b)=>{
-            if(b.date-a.date!==0) return b.date-a.date;
-            return b.index-a.index;
+            if(b.date - a.date !== 0) return b.date - a.date;
+            return b.index - a.index;
         });
 
     render(allData);
@@ -228,46 +247,47 @@ async function loadData(){
 
 /* FILTER */
 function applyFilter(){
-    let data=allData;
+    let data = allData;
 
-    const type=matchType.value;
-    const start=startDate.value?new Date(startDate.value):null;
-    const end=endDate.value?new Date(endDate.value):null;
+    const type = matchType.value;
+    const start = startDate.value ? new Date(startDate.value) : null;
+    const end = endDate.value ? new Date(endDate.value) : null;
 
-    if(type) data=data.filter(r=>r.type===type);
-    if(start) data=data.filter(r=>r.date>=start);
-    if(end) data=data.filter(r=>r.date<=end);
+    if(type) data = data.filter(r=>r.type===type);
+    if(start) data = data.filter(r=>r.date>=start);
+    if(end) data = data.filter(r=>r.date<=end);
 
     render(data);
 }
 
 /* RENDER */
 function render(data){
-    const tbody=document.getElementById("tableBody");
-    let html="";
+    const tbody = document.getElementById("tableBody");
+
+    let html = "";
 
     for(let i=0;i<Math.min(data.length,500);i++){
-        const r=data[i];
+        const r = data[i];
 
         let p1="",p2="";
         if(r.s1>r.s2){p1="win";p2="loss";}
         else if(r.s1<r.s2){p1="loss";p2="win";}
         else{p1="draw";p2="draw";}
 
-        let gold=(r.s1>=7||r.s2>=7)?"gold":"";
+        let gold = (r.s1>=7||r.s2>=7)?"gold":"";
 
-        html+=`
+        html += `
         <tr>
-            <td>${formatDate(r.date)}</td>
-            <td class="shift">${shortType(r.type)}</td>
-            <td class="shift ${p1}">${r.p1}</td>
-            <td class="shift ${p2}">${r.p2}</td>
+            <td class="date">${formatDate(r.date)}</td>
+            <td>${shortType(r.type)}</td>
+            <td class="${p1}">${r.p1}</td>
+            <td class="${p2}">${r.p2}</td>
             <td class="score ${gold}">${r.s1}-${r.s2}</td>
             <td class="point">${r.pt1}-${r.pt2}</td>
         </tr>`;
     }
 
-    tbody.innerHTML=html;
+    tbody.innerHTML = html;
 }
 
 loadData();

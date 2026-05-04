@@ -6,6 +6,7 @@
 <title>GOAT FC</title>
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
 
 <style>
@@ -18,7 +19,7 @@ color:white;
 overflow-x:hidden;
 }
 
-/* NAVBAR */
+/* ===== NAVBAR ===== */
 .navbar{
 display:flex;
 justify-content:space-between;
@@ -30,78 +31,70 @@ backdrop-filter:blur(10px);
 }
 .logo{display:flex;align-items:center;gap:8px;min-width:160px;}
 .logo img{height:38px;filter:drop-shadow(0 0 10px #7c3aed);}
-.logo span{font-size:16px;font-weight:700;}
+.logo span{font-size:16px;font-weight:700;white-space:nowrap;}
 .nav-links{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;}
 .nav-links a{
-font-size:12px;padding:6px 8px;color:#cbd5f5;text-decoration:none;
+font-size:12px;padding:6px 8px;color:#cbd5f5;
+text-decoration:none;white-space:nowrap;
+}
+.nav-links a:hover{color:#a78bfa;text-shadow:0 0 10px #a78bfa;}
+
+/* ===== HERO ===== */
+.hero{position:relative;height:240px;overflow:hidden;}
+.slide-box{
+position:absolute;width:100%;height:100%;
+opacity:0;transition:all .9s ease;
+}
+.slide-box.active{opacity:1;}
+.slide-box img{
+width:100%;height:100%;object-fit:cover;
+filter:brightness(.45);
+}
+.slide-content{
+z-index:5;position:absolute;
+top:50%;left:50%;
+transform:translate(-50%,-50%);
+text-align:center;width:90%;
+}
+.slide-content h1{
+font-size:18px;margin:4px 0;
+text-shadow:0 0 10px #8b5cf6;
+}
+.slide-content p{
+font-size:12px;margin:5px 0;
+color:#cbd5f5;
+}
+.btn{
+display:inline-block;margin-top:6px;
+padding:7px 16px;font-size:12px;
+background:linear-gradient(45deg,#7c3aed,#ec4899);
+border-radius:25px;text-decoration:none;color:white;
 }
 
-/* HERO */
-.hero{position:relative;height:240px;overflow:hidden;}
-.slide-box{position:absolute;width:100%;height:100%;opacity:0;transition:.9s;}
-.slide-box.active{opacity:1;}
-.slide-box img{width:100%;height:100%;object-fit:cover;filter:brightness(.45);}
-.slide-content{
-position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-text-align:center;width:90%;z-index:5;
-}
-.slide-content h1{font-size:18px;margin:4px 0;}
-.slide-content p{font-size:12px;color:#cbd5f5;}
-.btn{
-display:inline-block;padding:7px 16px;background:linear-gradient(45deg,#7c3aed,#ec4899);
-border-radius:25px;text-decoration:none;color:#fff;font-size:12px;
-}
+/* ===== ARROWS ===== */
 .arrow{
-position:absolute;top:50%;transform:translateY(-50%);
-background:rgba(0,0,0,.4);border:none;color:#fff;font-size:18px;
-padding:6px 10px;cursor:pointer;z-index:10;border-radius:50%;
+position:absolute;top:50%;
+transform:translateY(-50%);
+background:rgba(0,0,0,.4);
+border:none;color:white;
+font-size:18px;padding:6px 10px;
+cursor:pointer;z-index:10;
+border-radius:50%;
 }
 .arrow.left{left:8px;}
 .arrow.right{right:8px;}
 
-/* SECTION */
-.section{text-align:center;padding:25px 10px;}
-.section h2{
-margin-bottom:15px;font-size:16px;color:#a78bfa;
-text-shadow:0 0 10px #7c3aed;
-}
-
-/* GRID */
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
-gap:10px;padding:0 10px;max-width:900px;margin:auto;
-}
-.card{
-background:rgba(255,255,255,.05);
-padding:12px;border-radius:12px;text-align:center;position:relative;
-transition:.3s;cursor:pointer;
-}
-.card:hover{transform:scale(1.05);box-shadow:0 0 20px #8b5cf6;}
-
-.quick-container .card::before,
-.champ-container .card::before{
-content:"";position:absolute;inset:0;border-radius:12px;padding:1px;
--webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
--webkit-mask-composite:xor;mask-composite:exclude;
-}
-.quick-container .card::before{background:linear-gradient(45deg,#FFD700,#FFA500);}
-.champ-container .card::before{background:linear-gradient(45deg,#38bdf8,#6366f1);}
-
-.champ img{width:100%;border-radius:10px;}
-.desc{max-width:700px;margin:10px auto;font-size:12px;color:#cbd5f5;}
-
-/* LIVE SCORE */
-.live-score-wrap{
-padding:10px;
+/* ===== LIVE SCORE ===== */
+.live-wrap{
+padding:18px 10px 8px;
 max-width:1200px;
-margin:0 auto;
-overflow:hidden;
+margin:auto;
 }
 .live-title{
 text-align:center;
-font-size:14px;
-margin-bottom:10px;
+font-size:15px;
+font-weight:700;
+margin-bottom:12px;
 color:#22d3ee;
 text-shadow:0 0 10px #22d3ee;
 }
@@ -109,39 +102,37 @@ text-shadow:0 0 10px #22d3ee;
 display:flex;
 gap:12px;
 overflow-x:auto;
+scrollbar-width:none;
 scroll-behavior:smooth;
-padding-bottom:6px;
 }
 .live-track::-webkit-scrollbar{display:none;}
-
-.score-card{
+.live-card{
 min-width:260px;
 background:rgba(255,255,255,.05);
-border:1px solid rgba(34,211,238,.25);
+border:1px solid rgba(34,211,238,.2);
 border-radius:14px;
 padding:12px;
-box-shadow:0 0 15px rgba(34,211,238,.15);
+box-shadow:0 0 18px rgba(34,211,238,.12);
 flex-shrink:0;
 }
-.score-top{
+.live-top{
 display:flex;
 justify-content:space-between;
-align-items:center;
 font-size:10px;
 color:#94a3b8;
 margin-bottom:8px;
 }
-.score-mid{
+.live-mid{
 display:grid;
 grid-template-columns:1fr auto 1fr;
-gap:8px;
 align-items:center;
+gap:8px;
 }
-.player-box{text-align:center;}
+.player{text-align:center;}
 .player-name{font-size:12px;font-weight:700;}
 .player-id{font-size:10px;color:#94a3b8;}
-.vs-box{text-align:center;font-size:11px;color:#a78bfa;}
-.score-result{
+.vs{font-size:11px;color:#a78bfa;}
+.result{
 margin-top:8px;
 font-size:16px;
 font-weight:800;
@@ -151,28 +142,96 @@ text-align:center;
 .loss{color:#ef4444;}
 .draw{color:#eab308;}
 
-/* SOCIAL */
-.social a{
-display:inline-block;margin:5px;padding:8px 12px;font-size:12px;
-background:linear-gradient(45deg,#06b6d4,#3b82f6);
-border-radius:8px;color:white;text-decoration:none;
+/* ===== SECTION ===== */
+.section{text-align:center;padding:25px 10px;}
+.section h2{
+margin-bottom:15px;
+font-size:16px;
+animation:glowPulse 2.5s infinite alternate;
+}
+@keyframes glowPulse{
+0%{text-shadow:0 0 5px #7c3aed;}
+100%{text-shadow:0 0 20px #a78bfa;}
+}
+.glow{color:#a78bfa;}
+
+/* ===== GRID ===== */
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+gap:10px;
+padding:0 10px;
+max-width:900px;
+margin:auto;
+}
+.card{
+background:rgba(255,255,255,.05);
+padding:12px;
+border-radius:12px;
+transition:.3s;
+cursor:pointer;
+text-align:center;
+position:relative;
+}
+.quick-container .card::before{
+content:"";position:absolute;inset:0;
+border-radius:12px;padding:1px;
+background:linear-gradient(45deg,#FFD700,#FFA500);
+-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+-webkit-mask-composite:xor;
+mask-composite:exclude;
+}
+.champ-container .card::before{
+content:"";position:absolute;inset:0;
+border-radius:12px;padding:1px;
+background:linear-gradient(45deg,#38bdf8,#6366f1);
+-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+-webkit-mask-composite:xor;
+mask-composite:exclude;
+}
+.card:hover{
+transform:scale(1.05);
+box-shadow:0 0 20px #8b5cf6;
+}
+.card h3,.card h4,.card p{margin:4px 0;text-align:center;}
+.champ img{width:100%;border-radius:10px;}
+.champ h4{font-size:11px;}
+.champ p{font-size:10px;color:#cbd5f5;}
+.desc{
+max-width:700px;
+margin:10px auto;
+font-size:12px;
+color:#cbd5f5;
 }
 
-/* FOOTER */
+/* ===== SOCIAL ===== */
+.social a{
+display:inline-block;
+margin:5px;
+padding:8px 12px;
+font-size:12px;
+background:linear-gradient(45deg,#06b6d4,#3b82f6);
+border-radius:8px;
+color:white;
+text-decoration:none;
+}
+
+/* ===== FOOTER ===== */
 .footer{
-text-align:center;padding:15px;font-size:12px;color:#94a3b8;
+text-align:center;
+padding:15px;
+font-size:12px;
+color:#94a3b8;
 border-top:1px solid rgba(255,255,255,.1);
 }
+.footer a{color:#a78bfa;text-decoration:none;}
 
-/* ADS POPUP PLACEHOLDER */
-#popupAdContainer{display:none;}
-
-/* MOBILE */
 @media(max-width:600px){
+.navbar{flex-direction:column;align-items:center;}
+.logo{justify-content:center;width:100%;}
+.nav-links{justify-content:center;width:100%;}
 .hero{height:200px;}
-.slide-content h1{font-size:15px;}
-.slide-content p{font-size:11px;}
-.score-card{min-width:220px;}
+.live-card{min-width:220px;}
 }
 </style>
 </head>
@@ -197,80 +256,71 @@ border-top:1px solid rgba(255,255,255,.1);
 </div>
 
 <!-- LIVE SCORE -->
-<div class="live-score-wrap">
+<div class="live-wrap">
 <div class="live-title">LIVE SCORE • RECENT MATCHES</div>
-<div class="live-track" id="liveScoreTrack"></div>
+<div class="live-track" id="liveTrack"></div>
 </div>
 
 <div class="section">
-<h2>Club Hub</h2>
+<h2 class="glow">Club Hub</h2>
 <div class="grid quick-container"></div>
 </div>
 
 <div class="section" style="margin-top:-10px;">
-<h2>Hall of Champions</h2>
+<h2 class="glow">Hall of Champions</h2>
 <div class="grid champ-container"></div>
 <div class="desc">🏆 This zone represents champions, top scorers, and elite performers of Goat FC.</div>
 </div>
 
 <div class="section social">
-<h2>JOIN WITH US</h2>
+<h2 class="glow">JOIN WITH US</h2>
 </div>
 
-<div class="footer">Design By Md Rashedul Hasan</div>
-
-<!-- GOOGLE ADS POPUP PLACEHOLDER -->
-<div id="popupAdContainer">
-<!-- Paste Google Ads popup / script here when needed -->
+<div class="footer">
+Design By <a href="https://www.facebook.com/mdrashedulhasan02/">Md Rashedul Hasan</a>
 </div>
 
 <script>
 const sheetID="1ZoXNHa5sYiP_HaPRyL5RDML7l3kC2IaGuQCAmYkERf8";
 
-let slides=[], current=0;
+let slides=[],current=0;
 
-/* HERO SLIDES */
+/* HERO */
 fetch(`https://opensheet.elk.sh/${sheetID}/SLIDES`)
 .then(r=>r.json())
 .then(data=>{slides=data;renderSlides();startAuto();});
 
 function renderSlides(){
-const hero=document.querySelector(".hero");
+let hero=document.querySelector(".hero");
 hero.innerHTML=`
 <button class="arrow left" onclick="changeSlide(-1)">‹</button>
-<button class="arrow right" onclick="changeSlide(1)">›</button>
-`;
-hero.innerHTML += slides.map((item,i)=>`
-<div class="slide-box ${i===0?'active':''}">
+<button class="arrow right" onclick="changeSlide(1)">›</button>`;
+hero.innerHTML+=slides.map((item,i)=>`
+<div class="slide-box ${i==0?'active':''}">
 <img src="${item.image}">
 <div class="slide-content">
 <h1>${item.title}</h1>
 <p>${item.desc}</p>
 <a class="btn" href="${item.link}" target="_blank">${item.button}</a>
-</div>
-</div>`).join('');
+</div></div>`).join('');
 }
 function startAuto(){setInterval(()=>changeSlide(1),7000);}
 function changeSlide(dir){
-const boxes=document.querySelectorAll(".slide-box");
-if(!boxes.length) return;
+let boxes=document.querySelectorAll(".slide-box");
 boxes[current].classList.remove("active");
 current=(current+dir+boxes.length)%boxes.length;
 boxes[current].classList.add("active");
 }
 
-/* CLUB HUB */
+/* OTHER SHEETS */
 fetch(`https://opensheet.elk.sh/${sheetID}/LINKS`)
 .then(r=>r.json())
 .then(data=>{
 document.querySelector(".quick-container").innerHTML=data.map(l=>`
 <div class="card" onclick="window.open('${l.link}','_blank')">
-<h3>${l.icon}</h3>
-<h4>${l.title}</h4>
-</div>`).join('');
+<h3>${l.icon}</h3><h4>${l.title}</h4></div>`).join('');
 });
 
-/* CHAMPIONS */
 fetch(`https://opensheet.elk.sh/${sheetID}/CHAMPIONS`)
 .then(r=>r.json())
 .then(data=>{
@@ -278,84 +328,94 @@ document.querySelector(".champ-container").innerHTML=data.map(c=>`
 <div class="card champ">
 <img src="${c.image}">
 <h4>${c.title}</h4>
-<p>${c.subtitle}</p>
-</div>`).join('');
+<p>${c.subtitle}</p></div>`).join('');
 });
 
-/* SOCIAL */
 fetch(`https://opensheet.elk.sh/${sheetID}/SOCIAL`)
 .then(r=>r.json())
 .then(data=>{
-document.querySelector(".social").innerHTML += data.map(s=>`
-<a href="${s.link}" target="_blank">${s.name}</a>`).join('');
+document.querySelector(".social").innerHTML+=data.map(s=>
+`<a href="${s.link}" target="_blank">${s.name}</a>`).join('');
 });
 
-/* LIVE SCORE SYSTEM */
-const pointsCSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv";
-const membersCSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv";
+/* ROBUST CSV PARSER */
+function parseCSV(text){
+const rows=[];
+let row=[],cell='',inside=false;
+for(let i=0;i<text.length;i++){
+const c=text[i],n=text[i+1];
+if(c=='"' && inside && n=='"'){cell+='"';i++;}
+else if(c=='"'){inside=!inside;}
+else if(c==',' && !inside){row.push(cell);cell='';}
+else if((c=='\n'||c=='\r') && !inside){
+if(cell||row.length){row.push(cell);rows.push(row);row=[];cell='';}
+if(c=='\r'&&n=='\n')i++;
+}
+else cell+=c;
+}
+if(cell||row.length){row.push(cell);rows.push(row);}
+const headers=rows.shift();
+return rows.map(r=>Object.fromEntries(headers.map((h,i)=>[h.trim(),(r[i]||'').trim()])));
+}
 
+/* LIVE SCORE */
 Promise.all([
-fetch(pointsCSV).then(r=>r.text()),
-fetch(membersCSV).then(r=>r.text())
-]).then(([pointsText,membersText])=>{
-const parseCSV = txt => {
-const [head,...rows]=txt.trim().split('\n');
-const headers=head.split(',').map(h=>h.trim());
-return rows.map(r=>{
-const vals=r.split(',');
-return Object.fromEntries(headers.map((h,i)=>[h,vals[i]?.trim()||'']));
-});
-};
+fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv").then(r=>r.text()),
+fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv").then(r=>r.text())
+]).then(([matchCSV,memberCSV])=>{
 
-const matches=parseCSV(pointsText)
-.filter(m=>m.Approved?.toLowerCase()==='yes')
+const matches=parseCSV(matchCSV)
+.filter(m=>
+m.Approved?.toLowerCase()==='yes' &&
+!isNaN(parseFloat(m.P1_Score)) &&
+!isNaN(parseFloat(m.P2_Score))
+)
 .slice(-5)
 .reverse();
 
-const members=parseCSV(membersText);
-const memberMap={};
-members.forEach(m=>memberMap[m["Club ID Number"]]=m["Full Name"]);
+const members=parseCSV(memberCSV);
+const nameMap={};
+members.forEach(m=>nameMap[m["Club ID Number"]]=m["Full Name"]);
 
-document.getElementById("liveScoreTrack").innerHTML = matches.map(m=>{
-const p1Name=memberMap[m.P1_ID]||m.P1_ID;
-const p2Name=memberMap[m.P2_ID]||m.P2_ID;
+document.getElementById("liveTrack").innerHTML=matches.map(m=>{
+const p1=nameMap[m.P1_ID]||m.P1_ID;
+const p2=nameMap[m.P2_ID]||m.P2_ID;
 
 let cls='draw';
-if(+m.P1_Score > +m.P2_Score) cls='win';
-if(+m.P1_Score < +m.P2_Score) cls='loss';
+if(+m.P1_Score>+m.P2_Score) cls='win';
+if(+m.P1_Score<+m.P2_Score) cls='loss';
 
 return `
-<div class="score-card">
-<div class="score-top">
+<div class="live-card">
+<div class="live-top">
 <span>${m.Match_Type}</span>
 <span>${m.Match_Date}</span>
 </div>
-<div class="score-mid">
-<div class="player-box">
-<div class="player-name">${p1Name}</div>
+<div class="live-mid">
+<div class="player">
+<div class="player-name">${p1}</div>
 <div class="player-id">${m.P1_ID}</div>
 </div>
-<div class="vs-box">VS</div>
-<div class="player-box">
-<div class="player-name">${p2Name}</div>
+<div class="vs">VS</div>
+<div class="player">
+<div class="player-name">${p2}</div>
 <div class="player-id">${m.P2_ID}</div>
 </div>
 </div>
-<div class="score-result ${cls}">
+<div class="result ${cls}">
 ${m.P1_Score} - ${m.P2_Score}
 </div>
 </div>`;
 }).join('');
 });
 
-/* AUTO SCROLL LIVE SCORE */
+/* LIVE AUTO SCROLL */
 setInterval(()=>{
-const track=document.getElementById("liveScoreTrack");
-if(track){
-track.scrollBy({left:280,behavior:'smooth'});
-if(track.scrollLeft + track.clientWidth >= track.scrollWidth-20){
-track.scrollTo({left:0,behavior:'smooth'});
-}
+const t=document.getElementById("liveTrack");
+if(!t)return;
+t.scrollBy({left:280,behavior:'smooth'});
+if(t.scrollLeft+t.clientWidth>=t.scrollWidth-10){
+t.scrollTo({left:0,behavior:'smooth'});
 }
 },4000);
 </script>

@@ -3,115 +3,362 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GOAT FC Score Submit</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
-
-<!-- Google AdSense -->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4134818762312221"
-     crossorigin="anonymous"></script>
+<title>GOAT FC</title>
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
 
 <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Orbitron',sans-serif;
-}
-
+*{box-sizing:border-box;}
 body{
-    background:#05070d;
-    min-height:100vh;
-    padding:15px;
+margin:0;
+font-family:'Orbitron',sans-serif;
+background:radial-gradient(circle at top,#020617,#0f172a);
+color:white;
+overflow-x:hidden;
 }
 
-/* AD BOX */
-.ad-box{
-    max-width:1100px;
-    margin:0 auto 20px;
-    padding:14px;
-    border-radius:18px;
-    background:linear-gradient(90deg,#00ffff22,#8b5cf622,#ff00ff22);
-    border:1px solid rgba(0,255,255,.25);
-    box-shadow:0 0 25px rgba(0,255,255,.12);
-    backdrop-filter:blur(8px);
+/* NAVBAR */
+.navbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:10px 12px;
+flex-wrap:wrap;
+background:rgba(15,23,42,0.85);
+backdrop-filter:blur(10px);
+}
+.logo{display:flex;align-items:center;gap:8px;min-width:160px;}
+.logo img{height:38px;filter:drop-shadow(0 0 10px #7c3aed);}
+.logo span{font-size:16px;font-weight:700;}
+.nav-links{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;}
+.nav-links a{
+font-size:12px;padding:6px 8px;color:#cbd5f5;text-decoration:none;
 }
 
-/* FORM BUTTON */
-.open-btn{
-    width:100%;
-    max-width:1100px;
-    margin:auto;
-    display:block;
-    padding:22px;
-    border:none;
-    border-radius:18px;
-    font-size:18px;
-    font-weight:800;
-    cursor:pointer;
-    color:#fff;
-    letter-spacing:1px;
-    background:linear-gradient(90deg,#00ffff,#8b5cf6,#ff00ff);
-    background-size:300%;
-    animation:rgbFlow 6s linear infinite;
-    box-shadow:
-        0 0 20px rgba(0,255,255,.3),
-        0 0 35px rgba(139,92,246,.2);
-    transition:.3s;
+/* HERO */
+.hero{position:relative;height:240px;overflow:hidden;}
+.slide-box{position:absolute;width:100%;height:100%;opacity:0;transition:.9s;}
+.slide-box.active{opacity:1;}
+.slide-box img{width:100%;height:100%;object-fit:cover;filter:brightness(.45);}
+.slide-content{
+position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+text-align:center;width:90%;z-index:5;
+}
+.slide-content h1{font-size:18px;margin:4px 0;}
+.slide-content p{font-size:12px;color:#cbd5f5;}
+.btn{
+display:inline-block;padding:7px 16px;background:linear-gradient(45deg,#7c3aed,#ec4899);
+border-radius:25px;text-decoration:none;color:#fff;font-size:12px;
+}
+.arrow{
+position:absolute;top:50%;transform:translateY(-50%);
+background:rgba(0,0,0,.4);border:none;color:#fff;font-size:18px;
+padding:6px 10px;cursor:pointer;z-index:10;border-radius:50%;
+}
+.arrow.left{left:8px;}
+.arrow.right{right:8px;}
+
+/* SECTION */
+.section{text-align:center;padding:25px 10px;}
+.section h2{
+margin-bottom:15px;font-size:16px;color:#a78bfa;
+text-shadow:0 0 10px #7c3aed;
 }
 
-.open-btn:hover{
-    transform:translateY(-2px) scale(1.01);
+/* GRID */
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+gap:10px;padding:0 10px;max-width:900px;margin:auto;
+}
+.card{
+background:rgba(255,255,255,.05);
+padding:12px;border-radius:12px;text-align:center;position:relative;
+transition:.3s;cursor:pointer;
+}
+.card:hover{transform:scale(1.05);box-shadow:0 0 20px #8b5cf6;}
+
+.quick-container .card::before,
+.champ-container .card::before{
+content:"";position:absolute;inset:0;border-radius:12px;padding:1px;
+-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+-webkit-mask-composite:xor;mask-composite:exclude;
+}
+.quick-container .card::before{background:linear-gradient(45deg,#FFD700,#FFA500);}
+.champ-container .card::before{background:linear-gradient(45deg,#38bdf8,#6366f1);}
+
+.champ img{width:100%;border-radius:10px;}
+.desc{max-width:700px;margin:10px auto;font-size:12px;color:#cbd5f5;}
+
+/* LIVE SCORE */
+.live-score-wrap{
+padding:10px;
+max-width:1200px;
+margin:0 auto;
+overflow:hidden;
+}
+.live-title{
+text-align:center;
+font-size:14px;
+margin-bottom:10px;
+color:#22d3ee;
+text-shadow:0 0 10px #22d3ee;
+}
+.live-track{
+display:flex;
+gap:12px;
+overflow-x:auto;
+scroll-behavior:smooth;
+padding-bottom:6px;
+}
+.live-track::-webkit-scrollbar{display:none;}
+
+.score-card{
+min-width:260px;
+background:rgba(255,255,255,.05);
+border:1px solid rgba(34,211,238,.25);
+border-radius:14px;
+padding:12px;
+box-shadow:0 0 15px rgba(34,211,238,.15);
+flex-shrink:0;
+}
+.score-top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+font-size:10px;
+color:#94a3b8;
+margin-bottom:8px;
+}
+.score-mid{
+display:grid;
+grid-template-columns:1fr auto 1fr;
+gap:8px;
+align-items:center;
+}
+.player-box{text-align:center;}
+.player-name{font-size:12px;font-weight:700;}
+.player-id{font-size:10px;color:#94a3b8;}
+.vs-box{text-align:center;font-size:11px;color:#a78bfa;}
+.score-result{
+margin-top:8px;
+font-size:16px;
+font-weight:800;
+text-align:center;
+}
+.win{color:#22c55e;}
+.loss{color:#ef4444;}
+.draw{color:#eab308;}
+
+/* SOCIAL */
+.social a{
+display:inline-block;margin:5px;padding:8px 12px;font-size:12px;
+background:linear-gradient(45deg,#06b6d4,#3b82f6);
+border-radius:8px;color:white;text-decoration:none;
 }
 
-.preview-box{
-    max-width:1100px;
-    margin:20px auto 0;
-    padding:30px;
-    border-radius:18px;
-    background:#0b0f18;
-    text-align:center;
-    color:#9ca3af;
-    border:1px solid rgba(255,255,255,.05);
+/* FOOTER */
+.footer{
+text-align:center;padding:15px;font-size:12px;color:#94a3b8;
+border-top:1px solid rgba(255,255,255,.1);
 }
 
-@keyframes rgbFlow{
-    0%{background-position:0% 50%;}
-    100%{background-position:300% 50%;}
-}
+/* ADS POPUP PLACEHOLDER */
+#popupAdContainer{display:none;}
 
-@media(max-width:768px){
-    .open-btn{
-        font-size:16px;
-        padding:18px;
-    }
+/* MOBILE */
+@media(max-width:600px){
+.hero{height:200px;}
+.slide-content h1{font-size:15px;}
+.slide-content p{font-size:11px;}
+.score-card{min-width:220px;}
 }
 </style>
 </head>
 <body>
 
-<!-- TOP AD -->
-<div class="ad-box">
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-4134818762312221"
-         data-ad-slot="9931450669"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>
-         (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
+<div class="navbar">
+<div class="logo">
+<img src="https://i.imgur.com/LY3Bb9m.png">
+<span>GOAT FC</span>
+</div>
+<div class="nav-links">
+<a href="https://docs.google.com/document/d/1T7p7AjuFfk-DtVbJgdGFcwsH0ipDfG3wg05qv8Y0fJ4/edit?usp=sharing" target="_blank">Club Rules</a>
+<a href="https://www.facebook.com/groups/goatfc.official" target="_blank">About</a>
+<a href="https://www.facebook.com/goatfc.official" target="_blank">Contact</a>
+<a href="https://forms.gle/HnRQHSFgwpQXc81F9" target="_blank">Registration</a>
+</div>
 </div>
 
-<!-- FORM BUTTON -->
-<button class="open-btn"
-onclick="window.open('https://forms.gle/Ye9pfHMbs35AqQnW6','scoreSubmitWindow','width=900,height=900')">
-    OPEN SCORE SUBMIT FORM
-</button>
-
-<div class="preview-box">
-    Click the button above to submit your score.<br>
-    Form opens in popup for image upload compatibility.
+<div class="hero">
+<button class="arrow left" onclick="changeSlide(-1)">‹</button>
+<button class="arrow right" onclick="changeSlide(1)">›</button>
 </div>
+
+<!-- LIVE SCORE -->
+<div class="live-score-wrap">
+<div class="live-title">LIVE SCORE • RECENT MATCHES</div>
+<div class="live-track" id="liveScoreTrack"></div>
+</div>
+
+<div class="section">
+<h2>Club Hub</h2>
+<div class="grid quick-container"></div>
+</div>
+
+<div class="section" style="margin-top:-10px;">
+<h2>Hall of Champions</h2>
+<div class="grid champ-container"></div>
+<div class="desc">🏆 This zone represents champions, top scorers, and elite performers of Goat FC.</div>
+</div>
+
+<div class="section social">
+<h2>JOIN WITH US</h2>
+</div>
+
+<div class="footer">Design By Md Rashedul Hasan</div>
+
+<!-- GOOGLE ADS POPUP PLACEHOLDER -->
+<div id="popupAdContainer">
+<!-- Paste Google Ads popup / script here when needed -->
+</div>
+
+<script>
+const sheetID="1ZoXNHa5sYiP_HaPRyL5RDML7l3kC2IaGuQCAmYkERf8";
+
+let slides=[], current=0;
+
+/* HERO SLIDES */
+fetch(`https://opensheet.elk.sh/${sheetID}/SLIDES`)
+.then(r=>r.json())
+.then(data=>{slides=data;renderSlides();startAuto();});
+
+function renderSlides(){
+const hero=document.querySelector(".hero");
+hero.innerHTML=`
+<button class="arrow left" onclick="changeSlide(-1)">‹</button>
+<button class="arrow right" onclick="changeSlide(1)">›</button>
+`;
+hero.innerHTML += slides.map((item,i)=>`
+<div class="slide-box ${i===0?'active':''}">
+<img src="${item.image}">
+<div class="slide-content">
+<h1>${item.title}</h1>
+<p>${item.desc}</p>
+<a class="btn" href="${item.link}" target="_blank">${item.button}</a>
+</div>
+</div>`).join('');
+}
+function startAuto(){setInterval(()=>changeSlide(1),7000);}
+function changeSlide(dir){
+const boxes=document.querySelectorAll(".slide-box");
+if(!boxes.length) return;
+boxes[current].classList.remove("active");
+current=(current+dir+boxes.length)%boxes.length;
+boxes[current].classList.add("active");
+}
+
+/* CLUB HUB */
+fetch(`https://opensheet.elk.sh/${sheetID}/LINKS`)
+.then(r=>r.json())
+.then(data=>{
+document.querySelector(".quick-container").innerHTML=data.map(l=>`
+<div class="card" onclick="window.open('${l.link}','_blank')">
+<h3>${l.icon}</h3>
+<h4>${l.title}</h4>
+</div>`).join('');
+});
+
+/* CHAMPIONS */
+fetch(`https://opensheet.elk.sh/${sheetID}/CHAMPIONS`)
+.then(r=>r.json())
+.then(data=>{
+document.querySelector(".champ-container").innerHTML=data.map(c=>`
+<div class="card champ">
+<img src="${c.image}">
+<h4>${c.title}</h4>
+<p>${c.subtitle}</p>
+</div>`).join('');
+});
+
+/* SOCIAL */
+fetch(`https://opensheet.elk.sh/${sheetID}/SOCIAL`)
+.then(r=>r.json())
+.then(data=>{
+document.querySelector(".social").innerHTML += data.map(s=>`
+<a href="${s.link}" target="_blank">${s.name}</a>`).join('');
+});
+
+/* LIVE SCORE SYSTEM */
+const pointsCSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv";
+const membersCSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv";
+
+Promise.all([
+fetch(pointsCSV).then(r=>r.text()),
+fetch(membersCSV).then(r=>r.text())
+]).then(([pointsText,membersText])=>{
+const parseCSV = txt => {
+const [head,...rows]=txt.trim().split('\n');
+const headers=head.split(',').map(h=>h.trim());
+return rows.map(r=>{
+const vals=r.split(',');
+return Object.fromEntries(headers.map((h,i)=>[h,vals[i]?.trim()||'']));
+});
+};
+
+const matches=parseCSV(pointsText)
+.filter(m=>m.Approved?.toLowerCase()==='yes')
+.slice(-5)
+.reverse();
+
+const members=parseCSV(membersText);
+const memberMap={};
+members.forEach(m=>memberMap[m["Club ID Number"]]=m["Full Name"]);
+
+document.getElementById("liveScoreTrack").innerHTML = matches.map(m=>{
+const p1Name=memberMap[m.P1_ID]||m.P1_ID;
+const p2Name=memberMap[m.P2_ID]||m.P2_ID;
+
+let cls='draw';
+if(+m.P1_Score > +m.P2_Score) cls='win';
+if(+m.P1_Score < +m.P2_Score) cls='loss';
+
+return `
+<div class="score-card">
+<div class="score-top">
+<span>${m.Match_Type}</span>
+<span>${m.Match_Date}</span>
+</div>
+<div class="score-mid">
+<div class="player-box">
+<div class="player-name">${p1Name}</div>
+<div class="player-id">${m.P1_ID}</div>
+</div>
+<div class="vs-box">VS</div>
+<div class="player-box">
+<div class="player-name">${p2Name}</div>
+<div class="player-id">${m.P2_ID}</div>
+</div>
+</div>
+<div class="score-result ${cls}">
+${m.P1_Score} - ${m.P2_Score}
+</div>
+</div>`;
+}).join('');
+});
+
+/* AUTO SCROLL LIVE SCORE */
+setInterval(()=>{
+const track=document.getElementById("liveScoreTrack");
+if(track){
+track.scrollBy({left:280,behavior:'smooth'});
+if(track.scrollLeft + track.clientWidth >= track.scrollWidth-20){
+track.scrollTo({left:0,behavior:'smooth'});
+}
+}
+},4000);
+</script>
 
 </body>
 </html>

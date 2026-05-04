@@ -3,296 +3,123 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GOAT FC MATCH LOGS</title>
-<link rel="icon" type="image/png" href="https://i.imgur.com/LY3Bb9m.png">
+<title>GOAT FC Submit</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
 
 <style>
-body{
+*{
     margin:0;
-    font-family:'Segoe UI',sans-serif;
-    background:#020617;
-    color:#e2e8f0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Orbitron',sans-serif;
 }
 
-/* HEADER */
-.header{
+body{
+    background:#05070d;
+    min-height:100vh;
     display:flex;
     justify-content:center;
     align-items:center;
-    gap:10px;
-    padding:10px;
-}
-.header img{ width:40px; }
-
-.header h1{
-    color:#00f5ff;
-    text-shadow:0 0 15px #00f5ff;
-    font-size:18px;
+    padding:20px;
+    overflow-x:hidden;
 }
 
-/* DESC */
-.desc{
-    text-align:center;
-    font-size:12px;
-    color:#94a3b8;
-}
-
-/* FILTER */
-.filter-box{
-    display:flex;
-    justify-content:center;
-    gap:6px;
-    padding:10px;
-    overflow-x:auto;
-}
-
-select,input,button{
-    padding:6px;
-    border-radius:6px;
-    border:1px solid #00f5ff;
-    background:black;
-    color:#00f5ff;
-    font-size:11px;
-}
-
-button{
-    background:#00f5ff;
-    color:black;
-    font-weight:bold;
-}
-
-/* TABLE WRAPPER */
 .container{
-    max-height:75vh;
-    overflow:auto;
-}
-
-/* TABLE */
-table{
     width:100%;
-    border-collapse:collapse;
-    table-layout:fixed;
+    max-width:700px;
 }
 
-/* HEADER STICKY */
-thead{
-    position:sticky;
-    top:0;
-    background:#020617;
-    z-index:10;
+/* RGB Animated Ad Box */
+.ad-box{
+    width:100%;
+    min-height:110px;
+    border-radius:18px;
+    padding:3px;
+    background:linear-gradient(90deg,#ff0000,#00ffff,#00ff00,#ff00ff,#ff0000);
+    background-size:400%;
+    animation:rgbFlow 8s linear infinite;
+    margin-bottom:30px;
+    box-shadow:0 0 25px rgba(0,255,255,0.35);
 }
 
-th{
-    color:#00f5ff;
-    padding:10px 4px;
-    font-size:11px;
-    border-bottom:2px solid #00f5ff;
-    text-align:center;
-}
-
-/* BODY CELLS */
-td{
-    padding:6px 4px;
-    font-size:10px;
-    text-align:center;   /* ✅ ALL CENTER */
-    white-space:nowrap;
-}
-
-/* DATE COLOR */
-.date{
-    color:#38bdf8;
-    font-weight:600;
-}
-
-/* SCORE + POINT STYLE */
-.score{
+.ad-inner{
+    background:#0b0f1a;
+    border-radius:16px;
+    min-height:104px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#00ffff;
+    font-size:18px;
     font-weight:700;
-    font-size:11px;
+    letter-spacing:1px;
 }
 
-.point{
-    font-weight:700;
-    font-size:11px;
+/* Submit Button */
+.submit-btn{
+    width:100%;
+    padding:22px;
+    border:none;
+    border-radius:18px;
+    font-size:18px;
+    font-weight:800;
+    color:#fff;
+    cursor:pointer;
+    text-transform:uppercase;
+    letter-spacing:2px;
+    background:linear-gradient(90deg,#00ffff,#8b5cf6,#ff00ff);
+    background-size:300%;
+    animation:rgbFlow 6s linear infinite;
+    box-shadow:
+        0 0 15px rgba(0,255,255,0.4),
+        0 0 30px rgba(139,92,246,0.3);
+    transition:.3s;
 }
 
-/* RIGHT SIDE SLIGHT PUSH (VISUAL BALANCE) */
-td.score, td.point{
-    text-align:center;
+.submit-btn:hover{
+    transform:translateY(-3px) scale(1.02);
+    box-shadow:
+        0 0 25px rgba(0,255,255,0.7),
+        0 0 40px rgba(255,0,255,0.4);
 }
 
-/* RESULT COLORS */
-.win{color:#22c55e;}
-.loss{color:#ef4444;}
-.draw{color:#facc15;}
-.gold{color:gold;}
+@keyframes rgbFlow{
+    0%{background-position:0% 50%;}
+    100%{background-position:400% 50%;}
+}
+
+@media(max-width:768px){
+    .submit-btn{
+        font-size:16px;
+        padding:18px;
+    }
+
+    .ad-inner{
+        font-size:15px;
+        padding:10px;
+        text-align:center;
+    }
+}
 </style>
 </head>
-
 <body>
 
-<div class="header">
-    <img src="https://i.imgur.com/LY3Bb9m.png">
-    <h1>GOAT FC MATCH LOG</h1>
-</div>
-
-<div class="desc">
-Live approved match logs filtered by Match type and date range.
-</div>
-
-<div class="filter-box">
-<select id="matchType">
-<option value="">All</option>
-<option value="Friendly">Friendly</option>
-<option value="Solo Tournament">Solo</option>
-<option value="Bid Tournament">Bid</option>
-<option value="League">League</option>
-<option value="Co-op">Co-op</option>
-</select>
-
-<input type="date" id="startDate">
-<input type="date" id="endDate">
-
-<button onclick="applyFilter()">Filter</button>
-</div>
-
 <div class="container">
-<table>
-<thead>
-<tr>
-<th>Date</th>
-<th>Type</th>
-<th>Player 1</th>
-<th>Player 2</th>
-<th>Score</th>
-<th>Point</th>
-</tr>
-</thead>
 
-<tbody id="tableBody"></tbody>
-</table>
+    <!-- Ad Banner Area -->
+    <div class="ad-box">
+        <div class="ad-inner">
+            YOUR ADVERTISEMENT HERE
+        </div>
+    </div>
+
+    <!-- Form Open Button -->
+    <button class="submit-btn"
+        onclick="window.open('https://forms.gle/Ye9pfHMbs35AqQnW6','_blank')">
+        Open Score Submit Form
+    </button>
+
 </div>
-
-<script>
-
-const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv";
-
-let allData = [];
-
-/* FIX DATE (NO TRUNCATION / NO SHIFT) */
-function parseDate(str){
-    if(!str) return null;
-    let d = str.split(" ")[0];
-    let p = d.split("/");
-    if(p.length !== 3) return null;
-    return new Date(p[2], p[0]-1, p[1], 12);
-}
-
-/* FORMAT SAFE */
-function formatDate(d){
-    let y = d.getFullYear();
-    let m = String(d.getMonth()+1).padStart(2,'0');
-    let day = String(d.getDate()).padStart(2,'0');
-    return `${y}-${m}-${day}`;
-}
-
-function shortType(t){
-    if(t==="Solo Tournament") return "Solo";
-    if(t==="Bid Tournament") return "Bid";
-    return t;
-}
-
-/* CSV PARSER */
-function fastCSV(csv){
-    const lines = csv.split("\n");
-    const result = [];
-
-    for(let i=1;i<lines.length;i++){
-        const r = lines[i].split(",");
-        if(r.length < 12) continue;
-
-        const date = parseDate(r[11]);
-        if(!date) continue;
-
-        result.push({
-            index:i,
-            date,
-            type:r[2],
-            p1:r[0],
-            p2:r[1],
-            s1:+r[3]||0,
-            s2:+r[4]||0,
-            pt1:+r[5]||0,
-            pt2:+r[6]||0,
-            approved:(r[9]||"").toLowerCase().trim()
-        });
-    }
-
-    return result;
-}
-
-/* LOAD */
-async function loadData(){
-    const res = await fetch(CSV_URL + "&t=" + Date.now(), {cache:"no-store"});
-    const text = await res.text();
-
-    allData = fastCSV(text)
-        .filter(r=>r.approved==="yes")
-        .sort((a,b)=>{
-            if(b.date - a.date !== 0) return b.date - a.date;
-            return b.index - a.index;
-        });
-
-    render(allData);
-}
-
-/* FILTER */
-function applyFilter(){
-    let data = allData;
-
-    const type = matchType.value;
-    const start = startDate.value ? new Date(startDate.value) : null;
-    const end = endDate.value ? new Date(endDate.value) : null;
-
-    if(type) data = data.filter(r=>r.type===type);
-    if(start) data = data.filter(r=>r.date>=start);
-    if(end) data = data.filter(r=>r.date<=end);
-
-    render(data);
-}
-
-/* RENDER */
-function render(data){
-    const tbody = document.getElementById("tableBody");
-
-    let html = "";
-
-    for(let i=0;i<Math.min(data.length,500);i++){
-        const r = data[i];
-
-        let p1="",p2="";
-        if(r.s1>r.s2){p1="win";p2="loss";}
-        else if(r.s1<r.s2){p1="loss";p2="win";}
-        else{p1="draw";p2="draw";}
-
-        let gold = (r.s1>=7||r.s2>=7)?"gold":"";
-
-        html += `
-        <tr>
-            <td class="date">${formatDate(r.date)}</td>
-            <td>${shortType(r.type)}</td>
-            <td class="${p1}">${r.p1}</td>
-            <td class="${p2}">${r.p2}</td>
-            <td class="score ${gold}">${r.s1}-${r.s2}</td>
-            <td class="point">${r.pt1}-${r.pt2}</td>
-        </tr>`;
-    }
-
-    tbody.innerHTML = html;
-}
-
-loadData();
-
-</script>
 
 </body>
 </html>

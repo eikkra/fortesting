@@ -6,7 +6,6 @@
 <title>GOAT FC</title>
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
 
 <style>
@@ -89,58 +88,114 @@ border-radius:50%;
 padding:18px 10px 8px;
 max-width:1200px;
 margin:auto;
+overflow:hidden;
 }
 .live-title{
-text-align:center;
-font-size:15px;
+display:flex;
+justify-content:center;
+align-items:center;
+gap:8px;
+font-size:16px;
 font-weight:700;
-margin-bottom:12px;
+margin-bottom:14px;
 color:#22d3ee;
 text-shadow:0 0 10px #22d3ee;
 }
+.live-dot{
+width:10px;
+height:10px;
+background:#ef4444;
+border-radius:50%;
+animation:pulseLive 1s infinite;
+box-shadow:0 0 10px #ef4444;
+}
+@keyframes pulseLive{
+0%{transform:scale(1);opacity:1;}
+50%{transform:scale(1.5);opacity:.5;}
+100%{transform:scale(1);opacity:1;}
+}
+
 .live-track{
 display:flex;
 gap:12px;
 overflow-x:auto;
 scrollbar-width:none;
 scroll-behavior:smooth;
+scroll-snap-type:x mandatory;
 }
 .live-track::-webkit-scrollbar{display:none;}
+
 .live-card{
-min-width:260px;
-background:rgba(255,255,255,.05);
-border:1px solid rgba(34,211,238,.2);
-border-radius:14px;
-padding:12px;
-box-shadow:0 0 18px rgba(34,211,238,.12);
-flex-shrink:0;
+min-width:100%;
+scroll-snap-align:start;
+background:linear-gradient(135deg,rgba(34,211,238,.12),rgba(124,58,237,.10));
+border:1px solid rgba(34,211,238,.25);
+border-radius:16px;
+padding:14px;
+box-shadow:
+0 0 20px rgba(34,211,238,.12),
+inset 0 0 12px rgba(124,58,237,.08);
+position:relative;
+overflow:hidden;
 }
-.live-top{
-display:flex;
-justify-content:space-between;
+
+@media(min-width:768px){
+.live-card{
+min-width:calc(50% - 6px);
+}
+}
+@media(min-width:1100px){
+.live-card{
+min-width:calc(33.333% - 8px);
+}
+}
+
+.match-type{
+display:inline-block;
+padding:5px 12px;
+border-radius:20px;
 font-size:10px;
-color:#94a3b8;
-margin-bottom:8px;
+font-weight:700;
+background:linear-gradient(45deg,#7c3aed,#06b6d4);
+margin-bottom:12px;
 }
+
 .live-mid{
 display:grid;
 grid-template-columns:1fr auto 1fr;
 align-items:center;
-gap:8px;
+gap:10px;
 }
-.player{text-align:center;}
-.player-name{font-size:12px;font-weight:700;}
-.player-id{font-size:10px;color:#94a3b8;}
-.vs{font-size:11px;color:#a78bfa;}
-.result{
-margin-top:8px;
-font-size:16px;
-font-weight:800;
+
+.player{
 text-align:center;
+min-width:0;
 }
-.win{color:#22c55e;}
-.loss{color:#ef4444;}
-.draw{color:#eab308;}
+
+.player-name{
+font-size:11px;
+font-weight:700;
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;
+}
+
+.player-id{
+font-size:10px;
+color:#94a3b8;
+}
+
+.score-box{
+font-size:22px;
+font-weight:800;
+display:flex;
+align-items:center;
+gap:6px;
+}
+
+.score-win{color:#22c55e;}
+.score-loss{color:#ef4444;}
+.score-draw{color:#eab308;}
 
 /* ===== SECTION ===== */
 .section{text-align:center;padding:25px 10px;}
@@ -231,7 +286,6 @@ border-top:1px solid rgba(255,255,255,.1);
 .logo{justify-content:center;width:100%;}
 .nav-links{justify-content:center;width:100%;}
 .hero{height:200px;}
-.live-card{min-width:220px;}
 }
 </style>
 </head>
@@ -255,9 +309,11 @@ border-top:1px solid rgba(255,255,255,.1);
 <button class="arrow right" onclick="changeSlide(1)">›</button>
 </div>
 
-<!-- LIVE SCORE -->
 <div class="live-wrap">
-<div class="live-title">LIVE SCORE • RECENT MATCHES</div>
+<div class="live-title">
+<div class="live-dot"></div>
+LIVE SCORE
+</div>
 <div class="live-track" id="liveTrack"></div>
 </div>
 
@@ -285,7 +341,6 @@ const sheetID="1ZoXNHa5sYiP_HaPRyL5RDML7l3kC2IaGuQCAmYkERf8";
 
 let slides=[],current=0;
 
-/* HERO */
 fetch(`https://opensheet.elk.sh/${sheetID}/SLIDES`)
 .then(r=>r.json())
 .then(data=>{slides=data;renderSlides();startAuto();});
@@ -304,6 +359,7 @@ hero.innerHTML+=slides.map((item,i)=>`
 <a class="btn" href="${item.link}" target="_blank">${item.button}</a>
 </div></div>`).join('');
 }
+
 function startAuto(){setInterval(()=>changeSlide(1),7000);}
 function changeSlide(dir){
 let boxes=document.querySelectorAll(".slide-box");
@@ -312,7 +368,6 @@ current=(current+dir+boxes.length)%boxes.length;
 boxes[current].classList.add("active");
 }
 
-/* OTHER SHEETS */
 fetch(`https://opensheet.elk.sh/${sheetID}/LINKS`)
 .then(r=>r.json())
 .then(data=>{
@@ -338,27 +393,26 @@ document.querySelector(".social").innerHTML+=data.map(s=>
 `<a href="${s.link}" target="_blank">${s.name}</a>`).join('');
 });
 
-/* ROBUST CSV PARSER */
+/* Robust CSV Parser */
 function parseCSV(text){
 const rows=[];
 let row=[],cell='',inside=false;
 for(let i=0;i<text.length;i++){
 const c=text[i],n=text[i+1];
-if(c=='"' && inside && n=='"'){cell+='"';i++;}
+if(c=='"'&&inside&&n=='"'){cell+='"';i++;}
 else if(c=='"'){inside=!inside;}
-else if(c==',' && !inside){row.push(cell);cell='';}
-else if((c=='\n'||c=='\r') && !inside){
+else if(c==','&&!inside){row.push(cell);cell='';}
+else if((c=='\n'||c=='\r')&&!inside){
 if(cell||row.length){row.push(cell);rows.push(row);row=[];cell='';}
 if(c=='\r'&&n=='\n')i++;
-}
-else cell+=c;
+}else cell+=c;
 }
 if(cell||row.length){row.push(cell);rows.push(row);}
 const headers=rows.shift();
 return rows.map(r=>Object.fromEntries(headers.map((h,i)=>[h.trim(),(r[i]||'').trim()])));
 }
 
-/* LIVE SCORE */
+/* Live Score */
 Promise.all([
 fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv").then(r=>r.text()),
 fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv").then(r=>r.text())
@@ -370,7 +424,7 @@ m.Approved?.toLowerCase()==='yes' &&
 !isNaN(parseFloat(m.P1_Score)) &&
 !isNaN(parseFloat(m.P2_Score))
 )
-.slice(-5)
+.slice(-10)
 .reverse();
 
 const members=parseCSV(memberCSV);
@@ -381,41 +435,51 @@ document.getElementById("liveTrack").innerHTML=matches.map(m=>{
 const p1=nameMap[m.P1_ID]||m.P1_ID;
 const p2=nameMap[m.P2_ID]||m.P2_ID;
 
-let cls='draw';
-if(+m.P1_Score>+m.P2_Score) cls='win';
-if(+m.P1_Score<+m.P2_Score) cls='loss';
+let p1Class='score-draw', p2Class='score-draw';
+if(+m.P1_Score > +m.P2_Score){p1Class='score-win';p2Class='score-loss';}
+if(+m.P1_Score < +m.P2_Score){p1Class='score-loss';p2Class='score-win';}
 
 return `
 <div class="live-card">
-<div class="live-top">
-<span>${m.Match_Type}</span>
-<span>${m.Match_Date}</span>
+<div style="text-align:center;">
+<div class="match-type">${m.Match_Type}</div>
 </div>
 <div class="live-mid">
 <div class="player">
 <div class="player-name">${p1}</div>
 <div class="player-id">${m.P1_ID}</div>
 </div>
-<div class="vs">VS</div>
+
+<div class="score-box">
+<span class="${p1Class}">${m.P1_Score}</span>
+-
+<span class="${p2Class}">${m.P2_Score}</span>
+</div>
+
 <div class="player">
 <div class="player-name">${p2}</div>
 <div class="player-id">${m.P2_ID}</div>
 </div>
 </div>
-<div class="result ${cls}">
-${m.P1_Score} - ${m.P2_Score}
-</div>
 </div>`;
 }).join('');
 });
 
-/* LIVE AUTO SCROLL */
+/* Auto Slide Full Card */
 setInterval(()=>{
-const t=document.getElementById("liveTrack");
-if(!t)return;
-t.scrollBy({left:280,behavior:'smooth'});
-if(t.scrollLeft+t.clientWidth>=t.scrollWidth-10){
-t.scrollTo({left:0,behavior:'smooth'});
+const track=document.getElementById("liveTrack");
+const card=track.querySelector(".live-card");
+if(!card) return;
+
+track.scrollBy({
+left:card.offsetWidth + 12,
+behavior:'smooth'
+});
+
+if(track.scrollLeft + track.clientWidth >= track.scrollWidth - 20){
+setTimeout(()=>{
+track.scrollTo({left:0,behavior:'smooth'});
+},600);
 }
 },4000);
 </script>

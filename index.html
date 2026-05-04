@@ -36,7 +36,6 @@ backdrop-filter:blur(10px);
 font-size:12px;padding:6px 8px;color:#cbd5f5;
 text-decoration:none;white-space:nowrap;
 }
-.nav-links a:hover{color:#a78bfa;text-shadow:0 0 10px #a78bfa;}
 
 /* ===== HERO ===== */
 .hero{position:relative;height:240px;overflow:hidden;}
@@ -55,14 +54,8 @@ top:50%;left:50%;
 transform:translate(-50%,-50%);
 text-align:center;width:90%;
 }
-.slide-content h1{
-font-size:18px;margin:4px 0;
-text-shadow:0 0 10px #8b5cf6;
-}
-.slide-content p{
-font-size:12px;margin:5px 0;
-color:#cbd5f5;
-}
+.slide-content h1{font-size:18px;margin:4px 0;}
+.slide-content p{font-size:12px;margin:5px 0;color:#cbd5f5;}
 .btn{
 display:inline-block;margin-top:6px;
 padding:7px 16px;font-size:12px;
@@ -70,7 +63,6 @@ background:linear-gradient(45deg,#7c3aed,#ec4899);
 border-radius:25px;text-decoration:none;color:white;
 }
 
-/* ===== ARROWS ===== */
 .arrow{
 position:absolute;top:50%;
 transform:translateY(-50%);
@@ -102,17 +94,15 @@ color:#22d3ee;
 text-shadow:0 0 10px #22d3ee;
 }
 .live-dot{
-width:10px;
-height:10px;
+width:10px;height:10px;
 background:#ef4444;
 border-radius:50%;
 animation:pulseLive 1s infinite;
-box-shadow:0 0 10px #ef4444;
 }
 @keyframes pulseLive{
-0%{transform:scale(1);opacity:1;}
+0%{transform:scale(1);}
 50%{transform:scale(1.5);opacity:.5;}
-100%{transform:scale(1);opacity:1;}
+100%{transform:scale(1);}
 }
 
 .live-track{
@@ -132,18 +122,6 @@ background:linear-gradient(135deg,rgba(34,211,238,.12),rgba(124,58,237,.10));
 border:1px solid rgba(34,211,238,.25);
 border-radius:16px;
 padding:14px;
-box-shadow:
-0 0 20px rgba(34,211,238,.12),
-inset 0 0 12px rgba(124,58,237,.08);
-position:relative;
-overflow:hidden;
-}
-
-@media(min-width:768px){
-.live-card{min-width:calc(50% - 6px);}
-}
-@media(min-width:1100px){
-.live-card{min-width:calc(33.333% - 8px);}
 }
 
 .match-type{
@@ -158,7 +136,7 @@ margin-bottom:12px;
 
 .live-mid{
 display:grid;
-grid-template-columns:1fr auto 1fr;
+grid-template-columns:1.35fr auto 1.35fr;
 align-items:center;
 gap:6px;
 }
@@ -171,9 +149,8 @@ min-width:0;
 .player-name{
 font-size:10px;
 font-weight:700;
-line-height:1.25;
+line-height:1.2;
 word-break:break-word;
-overflow-wrap:anywhere;
 }
 
 .player-id{
@@ -187,29 +164,27 @@ font-size:18px;
 font-weight:800;
 display:flex;
 align-items:center;
-justify-content:center;
 gap:4px;
-min-width:58px;
+white-space:nowrap;
 }
 
 .score-win{color:#22c55e;}
 .score-loss{color:#ef4444;}
 .score-draw{color:#eab308;}
 
-/* ===== SECTION ===== */
-.section{text-align:center;padding:25px 10px;}
-.section h2{
-margin-bottom:15px;
-font-size:16px;
-animation:glowPulse 2.5s infinite alternate;
+@media(min-width:768px){
+.live-card{min-width:calc(50% - 6px);}
+.player-name{font-size:11px;}
+.score-box{font-size:22px;}
 }
-@keyframes glowPulse{
-0%{text-shadow:0 0 5px #7c3aed;}
-100%{text-shadow:0 0 20px #a78bfa;}
-}
-.glow{color:#a78bfa;}
 
-/* ===== GRID ===== */
+@media(min-width:1100px){
+.live-card{min-width:calc(33.333% - 8px);}
+}
+
+/* ===== OTHER ===== */
+.section{text-align:center;padding:25px 10px;}
+.section h2{margin-bottom:15px;font-size:16px;color:#a78bfa;}
 .grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
@@ -222,43 +197,8 @@ margin:auto;
 background:rgba(255,255,255,.05);
 padding:12px;
 border-radius:12px;
-transition:.3s;
-cursor:pointer;
-text-align:center;
-position:relative;
 }
-.quick-container .card::before{
-content:"";position:absolute;inset:0;
-border-radius:12px;padding:1px;
-background:linear-gradient(45deg,#FFD700,#FFA500);
--webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
--webkit-mask-composite:xor;
-mask-composite:exclude;
-}
-.champ-container .card::before{
-content:"";position:absolute;inset:0;
-border-radius:12px;padding:1px;
-background:linear-gradient(45deg,#38bdf8,#6366f1);
--webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
--webkit-mask-composite:xor;
-mask-composite:exclude;
-}
-.card:hover{
-transform:scale(1.05);
-box-shadow:0 0 20px #8b5cf6;
-}
-.card h3,.card h4,.card p{margin:4px 0;text-align:center;}
 .champ img{width:100%;border-radius:10px;}
-.champ h4{font-size:11px;}
-.champ p{font-size:10px;color:#cbd5f5;}
-.desc{
-max-width:700px;
-margin:10px auto;
-font-size:12px;
-color:#cbd5f5;
-}
-
-/* ===== SOCIAL ===== */
 .social a{
 display:inline-block;
 margin:5px;
@@ -269,44 +209,15 @@ border-radius:8px;
 color:white;
 text-decoration:none;
 }
-
-/* ===== FOOTER ===== */
 .footer{
 text-align:center;
 padding:15px;
 font-size:12px;
 color:#94a3b8;
-border-top:1px solid rgba(255,255,255,.1);
-}
-.footer a{color:#a78bfa;text-decoration:none;}
-
-@media(max-width:600px){
-.navbar{flex-direction:column;align-items:center;}
-.logo{justify-content:center;width:100%;}
-.nav-links{justify-content:center;width:100%;}
-.hero{height:200px;}
 }
 </style>
 </head>
 <body>
-
-<div class="navbar">
-<div class="logo">
-<img src="https://i.imgur.com/LY3Bb9m.png">
-<span>GOAT FC</span>
-</div>
-<div class="nav-links">
-<a href="https://docs.google.com/document/d/1T7p7AjuFfk-DtVbJgdGFcwsH0ipDfG3wg05qv8Y0fJ4/edit?usp=sharing" target="_blank">Club Rules</a>
-<a href="https://www.facebook.com/groups/goatfc.official" target="_blank">About</a>
-<a href="https://www.facebook.com/goatfc.official" target="_blank">Contact</a>
-<a href="https://forms.gle/HnRQHSFgwpQXc81F9" target="_blank">Registration</a>
-</div>
-</div>
-
-<div class="hero">
-<button class="arrow left" onclick="changeSlide(-1)">‹</button>
-<button class="arrow right" onclick="changeSlide(1)">›</button>
-</div>
 
 <div class="live-wrap">
 <div class="live-title">
@@ -316,27 +227,90 @@ LIVE SCORE
 <div class="live-track" id="liveTrack"></div>
 </div>
 
-<div class="section">
-<h2 class="glow">Club Hub</h2>
-<div class="grid quick-container"></div>
-</div>
-
-<div class="section" style="margin-top:-10px;">
-<h2 class="glow">Hall of Champions</h2>
-<div class="grid champ-container"></div>
-<div class="desc">🏆 This zone represents champions, top scorers, and elite performers of Goat FC.</div>
-</div>
-
-<div class="section social">
-<h2 class="glow">JOIN WITH US</h2>
-</div>
-
-<div class="footer">
-Design By <a href="https://www.facebook.com/mdrashedulhasan02/">Md Rashedul Hasan</a>
-</div>
-
 <script>
-/* KEEP YOUR EXISTING JS EXACTLY SAME */
+function parseCSV(text){
+const rows=[];
+let row=[],cell='',inside=false;
+for(let i=0;i<text.length;i++){
+const c=text[i],n=text[i+1];
+if(c=='"'&&inside&&n=='"'){cell+='"';i++;}
+else if(c=='"'){inside=!inside;}
+else if(c==','&&!inside){row.push(cell);cell='';}
+else if((c=='\n'||c=='\r')&&!inside){
+if(cell||row.length){row.push(cell);rows.push(row);row=[];cell='';}
+if(c=='\r'&&n=='\n')i++;
+}else cell+=c;
+}
+if(cell||row.length){row.push(cell);rows.push(row);}
+const headers=rows.shift();
+return rows.map(r=>Object.fromEntries(headers.map((h,i)=>[h.trim(),(r[i]||'').trim()])));
+}
+
+Promise.all([
+fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv").then(r=>r.text()),
+fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv").then(r=>r.text())
+]).then(([matchCSV,memberCSV])=>{
+
+const matches=parseCSV(matchCSV)
+.filter(m=>m.Approved?.toLowerCase()==='yes')
+.slice(-10)
+.reverse();
+
+const members=parseCSV(memberCSV);
+const nameMap={};
+members.forEach(m=>nameMap[m["Club ID Number"]]=m["Full Name"]);
+
+document.getElementById("liveTrack").innerHTML=matches.map(m=>{
+const p1=nameMap[m.P1_ID]||m.P1_ID;
+const p2=nameMap[m.P2_ID]||m.P2_ID;
+
+let p1Class='score-draw',p2Class='score-draw';
+if(+m.P1_Score > +m.P2_Score){p1Class='score-win';p2Class='score-loss';}
+if(+m.P1_Score < +m.P2_Score){p1Class='score-loss';p2Class='score-win';}
+
+return `
+<div class="live-card">
+<div style="text-align:center;">
+<div class="match-type">${m.Match_Type}</div>
+</div>
+
+<div class="live-mid">
+<div class="player">
+<div class="player-name">${p1}</div>
+<div class="player-id">${m.P1_ID}</div>
+</div>
+
+<div class="score-box">
+<span class="${p1Class}">${m.P1_Score}</span>
+-
+<span class="${p2Class}">${m.P2_Score}</span>
+</div>
+
+<div class="player">
+<div class="player-name">${p2}</div>
+<div class="player-id">${m.P2_ID}</div>
+</div>
+</div>
+</div>`;
+}).join('');
+});
+
+setInterval(()=>{
+const track=document.getElementById("liveTrack");
+const card=track.querySelector(".live-card");
+if(!card) return;
+
+track.scrollBy({
+left:card.offsetWidth+12,
+behavior:'smooth'
+});
+
+if(track.scrollLeft+track.clientWidth>=track.scrollWidth-20){
+setTimeout(()=>{
+track.scrollTo({left:0,behavior:'smooth'});
+},600);
+}
+},4000);
 </script>
 
 </body>

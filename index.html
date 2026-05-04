@@ -3,8 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GOAT FC Submit</title>
+<title>GOAT FC Score Submit</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+
+<!-- Google AdSense -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4134818762312221"
+     crossorigin="anonymous"></script>
 
 <style>
 *{
@@ -17,119 +21,96 @@
 body{
     background:#05070d;
     min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:20px;
-    overflow-x:hidden;
+    padding:15px;
 }
 
-.container{
-    width:100%;
-    max-width:700px;
-}
-
-/* RGB Animated Ad Box */
+/* AD BOX */
 .ad-box{
-    width:100%;
-    min-height:110px;
+    max-width:1100px;
+    margin:0 auto 20px;
+    padding:14px;
     border-radius:18px;
-    padding:3px;
-    background:linear-gradient(90deg,#ff0000,#00ffff,#00ff00,#ff00ff,#ff0000);
-    background-size:400%;
-    animation:rgbFlow 8s linear infinite;
-    margin-bottom:30px;
-    box-shadow:0 0 25px rgba(0,255,255,0.35);
+    background:linear-gradient(90deg,#00ffff22,#8b5cf622,#ff00ff22);
+    border:1px solid rgba(0,255,255,.25);
+    box-shadow:0 0 25px rgba(0,255,255,.12);
+    backdrop-filter:blur(8px);
 }
 
-.ad-inner{
-    background:#0b0f1a;
-    border-radius:16px;
-    min-height:104px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:#00ffff;
-    font-size:18px;
-    font-weight:700;
-    letter-spacing:1px;
-}
-
-/* Submit Button */
-.submit-btn{
+/* FORM BUTTON */
+.open-btn{
     width:100%;
+    max-width:1100px;
+    margin:auto;
+    display:block;
     padding:22px;
     border:none;
     border-radius:18px;
     font-size:18px;
     font-weight:800;
-    color:#fff;
     cursor:pointer;
-    text-transform:uppercase;
-    letter-spacing:2px;
+    color:#fff;
+    letter-spacing:1px;
     background:linear-gradient(90deg,#00ffff,#8b5cf6,#ff00ff);
     background-size:300%;
     animation:rgbFlow 6s linear infinite;
     box-shadow:
-        0 0 15px rgba(0,255,255,0.4),
-        0 0 30px rgba(139,92,246,0.3);
+        0 0 20px rgba(0,255,255,.3),
+        0 0 35px rgba(139,92,246,.2);
     transition:.3s;
 }
 
-.submit-btn:hover{
-    transform:translateY(-3px) scale(1.02);
-    box-shadow:
-        0 0 25px rgba(0,255,255,0.7),
-        0 0 40px rgba(255,0,255,0.4);
+.open-btn:hover{
+    transform:translateY(-2px) scale(1.01);
+}
+
+.preview-box{
+    max-width:1100px;
+    margin:20px auto 0;
+    padding:30px;
+    border-radius:18px;
+    background:#0b0f18;
+    text-align:center;
+    color:#9ca3af;
+    border:1px solid rgba(255,255,255,.05);
 }
 
 @keyframes rgbFlow{
     0%{background-position:0% 50%;}
-    100%{background-position:400% 50%;}
+    100%{background-position:300% 50%;}
 }
 
 @media(max-width:768px){
-    .submit-btn{
+    .open-btn{
         font-size:16px;
         padding:18px;
-    }
-
-    .ad-inner{
-        font-size:15px;
-        padding:10px;
-        text-align:center;
     }
 }
 </style>
 </head>
 <body>
 
-<div class="container">
+<!-- TOP AD -->
+<div class="ad-box">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-4134818762312221"
+         data-ad-slot="9931450669"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</div>
 
-    <!-- Ad Banner Area -->
-    <div class="ad-box">
-        <div class="ad-inner">
-            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4134818762312221"
-     crossorigin="anonymous"></script>
-<!-- GOAT FC -->
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-4134818762312221"
-     data-ad-slot="9931450669"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-        </div>
-    </div>
+<!-- FORM BUTTON -->
+<button class="open-btn"
+onclick="window.open('https://forms.gle/Ye9pfHMbs35AqQnW6','scoreSubmitWindow','width=900,height=900')">
+    OPEN SCORE SUBMIT FORM
+</button>
 
-    <!-- Form Open Button -->
-    <button class="submit-btn"
-        onclick="window.open('https://forms.gle/Ye9pfHMbs35AqQnW6','_blank')">
-        Open Score Submit Form
-    </button>
-
+<div class="preview-box">
+    Click the button above to submit your score.<br>
+    Form opens in popup for image upload compatibility.
 </div>
 
 </body>

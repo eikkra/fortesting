@@ -22,17 +22,15 @@ overflow-x:hidden;
 .navbar{
 display:flex;justify-content:space-between;align-items:center;
 padding:10px 12px;flex-wrap:wrap;
-background:rgba(15,23,42,0.85);
-backdrop-filter:blur(10px);
+background:rgba(15,23,42,0.85);backdrop-filter:blur(10px);
 }
 .logo{display:flex;align-items:center;gap:8px;min-width:160px;}
 .logo img{height:38px;filter:drop-shadow(0 0 10px #7c3aed);}
 .logo span{font-size:16px;font-weight:700;}
 .nav-links{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;}
 .nav-links a{
-font-size:12px;padding:6px 8px;
-color:#cbd5f5;text-decoration:none;
-white-space:nowrap;
+font-size:12px;padding:6px 8px;color:#cbd5f5;
+text-decoration:none;white-space:nowrap;
 }
 
 /* HERO */
@@ -43,30 +41,28 @@ opacity:0;transition:.9s ease;
 }
 .slide-box.active{opacity:1;}
 .slide-box img{
-width:100%;height:100%;
-object-fit:cover;filter:brightness(.45);
+width:100%;height:100%;object-fit:cover;
+filter:brightness(.45);
 }
 .slide-content{
 position:absolute;top:50%;left:50%;
 transform:translate(-50%,-50%);
 text-align:center;width:90%;
 }
-.slide-content h1{font-size:18px;margin:4px 0;}
+.slide-content h1{font-size:18px;}
 .slide-content p{font-size:12px;color:#cbd5f5;}
 .btn{
 display:inline-block;margin-top:6px;
 padding:7px 16px;font-size:12px;
 background:linear-gradient(45deg,#7c3aed,#ec4899);
-border-radius:25px;color:white;
-text-decoration:none;
-border:none;
-cursor:pointer;
+border-radius:25px;color:#fff;text-decoration:none;
 }
 
-/* ARROWS */
 .arrow{
-position:absolute;top:50%;transform:translateY(-50%);
-background:rgba(0,0,0,.4);border:none;color:white;
+position:absolute;top:50%;
+transform:translateY(-50%);
+background:rgba(0,0,0,.4);
+border:none;color:#fff;
 font-size:18px;padding:6px 10px;
 cursor:pointer;z-index:10;border-radius:50%;
 }
@@ -76,25 +72,24 @@ cursor:pointer;z-index:10;border-radius:50%;
 /* LIVE SCORE */
 .live-wrap{padding:18px 10px 8px;max-width:1200px;margin:auto;overflow:hidden;}
 .live-title{
-display:flex;justify-content:center;align-items:center;
-gap:8px;font-size:16px;font-weight:700;
-margin-bottom:14px;color:#22d3ee;
+display:flex;justify-content:center;align-items:center;gap:8px;
+font-size:16px;font-weight:700;margin-bottom:14px;
+color:#22d3ee;
 }
 .live-dot{
 width:10px;height:10px;background:#ef4444;
 border-radius:50%;animation:pulseLive 1s infinite;
 }
 @keyframes pulseLive{
-0%{transform:scale(1);}
 50%{transform:scale(1.5);opacity:.5;}
-100%{transform:scale(1);}
 }
+
 .live-track{
 display:flex;gap:12px;overflow-x:auto;
-scrollbar-width:none;scroll-behavior:smooth;
-scroll-snap-type:x mandatory;
+scrollbar-width:none;scroll-snap-type:x mandatory;
 }
 .live-track::-webkit-scrollbar{display:none;}
+
 .live-card{
 min-width:100%;scroll-snap-align:start;
 background:linear-gradient(135deg,rgba(34,211,238,.12),rgba(124,58,237,.10));
@@ -102,26 +97,7 @@ border:1px solid rgba(34,211,238,.25);
 border-radius:16px;padding:14px;
 }
 @media(min-width:768px){.live-card{min-width:calc(50% - 6px);}}
-@media(min-width:1100px){.live-card{min-width:calc(33.333% - 8px);}}
-
-.match-type{
-display:inline-block;padding:5px 12px;
-border-radius:20px;font-size:10px;
-background:linear-gradient(45deg,#7c3aed,#06b6d4);
-margin-bottom:12px;
-}
-.live-mid{
-display:grid;
-grid-template-columns:1fr auto 1fr;
-align-items:center;
-gap:10px;
-}
-.player-name{font-size:11px;font-weight:700;}
-.player-id{font-size:10px;color:#94a3b8;}
-.score-box{font-size:22px;font-weight:800;}
-.score-win{color:#22c55e;}
-.score-loss{color:#ef4444;}
-.score-draw{color:#eab308;}
+@media(min-width:1100px){.live-card{min-width:calc(33.33% - 8px);}}
 
 /* SECTION */
 .section{text-align:center;padding:25px 10px;}
@@ -140,90 +116,73 @@ padding:12px;border-radius:12px;
 text-align:center;position:relative;
 cursor:pointer;
 }
-.card:hover{transform:scale(1.03);}
-
-/* CHAMPIONS */
-.champ img{width:100%;border-radius:10px;}
 
 /* STORE */
 .store-grid{
 display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:12px;
+grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+gap:14px;
+padding:0 10px;
 max-width:1000px;
 margin:auto;
-padding:0 10px;
 }
 .store-card{
-background:rgba(255,255,255,.05);
+background:rgba(255,255,255,.04);
+border:1px solid rgba(124,58,237,.25);
 border-radius:14px;
-padding:10px;
-border:1px solid rgba(168,85,247,.25);
-box-shadow:0 0 15px rgba(124,58,237,.12);
+overflow:hidden;
+box-shadow:0 0 15px rgba(124,58,237,.15);
+transition:.3s;
+}
+.store-card:hover{
+transform:translateY(-4px);
+box-shadow:0 0 25px rgba(124,58,237,.3);
 }
 .store-card img{
 width:100%;
 aspect-ratio:1/1;
 object-fit:cover;
-border-radius:10px;
-margin-bottom:10px;
+display:block;
 }
-.store-card .btn{
-width:100%;
+.store-btn{
+display:block;
+margin:10px;
 padding:10px;
-font-size:11px;
+font-size:12px;
+font-weight:700;
+text-align:center;
+background:linear-gradient(45deg,#7c3aed,#ec4899);
+border-radius:10px;
+color:#fff;
+text-decoration:none;
 }
+@media(max-width:600px){
+.store-grid{
+grid-template-columns:repeat(2,1fr);
+}
+}
+
+/* CHAMP */
+.champ img{width:100%;border-radius:10px;}
+.desc{font-size:12px;color:#cbd5f5;max-width:700px;margin:auto;}
 
 /* SOCIAL */
 .social a{
-display:inline-block;
-margin:5px;padding:8px 12px;
-font-size:12px;
+display:inline-block;margin:5px;padding:8px 12px;
 background:linear-gradient(45deg,#06b6d4,#3b82f6);
 border-radius:8px;color:white;text-decoration:none;
 }
 
-/* VISITOR */
-.visitor-box{
-max-width:700px;
-margin:20px auto 0;
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:12px;
-padding:0 10px;
-}
-.visitor-card{
-background:linear-gradient(135deg,rgba(124,58,237,.18),rgba(6,182,212,.12));
-padding:16px;
-border-radius:14px;
-border:1px solid rgba(167,139,250,.25);
-box-shadow:0 0 15px rgba(124,58,237,.12);
-}
-.visitor-card h3{
-margin:0;
-font-size:12px;
-color:#cbd5f5;
-}
-.visitor-card p{
-margin:8px 0 0;
-font-size:22px;
-font-weight:800;
-color:#22d3ee;
-}
-
-/* FOOTER */
 .footer{
 text-align:center;padding:15px;
 font-size:12px;color:#94a3b8;
 border-top:1px solid rgba(255,255,255,.1);
 }
-.footer a{color:#a78bfa;text-decoration:none;}
+.footer a{color:#a78bfa;}
 
 @media(max-width:600px){
 .navbar{flex-direction:column;}
 .hero{height:200px;}
-.store-grid{grid-template-columns:repeat(3,1fr);}
-.store-card .btn{font-size:10px;padding:8px;}
 }
 </style>
 </head>
@@ -260,130 +219,41 @@ border-top:1px solid rgba(255,255,255,.1);
 <!-- GOAT STORE -->
 <div class="section" style="padding-top:5px;">
 <h2 class="glow">GOAT STORE</h2>
-<div class="store-grid" id="storeGrid"></div>
+<div class="store-grid" id="storeContainer"></div>
 </div>
 
 <div class="section" style="margin-top:-10px;">
 <h2 class="glow">Hall of Champions</h2>
 <div class="grid champ-container"></div>
-<div style="max-width:700px;margin:10px auto;font-size:12px;color:#cbd5f5;">
-🏆 This zone represents champions, top scorers, and elite performers of Goat FC.
-</div>
+<div class="desc">🏆 This zone represents champions, top scorers, and elite performers of Goat FC.</div>
 </div>
 
 <div class="section social">
 <h2 class="glow">JOIN WITH US</h2>
 </div>
 
-<!-- VISITOR COUNTER -->
-<div class="visitor-box">
-<div class="visitor-card">
-<h3>TOTAL VISITS</h3>
-<p id="totalVisits">0</p>
-</div>
-<div class="visitor-card">
-<h3>TODAY VISITS</h3>
-<p id="todayVisits">0</p>
-</div>
-</div>
-
 <div class="footer">
-Design By <a href="https://www.facebook.com/mdrashedulhasan02/">Md Rashedul Hasan</a>
+Design By <a href="#">Md Rashedul Hasan</a>
 </div>
 
 <script>
 const sheetID="1ZoXNHa5sYiP_HaPRyL5RDML7l3kC2IaGuQCAmYkERf8";
-let slides=[],current=0;
 
-/* HERO SLIDES */
-fetch(`https://opensheet.elk.sh/${sheetID}/SLIDES`)
-.then(r=>r.json())
-.then(data=>{slides=data;renderSlides();startAuto();});
-
-function renderSlides(){
-let hero=document.querySelector(".hero");
-hero.innerHTML=`
-<button class="arrow left" onclick="changeSlide(-1)">‹</button>
-<button class="arrow right" onclick="changeSlide(1)">›</button>`;
-hero.innerHTML+=slides.map((item,i)=>`
-<div class="slide-box ${i==0?'active':''}">
-<img src="${item.image}">
-<div class="slide-content">
-<h1>${item.title}</h1>
-<p>${item.desc}</p>
-<a class="btn" href="${item.link}" target="_blank">${item.button}</a>
-</div></div>`).join('');
-}
-function startAuto(){setInterval(()=>changeSlide(1),7000);}
-function changeSlide(dir){
-let boxes=document.querySelectorAll(".slide-box");
-boxes[current].classList.remove("active");
-current=(current+dir+boxes.length)%boxes.length;
-boxes[current].classList.add("active");
-}
-
-/* CLUB HUB */
-fetch(`https://opensheet.elk.sh/${sheetID}/LINKS`)
-.then(r=>r.json())
-.then(data=>{
-document.querySelector(".quick-container").innerHTML=data.map(l=>`
-<div class="card" onclick="window.open('${l.link}','_blank')">
-<h3>${l.icon}</h3><h4>${l.title}</h4>
-</div>`).join('');
-});
-
-/* STORE */
+/* STORE FETCH */
 fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vS3VQ-e6O8uHjlq8Lsdp5j0vxxOMZH1O17Nbo1ISGXDU_EFsuBEXNWydPbuhJ46lnxqJmevXaN2xPiL/pub?gid=1152972554&single=true&output=csv")
 .then(r=>r.text())
 .then(csv=>{
 const rows=parseCSV(csv);
-document.getElementById("storeGrid").innerHTML=rows.map(item=>`
+
+document.getElementById("storeContainer").innerHTML=rows.map(item=>`
 <div class="store-card">
 <img src="${item['Image Url']}">
-<button class="btn" onclick="window.open('${item['Link Url']}','_blank')">${item['Botton Name']}</button>
-</div>`).join('');
+<a class="store-btn" href="${item['Link Url']}" target="_blank">
+${item['Botton Name']}
+</a>
+</div>
+`).join('');
 });
-
-/* CHAMPIONS */
-fetch(`https://opensheet.elk.sh/${sheetID}/CHAMPIONS`)
-.then(r=>r.json())
-.then(data=>{
-document.querySelector(".champ-container").innerHTML=data.map(c=>`
-<div class="card champ">
-<img src="${c.image}">
-<h4>${c.title}</h4>
-<p>${c.subtitle}</p>
-</div>`).join('');
-});
-
-/* SOCIAL */
-fetch(`https://opensheet.elk.sh/${sheetID}/SOCIAL`)
-.then(r=>r.json())
-.then(data=>{
-document.querySelector(".social").innerHTML+=data.map(s=>
-`<a href="${s.link}" target="_blank">${s.name}</a>`).join('');
-});
-
-/* VISITOR COUNTER */
-const today=new Date().toLocaleDateString();
-let total=localStorage.getItem("goat_total_visits")||0;
-let lastVisit=localStorage.getItem("goat_last_visit");
-let todayCount=localStorage.getItem("goat_today_visits")||0;
-
-total=parseInt(total)+1;
-
-if(lastVisit!==today){
-todayCount=1;
-localStorage.setItem("goat_last_visit",today);
-}else{
-todayCount=parseInt(todayCount)+1;
-}
-
-localStorage.setItem("goat_total_visits",total);
-localStorage.setItem("goat_today_visits",todayCount);
-
-document.getElementById("totalVisits").innerText=total;
-document.getElementById("todayVisits").innerText=todayCount;
 
 /* CSV Parser */
 function parseCSV(text){

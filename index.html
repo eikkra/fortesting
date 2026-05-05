@@ -1,382 +1,369 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Responsive-Sports-Website-Templates" />
-    <meta name="keywords" content="HTML3, CSS3, Responsive" />
-    <meta name="author" content="Bayes Ahmed Shoharto" />
-    <title>Responsive Sports Website Templates</title>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GOAT FC</title>
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
 
-    <!-- font-awesome -->
-    <script
-      src="https://kit.fontawesome.com/5c565df8e2.js"
-      crossorigin="anonymous"
-    ></script>
+<style>
+*{box-sizing:border-box;}
+body{
+margin:0;
+font-family:'Orbitron',sans-serif;
+background:radial-gradient(circle at top,#020617,#0f172a);
+color:white;
+overflow-x:hidden;
+}
 
-    <!-- custom stylesheet -->
-    <link rel="stylesheet" href="assets/css/styles.css" />
-  </head>
+/* ===== NAVBAR ===== */
+.navbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:10px 12px;
+flex-wrap:wrap;
+background:rgba(15,23,42,0.85);
+backdrop-filter:blur(10px);
+}
+.logo{display:flex;align-items:center;gap:8px;min-width:160px;}
+.logo img{height:38px;filter:drop-shadow(0 0 10px #7c3aed);}
+.logo span{font-size:16px;font-weight:700;white-space:nowrap;}
+.nav-links{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;}
+.nav-links a{
+font-size:12px;padding:6px 8px;color:#cbd5f5;
+text-decoration:none;white-space:nowrap;
+}
+.nav-links a:hover{color:#a78bfa;text-shadow:0 0 10px #a78bfa;}
 
-  <body>
-    <!-- header-start -->
-    <header>
-      <section class="container">
-        <!-- nabigation bar start -->
-        <nav>
-          <div class="navbar-left">
-            <div class="mobile-nav">
-              <i class="fa fa-bars"></i>
-            </div>
-            <ul>
-              <li><a href="#!" target="_blank">Home</a></li>
-              <li><a href="#!" target="_blank">Clubs</a></li>
-              <li><a href="#!" target="_blank">World Cup 2023</a></li>
-              <li><a href="#!" target="_blank">Upcoming Matches</a></li>
-              <li><a href="#!" target="_blank">Contact</a></li>
-            </ul>
-          </div>
-          <div class="navbar-right">
-            <div class="action-button">
-              <a href="#!" target="_blank"
-                ><i class="fas fa-sign-in-alt"></i>Login</a
-              >
-            </div>
-          </div>
-        </nav>
-        <!-- /.nabigation bar end -->
+/* ===== HERO ===== */
+.hero{position:relative;height:240px;overflow:hidden;}
+.slide-box{
+position:absolute;width:100%;height:100%;
+opacity:0;transition:all .9s ease;
+}
+.slide-box.active{opacity:1;}
+.slide-box img{
+width:100%;height:100%;object-fit:cover;
+filter:brightness(.45);
+}
+.slide-content{
+z-index:5;position:absolute;
+top:50%;left:50%;
+transform:translate(-50%,-50%);
+text-align:center;width:90%;
+}
+.slide-content h1{font-size:18px;margin:4px 0;text-shadow:0 0 10px #8b5cf6;}
+.slide-content p{font-size:12px;margin:5px 0;color:#cbd5f5;}
+.btn{
+display:inline-block;margin-top:6px;padding:7px 16px;
+font-size:12px;background:linear-gradient(45deg,#7c3aed,#ec4899);
+border-radius:25px;text-decoration:none;color:white;
+}
 
-        <!-- header banner section start  -->
-        <div class="header-contents">
-          <div class="contents">
-            <div class="content">
-              <h1 class="content-title">Conmebol Copa America 2021</h1>
-              <div class="action-button">
-                <a href="#!" target="_blank"
-                  >Watch Now<i class="fas fa-arrow-right"></i
-                ></a>
-              </div>
-            </div>
+/* ===== ARROWS ===== */
+.arrow{
+position:absolute;top:50%;transform:translateY(-50%);
+background:rgba(0,0,0,.4);border:none;color:white;
+font-size:18px;padding:6px 10px;cursor:pointer;
+z-index:10;border-radius:50%;
+}
+.arrow.left{left:8px;}
+.arrow.right{right:8px;}
 
-            <div class="content effect">
-              <img src="assets/images/banner.png" alt="bannner image" />
-            </div>
-          </div>
-        </div>
-        <!-- /.header banner section end  -->
-      </section>
-    </header>
-    <!-- /.header-end -->
+/* ===== LIVE SCORE ===== */
+.live-wrap{padding:18px 10px 8px;max-width:1200px;margin:auto;overflow:hidden;}
+.live-title{
+display:flex;justify-content:center;align-items:center;gap:8px;
+font-size:16px;font-weight:700;margin-bottom:14px;
+color:#22d3ee;text-shadow:0 0 10px #22d3ee;
+}
+.live-dot{
+width:10px;height:10px;background:#ef4444;border-radius:50%;
+animation:pulseLive 1s infinite;box-shadow:0 0 10px #ef4444;
+}
+@keyframes pulseLive{
+0%{transform:scale(1);opacity:1;}
+50%{transform:scale(1.5);opacity:.5;}
+100%{transform:scale(1);opacity:1;}
+}
+.live-track{
+display:flex;gap:12px;overflow-x:auto;scrollbar-width:none;
+scroll-behavior:smooth;scroll-snap-type:x mandatory;
+}
+.live-track::-webkit-scrollbar{display:none;}
+.live-card{
+min-width:100%;scroll-snap-align:start;
+background:linear-gradient(135deg,rgba(34,211,238,.12),rgba(124,58,237,.10));
+border:1px solid rgba(34,211,238,.25);
+border-radius:16px;padding:14px;
+box-shadow:0 0 20px rgba(34,211,238,.12), inset 0 0 12px rgba(124,58,237,.08);
+}
+@media(min-width:768px){.live-card{min-width:calc(50% - 6px);}}
+@media(min-width:1100px){.live-card{min-width:calc(33.333% - 8px);}}
 
-    <!-- main section start -->
+.match-type{
+display:inline-block;padding:5px 12px;border-radius:20px;
+font-size:10px;font-weight:700;
+background:linear-gradient(45deg,#7c3aed,#06b6d4);
+margin-bottom:12px;
+}
+.live-mid{
+display:grid;grid-template-columns:1fr auto 1fr;
+align-items:center;gap:10px;
+}
+.player{text-align:center;min-width:0;}
+.player-name{
+font-size:11px;font-weight:700;
+white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.player-id{font-size:10px;color:#94a3b8;}
+.score-box{font-size:22px;font-weight:800;display:flex;gap:6px;}
+.score-win{color:#22c55e;}
+.score-loss{color:#ef4444;}
+.score-draw{color:#eab308;}
 
-    <main>
-      <!-- photo album section start -->
+/* ===== SECTION ===== */
+.section{text-align:center;padding:25px 10px;}
+.section h2{
+margin-bottom:15px;font-size:16px;
+animation:glowPulse 2.5s infinite alternate;
+}
+@keyframes glowPulse{
+0%{text-shadow:0 0 5px #7c3aed;}
+100%{text-shadow:0 0 20px #a78bfa;}
+}
+.glow{color:#a78bfa;}
 
-      <section class="container">
-        <div class="players-album">
-          <div class="players">
-            <div class="player">
-              <div class="player-photo gray-effect">
-                <img
-                  src="assets/images/players/player-1.png"
-                  alt="player Image"
-                />
-              </div>
-              <div class="player-info">
-                <h3 class="player-name">Naymar Jr</h3>
-                <p class="player-description">
-                  Neymar da Silva Santos Júnior, known as Neymar, is a Brazilian
-                  professional footballer who plays as a forward for Ligue 1
-                  club Paris .
-                </p>
-              </div>
-            </div>
-            <div class="player">
-              <div class="player-photo gray-effect">
-                <img
-                  src="assets/images/players/player-2.png"
-                  alt="player Image"
-                />
-              </div>
-              <div class="player-info">
-                <h3 class="player-name">Lionel Messi</h3>
-                <p class="player-description">
-                  Lionel Andrés Messi is an Argentine professional footballer
-                  who plays as a forward or an attacking midfielder and captains
-                  the Argentina national team.
-                </p>
-              </div>
-            </div>
-            <div class="player">
-              <div class="player-photo gray-effect">
-                <img
-                  src="assets/images/players/player-3.png"
-                  alt="player Image"
-                />
-              </div>
-              <div class="player-info">
-                <h3 class="player-name">Cristiano Ronaldo</h3>
-                <p class="player-description">
-                  Cristiano Ronaldo dos Santos Aveiro GOIH ComM is a Portuguese
-                  professional footballer who plays as a forward for Serie A
-                  club Juventus.
-                </p>
-              </div>
-            </div>
-            <div class="player">
-              <div class="player-photo gray-effect">
-                <img
-                  src="assets/images/players/player-4.png"
-                  alt="player Image"
-                />
-              </div>
-              <div class="player-info">
-                <h3 class="player-name">Paulo Dybala</h3>
-                <p class="player-description">
-                  Paulo Exequiel Dybala is an Argentine professional footballer
-                  who plays as a forward for Serie A club Juventus and the
-                  Argentina national team.
-                </p>
-              </div>
-            </div>
-            <div class="player">
-              <div class="player-photo gray-effect">
-                <img
-                  src="assets/images/players/player-5.png"
-                  alt="player Image"
-                />
-              </div>
-              <div class="player-info">
-                <h3 class="player-name">Mesut Ozil</h3>
-                <p class="player-description">
-                  esut Özil is a German professional footballer who plays as an
-                  attacking midfielder for Süper Lig club Fenerbahçe. Nicknamed
-                  "The Assist King".
-                </p>
-              </div>
-            </div>
-            <div class="player">
-              <div class="player-photo gray-effect">
-                <img
-                  src="assets/images/players/player-6.png"
-                  alt="player Image"
-                />
-              </div>
-              <div class="player-info">
-                <h3 class="player-name">Mauro Icardi</h3>
-                <p class="player-description">
-                  Mauro Emanuel Icardi is an Argentine professional footballer
-                  who plays as a striker for Ligue 1 club Paris Saint-Germain
-                  and the Argentina national team.
-                </p>
-              </div>
-            </div>
-            <div class="player">
-              <div class="player-photo gray-effect">
-                <img
-                  src="assets/images/players/player-7.png"
-                  alt="player Image"
-                />
-              </div>
-              <div class="player-info">
-                <h3 class="player-name">Di Maria</h3>
-                <p class="player-description">
-                  Ángel Fabián Di María is an Argentine professional footballer
-                  who plays for Ligue 1 club Paris Saint-Germain and the
-                  Argentina national team
-                </p>
-              </div>
-            </div>
-            <div class="player">
-              <div class="player-photo gray-effect">
-                <img
-                  src="assets/images/players/player-8.png"
-                  alt="player Image"
-                />
-              </div>
-              <div class="player-info">
-                <h3 class="player-name">Kylian Mbappé</h3>
-                <p class="player-description">
-                  Kylian Mbappé Lottin is a French professional footballer who
-                  plays as a forward for Ligue 1 club Paris Saint-Germain and
-                  the France national team.
-                </p>
-              </div>
-            </div>
-            <div class="player">
-              <div class="player-photo gray-effect">
-                <img
-                  src="assets/images/players/player-9.png"
-                  alt="player Image"
-                />
-              </div>
-              <div class="player-info">
-                <h3 class="player-name">Mohamed Salah</h3>
-                <p class="player-description">
-                  Mohamed Salah Hamed Mahrous Ghaly is an Egyptian professional
-                  footballer who plays as a forward for Premier League club
-                  Liverpool and captains the Egypt national team.
-                </p>
-              </div>
-            </div>
-            <div class="player">
-              <div class="player-photo gray-effect">
-                <img
-                  src="assets/images/players/player-10.png"
-                  alt="player Image"
-                />
-              </div>
-              <div class="player-info">
-                <h3 class="player-name">Harry Kane</h3>
-                <p class="player-description">
-                  Harry Edward Kane MBE is an English professional footballer
-                  who plays as a striker for Premier League club Tottenham
-                  Hotspur and captains the England national team.
-                </p>
-              </div>
-            </div>
-            <div class="player">
-              <div class="player-photo gray-effect">
-                <img
-                  src="assets/images/players/player-11.png"
-                  alt="player Image"
-                />
-              </div>
-              <div class="player-info">
-                <h3 class="player-name">Kevin De Bruyne</h3>
-                <p class="player-description">
-                  Kevin De Bruyne is a Belgian professional footballer who plays
-                  as a midfielder for Premier League club Manchester City, where
-                  he is vice-captain.
-                </p>
-              </div>
-            </div>
-            <div class="player">
-              <div class="player-photo gray-effect">
-                <img
-                  src="assets/images/players/player-12.png"
-                  alt="player Image"
-                />
-              </div>
-              <div class="player-info">
-                <h3 class="player-name">Philippe Coutinho</h3>
-                <p class="player-description">
-                  Philippe Coutinho Correia is a Brazilian professional
-                  footballer who plays as an attacking midfielder or winger for
-                  Spanish club Barcelona and the Brazil national team.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      <!-- /.photo album section end -->
+/* ===== GRID ===== */
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+gap:10px;
+padding:0 10px;
+max-width:900px;
+margin:auto;
+}
+.card{
+background:rgba(255,255,255,.05);
+padding:12px;border-radius:12px;
+transition:.3s;cursor:pointer;text-align:center;position:relative;
+}
+.quick-container .card::before,
+.champ-container .card::before{
+content:"";position:absolute;inset:0;border-radius:12px;padding:1px;
+-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+-webkit-mask-composite:xor;mask-composite:exclude;
+}
+.quick-container .card::before{background:linear-gradient(45deg,#FFD700,#FFA500);}
+.champ-container .card::before{background:linear-gradient(45deg,#38bdf8,#6366f1);}
+.card:hover{transform:scale(1.05);box-shadow:0 0 20px #8b5cf6;}
+.champ img{width:100%;border-radius:10px;}
+.champ h4{font-size:11px;}
+.champ p{font-size:10px;color:#cbd5f5;}
+.desc{max-width:700px;margin:10px auto;font-size:12px;color:#cbd5f5;}
 
-      <!-- highlights section start  -->
-      <section class="container">
-        <div class="all-highlights">
-          <div class="highlights">
-            <div class="highlight">
-              <h1 class="highlight-heading">
-                All Highlights Copa America 2021
-              </h1>
-              <p class="highlight-description">
-                Copa América or CONMEBOL Copa América, known until 1975 as the
-                South American Football Championship, is the main men's football
-                tournament contested among national teams from South America.
-              </p>
-              <div class="action-button">
-                <a href="#" target="_blank"
-                  >Watch Now<i class="fas fa-arrow-right"></i
-                ></a>
-              </div>
-            </div>
-            <div class="highlight">
-              <img src="assets/images/match.png" alt="highlight image" />
-            </div>
-          </div>
-        </div>
-      </section>
-      <!-- /.highlights section end  -->
+/* ===== STORE ===== */
+.store-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
+max-width:1000px;
+margin:auto;
+padding:0 10px;
+}
+.store-card{
+background:rgba(255,255,255,.05);
+border:1px solid rgba(168,85,247,.25);
+border-radius:14px;
+padding:10px;
+box-shadow:0 0 15px rgba(124,58,237,.12);
+}
+.store-card img{
+width:100%;
+aspect-ratio:1/1;
+object-fit:cover;
+border-radius:10px;
+margin-bottom:8px;
+}
+.store-btn{
+display:block;
+padding:8px;
+font-size:11px;
+border-radius:10px;
+background:linear-gradient(45deg,#7c3aed,#06b6d4);
+color:white;
+text-decoration:none;
+}
 
-      <!-- Form: contact us section start -->
+/* ===== VISITOR ===== */
+.visitor-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:12px;
+max-width:500px;
+margin:20px auto 0;
+padding:0 10px;
+}
+.visitor-card{
+background:rgba(255,255,255,.05);
+padding:16px;
+border-radius:14px;
+border:1px solid rgba(34,211,238,.25);
+box-shadow:0 0 20px rgba(34,211,238,.08);
+}
+.visitor-card h3{
+margin:0 0 8px;
+font-size:12px;
+color:#94a3b8;
+}
+.visitor-card div{
+font-size:22px;
+font-weight:800;
+color:#22d3ee;
+}
 
-      <section class="container">
-        <h1 class="form-heading">Leave Your Message</h1>
-        <div class="form-container">
-          <form>
-            <div class="row">
-              <div class="col-25">
-                <label for="fname">Your Name</label>
-              </div>
-              <div class="col-75">
-                <input
-                  type="text"
-                  id="fname"
-                  name="firstname"
-                  placeholder="Write your name.."
-                />
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-25">
-                <label for="lname">Your Email</label>
-              </div>
-              <div class="col-75">
-                <input
-                  type="text"
-                  id="lname"
-                  name="lastname"
-                  placeholder="Write your email address.."
-                />
-              </div>
-            </div>
+/* ===== SOCIAL ===== */
+.social a{
+display:inline-block;
+margin:5px;padding:8px 12px;
+font-size:12px;background:linear-gradient(45deg,#06b6d4,#3b82f6);
+border-radius:8px;color:white;text-decoration:none;
+}
 
-            <div class="row">
-              <div class="col-25">
-                <label for="subject">Your Message</label>
-              </div>
-              <div class="col-75">
-                <textarea
-                  id="subject"
-                  name="subject"
-                  placeholder="Write your message.."
-                  style="height: 200px"
-                ></textarea>
-              </div>
-            </div>
-            <div class="row">
-              <input type="submit" value="Submit" />
-            </div>
-          </form>
-        </div>
-      </section>
-      <!-- contact us section end -->
-    </main>
-    <!-- /.main section end -->
+.footer{
+text-align:center;padding:15px;font-size:12px;
+color:#94a3b8;border-top:1px solid rgba(255,255,255,.1);
+}
+.footer a{color:#a78bfa;text-decoration:none;}
 
-    <!-- footer section start -->
-    <footer>
-      <section class="container">
-        <div class="footer-container">
-          <div class="footer-top">
-            <img src="assets/images/Logo.png" alt="footer logo" />
-          </div>
-          <div class="footer-botom">
-            <div class="footer-icons">
-              <i class="fab fa-instagram"></i>
-              <i class="fab fa-dribbble"></i>
-              <i class="fab fa-twitter"></i>
-              <i class="fab fa-youtube"></i>
-            </div>
+@media(max-width:600px){
+.navbar{flex-direction:column;align-items:center;}
+.logo{justify-content:center;width:100%;}
+.nav-links{justify-content:center;width:100%;}
+.hero{height:200px;}
+.store-grid{grid-template-columns:repeat(3,1fr);}
+}
+</style>
+</head>
+<body>
 
-            <p class="footer-copyright">Copyright © 2022 Football</p>
-          </div>
-        </div>
-      </section>
-    </footer>
-    <!-- ./footer section end -->
-  </body>
+<div class="navbar">
+<div class="logo">
+<img src="https://i.imgur.com/LY3Bb9m.png">
+<span>GOAT FC</span>
+</div>
+<div class="nav-links">
+<a href="#" target="_blank">Club Rules</a>
+<a href="#" target="_blank">About</a>
+<a href="#" target="_blank">Contact</a>
+<a href="#" target="_blank">Registration</a>
+</div>
+</div>
+
+<div class="hero">
+<button class="arrow left" onclick="changeSlide(-1)">‹</button>
+<button class="arrow right" onclick="changeSlide(1)">›</button>
+</div>
+
+<div class="live-wrap">
+<div class="live-title"><div class="live-dot"></div>LIVE SCORE</div>
+<div class="live-track" id="liveTrack"></div>
+</div>
+
+<div class="section">
+<h2 class="glow">Club Hub</h2>
+<div class="grid quick-container"></div>
+</div>
+
+<div class="section">
+<h2 class="glow">GOAT STORE</h2>
+<div class="store-grid" id="storeGrid"></div>
+</div>
+
+<div class="section" style="margin-top:-10px;">
+<h2 class="glow">Hall of Champions</h2>
+<div class="grid champ-container"></div>
+<div class="desc">🏆 This zone represents champions, top scorers, and elite performers of Goat FC.</div>
+</div>
+
+<div class="section social">
+<h2 class="glow">JOIN WITH US</h2>
+</div>
+
+<div class="visitor-grid">
+<div class="visitor-card">
+<h3>TOTAL VISITS</h3>
+<div id="totalVisits">0</div>
+</div>
+<div class="visitor-card">
+<h3>TODAY VISITS</h3>
+<div id="todayVisits">0</div>
+</div>
+</div>
+
+<div class="footer">
+Design By <a href="https://www.facebook.com/mdrashedulhasan02/">Md Rashedul Hasan</a>
+</div>
+
+<script>
+const sheetID="1ZoXNHa5sYiP_HaPRyL5RDML7l3kC2IaGuQCAmYkERf8";
+let slides=[],current=0;
+
+/* SLIDES */
+fetch(`https://opensheet.elk.sh/${sheetID}/SLIDES`)
+.then(r=>r.json())
+.then(data=>{slides=data;renderSlides();startAuto();});
+
+function renderSlides(){
+let hero=document.querySelector(".hero");
+hero.innerHTML=`
+<button class="arrow left" onclick="changeSlide(-1)">‹</button>
+<button class="arrow right" onclick="changeSlide(1)">›</button>`;
+hero.innerHTML+=slides.map((item,i)=>`
+<div class="slide-box ${i==0?'active':''}">
+<img src="${item.image}">
+<div class="slide-content">
+<h1>${item.title}</h1>
+<p>${item.desc}</p>
+<a class="btn" href="${item.link}" target="_blank">${item.button}</a>
+</div></div>`).join('');
+}
+function startAuto(){setInterval(()=>changeSlide(1),7000);}
+function changeSlide(dir){
+let boxes=document.querySelectorAll(".slide-box");
+boxes[current].classList.remove("active");
+current=(current+dir+boxes.length)%boxes.length;
+boxes[current].classList.add("active");
+}
+
+/* STORE */
+fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vS3VQ-e6O8uHjlq8Lsdp5j0vxxOMZH1O17Nbo1ISGXDU_EFsuBEXNWydPbuhJ46lnxqJmevXaN2xPiL/pub?gid=1152972554&single=true&output=csv")
+.then(r=>r.text())
+.then(csv=>{
+const rows=csv.trim().split("\n").slice(1);
+document.getElementById("storeGrid").innerHTML=rows.map(r=>{
+const [img,btn,link]=r.split(",");
+return `
+<div class="store-card">
+<img src="${img}">
+<a class="store-btn" href="${link}" target="_blank">${btn}</a>
+</div>`;
+}).join('');
+});
+
+/* VISITOR COUNTER */
+fetch("https://api.countapi.xyz/hit/goatfc/total")
+.then(r=>r.json())
+.then(d=>document.getElementById("totalVisits").innerText=d.value);
+
+const todayKey=new Date().toISOString().slice(0,10);
+fetch(`https://api.countapi.xyz/hit/goatfc/${todayKey}`)
+.then(r=>r.json())
+.then(d=>document.getElementById("todayVisits").innerText=d.value);
+</script>
+
+</body>
 </html>

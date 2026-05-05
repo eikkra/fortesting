@@ -187,11 +187,18 @@ color:#94a3b8;
 }
 
 .score-box{
-font-size:22px;
+font-size:18px; /* আগে 22px ছিল */
 font-weight:800;
 display:flex;
-align-items:center;
-gap:6px;
+justify-content:center;
+gap:5px;
+}
+
+.match-type.bottom{
+margin-top:6px;
+font-size:9px;
+padding:3px 8px;
+display:inline-block;
 }
 
 .score-win{color:#22c55e;}
@@ -504,19 +511,20 @@ if(+m.P1_Score < +m.P2_Score){p1Class='score-loss';p2Class='score-win';}
 
 return `
 <div class="live-card">
-<div style="text-align:center;">
-<div class="match-type">${m.Match_Type}</div>
-</div>
+
 <div class="live-mid">
 <div class="player">
 <div class="player-name">${p1}</div>
 <div class="player-id">${m.P1_ID}</div>
 </div>
 
+<div>
 <div class="score-box">
 <span class="${p1Class}">${m.P1_Score}</span>
 -
 <span class="${p2Class}">${m.P2_Score}</span>
+</div>
+<div class="match-type bottom">${m.Match_Type}</div>
 </div>
 
 <div class="player">
@@ -524,6 +532,7 @@ return `
 <div class="player-id">${m.P2_ID}</div>
 </div>
 </div>
+
 </div>`;
 }).join('');
 });

@@ -18,80 +18,81 @@ color:white;
 overflow-x:hidden;
 }
 
-/* ===== NAVBAR ===== */
+/* NAVBAR */
 .navbar{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:10px 12px;
-flex-wrap:wrap;
+display:flex;justify-content:space-between;align-items:center;
+padding:10px 12px;flex-wrap:wrap;
 background:rgba(15,23,42,0.85);
 backdrop-filter:blur(10px);
 }
 .logo{display:flex;align-items:center;gap:8px;min-width:160px;}
 .logo img{height:38px;filter:drop-shadow(0 0 10px #7c3aed);}
-.logo span{font-size:16px;font-weight:700;white-space:nowrap;}
+.logo span{font-size:16px;font-weight:700;}
 .nav-links{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;}
 .nav-links a{
-font-size:12px;padding:6px 8px;color:#cbd5f5;
-text-decoration:none;white-space:nowrap;
+font-size:12px;padding:6px 8px;
+color:#cbd5f5;text-decoration:none;
+white-space:nowrap;
 }
-.nav-links a:hover{color:#a78bfa;text-shadow:0 0 10px #a78bfa;}
 
-/* ===== HERO ===== */
+/* HERO */
 .hero{position:relative;height:240px;overflow:hidden;}
 .slide-box{
 position:absolute;width:100%;height:100%;
-opacity:0;transition:all .9s ease;
+opacity:0;transition:.9s ease;
 }
 .slide-box.active{opacity:1;}
 .slide-box img{
-width:100%;height:100%;object-fit:cover;
-filter:brightness(.45);
+width:100%;height:100%;
+object-fit:cover;filter:brightness(.45);
 }
 .slide-content{
-z-index:5;position:absolute;
-top:50%;left:50%;
+position:absolute;top:50%;left:50%;
 transform:translate(-50%,-50%);
 text-align:center;width:90%;
 }
-.slide-content h1{font-size:18px;margin:4px 0;text-shadow:0 0 10px #8b5cf6;}
-.slide-content p{font-size:12px;margin:5px 0;color:#cbd5f5;}
+.slide-content h1{font-size:18px;margin:4px 0;}
+.slide-content p{font-size:12px;color:#cbd5f5;}
 .btn{
-display:inline-block;margin-top:6px;padding:7px 16px;
-font-size:12px;background:linear-gradient(45deg,#7c3aed,#ec4899);
-border-radius:25px;text-decoration:none;color:white;
+display:inline-block;margin-top:6px;
+padding:7px 16px;font-size:12px;
+background:linear-gradient(45deg,#7c3aed,#ec4899);
+border-radius:25px;color:white;
+text-decoration:none;
+border:none;
+cursor:pointer;
 }
 
-/* ===== ARROWS ===== */
+/* ARROWS */
 .arrow{
 position:absolute;top:50%;transform:translateY(-50%);
 background:rgba(0,0,0,.4);border:none;color:white;
-font-size:18px;padding:6px 10px;cursor:pointer;
-z-index:10;border-radius:50%;
+font-size:18px;padding:6px 10px;
+cursor:pointer;z-index:10;border-radius:50%;
 }
 .arrow.left{left:8px;}
 .arrow.right{right:8px;}
 
-/* ===== LIVE SCORE ===== */
+/* LIVE SCORE */
 .live-wrap{padding:18px 10px 8px;max-width:1200px;margin:auto;overflow:hidden;}
 .live-title{
-display:flex;justify-content:center;align-items:center;gap:8px;
-font-size:16px;font-weight:700;margin-bottom:14px;
-color:#22d3ee;text-shadow:0 0 10px #22d3ee;
+display:flex;justify-content:center;align-items:center;
+gap:8px;font-size:16px;font-weight:700;
+margin-bottom:14px;color:#22d3ee;
 }
 .live-dot{
-width:10px;height:10px;background:#ef4444;border-radius:50%;
-animation:pulseLive 1s infinite;box-shadow:0 0 10px #ef4444;
+width:10px;height:10px;background:#ef4444;
+border-radius:50%;animation:pulseLive 1s infinite;
 }
 @keyframes pulseLive{
-0%{transform:scale(1);opacity:1;}
+0%{transform:scale(1);}
 50%{transform:scale(1.5);opacity:.5;}
-100%{transform:scale(1);opacity:1;}
+100%{transform:scale(1);}
 }
 .live-track{
-display:flex;gap:12px;overflow-x:auto;scrollbar-width:none;
-scroll-behavior:smooth;scroll-snap-type:x mandatory;
+display:flex;gap:12px;overflow-x:auto;
+scrollbar-width:none;scroll-behavior:smooth;
+scroll-snap-type:x mandatory;
 }
 .live-track::-webkit-scrollbar{display:none;}
 .live-card{
@@ -99,86 +100,65 @@ min-width:100%;scroll-snap-align:start;
 background:linear-gradient(135deg,rgba(34,211,238,.12),rgba(124,58,237,.10));
 border:1px solid rgba(34,211,238,.25);
 border-radius:16px;padding:14px;
-box-shadow:0 0 20px rgba(34,211,238,.12), inset 0 0 12px rgba(124,58,237,.08);
 }
 @media(min-width:768px){.live-card{min-width:calc(50% - 6px);}}
 @media(min-width:1100px){.live-card{min-width:calc(33.333% - 8px);}}
 
 .match-type{
-display:inline-block;padding:5px 12px;border-radius:20px;
-font-size:10px;font-weight:700;
+display:inline-block;padding:5px 12px;
+border-radius:20px;font-size:10px;
 background:linear-gradient(45deg,#7c3aed,#06b6d4);
 margin-bottom:12px;
 }
 .live-mid{
-display:grid;grid-template-columns:1fr auto 1fr;
-align-items:center;gap:10px;
+display:grid;
+grid-template-columns:1fr auto 1fr;
+align-items:center;
+gap:10px;
 }
-.player{text-align:center;min-width:0;}
-.player-name{
-font-size:11px;font-weight:700;
-white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-}
+.player-name{font-size:11px;font-weight:700;}
 .player-id{font-size:10px;color:#94a3b8;}
-.score-box{font-size:22px;font-weight:800;display:flex;gap:6px;}
+.score-box{font-size:22px;font-weight:800;}
 .score-win{color:#22c55e;}
 .score-loss{color:#ef4444;}
 .score-draw{color:#eab308;}
 
-/* ===== SECTION ===== */
+/* SECTION */
 .section{text-align:center;padding:25px 10px;}
-.section h2{
-margin-bottom:15px;font-size:16px;
-animation:glowPulse 2.5s infinite alternate;
-}
-@keyframes glowPulse{
-0%{text-shadow:0 0 5px #7c3aed;}
-100%{text-shadow:0 0 20px #a78bfa;}
-}
 .glow{color:#a78bfa;}
 
-/* ===== GRID ===== */
+/* GRID */
 .grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
-gap:10px;
-padding:0 10px;
-max-width:900px;
-margin:auto;
+gap:10px;padding:0 10px;
+max-width:900px;margin:auto;
 }
 .card{
 background:rgba(255,255,255,.05);
 padding:12px;border-radius:12px;
-transition:.3s;cursor:pointer;text-align:center;position:relative;
+text-align:center;position:relative;
+cursor:pointer;
 }
-.quick-container .card::before,
-.champ-container .card::before{
-content:"";position:absolute;inset:0;border-radius:12px;padding:1px;
--webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
--webkit-mask-composite:xor;mask-composite:exclude;
-}
-.quick-container .card::before{background:linear-gradient(45deg,#FFD700,#FFA500);}
-.champ-container .card::before{background:linear-gradient(45deg,#38bdf8,#6366f1);}
-.card:hover{transform:scale(1.05);box-shadow:0 0 20px #8b5cf6;}
-.champ img{width:100%;border-radius:10px;}
-.champ h4{font-size:11px;}
-.champ p{font-size:10px;color:#cbd5f5;}
-.desc{max-width:700px;margin:10px auto;font-size:12px;color:#cbd5f5;}
+.card:hover{transform:scale(1.03);}
 
-/* ===== STORE ===== */
+/* CHAMPIONS */
+.champ img{width:100%;border-radius:10px;}
+
+/* STORE */
 .store-grid{
 display:grid;
 grid-template-columns:repeat(3,1fr);
-gap:10px;
+gap:12px;
 max-width:1000px;
 margin:auto;
 padding:0 10px;
 }
 .store-card{
 background:rgba(255,255,255,.05);
-border:1px solid rgba(168,85,247,.25);
 border-radius:14px;
 padding:10px;
+border:1px solid rgba(168,85,247,.25);
 box-shadow:0 0 15px rgba(124,58,237,.12);
 }
 .store-card img{
@@ -186,65 +166,64 @@ width:100%;
 aspect-ratio:1/1;
 object-fit:cover;
 border-radius:10px;
-margin-bottom:8px;
+margin-bottom:10px;
 }
-.store-btn{
-display:block;
-padding:8px;
+.store-card .btn{
+width:100%;
+padding:10px;
 font-size:11px;
-border-radius:10px;
-background:linear-gradient(45deg,#7c3aed,#06b6d4);
-color:white;
-text-decoration:none;
 }
 
-/* ===== VISITOR ===== */
-.visitor-grid{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:12px;
-max-width:500px;
+/* SOCIAL */
+.social a{
+display:inline-block;
+margin:5px;padding:8px 12px;
+font-size:12px;
+background:linear-gradient(45deg,#06b6d4,#3b82f6);
+border-radius:8px;color:white;text-decoration:none;
+}
+
+/* VISITOR */
+.visitor-box{
+max-width:700px;
 margin:20px auto 0;
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
 padding:0 10px;
 }
 .visitor-card{
-background:rgba(255,255,255,.05);
+background:linear-gradient(135deg,rgba(124,58,237,.18),rgba(6,182,212,.12));
 padding:16px;
 border-radius:14px;
-border:1px solid rgba(34,211,238,.25);
-box-shadow:0 0 20px rgba(34,211,238,.08);
+border:1px solid rgba(167,139,250,.25);
+box-shadow:0 0 15px rgba(124,58,237,.12);
 }
 .visitor-card h3{
-margin:0 0 8px;
+margin:0;
 font-size:12px;
-color:#94a3b8;
+color:#cbd5f5;
 }
-.visitor-card div{
+.visitor-card p{
+margin:8px 0 0;
 font-size:22px;
 font-weight:800;
 color:#22d3ee;
 }
 
-/* ===== SOCIAL ===== */
-.social a{
-display:inline-block;
-margin:5px;padding:8px 12px;
-font-size:12px;background:linear-gradient(45deg,#06b6d4,#3b82f6);
-border-radius:8px;color:white;text-decoration:none;
-}
-
+/* FOOTER */
 .footer{
-text-align:center;padding:15px;font-size:12px;
-color:#94a3b8;border-top:1px solid rgba(255,255,255,.1);
+text-align:center;padding:15px;
+font-size:12px;color:#94a3b8;
+border-top:1px solid rgba(255,255,255,.1);
 }
 .footer a{color:#a78bfa;text-decoration:none;}
 
 @media(max-width:600px){
-.navbar{flex-direction:column;align-items:center;}
-.logo{justify-content:center;width:100%;}
-.nav-links{justify-content:center;width:100%;}
+.navbar{flex-direction:column;}
 .hero{height:200px;}
 .store-grid{grid-template-columns:repeat(3,1fr);}
+.store-card .btn{font-size:10px;padding:8px;}
 }
 </style>
 </head>
@@ -278,7 +257,8 @@ color:#94a3b8;border-top:1px solid rgba(255,255,255,.1);
 <div class="grid quick-container"></div>
 </div>
 
-<div class="section">
+<!-- GOAT STORE -->
+<div class="section" style="padding-top:5px;">
 <h2 class="glow">GOAT STORE</h2>
 <div class="store-grid" id="storeGrid"></div>
 </div>
@@ -286,21 +266,24 @@ color:#94a3b8;border-top:1px solid rgba(255,255,255,.1);
 <div class="section" style="margin-top:-10px;">
 <h2 class="glow">Hall of Champions</h2>
 <div class="grid champ-container"></div>
-<div class="desc">🏆 This zone represents champions, top scorers, and elite performers of Goat FC.</div>
+<div style="max-width:700px;margin:10px auto;font-size:12px;color:#cbd5f5;">
+🏆 This zone represents champions, top scorers, and elite performers of Goat FC.
+</div>
 </div>
 
 <div class="section social">
 <h2 class="glow">JOIN WITH US</h2>
 </div>
 
-<div class="visitor-grid">
+<!-- VISITOR COUNTER -->
+<div class="visitor-box">
 <div class="visitor-card">
 <h3>TOTAL VISITS</h3>
-<div id="totalVisits">0</div>
+<p id="totalVisits">0</p>
 </div>
 <div class="visitor-card">
 <h3>TODAY VISITS</h3>
-<div id="todayVisits">0</div>
+<p id="todayVisits">0</p>
 </div>
 </div>
 
@@ -312,7 +295,7 @@ Design By <a href="https://www.facebook.com/mdrashedulhasan02/">Md Rashedul Hasa
 const sheetID="1ZoXNHa5sYiP_HaPRyL5RDML7l3kC2IaGuQCAmYkERf8";
 let slides=[],current=0;
 
-/* SLIDES */
+/* HERO SLIDES */
 fetch(`https://opensheet.elk.sh/${sheetID}/SLIDES`)
 .then(r=>r.json())
 .then(data=>{slides=data;renderSlides();startAuto();});
@@ -339,30 +322,87 @@ current=(current+dir+boxes.length)%boxes.length;
 boxes[current].classList.add("active");
 }
 
+/* CLUB HUB */
+fetch(`https://opensheet.elk.sh/${sheetID}/LINKS`)
+.then(r=>r.json())
+.then(data=>{
+document.querySelector(".quick-container").innerHTML=data.map(l=>`
+<div class="card" onclick="window.open('${l.link}','_blank')">
+<h3>${l.icon}</h3><h4>${l.title}</h4>
+</div>`).join('');
+});
+
 /* STORE */
 fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vS3VQ-e6O8uHjlq8Lsdp5j0vxxOMZH1O17Nbo1ISGXDU_EFsuBEXNWydPbuhJ46lnxqJmevXaN2xPiL/pub?gid=1152972554&single=true&output=csv")
 .then(r=>r.text())
 .then(csv=>{
-const rows=csv.trim().split("\n").slice(1);
-document.getElementById("storeGrid").innerHTML=rows.map(r=>{
-const [img,btn,link]=r.split(",");
-return `
+const rows=parseCSV(csv);
+document.getElementById("storeGrid").innerHTML=rows.map(item=>`
 <div class="store-card">
-<img src="${img}">
-<a class="store-btn" href="${link}" target="_blank">${btn}</a>
-</div>`;
-}).join('');
+<img src="${item['Image Url']}">
+<button class="btn" onclick="window.open('${item['Link Url']}','_blank')">${item['Botton Name']}</button>
+</div>`).join('');
+});
+
+/* CHAMPIONS */
+fetch(`https://opensheet.elk.sh/${sheetID}/CHAMPIONS`)
+.then(r=>r.json())
+.then(data=>{
+document.querySelector(".champ-container").innerHTML=data.map(c=>`
+<div class="card champ">
+<img src="${c.image}">
+<h4>${c.title}</h4>
+<p>${c.subtitle}</p>
+</div>`).join('');
+});
+
+/* SOCIAL */
+fetch(`https://opensheet.elk.sh/${sheetID}/SOCIAL`)
+.then(r=>r.json())
+.then(data=>{
+document.querySelector(".social").innerHTML+=data.map(s=>
+`<a href="${s.link}" target="_blank">${s.name}</a>`).join('');
 });
 
 /* VISITOR COUNTER */
-fetch("https://api.countapi.xyz/hit/goatfc/total")
-.then(r=>r.json())
-.then(d=>document.getElementById("totalVisits").innerText=d.value);
+const today=new Date().toLocaleDateString();
+let total=localStorage.getItem("goat_total_visits")||0;
+let lastVisit=localStorage.getItem("goat_last_visit");
+let todayCount=localStorage.getItem("goat_today_visits")||0;
 
-const todayKey=new Date().toISOString().slice(0,10);
-fetch(`https://api.countapi.xyz/hit/goatfc/${todayKey}`)
-.then(r=>r.json())
-.then(d=>document.getElementById("todayVisits").innerText=d.value);
+total=parseInt(total)+1;
+
+if(lastVisit!==today){
+todayCount=1;
+localStorage.setItem("goat_last_visit",today);
+}else{
+todayCount=parseInt(todayCount)+1;
+}
+
+localStorage.setItem("goat_total_visits",total);
+localStorage.setItem("goat_today_visits",todayCount);
+
+document.getElementById("totalVisits").innerText=total;
+document.getElementById("todayVisits").innerText=todayCount;
+
+/* CSV Parser */
+function parseCSV(text){
+const rows=[];
+let row=[],cell='',inside=false;
+for(let i=0;i<text.length;i++){
+const c=text[i],n=text[i+1];
+if(c=='"'&&inside&&n=='"'){cell+='"';i++;}
+else if(c=='"'){inside=!inside;}
+else if(c==','&&!inside){row.push(cell);cell='';}
+else if((c=='\n'||c=='\r')&&!inside){
+if(cell||row.length){row.push(cell);rows.push(row);row=[];cell='';}
+if(c=='\r'&&n=='\n')i++;
+}else cell+=c;
+}
+if(cell||row.length){row.push(cell);rows.push(row);}
+const headers=rows.shift();
+return rows.map(r=>Object.fromEntries(headers.map((h,i)=>[h.trim(),(r[i]||'').trim()])));
+}
 </script>
 
 </body>

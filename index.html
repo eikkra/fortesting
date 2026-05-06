@@ -167,7 +167,8 @@ grid-template-columns:1fr auto 1fr;
 grid-template-rows:auto auto auto;
 align-items:center;
 text-align:center;
-gap:2px 6px; /* gap কমানো */
+row-gap:2px;   /* কমানো */
+column-gap:6px;
 }
 
 .player{
@@ -178,15 +179,15 @@ min-width:0;
 .player-name{
 font-size:11px;
 font-weight:700;
-line-height:1.1;   /* height কম */
-margin:0;
+margin-bottom:0;
+line-height:1.1;
 }
 
 .player-id{
 font-size:10px;
 color:#05cff7;
-line-height:1.1;   /* height কম */
-margin:0;
+margin-top:0;
+line-height:1.1;
 }
 
 .score-box{
@@ -505,6 +506,21 @@ const headers=rows.shift();
 return rows.map(r=>Object.fromEntries(headers.map((h,i)=>[h.trim(),(r[i]||'').trim()])));
 }
 
+function formatBDTime(dateStr){
+if(!dateStr) return '';
+
+const d = new Date(dateStr);
+
+return d.toLocaleString('en-BD',{
+day:'2-digit',
+month:'short',
+hour:'2-digit',
+minute:'2-digit',
+hour12:true,
+timeZone:'Asia/Dhaka'
+});
+}
+
 /* Live Score + Rank System */
 Promise.all([
 
@@ -580,14 +596,17 @@ return `
 
 <!-- BOTTOM ROW -->
 <div class="player-id">${m.P1_ID}</div>
-<div></div>
+
+<div class="player-id" style="color:#94a3b8;font-size:10px;">
+${formatBDTime(m.Match_Date)}
+</div>
+
 <div class="player-id">${m.P2_ID}</div>
 
 </div>
 
 </div>
 `;
-
 }).join('');
 
 });

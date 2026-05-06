@@ -204,6 +204,14 @@ margin:0;
 .score-loss{color:#ef4444;}
 .score-draw{color:#eab308;}
 
+.rank{
+font-size:10px;
+font-weight:700;
+color:#facc15;
+text-shadow:0 0 8px #facc15;
+margin-bottom:2px;
+}
+
 /* ===== SECTION ===== */
 .section{text-align:center;padding:25px 10px;}
 .section h2{
@@ -481,11 +489,19 @@ const headers=rows.shift();
 return rows.map(r=>Object.fromEntries(headers.map((h,i)=>[h.trim(),(r[i]||'').trim()])));
 }
 
-/* Live Score */
+/* Live Score + Rank System */
 Promise.all([
+
+/* Match Data */
 fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv").then(r=>r.text()),
-fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv").then(r=>r.text())
-]).then(([matchCSV,memberCSV])=>{
+
+/* Members */
+fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv").then(r=>r.text()),
+
+/* Leaderboard (NEW) */
+fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1033046915&single=true&output=csv").then(r=>r.text())
+
+]).then(([matchCSV,memberCSV,leaderCSV])=>{
 
 const matches=parseCSV(matchCSV)
 .filter(m=>
@@ -496,42 +512,72 @@ m.Approved?.toLowerCase()==='yes' &&
 .slice(-10)
 .reverse();
 
+/* Player Name Map */
 const members=parseCSV(memberCSV);
 const nameMap={};
 members.forEach(m=>nameMap[m["Club ID Number"]]=m["Full Name"]);
 
+/* Rank Map (NEW) */
+const leaderboard=parseCSV(leaderCSV);
+const rankMap={};
+leaderboard.forEach(r=>{
+rankMap[r["Club_ID"]] = r["Overall Rank"];
+});
+
+/* Render */
 document.getElementById("liveTrack").innerHTML=matches.map(m=>{
+
 const p1=nameMap[m.P1_ID]||m.P1_ID;
 const p2=nameMap[m.P2_ID]||m.P2_ID;
 
+/* Rank Fetch */
+const p1Rank = rankMap[m.P1_ID] ? `#Rank ${rankMap[m.P1_ID]}` : '';
+const p2Rank = rankMap[m.P2_ID] ? `#Rank ${rankMap[m.P2_ID]}` : '';
+
 let p1Class='score-draw', p2Class='score-draw';
-if(+m.P1_Score > +m.P2_Score){p1Class='score-win';p2Class='score-loss';}
-if(+m.P1_Score < +m.P2_Score){p1Class='score-loss';p2Class='score-win';}
+
+if(+m.P1_Score > +m.P2_Score){
+p1Class='score-win';p2Class='score-loss';
+}
+if(+m.P1_Score < +m.P2_Score){
+p1Class='score-loss';p2Class='score-win';
+}
 
 return `
 <div class="live-card">
 
 <div class="live-mid">
 
+<div class="player">
+<div class="rank">${p1Rank}</div>
 <div class="player-name">${p1}</div>
+<div class="player-id">${m.P1_ID}</div>
+</div>
+
 <div class="score-box">
 <span class="${p1Class}">${m.P1_Score}</span>
 -
 <span class="${p2Class}">${m.P2_Score}</span>
 </div>
+
+<div class="player">
+<div class="rank">${p2Rank}</div>
 <div class="player-name">${p2}</div>
-
-<div class="player-id">${m.P1_ID}</div>
-<div class="match-type small">${m.Match_Type}</div>
 <div class="player-id">${m.P2_ID}</div>
+</div>
+
+<div></div>
+<div class="match-type small">${m.Match_Type}</div>
+<div></div>
 
 </div>
 
 </div>
-</div>`;
+`;
+
 }).join('');
-});
 
+});
 /* Auto Slide Full Card */
 setInterval(()=>{
 const track=document.getElementById("liveTrack");

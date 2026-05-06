@@ -177,10 +177,12 @@ min-width:0;
 }
 
 .player-name{
-font-size:11px;
-font-weight:700;
-margin-bottom:0;
-line-height:1.1;
+font-size:12px;
+font-weight:800;
+white-space:nowrap;        /* 🔥 line break bondho */
+overflow:hidden;
+text-overflow:ellipsis;
+letter-spacing:.3px;
 }
 
 .player-id{
@@ -190,14 +192,19 @@ margin-top:0;
 line-height:1.1;
 }
 
+.match-date{
+font-size:10px;
+color:#22d3ee;
+font-weight:700;
+text-shadow:0 0 8px #22d3ee;
+letter-spacing:.5px;
+}
+
 .score-box{
-font-size:17px;
-font-weight:800;
-align-self:center;   /* vertical center */
-display:flex;
-align-items:center;
-justify-content:center;
-height:100%;        /* full height নেয় */
+font-size:20px;
+font-weight:900;
+letter-spacing:2px;
+text-shadow:0 0 10px rgba(255,255,255,.2);
 }
 
 .match-type.small{
@@ -213,10 +220,9 @@ margin:0;
 
 .rank{
 font-size:10px;
-font-weight:700;
+font-weight:800;
 color:#facc15;
-text-shadow:0 0 8px #facc15;
-margin-bottom:1px;
+text-shadow:0 0 10px #facc15, 0 0 20px rgba(250,204,21,.4);
 }
 
 .top-row{
@@ -597,7 +603,7 @@ return `
 <!-- BOTTOM ROW -->
 <div class="player-id">${m.P1_ID}</div>
 
-<div class="player-id" style="color:#94a3b8;font-size:10px;">
+<div class="match-date">
 ${formatBDTime(m.Match_Date)}
 </div>
 

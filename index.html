@@ -172,8 +172,10 @@ column-gap:6px;
 }
 
 .player{
-text-align:center;
-min-width:0;
+display:flex;
+flex-direction:column;
+align-items:center;
+gap:2px;   /* 🔥 সবকিছু কাছাকাছি */
 }
 
 .player-name{
@@ -194,9 +196,9 @@ margin-top: 1px;        /* 🔥 কাছে আনছে */
 
 .match-date{
 font-size:9px;
-color:#22d3ee;
+color:#f7058e;
 font-weight:700;
-text-shadow:0 0 6px #22d3ee;
+text-shadow:0 0 6px #f7058e;
 margin-top:-2px;        /* 🔥 upore tule */
 }
 
@@ -586,19 +588,16 @@ return `
 
 <div class="live-mid">
 
-<!-- TOP ROW -->
-<div class="rank">${p1Rank}</div>
-<div class="match-type small center">${m.Match_Type}</div>
-<div class="rank">${p2Rank}</div>
-
 <!-- LEFT PLAYER -->
-<div>
+<div class="player">
+  <div class="rank">${p1Rank}</div>
   <div class="player-name">${p1}</div>
   <div class="player-id">${m.P1_ID}</div>
 </div>
 
-<!-- SCORE + DATE CENTER -->
+<!-- CENTER -->
 <div>
+  <div class="match-type small center">${m.Match_Type}</div>
   <div class="score-box">
     <span class="${p1Class}">${m.P1_Score}</span>
     -
@@ -610,11 +609,11 @@ return `
 </div>
 
 <!-- RIGHT PLAYER -->
-<div>
+<div class="player">
+  <div class="rank">${p2Rank}</div>
   <div class="player-name">${p2}</div>
   <div class="player-id">${m.P2_ID}</div>
 </div>
-
 </div>
 
 </div>

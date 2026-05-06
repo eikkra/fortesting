@@ -161,11 +161,29 @@ background:linear-gradient(45deg,#7c3aed,#06b6d4);
 margin-bottom:12px;
 }
 
-.live-mid{
-display:grid;
-grid-template-columns:1fr auto 1fr;
+.center-box{
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+gap:4px;
+}
+
+/* Score smaller */
+.score-box{
+font-size:16px;
+font-weight:800;
+display:flex;
 align-items:center;
 gap:6px;
+}
+
+/* Match type small */
+.match-type.small{
+font-size:9px;
+padding:3px 10px;
+border-radius:12px;
+margin:0;
 }
 
 .player{
@@ -174,25 +192,14 @@ min-width:0;
 }
 
 .player-name{
-font-size:11px;
-font-weight:700;
-white-space:nowrap;
-overflow:hidden;
-text-overflow:ellipsis;
-}
-
-.player-id{
 font-size:10px;
-color:#94a3b8;
+}
+.player-id{
+font-size:9px;
 }
 
 .score-box{
-font-size:16px;
-font-weight:700;
-display:flex;
-flex-direction:column;
-align-items:center;
-gap:4px;
+text-shadow:0 0 8px rgba(124,58,237,0.6);
 }
 
 .match-type{
@@ -522,14 +529,13 @@ return `
 <div class="player-id">${m.P1_ID}</div>
 </div>
 
+<div class="center-box">
 <div class="score-box">
-<div>
 <span class="${p1Class}">${m.P1_Score}</span>
 -
 <span class="${p2Class}">${m.P2_Score}</span>
 </div>
-
-<div class="match-type">${m.Match_Type}</div>
+<div class="match-type small">${m.Match_Type}</div>
 </div>
 
 <div class="player">

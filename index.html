@@ -163,7 +163,7 @@ margin-bottom:12px;
 
 .live-mid{
 display:grid;
-grid-template-columns:0.9fr auto 0.9fr;
+grid-template-columns:1fr auto 1fr;
 grid-template-rows:auto auto;
 align-items:center;
 text-align:center;
@@ -189,13 +189,14 @@ color:#09dae6;
 }
 
 .score-box{
-font-size:17px;
-font-weight:800;
+font-size:16px;
+min-width:50px; /* আগে auto ছিল */
+justify-content:center;
 }
 
 .match-type.small{
 font-size:9px;
-padding:2px 8px;
+padding:2px 6px;
 border-radius:10px;
 margin:0;
 }

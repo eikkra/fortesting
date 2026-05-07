@@ -207,7 +207,10 @@ font-size:9px;
 color:#05ebf7;
 font-weight:700;
 text-shadow:0 0 6px #00a5ad;
-margin-top:-2px;        /* 🔥 upore tule */
+margin-top:-2px;
+
+white-space:nowrap;   /* 🔥 এক লাইনে রাখবে */
+line-height:1.1;
 }
 
 .score-box{
@@ -579,8 +582,8 @@ const p1=nameMap[m.P1_ID]||m.P1_ID;
 const p2=nameMap[m.P2_ID]||m.P2_ID;
 
 /* Rank Fetch */
-const p1Rank = rankMap[m.P1_ID] ? `#Rank ${rankMap[m.P1_ID]}` : '';
-const p2Rank = rankMap[m.P2_ID] ? `#Rank ${rankMap[m.P2_ID]}` : '';
+const p1Rank = rankMap[m.P1_ID] ? `Rank ${rankMap[m.P1_ID]}` : '';
+const p2Rank = rankMap[m.P2_ID] ? `Rank ${rankMap[m.P2_ID]}` : '';
 
 let p1Class='score-draw', p2Class='score-draw';
 

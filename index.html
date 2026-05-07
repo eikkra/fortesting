@@ -133,23 +133,50 @@ scroll-snap-align:start;
 background:linear-gradient(135deg,rgba(34,211,238,.12),rgba(124,58,237,.10));
 
 border:1px solid rgba(255,255,255,.08);
-
 border-radius:15px;
+
 padding:10px 12px;
+
+box-shadow:
+0 0 20px rgba(34,211,238,.12),
+inset 0 0 12px rgba(124,58,237,.08);
 
 position:relative;
 overflow:hidden;
+}
 
-/* RGB GAMING GLOW */
-animation:rgbGlow 4s linear infinite;
+/* GAMING RGB BORDER LIGHT */
+.live-card::before{
+content:"";
+position:absolute;
+inset:0;
+border-radius:15px;
+padding:1.5px;
 
-box-shadow:
-0 0 5px #ff0000,
-0 0 10px #ff7300,
-0 0 15px #48ff00,
-0 0 20px #00ffd5,
-0 0 25px #7a00ff;
+background:
+linear-gradient(
+90deg,
+transparent 0%,
+transparent 35%,
+#00ffff 45%,
+#ff00ff 50%,
+#00ffff 55%,
+transparent 65%,
+transparent 100%
+);
 
+background-size:300% 300%;
+
+-webkit-mask:
+linear-gradient(#000 0 0) content-box,
+linear-gradient(#000 0 0);
+
+-webkit-mask-composite:xor;
+mask-composite:exclude;
+
+animation:rgbBorderMove 3s linear infinite;
+
+pointer-events:none;
 }
 
 @media(min-width:768px){
@@ -408,43 +435,13 @@ padding:8px;
 }
 }
 
-@keyframes rgbGlow{
-
+@keyframes rgbBorderMove{
 0%{
-box-shadow:
-0 0 5px #ff0000,
-0 0 10px #ff0000,
-0 0 20px #ff0000;
+background-position:0% 50%;
 }
-
-25%{
-box-shadow:
-0 0 5px #00ffd5,
-0 0 10px #00ffd5,
-0 0 20px #00ffd5;
-}
-
-50%{
-box-shadow:
-0 0 5px #48ff00,
-0 0 10px #48ff00,
-0 0 20px #48ff00;
-}
-
-75%{
-box-shadow:
-0 0 5px #7a00ff,
-0 0 10px #7a00ff,
-0 0 20px #7a00ff;
-}
-
 100%{
-box-shadow:
-0 0 5px #ff0000,
-0 0 10px #ff0000,
-0 0 20px #ff0000;
+background-position:300% 50%;
 }
-
 }
 
 </style>

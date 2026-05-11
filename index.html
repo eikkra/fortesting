@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Professional Unit Converter</title>
-
+  <title>Number To Words Converter Pro</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -18,15 +17,24 @@
 
     body {
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #0f172a, #111827, #1e293b);
-      color: white;
+      background: linear-gradient(135deg, #0f172a, #1e293b, #111827);
       min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       padding: 20px;
+      color: #fff;
     }
 
     .container {
-      max-width: 1200px;
-      margin: auto;
+      width: 100%;
+      max-width: 950px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 24px;
+      padding: 35px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.35);
     }
 
     .header {
@@ -35,7 +43,7 @@
     }
 
     .header h1 {
-      font-size: 3rem;
+      font-size: 2.5rem;
       font-weight: 700;
       background: linear-gradient(to right, #38bdf8, #818cf8, #c084fc);
       -webkit-background-clip: text;
@@ -45,114 +53,117 @@
 
     .header p {
       color: #cbd5e1;
+      font-size: 0.95rem;
     }
 
-    .tabs {
+    .input-box {
       display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      justify-content: center;
+      gap: 15px;
       margin-bottom: 30px;
+      flex-wrap: wrap;
     }
 
-    .tab-btn {
-      padding: 12px 22px;
+    .input-box input {
+      flex: 1;
+      min-width: 240px;
+      padding: 18px 20px;
+      border-radius: 14px;
       border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      font-weight: 600;
-      background: rgba(255,255,255,0.08);
-      color: white;
+      outline: none;
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      font-size: 1.1rem;
       transition: 0.3s;
     }
 
-    .tab-btn.active,
-    .tab-btn:hover {
+    .input-box input:focus {
+      background: rgba(255,255,255,0.15);
+      box-shadow: 0 0 0 3px rgba(99,102,241,0.4);
+    }
+
+    .input-box button {
+      padding: 16px 28px;
+      border: none;
+      border-radius: 14px;
       background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      color: white;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .input-box button:hover {
       transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(99,102,241,0.35);
     }
 
-    .tab-content {
-      display: none;
-    }
-
-    .tab-content.active {
-      display: block;
-    }
-
-    .grid {
+    .results {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: 20px;
     }
 
     .card {
       background: rgba(255,255,255,0.06);
       border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 20px;
+      border-radius: 18px;
       padding: 22px;
-      backdrop-filter: blur(12px);
       transition: 0.3s;
+      position: relative;
+      overflow: hidden;
     }
 
     .card:hover {
-      transform: translateY(-5px);
+      transform: translateY(-4px);
       background: rgba(255,255,255,0.08);
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(to right, #38bdf8, #8b5cf6);
     }
 
     .card h3 {
-      margin-bottom: 15px;
+      font-size: 1.05rem;
+      margin-bottom: 12px;
       color: #93c5fd;
-      font-size: 1.1rem;
     }
 
-    .input-group {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    input {
-      width: 100%;
-      padding: 14px 16px;
-      border-radius: 12px;
-      border: none;
-      outline: none;
-      background: rgba(255,255,255,0.08);
-      color: white;
-      font-size: 1rem;
-    }
-
-    input:focus {
-      box-shadow: 0 0 0 3px rgba(99,102,241,0.4);
-    }
-
-    .result {
-      background: rgba(255,255,255,0.08);
-      padding: 14px;
-      border-radius: 12px;
+    .card p {
       color: #e2e8f0;
-      font-weight: 500;
-      min-height: 55px;
-      display: flex;
-      align-items: center;
+      line-height: 1.7;
+      font-size: 0.96rem;
+      word-wrap: break-word;
     }
 
     .footer {
       text-align: center;
-      margin-top: 40px;
+      margin-top: 30px;
       color: #94a3b8;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
     }
 
-    @media(max-width: 768px) {
-      .header h1 {
-        font-size: 2rem;
+    @media(max-width: 600px) {
+      .container {
+        padding: 22px;
       }
 
-      .tabs {
-        justify-content: flex-start;
-        overflow-x: auto;
+      .header h1 {
+        font-size: 1.9rem;
+      }
+
+      .input-box {
+        flex-direction: column;
+      }
+
+      .input-box button {
+        width: 100%;
       }
     }
   </style>
@@ -160,268 +171,150 @@
 <body>
 
   <div class="container">
-
     <div class="header">
-      <h1>Professional Unit Converter</h1>
-      <p>Measurement • Area • Weight • Temperature • Speed • Volume • Pressure</p>
+      <h1>Number To Words Converter</h1>
+      <p>Bangladesh • India • USA • International Numbering System</p>
     </div>
 
-    <div class="tabs">
-      <button class="tab-btn active" onclick="openTab('measurement')">Measurement</button>
-      <button class="tab-btn" onclick="openTab('area')">Area</button>
-      <button class="tab-btn" onclick="openTab('weight')">Weight</button>
-      <button class="tab-btn" onclick="openTab('temperature')">Temperature</button>
-      <button class="tab-btn" onclick="openTab('speed')">Speed</button>
-      <button class="tab-btn" onclick="openTab('volume')">Volume</button>
-      <button class="tab-btn" onclick="openTab('pressure')">Pressure</button>
+    <div class="input-box">
+      <input type="number" id="numberInput" placeholder="Enter a number like 323691" />
+      <button onclick="convertNumber()">Convert</button>
     </div>
 
-    <!-- Measurement -->
-    <div id="measurement" class="tab-content active">
-      <div class="grid">
-
-        <div class="card">
-          <h3>FT → Meter</h3>
-          <div class="input-group">
-            <input type="number" id="ft" placeholder="Enter Feet" oninput="convertFT()">
-            <div class="result" id="ftResult">0 Meter</div>
-          </div>
-        </div>
-
-        <div class="card">
-          <h3>Meter → FT</h3>
-          <div class="input-group">
-            <input type="number" id="meter" placeholder="Enter Meter" oninput="convertMeter()">
-            <div class="result" id="meterResult">0 Feet</div>
-          </div>
-        </div>
-
-        <div class="card">
-          <h3>Inch → CM</h3>
-          <div class="input-group">
-            <input type="number" id="inch" placeholder="Enter Inch" oninput="convertInch()">
-            <div class="result" id="inchResult">0 CM</div>
-          </div>
-        </div>
-
-        <div class="card">
-          <h3>CM → Inch</h3>
-          <div class="input-group">
-            <input type="number" id="cm" placeholder="Enter CM" oninput="convertCM()">
-            <div class="result" id="cmResult">0 Inch</div>
-          </div>
-        </div>
-
+    <div class="results">
+      <div class="card">
+        <h3>🇧🇩 Bangladesh Style</h3>
+        <p id="bdResult">Waiting for input...</p>
       </div>
-    </div>
 
-    <!-- Area -->
-    <div id="area" class="tab-content">
-      <div class="grid">
-
-        <div class="card">
-          <h3>Square Feet → Square Meter</h3>
-          <div class="input-group">
-            <input type="number" id="sqft" placeholder="Enter Sq Ft" oninput="convertSqft()">
-            <div class="result" id="sqftResult">0 Sq Meter</div>
-          </div>
-        </div>
-
-        <div class="card">
-          <h3>Acre → Hectare</h3>
-          <div class="input-group">
-            <input type="number" id="acre" placeholder="Enter Acre" oninput="convertAcre()">
-            <div class="result" id="acreResult">0 Hectare</div>
-          </div>
-        </div>
-
+      <div class="card">
+        <h3>🇮🇳 Indian Style</h3>
+        <p id="indianResult">Waiting for input...</p>
       </div>
-    </div>
 
-    <!-- Weight -->
-    <div id="weight" class="tab-content">
-      <div class="grid">
-
-        <div class="card">
-          <h3>KG → Pound</h3>
-          <div class="input-group">
-            <input type="number" id="kg" placeholder="Enter KG" oninput="convertKG()">
-            <div class="result" id="kgResult">0 Pound</div>
-          </div>
-        </div>
-
-        <div class="card">
-          <h3>Pound → KG</h3>
-          <div class="input-group">
-            <input type="number" id="pound" placeholder="Enter Pound" oninput="convertPound()">
-            <div class="result" id="poundResult">0 KG</div>
-          </div>
-        </div>
-
+      <div class="card">
+        <h3>🇺🇸 USA Style</h3>
+        <p id="usaResult">Waiting for input...</p>
       </div>
-    </div>
 
-    <!-- Temperature -->
-    <div id="temperature" class="tab-content">
-      <div class="grid">
-
-        <div class="card">
-          <h3>Celsius → Fahrenheit</h3>
-          <div class="input-group">
-            <input type="number" id="cel" placeholder="Enter Celsius" oninput="convertCel()">
-            <div class="result" id="celResult">0 °F</div>
-          </div>
-        </div>
-
-        <div class="card">
-          <h3>Fahrenheit → Celsius</h3>
-          <div class="input-group">
-            <input type="number" id="far" placeholder="Enter Fahrenheit" oninput="convertFar()">
-            <div class="result" id="farResult">0 °C</div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- Speed -->
-    <div id="speed" class="tab-content">
-      <div class="grid">
-
-        <div class="card">
-          <h3>KM/H → MPH</h3>
-          <div class="input-group">
-            <input type="number" id="kmh" placeholder="Enter KM/H" oninput="convertKMH()">
-            <div class="result" id="kmhResult">0 MPH</div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- Volume -->
-    <div id="volume" class="tab-content">
-      <div class="grid">
-
-        <div class="card">
-          <h3>Liter → Gallon</h3>
-          <div class="input-group">
-            <input type="number" id="liter" placeholder="Enter Liter" oninput="convertLiter()">
-            <div class="result" id="literResult">0 Gallon</div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- Pressure -->
-    <div id="pressure" class="tab-content">
-      <div class="grid">
-
-        <div class="card">
-          <h3>PSI → Bar</h3>
-          <div class="input-group">
-            <input type="number" id="psi" placeholder="Enter PSI" oninput="convertPSI()">
-            <div class="result" id="psiResult">0 Bar</div>
-          </div>
-        </div>
-
+      <div class="card">
+        <h3>🌍 International Style</h3>
+        <p id="intlResult">Waiting for input...</p>
       </div>
     </div>
 
     <div class="footer">
-      Professional Measurement Converter • Ready for GitHub Pages
+      Made with ❤️ for GitHub Pages Deployment
     </div>
-
   </div>
 
   <script>
+    const ones = [
+      '', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine',
+      'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen',
+      'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'
+    ];
 
-    function openTab(tabId) {
-      document.querySelectorAll('.tab-content').forEach(tab => {
-        tab.classList.remove('active');
-      });
+    const tens = [
+      '', '', 'Twenty', 'Thirty', 'Forty', 'Fifty',
+      'Sixty', 'Seventy', 'Eighty', 'Ninety'
+    ];
 
-      document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.classList.remove('active');
-      });
+    function convertHundreds(num) {
+      let word = '';
 
-      document.getElementById(tabId).classList.add('active');
-      event.target.classList.add('active');
+      if (num > 99) {
+        word += ones[Math.floor(num / 100)] + ' Hundred ';
+        num %= 100;
+      }
+
+      if (num > 19) {
+        word += tens[Math.floor(num / 10)] + ' ';
+        num %= 10;
+      }
+
+      if (num > 0) {
+        word += ones[num] + ' ';
+      }
+
+      return word.trim();
     }
 
-    // Measurement
-    function convertFT() {
-      let v = document.getElementById('ft').value;
-      document.getElementById('ftResult').innerText = (v * 0.3048).toFixed(4) + ' Meter';
+    function numberToWordsInternational(num) {
+      if (num === 0) return 'Zero';
+
+      const units = ['', 'Thousand', 'Million', 'Billion', 'Trillion'];
+      let words = '';
+      let unitIndex = 0;
+
+      while (num > 0) {
+        let chunk = num % 1000;
+
+        if (chunk !== 0) {
+          words = convertHundreds(chunk) + ' ' + units[unitIndex] + ' ' + words;
+        }
+
+        num = Math.floor(num / 1000);
+        unitIndex++;
+      }
+
+      return words.trim();
     }
 
-    function convertMeter() {
-      let v = document.getElementById('meter').value;
-      document.getElementById('meterResult').innerText = (v * 3.28084).toFixed(4) + ' Feet';
+    function numberToWordsIndian(num) {
+      if (num === 0) return 'Zero';
+
+      const units = ['', 'Thousand', 'Lakh', 'Crore', 'Arab'];
+
+      let words = '';
+      let unitIndex = 0;
+
+      let firstPart = num % 1000;
+      if (firstPart !== 0) {
+        words = convertHundreds(firstPart);
+      }
+
+      num = Math.floor(num / 1000);
+      unitIndex = 1;
+
+      while (num > 0) {
+        let chunk = num % 100;
+
+        if (chunk !== 0) {
+          words = convertHundreds(chunk) + ' ' + units[unitIndex] + ' ' + words;
+        }
+
+        num = Math.floor(num / 100);
+        unitIndex++;
+      }
+
+      return words.trim();
     }
 
-    function convertInch() {
-      let v = document.getElementById('inch').value;
-      document.getElementById('inchResult').innerText = (v * 2.54).toFixed(4) + ' CM';
+    function numberToWordsBangladesh(num) {
+      return numberToWordsIndian(num);
     }
 
-    function convertCM() {
-      let v = document.getElementById('cm').value;
-      document.getElementById('cmResult').innerText = (v / 2.54).toFixed(4) + ' Inch';
+    function convertNumber() {
+      const input = document.getElementById('numberInput').value;
+      const number = parseInt(input);
+
+      if (isNaN(number) || number < 0) {
+        alert('Please enter a valid positive number');
+        return;
+      }
+
+      document.getElementById('bdResult').innerText = numberToWordsBangladesh(number);
+      document.getElementById('indianResult').innerText = numberToWordsIndian(number);
+      document.getElementById('usaResult').innerText = numberToWordsInternational(number);
+      document.getElementById('intlResult').innerText = numberToWordsInternational(number);
     }
 
-    // Area
-    function convertSqft() {
-      let v = document.getElementById('sqft').value;
-      document.getElementById('sqftResult').innerText = (v * 0.092903).toFixed(4) + ' Sq Meter';
-    }
-
-    function convertAcre() {
-      let v = document.getElementById('acre').value;
-      document.getElementById('acreResult').innerText = (v * 0.404686).toFixed(4) + ' Hectare';
-    }
-
-    // Weight
-    function convertKG() {
-      let v = document.getElementById('kg').value;
-      document.getElementById('kgResult').innerText = (v * 2.20462).toFixed(4) + ' Pound';
-    }
-
-    function convertPound() {
-      let v = document.getElementById('pound').value;
-      document.getElementById('poundResult').innerText = (v * 0.453592).toFixed(4) + ' KG';
-    }
-
-    // Temperature
-    function convertCel() {
-      let v = document.getElementById('cel').value;
-      document.getElementById('celResult').innerText = ((v * 9/5) + 32).toFixed(2) + ' °F';
-    }
-
-    function convertFar() {
-      let v = document.getElementById('far').value;
-      document.getElementById('farResult').innerText = ((v - 32) * 5/9).toFixed(2) + ' °C';
-    }
-
-    // Speed
-    function convertKMH() {
-      let v = document.getElementById('kmh').value;
-      document.getElementById('kmhResult').innerText = (v * 0.621371).toFixed(4) + ' MPH';
-    }
-
-    // Volume
-    function convertLiter() {
-      let v = document.getElementById('liter').value;
-      document.getElementById('literResult').innerText = (v * 0.264172).toFixed(4) + ' Gallon';
-    }
-
-    // Pressure
-    function convertPSI() {
-      let v = document.getElementById('psi').value;
-      document.getElementById('psiResult').innerText = (v * 0.0689476).toFixed(4) + ' Bar';
-    }
-
+    document.getElementById('numberInput').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        convertNumber();
+      }
+    });
   </script>
 
 </body>

@@ -177,14 +177,14 @@
     </div>
 
     <div class="input-box">
-      <input type="number" id="numberInput" placeholder="Enter a number like 323691" />
+      <input type="number" id="numberInput" placeholder="Enter amount like 614031" />
       <button onclick="convertNumber()">Convert</button>
     </div>
 
     <div class="results">
       <div class="card">
         <h3>🇧🇩 Bangladesh Style</h3>
-        <p id="bdResult">Waiting for input...</p>
+        <p id="bdResult">Example: Six Lac Fourteen Thousand and Thirty One Only</p>
       </div>
 
       <div class="card">
@@ -220,75 +220,96 @@
       'Sixty', 'Seventy', 'Eighty', 'Ninety'
     ];
 
-    function convertHundreds(num) {
-      let word = '';
+    function convertBelowThousand(num) {
+      let str = '';
 
-      if (num > 99) {
-        word += ones[Math.floor(num / 100)] + ' Hundred ';
+      if (num >= 100) {
+        str += ones[Math.floor(num / 100)] + ' Hundred';
         num %= 100;
+
+        if (num > 0) {
+          str += ' and ';
+        } else {
+          str += ' ';
+        }
       }
 
-      if (num > 19) {
-        word += tens[Math.floor(num / 10)] + ' ';
+      if (num >= 20) {
+        str += tens[Math.floor(num / 10)] + ' ';
         num %= 10;
       }
 
       if (num > 0) {
-        word += ones[num] + ' ';
+        str += ones[num] + ' ';
       }
 
-      return word.trim();
+      return str.trim();
+    }
+
+    function formatFinalText(text) {
+      text = text.replace(/\s+/g, ' ').trim();
+
+      if (!text.toLowerCase().endsWith('only')) {
+        text += ' Only';
+      }
+
+      return text;
     }
 
     function numberToWordsInternational(num) {
-      if (num === 0) return 'Zero';
+      if (num === 0) return 'Zero Only';
 
       const units = ['', 'Thousand', 'Million', 'Billion', 'Trillion'];
-      let words = '';
-      let unitIndex = 0;
+      let result = '';
+      let i = 0;
 
       while (num > 0) {
         let chunk = num % 1000;
 
         if (chunk !== 0) {
-          words = convertHundreds(chunk) + ' ' + units[unitIndex] + ' ' + words;
+          result = convertBelowThousand(chunk) + ' ' + units[i] + ' ' + result;
         }
 
         num = Math.floor(num / 1000);
-        unitIndex++;
+        i++;
       }
 
-      return words.trim();
+      return formatFinalText(result);
     }
 
     function numberToWordsIndian(num) {
-      if (num === 0) return 'Zero';
+      if (num === 0) return 'Zero Only';
 
-      const units = ['', 'Thousand', 'Lakh', 'Crore', 'Arab'];
+      let result = '';
 
-      let words = '';
-      let unitIndex = 0;
+      const crore = Math.floor(num / 10000000);
+      num %= 10000000;
 
-      let firstPart = num % 1000;
-      if (firstPart !== 0) {
-        words = convertHundreds(firstPart);
+      const lakh = Math.floor(num / 100000);
+      num %= 100000;
+
+      const thousand = Math.floor(num / 1000);
+      num %= 1000;
+
+      const hundred = num;
+
+      if (crore > 0) {
+        result += convertBelowThousand(crore) + ' Crore ';
       }
 
-      num = Math.floor(num / 1000);
-      unitIndex = 1;
-
-      while (num > 0) {
-        let chunk = num % 100;
-
-        if (chunk !== 0) {
-          words = convertHundreds(chunk) + ' ' + units[unitIndex] + ' ' + words;
-        }
-
-        num = Math.floor(num / 100);
-        unitIndex++;
+      if (lakh > 0) {
+        result += convertBelowThousand(lakh) + ' Lac ';
       }
 
-      return words.trim();
+      if (thousand > 0) {
+        result += convertBelowThousand(thousand) + ' Thousand ';
+      }
+
+      if (hundred > 0) {
+        result += convertBelowThousand(hundred) + ' ';
+      }
+
+      return formatFinalText(result);
     }
 
     function numberToWordsBangladesh(num) {
@@ -300,7 +321,7 @@
       const number = parseInt(input);
 
       if (isNaN(number) || number < 0) {
-        alert('Please enter a valid positive number');
+        alert('Please enter a valid amount');
         return;
       }
 

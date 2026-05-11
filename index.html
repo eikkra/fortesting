@@ -1,721 +1,321 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GOAT FC</title>
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Number To Words Converter Pro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-<style>
-*{box-sizing:border-box;}
-body{
-margin:0;
-font-family:'Orbitron',sans-serif;
-background:radial-gradient(circle at top,#020617,#0f172a);
-color:white;
-overflow-x:hidden;
-}
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #0f172a, #1e293b, #111827);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      color: #fff;
+    }
 
-/* ===== NAVBAR ===== */
-.navbar{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:10px 12px;
-flex-wrap:wrap;
-background:rgba(15,23,42,0.85);
-backdrop-filter:blur(10px);
-}
-.logo{display:flex;align-items:center;gap:8px;min-width:160px;}
-.logo img{height:38px;filter:drop-shadow(0 0 10px #7c3aed);}
-.logo span{font-size:16px;font-weight:700;white-space:nowrap;}
-.nav-links{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;}
-.nav-links a{
-font-size:12px;padding:6px 8px;color:#cbd5f5;
-text-decoration:none;white-space:nowrap;
-}
-.nav-links a:hover{color:#a78bfa;text-shadow:0 0 10px #a78bfa;}
+    .container {
+      width: 100%;
+      max-width: 950px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 24px;
+      padding: 35px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.35);
+    }
 
-/* ===== HERO ===== */
-.hero{position:relative;height:240px;overflow:hidden;}
-.slide-box{
-position:absolute;width:100%;height:100%;
-opacity:0;transition:all .9s ease;
-}
-.slide-box.active{opacity:1;}
-.slide-box img{
-width:100%;height:100%;object-fit:cover;
-filter:brightness(.45);
-}
-.slide-content{
-z-index:5;position:absolute;
-top:50%;left:50%;
-transform:translate(-50%,-50%);
-text-align:center;width:90%;
-}
-.slide-content h1{
-font-size:18px;margin:4px 0;
-text-shadow:0 0 10px #8b5cf6;
-}
-.slide-content p{
-font-size:12px;margin:5px 0;
-color:#cbd5f5;
-}
-.btn{
-display:inline-block;margin-top:6px;
-padding:7px 16px;font-size:12px;
-background:linear-gradient(45deg,#7c3aed,#ec4899);
-border-radius:25px;text-decoration:none;color:white;
-}
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
 
-/* ===== ARROWS ===== */
-.arrow{
-position:absolute;top:50%;
-transform:translateY(-50%);
-background:rgba(0,0,0,.4);
-border:none;color:white;
-font-size:18px;padding:6px 10px;
-cursor:pointer;z-index:10;
-border-radius:50%;
-}
-.arrow.left{left:8px;}
-.arrow.right{right:8px;}
+    .header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(to right, #38bdf8, #818cf8, #c084fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
+    }
 
-/* ===== LIVE SCORE ===== */
-.live-wrap{
-padding:18px 10px 8px;
-max-width:1200px;
-margin:auto;
-overflow:hidden;
-}
-.live-title{
-display:flex;
-justify-content:center;
-align-items:center;
-gap:8px;
-font-size:16px;
-font-weight:700;
-margin-bottom:14px;
-color:#22d3ee;
-text-shadow:0 0 10px #22d3ee;
-}
-.live-dot{
-width:10px;
-height:10px;
-background:#ef4444;
-border-radius:50%;
-animation:pulseLive 1s infinite;
-box-shadow:0 0 10px #ef4444;
-}
-@keyframes pulseLive{
-0%{transform:scale(1);opacity:1;}
-50%{transform:scale(1.5);opacity:.5;}
-100%{transform:scale(1);opacity:1;}
-}
+    .header p {
+      color: #cbd5e1;
+      font-size: 0.95rem;
+    }
 
-.live-track{
-display:flex;
-gap:12px;
-overflow-x:auto;
-scrollbar-width:none;
-scroll-behavior:smooth;
-scroll-snap-type:x mandatory;
-}
-.live-track::-webkit-scrollbar{display:none;}
+    .input-box {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
 
-.live-card{
-min-width:100%;
-scroll-snap-align:start;
+    .input-box input {
+      flex: 1;
+      min-width: 240px;
+      padding: 18px 20px;
+      border-radius: 14px;
+      border: none;
+      outline: none;
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      font-size: 1.1rem;
+      transition: 0.3s;
+    }
 
-background:linear-gradient(135deg,rgba(34,211,238,.12),rgba(124,58,237,.10));
+    .input-box input:focus {
+      background: rgba(255,255,255,0.15);
+      box-shadow: 0 0 0 3px rgba(99,102,241,0.4);
+    }
 
-border:1px solid rgba(255,255,255,.08);
-border-radius:15px;
+    .input-box button {
+      padding: 16px 28px;
+      border: none;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      color: white;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+    }
 
-padding:10px 12px;
+    .input-box button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(99,102,241,0.35);
+    }
 
-box-shadow:
-0 0 20px rgba(34,211,238,.12),
-inset 0 0 12px rgba(124,58,237,.08);
+    .results {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
 
-position:relative;
-overflow:hidden;
-}
+    .card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      padding: 22px;
+      transition: 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
 
-/* GAMING RGB BORDER LIGHT */
-.live-card::before{
-content:"";
-position:absolute;
-inset:0;
-border-radius:15px;
-padding:1.5px;
+    .card:hover {
+      transform: translateY(-4px);
+      background: rgba(255,255,255,0.08);
+    }
 
-background:
-linear-gradient(
-90deg,
-transparent 0%,
-transparent 35%,
-#00ffff 45%,
-#ff00ff 50%,
-#00ffff 55%,
-transparent 65%,
-transparent 100%
-);
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(to right, #38bdf8, #8b5cf6);
+    }
 
-background-size:300% 300%;
+    .card h3 {
+      font-size: 1.05rem;
+      margin-bottom: 12px;
+      color: #93c5fd;
+    }
 
--webkit-mask:
-linear-gradient(#000 0 0) content-box,
-linear-gradient(#000 0 0);
+    .card p {
+      color: #e2e8f0;
+      line-height: 1.7;
+      font-size: 0.96rem;
+      word-wrap: break-word;
+    }
 
--webkit-mask-composite:xor;
-mask-composite:exclude;
+    .footer {
+      text-align: center;
+      margin-top: 30px;
+      color: #94a3b8;
+      font-size: 0.85rem;
+    }
 
-animation:rgbBorderMove 3s linear infinite;
+    @media(max-width: 600px) {
+      .container {
+        padding: 22px;
+      }
 
-pointer-events:none;
-}
+      .header h1 {
+        font-size: 1.9rem;
+      }
 
-@media(min-width:768px){
-.live-card{
-min-width:calc(50% - 6px);
-}
-}
-@media(min-width:1100px){
-.live-card{
-min-width:calc(33.333% - 8px);
-}
-}
+      .input-box {
+        flex-direction: column;
+      }
 
-.match-type{
-display:inline-block;
-padding:3px 12px;
-border-radius:20px;
-font-size:10px;
-font-weight:700;
-background:linear-gradient(45deg,#7c3aed,#06b6d4);
-margin-bottom:12px;
-}
-
-.live-mid{
-display:grid;
-grid-template-columns:110px 90px 110px;
-align-items:center;
-justify-content:center;
-text-align:center;
-column-gap:8px;
-}
-
-.player{
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-min-height:70px;
-}
-
-.live-mid > div:nth-child(2){
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-min-height:70px;
-}
-
-.player-name{
-font-size:11px;         /* 🔥 ছোট করা */
-font-weight:800;
-white-space:nowrap;
-overflow:hidden;
-text-overflow:ellipsis;
-line-height:1.05;
-}
-
-.player-id{
-font-size:9px;
-color:#f7058e;
-line-height:1.05;
-margin-top:1px;
-font-weight:600;   /* 🔥 bold */
-}
-
-.match-date{
-font-size:9px;
-color:#05ebf7;
-font-weight:700;
-text-shadow:0 0 6px #00a5ad;
-margin-top:-2px;
-
-white-space:nowrap;   /* 🔥 এক লাইনে রাখবে */
-line-height:1.1;
-}
-
-.score-box{
-font-size:18px;         /* 🔥 একটু ছোট */
-font-weight:900;
-letter-spacing:1px;     /* 🔥 gap কম */
-text-shadow:0 0 8px rgba(255,255,255,.2);
-}
-
-.match-type.small{
-font-size:9px;
-padding:2px 6px;
-border-radius:10px;
-margin:0;
-}
-
-.score-win{color:#22c55e;}
-.score-loss{color:#ef4444;}
-.score-draw{color:#eab308;}
-
-.rank{
-font-size:10px;
-font-weight:800;
-color:#facc15;
-text-shadow:0 0 10px #facc15, 0 0 20px rgba(250,204,21,.4);
-}
-
-.top-row{
-display:contents;
-}
-
-.match-type.small{
-font-size:9px;
-padding:1px 6px;
-margin:0;
-}
-
-/* ===== SECTION ===== */
-.section{text-align:center;padding:25px 10px;}
-.section h2{
-margin-bottom:15px;
-font-size:16px;
-animation:glowPulse 2.5s infinite alternate;
-}
-@keyframes glowPulse{
-0%{text-shadow:0 0 5px #7c3aed;}
-100%{text-shadow:0 0 20px #a78bfa;}
-}
-.glow{color:#a78bfa;}
-
-/* ===== GRID ===== */
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
-gap:10px;
-padding:0 10px;
-max-width:900px;
-margin:auto;
-}
-.card{
-background:rgba(255,255,255,.05);
-padding:12px;
-border-radius:12px;
-transition:.3s;
-cursor:pointer;
-text-align:center;
-position:relative;
-}
-.quick-container .card::before{
-content:"";position:absolute;inset:0;
-border-radius:12px;padding:1px;
-background:linear-gradient(45deg,#FFD700,#FFA500);
--webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
--webkit-mask-composite:xor;
-mask-composite:exclude;
-}
-.champ-container .card::before{
-content:"";position:absolute;inset:0;
-border-radius:12px;padding:1px;
-background:linear-gradient(45deg,#38bdf8,#6366f1);
--webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
--webkit-mask-composite:xor;
-mask-composite:exclude;
-}
-.card:hover{
-transform:scale(1.05);
-box-shadow:0 0 20px #8b5cf6;
-}
-.card h3,.card h4,.card p{margin:4px 0;text-align:center;}
-.champ img{width:100%;border-radius:10px;}
-.champ h4{font-size:11px;}
-.champ p{font-size:10px;color:#cbd5f5;}
-.desc{
-max-width:700px;
-margin:10px auto;
-font-size:12px;
-color:#cbd5f5;
-}
-
-/* ===== SOCIAL ===== */
-.social a{
-display:inline-block;
-margin:5px;
-padding:8px 12px;
-font-size:12px;
-background:linear-gradient(45deg,#06b6d4,#3b82f6);
-border-radius:8px;
-color:white;
-text-decoration:none;
-}
-
-/* ===== FOOTER ===== */
-.footer{
-text-align:center;
-padding:15px;
-font-size:12px;
-color:#94a3b8;
-border-top:1px solid rgba(255,255,255,.1);
-}
-.footer a{color:#a78bfa;text-decoration:none;}
-
-@media(max-width:600px){
-.navbar{flex-direction:column;align-items:center;}
-.logo{justify-content:center;width:100%;}
-.nav-links{justify-content:center;width:100%;}
-.hero{height:200px;}
-}
-
-/* ===== GOAT STORE ===== */
-.store-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit, minmax(160px, 200px));
-justify-content:center;
-gap:14px;
-padding:0 10px;
-max-width:900px;
-margin:auto;
-}
-
-.store-card{
-background:rgba(255,255,255,.04);
-border:1px solid rgba(124,58,237,.25);
-border-radius:14px;
-overflow:hidden;
-box-shadow:0 0 15px rgba(124,58,237,.15);
-transition:.3s;
-}
-
-.store-card:hover{
-transform:translateY(-4px);
-box-shadow:0 0 25px rgba(124,58,237,.35);
-}
-
-.store-card img{
-width:100%;
-aspect-ratio:1/1;
-object-fit:cover;
-display:block;
-}
-
-.store-btn{
-display:block;
-margin:10px;
-padding:10px;
-font-size:12px;
-font-weight:700;
-text-align:center;
-background:linear-gradient(45deg,#7c3aed,#ec4899);
-border-radius:10px;
-color:#fff;
-text-decoration:none;
-}
-
-@media(max-width:600px){
-.store-grid{
-grid-template-columns:repeat(2,1fr);
-gap:10px;
-}
-.store-btn{
-font-size:11px;
-padding:8px;
-}
-}
-
-@keyframes rgbBorderMove{
-0%{
-background-position:0% 50%;
-}
-100%{
-background-position:300% 50%;
-}
-}
-
-</style>
+      .input-box button {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
 <body>
 
-<div class="navbar">
-<div class="logo">
-<img src="https://i.imgur.com/LY3Bb9m.png">
-<span>GOAT FC</span>
-</div>
-<div class="nav-links">
-<a href="https://docs.google.com/document/d/1T7p7AjuFfk-DtVbJgdGFcwsH0ipDfG3wg05qv8Y0fJ4/edit?usp=sharing" target="_blank">Club Rules</a>
-<a href="https://www.facebook.com/groups/goatfc.official" target="_blank">About</a>
-<a href="https://www.facebook.com/goatfc.official" target="_blank">Contact</a>
-<a href="https://forms.gle/HnRQHSFgwpQXc81F9" target="_blank">Registration</a>
-</div>
-</div>
+  <div class="container">
+    <div class="header">
+      <h1>Number To Words Converter</h1>
+      <p>Bangladesh • India • USA • International Numbering System</p>
+    </div>
 
-<div class="hero">
-<button class="arrow left" onclick="changeSlide(-1)">‹</button>
-<button class="arrow right" onclick="changeSlide(1)">›</button>
-</div>
+    <div class="input-box">
+      <input type="number" id="numberInput" placeholder="Enter a number like 323691" />
+      <button onclick="convertNumber()">Convert</button>
+    </div>
 
-<div class="live-wrap">
-<div class="live-title">
-<div class="live-dot"></div>
-LIVE SCORE
-</div>
-<div class="live-track" id="liveTrack"></div>
-</div>
+    <div class="results">
+      <div class="card">
+        <h3>🇧🇩 Bangladesh Style</h3>
+        <p id="bdResult">Waiting for input...</p>
+      </div>
 
-<div class="section">
-<h2 class="glow">Club Hub</h2>
-<div class="grid quick-container"></div>
-</div>
+      <div class="card">
+        <h3>🇮🇳 Indian Style</h3>
+        <p id="indianResult">Waiting for input...</p>
+      </div>
 
-<div class="section" style="padding-top:5px;">
-  <h2 class="glow">COMING SOON</h2>
-  <div class="store-grid" id="storeContainer"></div>
-</div>
+      <div class="card">
+        <h3>🇺🇸 USA Style</h3>
+        <p id="usaResult">Waiting for input...</p>
+      </div>
 
-<div class="section" style="margin-top:-10px;">
-<h2 class="glow">Hall of Champions</h2>
-<div class="grid champ-container"></div>
-<div class="desc">🏆 This zone represents champions, top scorers, and elite performers of Goat FC.</div>
-</div>
+      <div class="card">
+        <h3>🌍 International Style</h3>
+        <p id="intlResult">Waiting for input...</p>
+      </div>
+    </div>
 
-<div class="section social">
-<h2 class="glow">JOIN WITH US</h2>
-</div>
-
-<div class="footer">
-Design By <a href="https://www.facebook.com/mdrashedulhasan02/">Md Rashedul Hasan</a>
-</div>
-
-<script>
-const sheetID="1ZoXNHa5sYiP_HaPRyL5RDML7l3kC2IaGuQCAmYkERf8";
-
-let slides=[],current=0;
-
-fetch(`https://opensheet.elk.sh/${sheetID}/SLIDES`)
-.then(r=>r.json())
-.then(data=>{slides=data;renderSlides();startAuto();});
-
-function renderSlides(){
-let hero=document.querySelector(".hero");
-hero.innerHTML=`
-<button class="arrow left" onclick="changeSlide(-1)">‹</button>
-<button class="arrow right" onclick="changeSlide(1)">›</button>`;
-hero.innerHTML+=slides.map((item,i)=>`
-<div class="slide-box ${i==0?'active':''}">
-<img src="${item.image}">
-<div class="slide-content">
-<h1>${item.title}</h1>
-<p>${item.desc}</p>
-<a class="btn" href="${item.link}" target="_blank">${item.button}</a>
-</div></div>`).join('');
-}
-
-function startAuto(){setInterval(()=>changeSlide(1),7000);}
-function changeSlide(dir){
-let boxes=document.querySelectorAll(".slide-box");
-boxes[current].classList.remove("active");
-current=(current+dir+boxes.length)%boxes.length;
-boxes[current].classList.add("active");
-}
-
-fetch(`https://opensheet.elk.sh/${sheetID}/LINKS`)
-.then(r=>r.json())
-.then(data=>{
-document.querySelector(".quick-container").innerHTML=data.map(l=>`
-<div class="card" onclick="window.open('${l.link}','_blank')">
-<h3>${l.icon}</h3><h4>${l.title}</h4></div>`).join('');
-});
-
-fetch(`https://opensheet.elk.sh/${sheetID}/CHAMPIONS`)
-.then(r=>r.json())
-.then(data=>{
-document.querySelector(".champ-container").innerHTML=data.map(c=>`
-<div class="card champ">
-<img src="${c.image}">
-<h4>${c.title}</h4>
-<p>${c.subtitle}</p></div>`).join('');
-});
-
-fetch(`https://opensheet.elk.sh/${sheetID}/SOCIAL`)
-.then(r=>r.json())
-.then(data=>{
-document.querySelector(".social").innerHTML+=data.map(s=>
-`<a href="${s.link}" target="_blank">${s.name}</a>`).join('');
-});
-
-/* Robust CSV Parser */
-function parseCSV(text){
-const rows=[];
-let row=[],cell='',inside=false;
-for(let i=0;i<text.length;i++){
-const c=text[i],n=text[i+1];
-if(c=='"'&&inside&&n=='"'){cell+='"';i++;}
-else if(c=='"'){inside=!inside;}
-else if(c==','&&!inside){row.push(cell);cell='';}
-else if((c=='\n'||c=='\r')&&!inside){
-if(cell||row.length){row.push(cell);rows.push(row);row=[];cell='';}
-if(c=='\r'&&n=='\n')i++;
-}else cell+=c;
-}
-if(cell||row.length){row.push(cell);rows.push(row);}
-const headers=rows.shift();
-return rows.map(r=>Object.fromEntries(headers.map((h,i)=>[h.trim(),(r[i]||'').trim()])));
-}
-
-function formatBDTime(dateStr){
-if(!dateStr) return '';
-
-const d = new Date(dateStr);
-
-return d.toLocaleString('en-BD',{
-day:'2-digit',
-month:'short',
-hour:'2-digit',
-minute:'2-digit',
-hour12:true,
-timeZone:'Asia/Dhaka'
-});
-}
-
-/* Live Score + Rank System */
-Promise.all([
-
-/* Match Data */
-fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv").then(r=>r.text()),
-
-/* Members */
-fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv").then(r=>r.text()),
-
-/* Leaderboard (NEW) */
-fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1033046915&single=true&output=csv").then(r=>r.text())
-
-]).then(([matchCSV,memberCSV,leaderCSV])=>{
-
-const matches=parseCSV(matchCSV)
-.filter(m=>
-m.Approved?.toLowerCase()==='yes' &&
-!isNaN(parseFloat(m.P1_Score)) &&
-!isNaN(parseFloat(m.P2_Score))
-)
-.slice(-10)
-.reverse();
-
-/* Player Name Map */
-const members=parseCSV(memberCSV);
-const nameMap={};
-members.forEach(m=>nameMap[m["Club ID Number"]]=m["Full Name"]);
-
-/* Rank Map (NEW) */
-const leaderboard=parseCSV(leaderCSV);
-const rankMap={};
-leaderboard.forEach(r=>{
-rankMap[r["Club_ID"]] = r["Overall Rank"];
-});
-
-/* Render */
-document.getElementById("liveTrack").innerHTML=matches.map(m=>{
-
-const p1=nameMap[m.P1_ID]||m.P1_ID;
-const p2=nameMap[m.P2_ID]||m.P2_ID;
-
-/* Rank Fetch */
-const p1Rank = rankMap[m.P1_ID] ? `Rank ${rankMap[m.P1_ID]}` : '';
-const p2Rank = rankMap[m.P2_ID] ? `Rank ${rankMap[m.P2_ID]}` : '';
-
-let p1Class='score-draw', p2Class='score-draw';
-
-if(+m.P1_Score > +m.P2_Score){
-p1Class='score-win';p2Class='score-loss';
-}
-if(+m.P1_Score < +m.P2_Score){
-p1Class='score-loss';p2Class='score-win';
-}
-
-return `
-<div class="live-card">
-
-<div class="live-mid">
-
-<!-- LEFT PLAYER -->
-<div class="player">
-  <div class="rank">${p1Rank}</div>
-  <div class="player-name">${p1}</div>
-  <div class="player-id">${m.P1_ID}</div>
-</div>
-
-<!-- CENTER -->
-<div>
-  <div class="match-type small center">${m.Match_Type}</div>
-  <div class="score-box">
-    <span class="${p1Class}">${m.P1_Score}</span>
-    -
-    <span class="${p2Class}">${m.P2_Score}</span>
+    <div class="footer">
+      Made with ❤️ for GitHub Pages Deployment
+    </div>
   </div>
-  <div class="match-date">
-    ${formatBDTime(m.Match_Date)}
-  </div>
-</div>
 
-<!-- RIGHT PLAYER -->
-<div class="player">
-  <div class="rank">${p2Rank}</div>
-  <div class="player-name">${p2}</div>
-  <div class="player-id">${m.P2_ID}</div>
-</div>
-</div>
+  <script>
+    const ones = [
+      '', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine',
+      'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen',
+      'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'
+    ];
 
-</div>
-`;
-}).join('');
+    const tens = [
+      '', '', 'Twenty', 'Thirty', 'Forty', 'Fifty',
+      'Sixty', 'Seventy', 'Eighty', 'Ninety'
+    ];
 
-});
-/* Auto Slide Full Card */
-setInterval(()=>{
-const track=document.getElementById("liveTrack");
-const card=track.querySelector(".live-card");
-if(!card) return;
+    function convertHundreds(num) {
+      let word = '';
 
-track.scrollBy({
-left:card.offsetWidth + 12,
-behavior:'smooth'
-});
+      if (num > 99) {
+        word += ones[Math.floor(num / 100)] + ' Hundred ';
+        num %= 100;
+      }
 
-if(track.scrollLeft + track.clientWidth >= track.scrollWidth - 20){
-setTimeout(()=>{
-track.scrollTo({left:0,behavior:'smooth'});
-},600);
-}
-},4000);
+      if (num > 19) {
+        word += tens[Math.floor(num / 10)] + ' ';
+        num %= 10;
+      }
 
-/* ===== GOAT STORE FETCH ===== */
-fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vS3VQ-e6O8uHjlq8Lsdp5j0vxxOMZH1O17Nbo1ISGXDU_EFsuBEXNWydPbuhJ46lnxqJmevXaN2xPiL/pub?gid=1152972554&single=true&output=csv")
-.then(r=>r.text())
-.then(csv=>{
-const storeItems=parseCSV(csv);
+      if (num > 0) {
+        word += ones[num] + ' ';
+      }
 
-document.getElementById("storeContainer").innerHTML = storeItems.map(item=>`
-<div class="store-card">
-<img src="${item['Image Url']}" alt="Store Item">
-<a class="store-btn" href="${item['Link Url']}" target="_blank">
-${item['Botton Name']}
-</a>
-</div>
-`).join('');
-});
+      return word.trim();
+    }
 
-</script>
+    function numberToWordsInternational(num) {
+      if (num === 0) return 'Zero';
+
+      const units = ['', 'Thousand', 'Million', 'Billion', 'Trillion'];
+      let words = '';
+      let unitIndex = 0;
+
+      while (num > 0) {
+        let chunk = num % 1000;
+
+        if (chunk !== 0) {
+          words = convertHundreds(chunk) + ' ' + units[unitIndex] + ' ' + words;
+        }
+
+        num = Math.floor(num / 1000);
+        unitIndex++;
+      }
+
+      return words.trim();
+    }
+
+    function numberToWordsIndian(num) {
+      if (num === 0) return 'Zero';
+
+      const units = ['', 'Thousand', 'Lakh', 'Crore', 'Arab'];
+
+      let words = '';
+      let unitIndex = 0;
+
+      let firstPart = num % 1000;
+      if (firstPart !== 0) {
+        words = convertHundreds(firstPart);
+      }
+
+      num = Math.floor(num / 1000);
+      unitIndex = 1;
+
+      while (num > 0) {
+        let chunk = num % 100;
+
+        if (chunk !== 0) {
+          words = convertHundreds(chunk) + ' ' + units[unitIndex] + ' ' + words;
+        }
+
+        num = Math.floor(num / 100);
+        unitIndex++;
+      }
+
+      return words.trim();
+    }
+
+    function numberToWordsBangladesh(num) {
+      return numberToWordsIndian(num);
+    }
+
+    function convertNumber() {
+      const input = document.getElementById('numberInput').value;
+      const number = parseInt(input);
+
+      if (isNaN(number) || number < 0) {
+        alert('Please enter a valid positive number');
+        return;
+      }
+
+      document.getElementById('bdResult').innerText = numberToWordsBangladesh(number);
+      document.getElementById('indianResult').innerText = numberToWordsIndian(number);
+      document.getElementById('usaResult').innerText = numberToWordsInternational(number);
+      document.getElementById('intlResult').innerText = numberToWordsInternational(number);
+    }
+
+    document.getElementById('numberInput').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        convertNumber();
+      }
+    });
+  </script>
 
 </body>
 </html>

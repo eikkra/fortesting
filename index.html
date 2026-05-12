@@ -1,136 +1,323 @@
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
+<!-- IMPORTANT FOR MOBILE -->
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 <title>GOAT FC Players</title>
 <style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 body{
     background:#020617;
     color:white;
-    font-family:Segoe UI;
-    margin:0;
-    padding:20px;
+    font-family:'Segoe UI',sans-serif;
+    padding:14px;
+    overflow-x:hidden;
 }
-h2{
-    text-align:center;
-    color:#00f5ff;
-    margin-bottom:10px;
+/* BG EFFECT */
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:
+    radial-gradient(circle at top left,#00f5ff11,transparent 25%),
+    radial-gradient(circle at bottom right,#00ff8811,transparent 25%);
+    z-index:-1;
 }
-/* SEARCH BOX */
+/* HEADER */
+.header{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+    margin-bottom:12px;
+}
+/* LOGO */
+.logo{
+    width:38px;
+    filter:
+    drop-shadow(0 0 5px #00f5ff)
+    drop-shadow(0 0 10px #00ff88);
+    animation:logoGlow 3s linear infinite;
+}
+@keyframes logoGlow{
+0%{
+filter:
+drop-shadow(0 0 5px #00f5ff)
+drop-shadow(0 0 10px #00ff88);
+}
+50%{
+filter:
+drop-shadow(0 0 10px #00ff88)
+drop-shadow(0 0 20px #00f5ff);
+}
+100%{
+filter:
+drop-shadow(0 0 5px #00f5ff)
+drop-shadow(0 0 10px #00ff88);
+}
+}
+/* RGB TITLE */
+.title{
+    font-size:24px;
+    font-weight:900;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    background:linear-gradient(
+    90deg,
+    #00f5ff,
+    #00ff88,
+    #00f5ff,
+    #00ff88
+    );
+    background-size:300%;
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    animation:rgbText 5s linear infinite;
+}
+@keyframes rgbText{
+0%{
+background-position:0%;
+}
+100%{
+background-position:300%;
+}
+}
+/* SEARCH */
 .search-box{
     width:100%;
-    max-width:500px;
-    margin:10px auto 20px;
-    display:block;
-    padding:10px 12px;
-    border-radius:10px;
+    padding:12px 14px;
+    border-radius:14px;
     border:1px solid #00f5ff55;
     background:#0f172a;
     color:white;
     outline:none;
     font-size:14px;
+    margin-bottom:16px;
+    box-shadow:
+    0 0 10px #00f5ff22 inset,
+    0 0 15px #00f5ff11;
 }
 .search-box:focus{
     border-color:#00f5ff;
-    box-shadow:0 0 10px #00f5ff33;
+    box-shadow:
+    0 0 15px #00f5ff55,
+    0 0 25px #00ff8855;
 }
+/* GRID */
 .grid{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+    grid-template-columns:
+    repeat(auto-fit,minmax(145px,1fr));
     gap:12px;
 }
+/* PLAYER CARD */
 .card{
-    background:#0f172a;
-    border:1px solid #00f5ff33;
-    border-radius:12px;
-    padding:10px;
+    background:
+    linear-gradient(
+    145deg,
+    #0f172a,
+    #07101d
+    );
+    border-radius:16px;
+    padding:14px 10px;
     text-align:center;
     cursor:pointer;
-    transition:0.2s;
+    position:relative;
+    overflow:hidden;
+    transition:.25s;
+    border:1px solid #00f5ff33;
+    box-shadow:
+    0 0 10px #00f5ff22,
+    inset 0 0 10px #00ff8811;
+}
+/* RGB BORDER EFFECT */
+.card::before{
+    content:"";
+    position:absolute;
+    inset:-2px;
+    background:linear-gradient(
+    90deg,
+    #00f5ff,
+    #00ff88,
+    #00f5ff,
+    #00ff88
+    );
+    background-size:300%;
+    animation:rgbBorder 4s linear infinite;
+    z-index:-1;
+    filter:blur(10px);
+    opacity:.7;
+}
+@keyframes rgbBorder{
+0%{
+background-position:0%;
+}
+100%{
+background-position:300%;
+}
 }
 .card:hover{
-    transform:scale(1.05);
-    box-shadow:0 0 15px #00f5ff33;
+    transform:translateY(-4px);
+    box-shadow:
+    0 0 20px #00f5ff55,
+    0 0 30px #00ff8855;
 }
-img{
-    width:60px;
-    height:60px;
+/* PLAYER IMAGE */
+.card img{
+    width:68px;
+    height:68px;
     border-radius:50%;
-    border:2px solid #00f5ff;
     object-fit:cover;
+    border:2px solid #00f5ff;
+    box-shadow:
+    0 0 10px #00f5ff,
+    0 0 20px #00ff8855;
+}
+/* NAME */
+.name{
+    margin-top:10px;
+    font-size:14px;
+    font-weight:700;
+    line-height:1.3;
+}
+/* ID */
+.id{
+    margin-top:5px;
+    color:#00f5ff;
+    font-size:11px;
+    font-weight:600;
+    letter-spacing:.5px;
+}
+/* MOBILE FIX */
+@media(max-width:768px){
+.title{
+    font-size:20px;
+}
+.grid{
+grid-template-columns:
+repeat(2,1fr);
+gap:10px;
+}
+.card{
+padding:12px 8px;
+}
+.card img{
+width:62px;
+height:62px;
 }
 .name{
-    margin-top:8px;
-    font-weight:700;
+font-size:13px;
 }
-.id{
-    font-size:11px;
-    color:#00f5ff;
-    margin-top:3px;
 }
-.hide{
-    display:none;
+/* SMALL MOBILE */
+@media(max-width:420px){
+.grid{
+grid-template-columns:
+repeat(2,1fr);
+}
+.title{
+font-size:18px;
+}
 }
 </style>
 </head>
 <body>
-<h2>GOAT FC PLAYERS</h2>
-<!-- SEARCH INPUT -->
-<input type="text" id="search"
+<!-- HEADER -->
+<div class="header">
+<img class="logo"
+src="https://i.imgur.com/LY3Bb9m.png">
+<div class="title">
+GOAT FC PLAYERS
+</div>
+</div>
+<!-- SEARCH -->
+<input
+type="text"
+id="search"
 class="search-box"
 placeholder="Search Player Name / ID...">
-<div id="grid" class="grid">Loading...</div>
+<!-- PLAYER GRID -->
+<div id="grid" class="grid">
+</div>
 <script>
 const MEMBER_CSV =
 "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv";
+let playersData=[];
+/* SIMPLE CSV */
 function parseCSV(text){
-    return text.split("\n").map(r=>r.split(","));
+return text
+.split("\n")
+.map(r=>r.split(","));
 }
-let playersData = [];
 function normalize(x){
-    return (x||"").toLowerCase();
+return (x||"")
+.toLowerCase();
 }
+/* LOAD PLAYERS */
 async function loadPlayers(){
-const res = await fetch(MEMBER_CSV);
-const text = await res.text();
-const rows = parseCSV(text);
+const res =
+await fetch(MEMBER_CSV);
+const text =
+await res.text();
+const rows =
+parseCSV(text);
 rows.slice(1).forEach(r=>{
-    playersData.push({
-        name: r[0] || "",
-        id: r[1] || "",
-        pic: r[4] || "https://i.imgur.com/LY3Bb9m.png"
-    });
+playersData.push({
+name:r[0] || "Unknown",
+id:r[1] || "N/A",
+pic:r[4] ||
+"https://i.imgur.com/LY3Bb9m.png"
+});
 });
 render(playersData);
 }
-/* RENDER FUNCTION */
+/* RENDER */
 function render(data){
-let html = "";
+let html='';
 data.forEach(p=>{
 html += `
-<div class="card" onclick="openProfile('${p.id}')">
+<div class="card"
+onclick="openProfile('${p.id}')">
 <img src="${p.pic}">
-<div class="name">${p.name}</div>
-<div class="id">${p.id}</div>
+<div class="name">
+${p.name}
+</div>
+<div class="id">
+${p.id}
+</div>
 </div>
 `;
 });
-document.getElementById("grid").innerHTML = html;
+document.getElementById("grid")
+.innerHTML = html;
 }
-/* SEARCH FUNCTION */
-document.getElementById("search")
-.addEventListener("input", function(){
-const value = normalize(this.value);
-const filtered = playersData.filter(p=>
-normalize(p.name).includes(value) ||
-normalize(p.id).includes(value)
+/* SEARCH */
+document
+.getElementById("search")
+.addEventListener("input",function(){
+const value =
+normalize(this.value);
+const filtered =
+playersData.filter(p=>
+normalize(p.name)
+.includes(value)
+||
+normalize(p.id)
+.includes(value)
 );
 render(filtered);
 });
 /* OPEN PROFILE */
 function openProfile(id){
-    window.location.href = "profile.html?id=" + id;
+window.location.href =
+"profile.html?id="+id;
 }
 loadPlayers();
 </script>

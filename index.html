@@ -1,342 +1,94 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Number To Words Converter Pro</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #0f172a, #1e293b, #111827);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      color: #fff;
-    }
-
-    .container {
-      width: 100%;
-      max-width: 950px;
-      background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 24px;
-      padding: 35px;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.35);
-    }
-
-    .header {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-
-    .header h1 {
-      font-size: 2.5rem;
-      font-weight: 700;
-      background: linear-gradient(to right, #38bdf8, #818cf8, #c084fc);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 10px;
-    }
-
-    .header p {
-      color: #cbd5e1;
-      font-size: 0.95rem;
-    }
-
-    .input-box {
-      display: flex;
-      gap: 15px;
-      margin-bottom: 30px;
-      flex-wrap: wrap;
-    }
-
-    .input-box input {
-      flex: 1;
-      min-width: 240px;
-      padding: 18px 20px;
-      border-radius: 14px;
-      border: none;
-      outline: none;
-      background: rgba(255,255,255,0.1);
-      color: #fff;
-      font-size: 1.1rem;
-      transition: 0.3s;
-    }
-
-    .input-box input:focus {
-      background: rgba(255,255,255,0.15);
-      box-shadow: 0 0 0 3px rgba(99,102,241,0.4);
-    }
-
-    .input-box button {
-      padding: 16px 28px;
-      border: none;
-      border-radius: 14px;
-      background: linear-gradient(135deg, #6366f1, #8b5cf6);
-      color: white;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    .input-box button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(99,102,241,0.35);
-    }
-
-    .results {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 20px;
-    }
-
-    .card {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 18px;
-      padding: 22px;
-      transition: 0.3s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .card:hover {
-      transform: translateY(-4px);
-      background: rgba(255,255,255,0.08);
-    }
-
-    .card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 4px;
-      background: linear-gradient(to right, #38bdf8, #8b5cf6);
-    }
-
-    .card h3 {
-      font-size: 1.05rem;
-      margin-bottom: 12px;
-      color: #93c5fd;
-    }
-
-    .card p {
-      color: #e2e8f0;
-      line-height: 1.7;
-      font-size: 0.96rem;
-      word-wrap: break-word;
-    }
-
-    .footer {
-      text-align: center;
-      margin-top: 30px;
-      color: #94a3b8;
-      font-size: 0.85rem;
-    }
-
-    @media(max-width: 600px) {
-      .container {
-        padding: 22px;
-      }
-
-      .header h1 {
-        font-size: 1.9rem;
-      }
-
-      .input-box {
-        flex-direction: column;
-      }
-
-      .input-box button {
-        width: 100%;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<title>GOAT FC Players</title>
+<style>
+body{
+    background:#020617;
+    color:white;
+    font-family:Segoe UI;
+    margin:0;
+    padding:20px;
+}
+h2{
+    text-align:center;
+    color:#00f5ff;
+    margin-bottom:20px;
+}
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+    gap:12px;
+}
+.card{
+    background:#0f172a;
+    border:1px solid #00f5ff33;
+    border-radius:12px;
+    padding:10px;
+    text-align:center;
+    cursor:pointer;
+    transition:0.2s;
+}
+.card:hover{
+    transform:scale(1.05);
+    box-shadow:0 0 15px #00f5ff33;
+}
+img{
+    width:60px;
+    height:60px;
+    border-radius:50%;
+    border:2px solid #00f5ff;
+    object-fit:cover;
+}
+.name{
+    margin-top:8px;
+    font-weight:700;
+}
+.id{
+    font-size:11px;
+    color:#00f5ff;
+    margin-top:3px;
+}
+</style>
 </head>
 <body>
-
-  <div class="container">
-    <div class="header">
-      <h1>Number To Words Converter</h1>
-      <p>Bangladesh • India • USA • International Numbering System</p>
-    </div>
-
-    <div class="input-box">
-      <input type="number" id="numberInput" placeholder="Enter amount like 614031" />
-      <button onclick="convertNumber()">Convert</button>
-    </div>
-
-    <div class="results">
-      <div class="card">
-        <h3>🇧🇩 Bangladesh Style</h3>
-        <p id="bdResult">Example: Six Lac Fourteen Thousand and Thirty One Only</p>
-      </div>
-
-      <div class="card">
-        <h3>🇮🇳 Indian Style</h3>
-        <p id="indianResult">Waiting for input...</p>
-      </div>
-
-      <div class="card">
-        <h3>🇺🇸 USA Style</h3>
-        <p id="usaResult">Waiting for input...</p>
-      </div>
-
-      <div class="card">
-        <h3>🌍 International Style</h3>
-        <p id="intlResult">Waiting for input...</p>
-      </div>
-    </div>
-
-    <div class="footer">
-      Made with ❤️ for GitHub Pages Deployment
-    </div>
-  </div>
-
-  <script>
-    const ones = [
-      '', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine',
-      'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen',
-      'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'
-    ];
-
-    const tens = [
-      '', '', 'Twenty', 'Thirty', 'Forty', 'Fifty',
-      'Sixty', 'Seventy', 'Eighty', 'Ninety'
-    ];
-
-    function convertBelowThousand(num) {
-      let str = '';
-
-      if (num >= 100) {
-        str += ones[Math.floor(num / 100)] + ' Hundred';
-        num %= 100;
-
-        if (num > 0) {
-          str += ' and ';
-        } else {
-          str += ' ';
-        }
-      }
-
-      if (num >= 20) {
-        str += tens[Math.floor(num / 10)] + ' ';
-        num %= 10;
-      }
-
-      if (num > 0) {
-        str += ones[num] + ' ';
-      }
-
-      return str.trim();
-    }
-
-    function formatFinalText(text) {
-      text = text.replace(/\s+/g, ' ').trim();
-
-      if (!text.toLowerCase().endsWith('only')) {
-        text += ' Only';
-      }
-
-      return text;
-    }
-
-    function numberToWordsInternational(num) {
-      if (num === 0) return 'Zero Only';
-
-      const units = ['', 'Thousand', 'Million', 'Billion', 'Trillion'];
-      let result = '';
-      let i = 0;
-
-      while (num > 0) {
-        let chunk = num % 1000;
-
-        if (chunk !== 0) {
-          result = convertBelowThousand(chunk) + ' ' + units[i] + ' ' + result;
-        }
-
-        num = Math.floor(num / 1000);
-        i++;
-      }
-
-      return formatFinalText(result);
-    }
-
-    function numberToWordsIndian(num) {
-      if (num === 0) return 'Zero Only';
-
-      let result = '';
-
-      const crore = Math.floor(num / 10000000);
-      num %= 10000000;
-
-      const lakh = Math.floor(num / 100000);
-      num %= 100000;
-
-      const thousand = Math.floor(num / 1000);
-      num %= 1000;
-
-      const hundred = num;
-
-      if (crore > 0) {
-        result += convertBelowThousand(crore) + ' Crore ';
-      }
-
-      if (lakh > 0) {
-        result += convertBelowThousand(lakh) + ' Lac ';
-      }
-
-      if (thousand > 0) {
-        result += convertBelowThousand(thousand) + ' Thousand ';
-      }
-
-      if (hundred > 0) {
-        result += convertBelowThousand(hundred) + ' ';
-      }
-
-      return formatFinalText(result);
-    }
-
-    function numberToWordsBangladesh(num) {
-      return numberToWordsIndian(num);
-    }
-
-    function convertNumber() {
-      const input = document.getElementById('numberInput').value;
-      const number = parseInt(input);
-
-      if (isNaN(number) || number < 0) {
-        alert('Please enter a valid amount');
-        return;
-      }
-
-      document.getElementById('bdResult').innerText = numberToWordsBangladesh(number);
-      document.getElementById('indianResult').innerText = numberToWordsIndian(number);
-      document.getElementById('usaResult').innerText = numberToWordsInternational(number);
-      document.getElementById('intlResult').innerText = numberToWordsInternational(number);
-    }
-
-    document.getElementById('numberInput').addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') {
-        convertNumber();
-      }
-    });
-  </script>
-
+<h2>GOAT FC PLAYERS</h2>
+<div id="grid" class="grid">Loading...</div>
+<script>
+const MEMBER_CSV =
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv";
+function normalize(x){
+    return (x||"").toLowerCase().replace(/[^a-z0-9]/g,'');
+}
+function parseCSV(text){
+    return text.split("\n").map(r=>r.split(","));
+}
+async function loadPlayers(){
+const res = await fetch(MEMBER_CSV);
+const text = await res.text();
+const rows = parseCSV(text);
+let html = "";
+rows.slice(1).forEach(r=>{
+const name = r[0];
+const idRaw = r[1];
+const id = normalize(r[1]);
+const pic = r[4] || "https://i.imgur.com/LY3Bb9m.png";
+html += `
+<div class="card" onclick="openProfile('${idRaw}')">
+<img src="${pic}">
+<div class="name">${name}</div>
+<div class="id">${idRaw}</div>
+</div>
+`;
+});
+document.getElementById("grid").innerHTML = html;
+}
+function openProfile(id){
+    window.location.href = "profile.html?id=" + id;
+}
+loadPlayers();
+</script>
 </body>
 </html>

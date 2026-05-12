@@ -15,7 +15,25 @@ body{
 h2{
     text-align:center;
     color:#00f5ff;
-    margin-bottom:20px;
+    margin-bottom:10px;
+}
+/* SEARCH BOX */
+.search-box{
+    width:100%;
+    max-width:500px;
+    margin:10px auto 20px;
+    display:block;
+    padding:10px 12px;
+    border-radius:10px;
+    border:1px solid #00f5ff55;
+    background:#0f172a;
+    color:white;
+    outline:none;
+    font-size:14px;
+}
+.search-box:focus{
+    border-color:#00f5ff;
+    box-shadow:0 0 10px #00f5ff33;
 }
 .grid{
     display:grid;
@@ -51,40 +69,66 @@ img{
     color:#00f5ff;
     margin-top:3px;
 }
+.hide{
+    display:none;
+}
 </style>
 </head>
 <body>
 <h2>GOAT FC PLAYERS</h2>
+<!-- SEARCH INPUT -->
+<input type="text" id="search"
+class="search-box"
+placeholder="Search Player Name / ID...">
 <div id="grid" class="grid">Loading...</div>
 <script>
 const MEMBER_CSV =
 "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv";
-function normalize(x){
-    return (x||"").toLowerCase().replace(/[^a-z0-9]/g,'');
-}
 function parseCSV(text){
     return text.split("\n").map(r=>r.split(","));
+}
+let playersData = [];
+function normalize(x){
+    return (x||"").toLowerCase();
 }
 async function loadPlayers(){
 const res = await fetch(MEMBER_CSV);
 const text = await res.text();
 const rows = parseCSV(text);
-let html = "";
 rows.slice(1).forEach(r=>{
-const name = r[0];
-const idRaw = r[1];
-const id = normalize(r[1]);
-const pic = r[4] || "https://i.imgur.com/LY3Bb9m.png";
+    playersData.push({
+        name: r[0] || "",
+        id: r[1] || "",
+        pic: r[4] || "https://i.imgur.com/LY3Bb9m.png"
+    });
+});
+render(playersData);
+}
+/* RENDER FUNCTION */
+function render(data){
+let html = "";
+data.forEach(p=>{
 html += `
-<div class="card" onclick="openProfile('${idRaw}')">
-<img src="${pic}">
-<div class="name">${name}</div>
-<div class="id">${idRaw}</div>
+<div class="card" onclick="openProfile('${p.id}')">
+<img src="${p.pic}">
+<div class="name">${p.name}</div>
+<div class="id">${p.id}</div>
 </div>
 `;
 });
 document.getElementById("grid").innerHTML = html;
 }
+/* SEARCH FUNCTION */
+document.getElementById("search")
+.addEventListener("input", function(){
+const value = normalize(this.value);
+const filtered = playersData.filter(p=>
+normalize(p.name).includes(value) ||
+normalize(p.id).includes(value)
+);
+render(filtered);
+});
+/* OPEN PROFILE */
 function openProfile(id){
     window.location.href = "profile.html?id=" + id;
 }

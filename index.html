@@ -8,6 +8,121 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
 <style>
+
+/* =========================
+TOPBAR
+========================= */
+
+.topbar{
+
+position:sticky;
+top:0;
+z-index:9999;
+
+height:46px;
+
+padding:0 14px;
+
+display:flex;
+align-items:center;
+justify-content:space-between;
+
+text-decoration:none;
+
+background:rgba(2,6,23,.88);
+
+backdrop-filter:blur(10px);
+
+border-bottom:1px solid #00f5ff22;
+
+box-shadow:
+0 0 15px #00f5ff11;
+
+}
+
+.topbar-left{
+
+display:flex;
+align-items:center;
+gap:8px;
+
+}
+
+.topbar-logo{
+
+width:26px;
+
+filter:
+drop-shadow(0 0 6px #00f5ff);
+
+}
+
+.topbar-text{
+
+font-size:13px;
+font-weight:800;
+
+letter-spacing:1px;
+
+background:
+linear-gradient(
+90deg,
+#00f5ff,
+#00ff88
+);
+
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+
+}
+
+.topbar-right{
+
+width:28px;
+height:28px;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+border-radius:50%;
+
+background:#00f5ff11;
+
+border:1px solid #00f5ff33;
+
+color:#00f5ff;
+
+font-size:12px;
+
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+.topbar{
+
+height:42px;
+
+padding:0 10px;
+
+}
+
+.topbar-logo{
+
+width:23px;
+
+}
+
+.topbar-text{
+
+font-size:12px;
+
+}
+
+}
+
 *{margin:0;padding:0;box-sizing:border-box}
 
 body{
@@ -63,7 +178,7 @@ font-size:10px;
 color:#00f5ff;
 margin-bottom:10px;
 
-letter-spacing:6px;
+letter-spacing:3px;
 
 width:100%;
 
@@ -255,6 +370,24 @@ letter-spacing:1px;
 </style>
 </head>
 <body>
+
+<a href="https://goatfcbd.com" class="topbar">
+
+<div class="topbar-left">
+
+<img src="https://i.imgur.com/LY3Bb9m.png" class="topbar-logo">
+
+<div class="topbar-text">
+GOAT FC
+</div>
+
+</div>
+
+<div class="topbar-right">
+<i class="fa-solid fa-house"></i>
+</div>
+
+</a>
 
 <div class="header">
 <img class="logo" src="https://i.imgur.com/LY3Bb9m.png">
@@ -465,15 +598,15 @@ font-weight:700;
 </div>
 
 <div class="grid">
-<div class="box"><div class="label">Wins</div><div class="value">${win}</div></div>
-<div class="box"><div class="label">Loss</div><div class="value">${loss}</div></div>
-<div class="box"><div class="label">Draw</div><div class="value">${draw}</div></div>
-<div class="box"><div class="label">Matches</div><div class="value">${total}</div></div>
-<div class="box"><div class="label">Win Rate</div><div class="value">${wr}%</div></div>
-<div class="box"><div class="label">Goal Rate</div><div class="value">${gr}</div></div>
-<div class="box"><div class="label">Scored</div><div class="value">${gs}</div></div>
-<div class="box"><div class="label">Conceded</div><div class="value">${gc}</div></div>
-<div class="box"><div class="label">7+ Goals</div><div class="value">${seven}</div></div>
+<div class="box"><div class="label">🟢Wins</div><div class="value">${win}</div></div>
+<div class="box"><div class="label">🔴Loss</div><div class="value">${loss}</div></div>
+<div class="box"><div class="label">🟡Draw</div><div class="value">${draw}</div></div>
+<div class="box"><div class="label">🎮Matches</div><div class="value">${total}</div></div>
+<div class="box"><div class="label">📊Win Rate</div><div class="value">${wr}%</div></div>
+<div class="box"><div class="label">📈Goal Rate</div><div class="value">${gr}</div></div>
+<div class="box"><div class="label">⚽Scored</div><div class="value">${gs}</div></div>
+<div class="box"><div class="label">🥅Conceded</div><div class="value">${gc}</div></div>
+<div class="box"><div class="label">👑7+ Goals</div><div class="value">${seven}</div></div>
 </div>
 
 <div class="matches">

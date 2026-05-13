@@ -437,7 +437,7 @@ const html=`
 
 <div class="name-row">
 <div class="name">${info.name}</div>
-<div class="clubid">${info.club}</div>
+<div class="| clubid">${info.club}</div>
 </div>
 
 <div class="rank-row">
@@ -459,7 +459,7 @@ const html=`
 </div>
 
 <div class="matches">
-<div class="matches-title">RECENT MATCHES</div>
+<div class="matches-title">RECENT 5 MATCHES</div>
 
 ${matches.reverse().slice(0,5).map(m=>{
 

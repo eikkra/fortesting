@@ -6,7 +6,7 @@
 <meta name="viewport"
 content="width=device-width, initial-scale=1.0">
 
-<title>PLAYERS HUB</title>
+<title>GOAT FC PLAY CARD</title>
 
 <link rel="icon"
 type="image/png"
@@ -17,6 +17,8 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
 
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Rajdhani:wght@400;500;600;700&display=swap"
 rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 
 <style>
 
@@ -162,10 +164,12 @@ font-weight:700;
 letter-spacing:3px;
 
 color:var(--muted);
+
+line-height:1.5;
 }
 
 /* =====================
-MAIN WRAP
+WRAP
 ===================== */
 
 .wrap{
@@ -219,26 +223,13 @@ box-shadow:
 }
 
 /* =====================
-GRID
-===================== */
-
-.grid{
-display:grid;
-
-grid-template-columns:
-repeat(2,1fr);
-
-gap:10px;
-}
-
-/* =====================
 CARD
 ===================== */
 
 .card{
 position:relative;
 
-padding:12px 10px;
+padding:12px;
 
 border-radius:18px;
 
@@ -249,11 +240,7 @@ border:1px solid #00f5ff18;
 
 overflow:hidden;
 
-cursor:pointer;
-
-transition:.25s;
-
-text-align:center;
+margin-bottom:10px;
 
 box-shadow:
 0 0 10px #000;
@@ -273,57 +260,37 @@ border:1px solid #00f5ff10;
 pointer-events:none;
 }
 
-.card:hover{
-transform:translateY(-3px);
+/* =====================
+TOP INFO
+===================== */
 
-border-color:#00f5ff30;
+.player-top{
+display:flex;
+align-items:center;
+justify-content:space-between;
 
-box-shadow:
-0 0 14px #00f5ff18;
+gap:10px;
 }
 
-/* IMAGE */
-
-.card img{
-width:68px;
-height:68px;
-
-border-radius:50%;
-
-object-fit:cover;
-
-border:2px solid #00f5ff;
-
-background:#111827;
-
-box-shadow:
-0 0 10px #00f5ff22;
+.player-left{
+min-width:0;
 }
 
-/* NAME */
-
-.name{
-margin-top:9px;
-
-font-size:13px;
+.player-name{
+font-size:14px;
 font-weight:800;
-
-line-height:1.3;
 
 white-space:nowrap;
 overflow:hidden;
 text-overflow:ellipsis;
 }
 
-/* ID */
-
-.id{
-margin-top:5px;
+.player-id{
+margin-top:4px;
 
 display:inline-flex;
 align-items:center;
-justify-content:center;
-gap:4px;
+gap:5px;
 
 padding:5px 8px;
 
@@ -339,7 +306,103 @@ font-weight:700;
 color:var(--cyan);
 }
 
-/* EMPTY */
+/* =====================
+INFO GRID
+===================== */
+
+.info-grid{
+display:grid;
+
+grid-template-columns:
+1fr 1fr;
+
+gap:8px;
+
+margin-top:12px;
+}
+
+.info-box{
+padding:9px;
+
+border-radius:14px;
+
+background:
+linear-gradient(145deg,#0b1220,#0f172a);
+
+border:1px solid #ffffff10;
+}
+
+.info-label{
+font-size:7px;
+font-weight:700;
+
+letter-spacing:1px;
+
+color:var(--muted);
+
+margin-bottom:4px;
+}
+
+.info-value{
+font-size:11px;
+font-weight:800;
+
+word-break:break-word;
+}
+
+/* COLORS */
+
+.konami{
+color:#fbbf24;
+}
+
+.device{
+color:#c084fc;
+}
+
+/* =====================
+FB BUTTON
+===================== */
+
+.fb-btn{
+margin-top:10px;
+
+width:100%;
+
+height:38px;
+
+border-radius:14px;
+
+display:flex;
+align-items:center;
+justify-content:center;
+gap:8px;
+
+text-decoration:none;
+
+background:
+linear-gradient(145deg,#111827,#0f172a);
+
+border:1px solid #1877f220;
+
+color:#4ea1ff;
+
+font-size:11px;
+font-weight:800;
+
+transition:.25s;
+}
+
+.fb-btn:hover{
+border-color:#1877f255;
+
+box-shadow:
+0 0 12px #1877f220;
+}
+
+/* =====================
+EMPTY
+===================== */
 
 .empty{
 padding:40px 10px;
@@ -352,21 +415,33 @@ font-weight:700;
 color:var(--muted);
 }
 
+/* =====================
+FOOTER
+===================== */
+
+.footer{
+margin-top:18px;
+
+text-align:center;
+
+font-size:9px;
+font-weight:700;
+
+letter-spacing:2px;
+
+color:#64748b;
+}
+
 /* MOBILE */
 
 @media(max-width:420px){
 
-.card{
-padding:10px 8px;
+.player-name{
+font-size:13px;
 }
 
-.card img{
-width:62px;
-height:62px;
-}
-
-.name{
-font-size:12px;
+.info-value{
+font-size:10px;
 }
 
 }
@@ -403,11 +478,11 @@ GOAT FC
 <div class="hero">
 
 <div class="hero-title">
-PLAYERS HUB
+GOAT FC PLAY CARD
 </div>
 
 <div class="hero-sub">
-SEARCH YOUR FAVORITE PLAYER
+SEARCH CLUB ID & VIEW PLAYER DETAILS
 </div>
 
 </div>
@@ -416,78 +491,60 @@ SEARCH YOUR FAVORITE PLAYER
 
 <div class="wrap">
 
-<!-- SEARCH -->
-
 <input
 type="text"
-id="search"
+id="searchInput"
 class="search-box"
-placeholder="Search Player Name / ID...">
+placeholder="Search By Club ID...">
 
-<!-- GRID -->
+<div id="players">
 
-<div id="grid"
-class="grid">
+</div>
 
+<div class="footer">
+POWERED BY GOAT FC
 </div>
 
 </div>
 
 <script>
 
-const MEMBER_CSV =
-"https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv";
+const csvURL =
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vRxNxMgcwsp3k8B9jqnfObnnRfhSX3vUcEOuaPTsyEMaEVOZKE9OIcLiMQRJHHkAQiJWn-msKE6Cs80/pub?output=csv";
 
-let playersData=[];
-
-/* CSV */
-
-function parseCSV(text){
-
-return text
-.split("\n")
-.map(r=>r.split(","));
-
-}
+let players=[];
 
 /* NORMALIZE */
 
-function normalize(x){
+function normalize(str){
 
-return (x||"")
-.toLowerCase();
+return (str || "")
+.toLowerCase()
+.replace(/[^a-z0-9]/g,"");
 
 }
 
 /* LOAD */
 
-async function loadPlayers(){
+function loadData(){
 
-const res =
-await fetch(MEMBER_CSV);
+Papa.parse(csvURL,{
 
-const text =
-await res.text();
+download:true,
 
-const rows =
-parseCSV(text);
+header:true,
 
-rows.slice(1).forEach(r=>{
+skipEmptyLines:true,
 
-playersData.push({
+complete:function(res){
 
-name:r[0] || "Unknown",
+players=res.data;
 
-id:r[1] || "N/A",
+render(players);
 
-pic:r[4] ||
-"https://i.imgur.com/LY3Bb9m.png"
+}
 
 });
-
-});
-
-render(playersData);
 
 }
 
@@ -495,11 +552,14 @@ render(playersData);
 
 function render(data){
 
-let html='';
+const wrap =
+document.getElementById("players");
+
+wrap.innerHTML="";
 
 if(data.length===0){
 
-html=`
+wrap.innerHTML=`
 
 <div class="empty">
 <i class="fa-solid fa-magnifying-glass"></i>
@@ -509,34 +569,73 @@ No Player Found
 
 `;
 
-document
-.getElementById("grid")
-.innerHTML=html;
-
 return;
 
 }
 
 data.forEach(p=>{
 
-html += `
+wrap.innerHTML += `
 
-<div class="card"
-onclick="openProfile('${p.id}')">
+<div class="card">
 
-<img src="${p.pic}">
+<div class="player-top">
 
-<div class="name">
-${p.name}
+<div class="player-left">
+
+<div class="player-name">
+${p["Player Name"] || "Unknown"}
 </div>
 
-<div class="id">
+<div class="player-id">
 
 <i class="fa-solid fa-shield-halved"></i>
 
-${p.id}
+${p["Your Club ID"] || "N/A"}
 
 </div>
+
+</div>
+
+</div>
+
+<div class="info-grid">
+
+<div class="info-box">
+
+<div class="info-label">
+KONAMI ID
+</div>
+
+<div class="info-value konami">
+${p["KONAMI ID"] || "N/A"}
+</div>
+
+</div>
+
+<div class="info-box">
+
+<div class="info-label">
+DEVICE
+</div>
+
+<div class="info-value device">
+${p["DEVICE NAME"] || "N/A"}
+</div>
+
+</div>
+
+</div>
+
+<a href="${p["Facebook URL"] || "#"}"
+target="_blank"
+class="fb-btn">
+
+<i class="fa-brands fa-facebook-f"></i>
+
+VISIT FACEBOOK
+
+</a>
 
 </div>
 
@@ -544,49 +643,37 @@ ${p.id}
 
 });
 
-document
-.getElementById("grid")
-.innerHTML = html;
-
 }
 
 /* SEARCH */
 
 document
-.getElementById("search")
+.getElementById("searchInput")
 
 .addEventListener("input",function(){
 
-const value =
+const val =
 normalize(this.value);
 
 const filtered =
-playersData.filter(p=>
+players.filter(p=>{
 
-normalize(p.name)
-.includes(value)
+let club =
+normalize(p["Your Club ID"]);
 
-||
+return club.includes(val);
 
-normalize(p.id)
-.includes(value)
-
-);
+});
 
 render(filtered);
 
 });
 
-/* OPEN PROFILE */
+/* LOAD */
 
-function openProfile(id){
+loadData();
 
-window.location.href =
-"profile/?id="+id;
-
-}
-
-loadPlayers();
+setInterval(loadData,30000);
 
 </script>
 

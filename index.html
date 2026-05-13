@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
 <title>ELITE ATHLETE</title>
 
 <link rel="icon" type="image/png" href="https://i.imgur.com/LY3Bb9m.png"/>
@@ -16,12 +17,11 @@
 :root{
 --bg:#050816;
 --card:#0f172a;
---line:#1e293b;
 --cyan:#00f5ff;
 --green:#00ff88;
 --yellow:#ffd60a;
 --red:#ff4d6d;
---text:#f8fafc;
+--white:#f8fafc;
 --muted:#94a3b8;
 }
 
@@ -34,7 +34,7 @@ box-sizing:border-box;
 body{
 background:var(--bg);
 font-family:'Rajdhani',sans-serif;
-color:var(--text);
+color:var(--white);
 overflow-x:hidden;
 }
 
@@ -42,22 +42,20 @@ body::before{
 content:"";
 position:fixed;
 inset:0;
+
 background:
-radial-gradient(circle at top left,#00f5ff10,transparent 25%),
+radial-gradient(circle at top left,#00f5ff12,transparent 25%),
 radial-gradient(circle at bottom right,#00ff8810,transparent 25%);
+
 z-index:-1;
 }
 
-/* =========================
+/* =====================
 TOPBAR
-========================= */
+===================== */
 
 .topbar{
-position:sticky;
-top:0;
-z-index:9999;
-
-height:48px;
+height:46px;
 
 display:flex;
 align-items:center;
@@ -65,82 +63,74 @@ justify-content:space-between;
 
 padding:0 12px;
 
-background:rgba(5,8,22,.85);
+background:rgba(5,8,22,.88);
 
 backdrop-filter:blur(10px);
 
 border-bottom:1px solid #00f5ff15;
+
+position:sticky;
+top:0;
+z-index:999;
 }
 
-.topbar-left{
+.top-left{
 display:flex;
 align-items:center;
-gap:8px;
+gap:7px;
 }
 
-.topbar-logo{
-width:24px;
+.top-logo{
+width:22px;
 
 filter:
-drop-shadow(0 0 6px #00f5ff);
+drop-shadow(0 0 5px #00f5ff);
 }
 
-.brand{
-display:flex;
-flex-direction:column;
-line-height:1;
-}
-
-.brand-title{
+.top-title{
 font-family:'Orbitron',sans-serif;
-font-size:11px;
+font-size:10px;
 font-weight:700;
 letter-spacing:1px;
 
-background:linear-gradient(90deg,var(--cyan),var(--green));
+background:
+linear-gradient(90deg,var(--cyan),var(--green));
 
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
 }
 
-.brand-sub{
-font-size:7px;
-letter-spacing:2px;
-color:var(--muted);
-margin-top:2px;
-}
-
-.nav-btn{
-width:30px;
-height:30px;
+.home-btn{
+width:28px;
+height:28px;
 
 display:flex;
 align-items:center;
 justify-content:center;
 
-border-radius:10px;
+border-radius:9px;
 
-background:#0f172a;
+background:#111827;
 
 border:1px solid #00f5ff20;
 
 color:var(--cyan);
 
-font-size:11px;
+font-size:10px;
 }
 
-/* =========================
+/* =====================
 HEADER
-========================= */
+===================== */
 
 .hero{
-padding:16px 10px 10px;
+padding:12px 10px 10px;
 text-align:center;
 }
 
 .hero-title{
 font-family:'Orbitron',sans-serif;
-font-size:22px;
+font-size:20px;
 font-weight:800;
 letter-spacing:2px;
 
@@ -157,33 +147,30 @@ linear-gradient(
 }
 
 .hero-sub{
-margin-top:5px;
+margin-top:4px;
 
-font-size:8px;
+font-size:7px;
 letter-spacing:3px;
-text-transform:uppercase;
 
 color:var(--muted);
 }
 
-/* =========================
+/* =====================
 PROFILE
-========================= */
+===================== */
 
 .profile{
-width:calc(100% - 12px);
+width:calc(100% - 10px);
 
 margin:auto;
 
-background:rgba(15,23,42,.88);
+background:rgba(15,23,42,.92);
 
 border:1px solid #00f5ff15;
 
 border-radius:22px;
 
 overflow:hidden;
-
-backdrop-filter:blur(8px);
 
 box-shadow:
 0 0 20px #000;
@@ -192,10 +179,10 @@ box-shadow:
 /* COVER */
 
 .cover{
-height:110px;
+height:95px;
 
 background:
-linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,.65)),
+linear-gradient(rgba(0,0,0,.15),rgba(0,0,0,.7)),
 url('https://images.unsplash.com/photo-1517927033932-b3d18e61fb3a?q=80&w=1200&auto=format&fit=crop');
 
 background-size:cover;
@@ -207,14 +194,14 @@ background-position:center;
 .top{
 text-align:center;
 
-margin-top:-40px;
+margin-top:-34px;
 
-padding:0 10px 12px;
+padding:0 10px 10px;
 }
 
 .avatar-wrap{
 position:relative;
-width:82px;
+width:74px;
 margin:auto;
 }
 
@@ -244,8 +231,8 @@ transform:rotate(360deg);
 .avatar{
 position:relative;
 
-width:82px;
-height:82px;
+width:74px;
+height:74px;
 
 border-radius:50%;
 
@@ -260,11 +247,11 @@ z-index:2;
 
 .online{
 position:absolute;
-right:4px;
-bottom:5px;
+right:3px;
+bottom:4px;
 
-width:14px;
-height:14px;
+width:13px;
+height:13px;
 
 border-radius:50%;
 
@@ -275,62 +262,43 @@ border:2px solid #050816;
 z-index:5;
 }
 
-.name{
-margin-top:10px;
+/* NAME */
 
-font-size:18px;
+.name-row{
+margin-top:9px;
+
+display:flex;
+justify-content:center;
+align-items:center;
+gap:6px;
+
+flex-wrap:wrap;
+}
+
+.name{
+font-size:17px;
 font-weight:800;
 
 font-family:'Orbitron',sans-serif;
 }
 
-.club{
-margin-top:7px;
-
-display:inline-flex;
-align-items:center;
-justify-content:center;
-gap:5px;
-
-padding:6px 10px;
+.club-id{
+padding:5px 9px;
 
 border-radius:999px;
 
 background:#00f5ff10;
 
-border:1px solid #00f5ff25;
-
-color:var(--cyan);
-
-font-size:10px;
-font-weight:700;
-
-max-width:100%;
-
-white-space:nowrap;
-overflow:hidden;
-text-overflow:ellipsis;
-}
-
-.player-id{
-margin-top:7px;
-
-display:inline-flex;
-align-items:center;
-gap:5px;
-
-padding:6px 10px;
-
-border-radius:999px;
-
-background:#ffffff08;
-
-border:1px solid #ffffff10;
+border:1px solid #00f5ff20;
 
 font-size:9px;
 font-weight:700;
 
-color:#cbd5e1;
+color:var(--cyan);
+
+display:flex;
+align-items:center;
+gap:4px;
 }
 
 /* BADGES */
@@ -338,15 +306,16 @@ color:#cbd5e1;
 .badges{
 display:grid;
 grid-template-columns:1fr 1fr;
-gap:8px;
 
-margin-top:12px;
+gap:7px;
+
+margin-top:10px;
 }
 
 .badge{
-padding:10px;
+padding:9px;
 
-border-radius:16px;
+border-radius:15px;
 
 background:
 linear-gradient(145deg,#111827,#0f172a);
@@ -355,20 +324,20 @@ border:1px solid #ffffff10;
 
 display:flex;
 align-items:center;
-gap:8px;
+gap:7px;
 }
 
 .badge-icon{
-width:34px;
-height:34px;
+width:28px;
+height:28px;
 
 display:flex;
 align-items:center;
 justify-content:center;
 
-border-radius:12px;
+border-radius:10px;
 
-font-size:13px;
+font-size:11px;
 }
 
 .rank-icon{
@@ -384,50 +353,79 @@ color:var(--yellow);
 .badge small{
 display:block;
 
-font-size:7px;
+font-size:6px;
 letter-spacing:1px;
 
 color:var(--muted);
 }
 
 .badge strong{
-font-size:14px;
+font-size:13px;
 font-weight:800;
 }
 
-/* STATS */
+/* =====================
+STATS
+===================== */
 
 .stats{
-padding:0 10px 12px;
+padding:0 10px 10px;
 
 display:grid;
 grid-template-columns:repeat(3,1fr);
 
-gap:8px;
+gap:7px;
 }
 
 .stat{
-padding:10px 8px;
+padding:8px 5px;
 
-border-radius:16px;
+border-radius:15px;
 
 background:
 linear-gradient(145deg,#111827,#0f172a);
 
 border:1px solid #ffffff10;
 
-text-align:center;
+display:flex;
+align-items:center;
+gap:7px;
 }
 
-.stat i{
-font-size:12px;
+.stat-icon{
+width:26px;
+height:26px;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+border-radius:9px;
+
+background:#00f5ff10;
+
 color:var(--cyan);
+
+font-size:10px;
+
+flex-shrink:0;
+}
+
+.stat-info{
+line-height:1;
+}
+
+.stat-value{
+font-size:14px;
+font-weight:800;
+
+font-family:'Orbitron',sans-serif;
 }
 
 .stat-label{
-margin-top:5px;
+margin-top:3px;
 
-font-size:7px;
+font-size:6px;
 letter-spacing:1px;
 
 text-transform:uppercase;
@@ -435,19 +433,12 @@ text-transform:uppercase;
 color:var(--muted);
 }
 
-.stat-value{
-margin-top:4px;
-
-font-size:18px;
-font-weight:800;
-
-font-family:'Orbitron',sans-serif;
-}
-
-/* MATCHES */
+/* =====================
+MATCHES
+===================== */
 
 .matches{
-padding:0 10px 14px;
+padding:0 10px 12px;
 }
 
 .matches-head{
@@ -455,17 +446,17 @@ display:flex;
 align-items:center;
 justify-content:space-between;
 
-margin-bottom:10px;
+margin-bottom:8px;
 }
 
 .matches-title{
-font-size:13px;
+font-size:11px;
 font-family:'Orbitron',sans-serif;
 font-weight:700;
 }
 
 .match-count{
-padding:5px 8px;
+padding:4px 7px;
 
 border-radius:999px;
 
@@ -473,7 +464,7 @@ background:#00f5ff10;
 
 border:1px solid #00f5ff20;
 
-font-size:8px;
+font-size:7px;
 font-weight:700;
 
 color:var(--cyan);
@@ -485,13 +476,13 @@ grid-template-columns:1fr auto 1fr;
 
 align-items:center;
 
-gap:8px;
+gap:5px;
 
-padding:10px;
+padding:9px;
 
-margin-bottom:8px;
+margin-bottom:7px;
 
-border-radius:16px;
+border-radius:14px;
 
 background:
 linear-gradient(145deg,#111827,#0f172a);
@@ -502,7 +493,7 @@ border:1px solid #ffffff10;
 .player{
 display:flex;
 align-items:center;
-gap:6px;
+gap:5px;
 }
 
 .player.right{
@@ -511,14 +502,14 @@ text-align:right;
 }
 
 .player-avatar{
-width:28px;
-height:28px;
+width:24px;
+height:24px;
 
 display:flex;
 align-items:center;
 justify-content:center;
 
-border-radius:10px;
+border-radius:8px;
 
 background:#0b1220;
 
@@ -526,22 +517,22 @@ border:1px solid #00f5ff15;
 
 color:var(--cyan);
 
-font-size:10px;
+font-size:9px;
 }
 
 .player-name{
-font-size:10px;
+font-size:9px;
 font-weight:700;
+
+max-width:60px;
 
 white-space:nowrap;
 overflow:hidden;
 text-overflow:ellipsis;
-
-max-width:70px;
 }
 
 .player-id-small{
-font-size:7px;
+font-size:6px;
 color:var(--muted);
 margin-top:1px;
 }
@@ -551,11 +542,11 @@ text-align:center;
 }
 
 .score{
-padding:6px 10px;
+padding:5px 9px;
 
-border-radius:12px;
+border-radius:10px;
 
-font-size:12px;
+font-size:11px;
 font-weight:800;
 
 font-family:'Orbitron',sans-serif;
@@ -580,24 +571,24 @@ border:1px solid #ffd60a25;
 }
 
 .match-type{
-margin-top:4px;
+margin-top:3px;
 
 font-size:6px;
 letter-spacing:1px;
 
-text-transform:uppercase;
-
 color:var(--muted);
+
+text-transform:uppercase;
 }
 
 /* FOOTER */
 
 .footer{
-padding:12px;
+padding:10px;
 
 text-align:center;
 
-font-size:8px;
+font-size:7px;
 letter-spacing:2px;
 
 color:var(--muted);
@@ -606,11 +597,11 @@ border-top:1px solid #ffffff10;
 }
 
 .loader{
-padding:60px 20px;
+padding:50px 20px;
 
 text-align:center;
 
-font-size:14px;
+font-size:13px;
 font-weight:700;
 
 color:var(--cyan);
@@ -623,20 +614,22 @@ color:var(--cyan);
 
 <!-- TOPBAR -->
 
-<a href="https://goatfcbd.com" class="topbar" style="text-decoration:none;">
+<a href="https://goatfcbd.com"
+class="topbar"
+style="text-decoration:none;">
 
-<div class="topbar-left">
+<div class="top-left">
 
-<img src="https://i.imgur.com/LY3Bb9m.png" class="topbar-logo">
+<img src="https://i.imgur.com/LY3Bb9m.png"
+class="top-logo">
 
-<div class="brand">
-<div class="brand-title">GOAT FC</div>
-<div class="brand-sub">ESPORTS</div>
+<div class="top-title">
+GOAT FC
 </div>
 
 </div>
 
-<div class="nav-btn">
+<div class="home-btn">
 <i class="fa-solid fa-house"></i>
 </div>
 
@@ -697,21 +690,26 @@ const c=str[i];
 if(c==='"'){
 quote=!quote;
 }
+
 else if(c===','&&!quote){
 row.push(col);
 col='';
 }
+
 else if((c==='\n'||c==='\r')&&!quote){
 
 if(col||row.length){
+
 row.push(col);
 rows.push(row);
 
 row=[];
 col='';
+
 }
 
 }
+
 else{
 col+=c;
 }
@@ -719,8 +717,10 @@ col+=c;
 }
 
 if(col||row.length){
+
 row.push(col);
 rows.push(row);
+
 }
 
 return rows;
@@ -732,9 +732,11 @@ async function load(){
 try{
 
 const [matchRes,memberRes,cpRes]=await Promise.all([
+
 fetch(MATCH_CSV+'&t='+Date.now()),
 fetch(MEMBER_CSV+'&t='+Date.now()),
 fetch(CP_CSV+'&t='+Date.now())
+
 ]);
 
 const matchText=await matchRes.text();
@@ -779,6 +781,7 @@ const matches=[];
 matchRows.slice(1).forEach(r=>{
 
 if(!r.length)return;
+
 if((r[9]||'').toLowerCase()!=='yes')return;
 
 const p1=normalize(r[0]);
@@ -837,11 +840,15 @@ matches.forEach(m=>{
 let me,op;
 
 if(normalize(m.p1)===playerId){
+
 me=m.s1;
 op=m.s2;
+
 }else{
+
 me=m.s2;
 op=m.s1;
+
 }
 
 gs+=me;
@@ -883,24 +890,25 @@ const html=`
 
 <div class="avatar-ring"></div>
 
-<img class="avatar" crossorigin="anonymous" src="${info.pic}">
+<img class="avatar"
+crossorigin="anonymous"
+src="${info.pic}">
 
 <div class="online"></div>
 
 </div>
 
+<div class="name-row">
+
 <div class="name">
 ${info.name}
 </div>
 
-<div class="club">
+<div class="club-id">
 <i class="fa-solid fa-shield-halved"></i>
 ${info.club}
 </div>
 
-<div class="player-id">
-<i class="fa-solid fa-id-card"></i>
-${playerId.toUpperCase()}
 </div>
 
 <div class="badges">
@@ -935,63 +943,130 @@ ${playerId.toUpperCase()}
 
 </div>
 
+<!-- STATS -->
+
 <div class="stats">
 
 <div class="stat">
+
+<div class="stat-icon">
 <i class="fa-solid fa-medal"></i>
-<div class="stat-label">Wins</div>
+</div>
+
+<div class="stat-info">
 <div class="stat-value">${win}</div>
+<div class="stat-label">Wins</div>
+</div>
+
 </div>
 
 <div class="stat">
+
+<div class="stat-icon">
 <i class="fa-solid fa-heart-crack"></i>
-<div class="stat-label">Loss</div>
+</div>
+
+<div class="stat-info">
 <div class="stat-value">${loss}</div>
+<div class="stat-label">Loss</div>
+</div>
+
 </div>
 
 <div class="stat">
+
+<div class="stat-icon">
 <i class="fa-solid fa-handshake"></i>
-<div class="stat-label">Draw</div>
+</div>
+
+<div class="stat-info">
 <div class="stat-value">${draw}</div>
+<div class="stat-label">Draw</div>
+</div>
+
 </div>
 
 <div class="stat">
+
+<div class="stat-icon">
 <i class="fa-solid fa-gamepad"></i>
-<div class="stat-label">Match</div>
+</div>
+
+<div class="stat-info">
 <div class="stat-value">${total}</div>
+<div class="stat-label">Match</div>
+</div>
+
 </div>
 
 <div class="stat">
+
+<div class="stat-icon">
 <i class="fa-solid fa-chart-line"></i>
-<div class="stat-label">Win%</div>
+</div>
+
+<div class="stat-info">
 <div class="stat-value">${wr}</div>
+<div class="stat-label">Win%</div>
+</div>
+
 </div>
 
 <div class="stat">
+
+<div class="stat-icon">
 <i class="fa-solid fa-bullseye"></i>
-<div class="stat-label">Goal R</div>
+</div>
+
+<div class="stat-info">
 <div class="stat-value">${gr}</div>
+<div class="stat-label">Goal R</div>
+</div>
+
 </div>
 
 <div class="stat">
+
+<div class="stat-icon">
 <i class="fa-solid fa-futbol"></i>
-<div class="stat-label">Scored</div>
+</div>
+
+<div class="stat-info">
 <div class="stat-value">${gs}</div>
+<div class="stat-label">Scored</div>
+</div>
+
 </div>
 
 <div class="stat">
+
+<div class="stat-icon">
 <i class="fa-solid fa-shield"></i>
-<div class="stat-label">Against</div>
+</div>
+
+<div class="stat-info">
 <div class="stat-value">${gc}</div>
+<div class="stat-label">Against</div>
+</div>
+
 </div>
 
 <div class="stat">
+
+<div class="stat-icon">
 <i class="fa-solid fa-crown"></i>
-<div class="stat-label">7+ Goal</div>
+</div>
+
+<div class="stat-info">
 <div class="stat-value">${seven}</div>
+<div class="stat-label">7+ Goal</div>
 </div>
 
 </div>
+
+</div>
+
+<!-- MATCHES -->
 
 <div class="matches">
 

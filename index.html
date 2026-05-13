@@ -2,991 +2,327 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>GOAT FC Player Profile</title>
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+<title>GOAT FC Profile</title>
 
 <style>
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-}
+*{margin:0;padding:0;box-sizing:border-box}
 
 body{
-font-family:'Segoe UI',sans-serif;
 background:#020617;
 color:#fff;
+font-family:Segoe UI;
 overflow-x:hidden;
 }
 
-/* BG */
-
-body::before{
-content:"";
-position:fixed;
-inset:0;
-background:
-radial-gradient(circle at top left,#00f5ff11,transparent 25%),
-radial-gradient(circle at bottom right,#00f5ff11,transparent 25%);
-z-index:-1;
-}
-
 /* HEADER */
-
-.header-wrap{
-padding:10px 10px 4px;
-text-align:center;
-}
-
 .header{
-display:flex;
-align-items:center;
-justify-content:center;
-gap:8px;
+text-align:center;
+padding:10px 10px 2px;
 }
 
 .logo{
-width:36px;
+width:32px;
 filter:drop-shadow(0 0 10px #00f5ff);
 }
 
 .title{
-font-size:19px;
+font-size:16px;
 font-weight:800;
-text-transform:uppercase;
+color:#00f5ff;
 letter-spacing:1px;
-
-background:linear-gradient(
-90deg,
-#00f5ff,
-#00ff88,
-#00f5ff
-);
-
-background-size:300%;
-
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
-
-animation:rgb 6s linear infinite;
 }
-
-@keyframes rgb{
-0%{background-position:0%}
-100%{background-position:300%}
-}
-
-/* SLOGAN */
 
 .slogan{
-margin-top:3px;
 font-size:10px;
-letter-spacing:1px;
 color:#94a3b8;
+margin-top:2px;
 }
 
-/* PROFILE */
-
-.profile{
-width:min(100% - 14px,700px);
+/* CARD */
+.card{
+width:min(720px,95%);
 margin:auto;
-
-border-radius:18px;
-overflow:hidden;
-
 background:#08111f;
-
 border:1px solid #00f5ff22;
-
-box-shadow:
-0 0 25px #00f5ff11;
+border-radius:16px;
+overflow:hidden;
+box-shadow:0 0 20px #00f5ff11;
 }
 
 /* COVER */
-/* CHANGE COVER IMAGE HERE */
-
 .cover{
-height:88px;
-
-background:
-linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.8)),
-url('https://c4.wallpaperflare.com/wallpaper/398/874/541/champions-league-stadium-wallpaper-preview.jpg');
-
+height:85px;
+background:url('https://c4.wallpaperflare.com/wallpaper/398/874/541/champions-league-stadium-wallpaper-preview.jpg');
 background-size:cover;
 background-position:center;
 }
 
 /* TOP */
-
 .top{
 text-align:center;
-margin-top:-38px;
-padding:0 10px 10px;
+margin-top:-35px;
+padding-bottom:8px;
 }
-
-/* AVATAR */
 
 .avatar{
-width:76px;
-height:76px;
-
+width:70px;height:70px;
 border-radius:50%;
-object-fit:cover;
-
 border:2px solid #00f5ff;
-
-background:#0f172a;
-
-box-shadow:
-0 0 10px #00f5ff,
-0 0 20px #00f5ff22;
+box-shadow:0 0 15px #00f5ff33;
+object-fit:cover;
 }
 
-/* NAME + ID */
-
-.name-row{
-margin-top:7px;
-
+.nameRow{
 display:flex;
 justify-content:center;
-align-items:center;
 gap:6px;
-
-flex-wrap:wrap;
-}
-
-.name{
-font-size:16px;
+margin-top:5px;
+font-size:15px;
 font-weight:700;
 }
 
-.clubid{
-font-size:12px;
-color:#00f5ff;
-font-weight:600;
-}
+.name{color:#fff}
+.cid{color:#00f5ff}
 
-/* RANK */
-
-.rank-row{
-margin-top:7px;
-
+.rankRow{
 display:flex;
 justify-content:center;
-align-items:center;
 gap:8px;
-
-flex-wrap:wrap;
-}
-
-.rank{
-padding:5px 10px;
-
-border-radius:999px;
-
-background:#00f5ff11;
-
-border:1px solid #00f5ff44;
-
-font-size:10px;
-color:#00f5ff;
+font-size:11px;
+color:#94a3b8;
+margin-top:4px;
 }
 
 .cp{
-padding:5px 10px;
-
-border-radius:999px;
-
-background:#facc1515;
-
-border:1px solid #facc1555;
-
-font-size:10px;
-color:#facc15;
+color:#fbbf24;
 }
 
-/* GRID */
-
+/* STATS */
 .grid{
 display:grid;
-
-grid-template-columns:repeat(3,1fr);
-
-gap:7px;
-
-padding:10px;
-}
-
-.box{
-background:
-linear-gradient(
-145deg,
-#0f172a,
-#07101d
-);
-
-border:1px solid #00f5ff22;
-
-border-radius:12px;
-
-padding:9px 5px;
-
-text-align:center;
-
-box-shadow:
-inset 0 0 10px #00f5ff11,
-0 0 10px #000;
-}
-
-.label{
-font-size:9px;
-color:#94a3b8;
-
-text-transform:uppercase;
-
-letter-spacing:.5px;
-}
-
-.value{
-margin-top:4px;
-
-font-size:15px;
-font-weight:700;
-
-color:#00f5ff;
-}
-
-/* MATCHES */
-
-.matches{
-padding:4px 10px 12px;
-}
-
-.matches-title{
-text-align:center;
-
-color:#00f5ff;
-
-margin-bottom:8px;
-
-font-size:11px;
-
-font-weight:700;
-
-letter-spacing:1px;
-}
-
-/* SLIDER */
-
-.slider{
-display:flex;
-overflow-x:auto;
-gap:8px;
-
-scroll-snap-type:x mandatory;
-
-padding-bottom:4px;
-}
-
-.slider::-webkit-scrollbar{
-display:none;
-}
-
-/* MATCH CARD */
-
-.match{
-min-width:100%;
-
-scroll-snap-align:start;
-
-background:#0f172a;
-
-border:1px solid #1e293b;
-
-border-radius:12px;
-
+grid-template-columns:repeat(4,1fr);
+gap:6px;
 padding:8px;
 }
 
-.row{
+.box{
+background:#0f172a;
+border:1px solid #00f5ff22;
+border-radius:10px;
+padding:6px;
+text-align:center;
+}
+
+.label{font-size:9px;color:#94a3b8}
+.value{font-size:13px;color:#00f5ff;font-weight:700}
+
+/* MATCHES */
+.matchWrap{
+padding:8px;
+}
+
+.matchTitle{
+text-align:center;
+font-size:11px;
+color:#00f5ff;
+margin-bottom:6px;
+}
+
+.matchGrid{
+display:flex;
+overflow-x:auto;
+gap:6px;
+padding-bottom:6px;
+scroll-snap-type:x mandatory;
+}
+
+.match{
+min-width:160px;
+background:#0f172a;
+border:1px solid #1e293b;
+border-radius:10px;
+padding:6px;
+scroll-snap-align:start;
+font-size:10px;
+}
+
+.mTop{
 display:flex;
 justify-content:space-between;
-align-items:center;
-gap:8px;
-}
-
-.player{
-font-size:10px;
-width:34%;
-}
-
-.player-name{
-font-weight:600;
-}
-
-.player-id{
-font-size:8px;
+font-size:9px;
 color:#94a3b8;
-margin-top:1px;
-}
-
-.center{
-text-align:center;
-width:32%;
 }
 
 .score{
-display:inline-block;
-
-padding:4px 8px;
-
-border-radius:7px;
-
-font-size:10px;
-font-weight:700;
+text-align:center;
+font-weight:800;
+margin:4px 0;
 }
 
 .type{
-margin-top:4px;
-font-size:8px;
-color:#94a3b8;
-}
-
-.win{
-background:#22c55e22;
-color:#22c55e;
-}
-
-.loss{
-background:#ef444422;
-color:#ef4444;
-}
-
-.draw{
-background:#eab30822;
-color:#eab308;
-}
-
-/* FOOTER */
-
-.footer{
 text-align:center;
-
-padding:8px 0 12px;
-
-font-size:9px;
-
+font-size:8px;
 color:#64748b;
-
-letter-spacing:1px;
 }
 
-/* MOBILE */
-
-@media(max-width:768px){
-
-.grid{
-grid-template-columns:repeat(3,1fr);
-}
-
-.name{
-font-size:15px;
-}
-
-}
+/* COLORS */
+.win{color:#22c55e}
+.loss{color:#ef4444}
+.draw{color:#eab308}
 
 </style>
 </head>
 
 <body>
 
-<div class="header-wrap">
-
 <div class="header">
-
-<img class="logo"
-src="https://i.imgur.com/LY3Bb9m.png">
-
-<div class="title">
-PLAYER PROFILE
+<img class="logo" src="https://i.imgur.com/LY3Bb9m.png">
+<div class="title">PLAYER PROFILE</div>
+<div class="slogan">BE A GAME CHANGER</div>
 </div>
 
-</div>
-
-<div class="slogan">
-BE A GAME CHANGER
-</div>
-
-</div>
-
-<div id="app"
-style="text-align:center;padding:40px;color:#00f5ff;">
-Loading Profile...
-</div>
-
-<script>
-
-/* =========================
-CSV LINKS
-========================= */
-
-const MATCH_CSV =
-"https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv";
-
-const MEMBER_CSV =
-"https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv";
-
-const CP_CSV =
-"https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1033046915&single=true&output=csv";
-
-/* =========================
-PLAYER ID
-========================= */
-
-const params =
-new URLSearchParams(location.search);
-
-function normalize(x){
-
-return (x || "")
-.toLowerCase()
-.replace(/[^a-z0-9]/g,'');
-
-}
-
-const playerId =
-normalize(
-params.get("id") || "GFC-001"
-);
-
-/* =========================
-CSV PARSER
-========================= */
-
-function parseCSV(text){
-
-const rows=[];
-
-let row=[];
-
-let current='';
-
-let inside=false;
-
-for(let i=0;i<text.length;i++){
-
-const c=text[i];
-const next=text[i+1];
-
-if(c === '"'){
-
-if(inside && next === '"'){
-
-current += '"';
-i++;
-
-}else{
-
-inside=!inside;
-
-}
-
-}else if(c===',' && !inside){
-
-row.push(current);
-current='';
-
-}else if(
-(c === '\n' || c === '\r')
-&& !inside){
-
-if(current || row.length){
-
-row.push(current);
-rows.push(row);
-
-}
-
-row=[];
-current='';
-
-}else{
-
-current += c;
-
-}
-
-}
-
-if(current || row.length){
-
-row.push(current);
-rows.push(row);
-
-}
-
-return rows;
-
-}
-
-/* =========================
-LOAD
-========================= */
-
-async function load(){
-
-try{
-
-const [
-matchText,
-memberText,
-cpText
-
-] = await Promise.all([
-
-fetch(MATCH_CSV+"&t="+Date.now())
-.then(r=>r.text()),
-
-fetch(MEMBER_CSV+"&t="+Date.now())
-.then(r=>r.text()),
-
-fetch(CP_CSV+"&t="+Date.now())
-.then(r=>r.text())
-
-]);
-
-const matchRows=parseCSV(matchText);
-const memberRows=parseCSV(memberText);
-const cpRows=parseCSV(cpText);
-
-/* MEMBERS */
-
-const members={};
-
-memberRows.slice(1).forEach(r=>{
-
-members[
-normalize(r[1])
-]={
-
-name:r[0] || "Unknown",
-
-pic:r[4] ||
-"https://i.imgur.com/LY3Bb9m.png",
-
-club:r[1]
-
-};
-
-});
-
-/* CP */
-
-const cpData={};
-
-cpRows.slice(1).forEach(r=>{
-
-cpData[
-normalize(r[0])
-]=r[7] || "0";
-
-});
-
-/* BOARD */
-
-const board={};
-
-matchRows.slice(1).forEach(r=>{
-
-if((r[9] || "")
-.toLowerCase() !== "yes")
-return;
-
-const p1=normalize(r[0]);
-const p2=normalize(r[1]);
-
-if(!board[p1]){
-
-board[p1]={
-points:0,
-win:0,
-gs:0,
-gc:0
-};
-
-}
-
-if(!board[p2]){
-
-board[p2]={
-points:0,
-win:0,
-gs:0,
-gc:0
-};
-
-}
-
-board[p1].points += (+r[5]||0);
-board[p2].points += (+r[6]||0);
-
-if(+r[3] > +r[4])
-board[p1].win++;
-
-if(+r[4] > +r[3])
-board[p2].win++;
-
-board[p1].gs += (+r[3]||0);
-board[p1].gc += (+r[4]||0);
-
-board[p2].gs += (+r[4]||0);
-board[p2].gc += (+r[3]||0);
-
-});
-
-/* RANK */
-
-const ranking=
-Object.entries(board)
-
-.map(([id,v])=>{
-
-return{
-
-id,
-
-points:v.points,
-
-win:v.win,
-
-gd:v.gs-v.gc
-
-};
-
-})
-
-.sort((a,b)=>
-
-b.points-a.points ||
-
-b.win-a.win ||
-
-b.gd-a.gd
-
-);
-
-const rank=
-ranking.findIndex(x=>
-x.id===playerId
-)+1;
-
-/* MATCHES */
-
-let matches=[];
-
-matchRows.slice(1).forEach(r=>{
-
-if((r[9] || "")
-.toLowerCase() !== "yes")
-return;
-
-const p1=normalize(r[0]);
-const p2=normalize(r[1]);
-
-if(p1!==playerId &&
-p2!==playerId)
-return;
-
-matches.push({
-
-p1:r[0],
-p2:r[1],
-
-p1n:
-members[p1]?.name ||
-r[0],
-
-p2n:
-members[p2]?.name ||
-r[1],
-
-type:r[2],
-
-s1:+r[3],
-s2:+r[4]
-
-});
-
-});
-
-/* STATS */
-
-let win=0,
-loss=0,
-draw=0,
-gs=0,
-gc=0,
-seven=0;
-
-matches.forEach(m=>{
-
-let me,op;
-
-if(normalize(m.p1)===playerId){
-
-me=m.s1;
-op=m.s2;
-
-}else{
-
-me=m.s2;
-op=m.s1;
-
-}
-
-gs += me;
-gc += op;
-
-if(me>=7)
-seven++;
-
-if(me>op)
-win++;
-
-else if(me<op)
-loss++;
-
-else
-draw++;
-
-});
-
-const total=matches.length;
-
-const wr=
-((win/(total||1))*100)
-.toFixed(1);
-
-const info=
-members[playerId] || {
-
-name:"Unknown Player",
-
-pic:"https://i.imgur.com/LY3Bb9m.png",
-
-club:"N/A"
-
-};
-
-const cp=
-cpData[playerId] || "0";
-
-/* RENDER */
-
-document.getElementById("app")
-.innerHTML=`
-
-<div class="profile">
+<div class="card" id="card">
 
 <div class="cover"></div>
 
 <div class="top">
 
-<img class="avatar"
-src="${info.pic}">
+<img id="img" class="avatar">
 
-<div class="name-row">
-
-<div class="name">
-${info.name}
+<div class="nameRow">
+<div class="name" id="name">Loading</div>
+<div class="cid" id="cid">...</div>
 </div>
 
-<div class="clubid">
-| ${info.club}
-</div>
-
-</div>
-
-<div class="rank-row">
-
-<div class="rank">
-🏆 OVERALL #${rank || '-'}
-</div>
-
-<div class="cp">
-🪙 ${cp} CP
-</div>
-
+<div class="rankRow">
+<div>🏆 Rank #<span id="rank">0</span></div>
+<div>🪙 CP: <span class="cp" id="cp">0</span></div>
 </div>
 
 </div>
 
 <div class="grid">
 
-<div class="box">
-<div class="label">Wins</div>
-<div class="value">${win}</div>
+<div class="box"><div class="label">Win</div><div class="value" id="win"></div></div>
+<div class="box"><div class="label">Loss</div><div class="value" id="loss"></div></div>
+<div class="box"><div class="label">Draw</div><div class="value" id="draw"></div></div>
+<div class="box"><div class="label">Match</div><div class="value" id="match"></div></div>
+
 </div>
 
-<div class="box">
-<div class="label">Loss</div>
-<div class="value">${loss}</div>
-</div>
+<div class="matchWrap">
 
-<div class="box">
-<div class="label">Draw</div>
-<div class="value">${draw}</div>
-</div>
+<div class="matchTitle">RECENT MATCHES</div>
 
-<div class="box">
-<div class="label">Matches</div>
-<div class="value">${total}</div>
-</div>
+<div class="matchGrid" id="matches"></div>
 
-<div class="box">
-<div class="label">Win Rate</div>
-<div class="value">${wr}%</div>
-</div>
-
-<div class="box">
-<div class="label">Scored</div>
-<div class="value">${gs}</div>
-</div>
-
-<div class="box">
-<div class="label">Conceded</div>
-<div class="value">${gc}</div>
-</div>
-
-<div class="box">
-<div class="label">Difference</div>
-<div class="value">${gs-gc}</div>
-</div>
-
-<div class="box">
-<div class="label">7+ Goals</div>
-<div class="value">${seven}</div>
 </div>
 
 </div>
 
-<div class="matches">
+<script>
 
-<div class="matches-title">
-RECENT MATCHES
-</div>
+const M = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv";
+const U = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv";
+const C = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1252347749&single=true&output=csv";
 
-<div class="slider">
+const id = new URLSearchParams(location.search).get("id")?.toLowerCase() || "gfc001";
 
-${matches.reverse()
-.slice(0,20)
-.map(m=>{
-
-let me,op,cls;
-
-if(normalize(m.p1)
-===playerId){
-
-me=m.s1;
-op=m.s2;
-
-}else{
-
-me=m.s2;
-op=m.s1;
-
+function norm(x){
+return (x||"").toLowerCase().replace(/[^a-z0-9]/g,"");
 }
 
-if(me>op)
-cls='win';
+function csv(t){
+return t.split("\n").map(r=>r.split(","));
+}
 
-else if(me<op)
-cls='loss';
+async function load(){
 
-else
-cls='draw';
+const [m,u,c] = await Promise.all([
+fetch(M).then(r=>r.text()),
+fetch(U).then(r=>r.text()),
+fetch(C).then(r=>r.text())
+]);
 
-return `
+const Mx = csv(m);
+const Ux = csv(u);
+const Cx = csv(c);
 
+/* USER */
+let user = Ux.find(r=>norm(r[1])===id);
+document.getElementById("name").innerText = user?.[0] || "Player";
+document.getElementById("cid").innerText = user?.[1] || id;
+document.getElementById("img").src = user?.[4] || "https://i.imgur.com/LY3Bb9m.png";
+
+/* CP */
+let cp = Cx.find(r=>norm(r[0])===id);
+document.getElementById("cp").innerText = cp?.[7] || 0;
+
+/* STATS */
+let win=0,loss=0,draw=0;
+
+let matches=[];
+
+Mx.slice(1).forEach(r=>{
+
+if(norm(r[9])!=="yes") return;
+
+let p1=norm(r[0]);
+let p2=norm(r[1]);
+
+if(p1!==id && p2!==id) return;
+
+let s1=+r[3], s2=+r[4];
+
+let me = p1===id ? s1 : s2;
+let op = p1===id ? s2 : s1;
+
+if(me>op) win++;
+else if(me<op) loss++;
+else draw++;
+
+matches.push({
+p1:r[0],
+p2:r[1],
+s1,s2,
+type:r[2]
+});
+
+});
+
+document.getElementById("win").innerText=win;
+document.getElementById("loss").innerText=loss;
+document.getElementById("draw").innerText=draw;
+document.getElementById("match").innerText=matches.length;
+
+/* RECENT 20 SLIDE STYLE */
+let box = document.getElementById("matches");
+
+matches.slice(-20).reverse().forEach(m=>{
+
+let cls = (m.s1>m.s2)?"win":(m.s1<m.s2)?"loss":"draw";
+
+box.innerHTML += `
 <div class="match">
 
-<div class="row">
-
-<div class="player">
-
-<div class="player-name">
-${m.p1n}
+<div class="mTop">
+<span>${m.p1}</span>
+<span>${m.p2}</span>
 </div>
-
-<div class="player-id">
-${m.p1}
-</div>
-
-</div>
-
-<div class="center">
 
 <div class="score ${cls}">
-${m.s1}-${m.s2}
+${m.s1} - ${m.s2}
 </div>
 
-<div class="type">
-${m.type}
-</div>
+<div class="type">${m.type}</div>
 
-</div>
-
-<div class="player"
-style="text-align:right;">
-
-<div class="player-name">
-${m.p2n}
-</div>
-
-<div class="player-id">
-${m.p2}
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-`;
-
-}).join('')}
-
-</div>
-
-</div>
-
-<div class="footer">
-POWERED BY GOAT FC
-</div>
-
-</div>
-
-`;
-
-}catch(err){
-
-document.getElementById("app")
-.innerHTML=`
-<div style="padding:40px;">
-Failed To Load Profile
 </div>
 `;
 
-console.log(err);
-
-}
+});
 
 }
 

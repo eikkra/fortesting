@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>GOAT FC Player Profile</title>
 
 <link rel="stylesheet"
@@ -36,15 +37,19 @@ display:flex;
 justify-content:center;
 align-items:center;
 gap:8px;
-padding:10px 10px 2px;
+padding:10px 10px 0;
 }
 
-.logo{width:32px}
+.logo{
+width:32px;
+filter:drop-shadow(0 0 10px #00f5ff);
+}
 
 /* TITLE */
 .title{
 font-size:18px;
 font-weight:800;
+text-transform:uppercase;
 background:linear-gradient(90deg,#00f5ff,#00ff88,#00f5ff);
 background-size:300%;
 -webkit-background-clip:text;
@@ -57,32 +62,32 @@ animation:move 6s linear infinite;
 100%{background-position:300%}
 }
 
-/* TOP TEXT */
-.topbrand{
+/* POWER */
+.power{
 text-align:center;
-font-size:10px;
+font-size:9px;
 color:#00f5ff;
-letter-spacing:2px;
 margin-bottom:6px;
-font-weight:600;
+letter-spacing:1px;
 }
 
-/* PROFILE */
+/* CARD */
 .profile{
-width:min(96%,700px);
+width:min(700px,96%);
 margin:auto;
 background:#08111f;
+border:1px solid #00f5ff22;
 border-radius:16px;
 overflow:hidden;
-border:1px solid #00f5ff22;
+box-shadow:0 0 20px #00f5ff11;
 }
 
 /* COVER */
 .cover{
 height:90px;
 background:
-linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.8)),
-url('https://c4.wallpaperflare.com/wallpaper/398/874/541/champions-league-stadium-wallpaper-preview.jpg');
+linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.7)),
+url("https://c4.wallpaperflare.com/wallpaper/398/874/541/champions-league-stadium-wallpaper-preview.jpg");
 background-size:cover;
 }
 
@@ -90,60 +95,57 @@ background-size:cover;
 .top{
 text-align:center;
 margin-top:-35px;
-padding-bottom:10px;
+padding:0 10px 10px;
 }
 
+/* AVATAR */
 .avatar{
-width:75px;height:75px;
+width:75px;
+height:75px;
 border-radius:50%;
 border:2px solid #00f5ff;
-box-shadow:0 0 15px #00f5ff55;
 object-fit:cover;
+box-shadow:0 0 15px #00f5ff44;
 }
 
-/* NAME + CLUB ROW */
+/* NAME ROW */
 .nameRow{
 display:flex;
 justify-content:center;
-gap:8px;
+align-items:center;
+gap:6px;
 margin-top:6px;
-font-weight:700;
 }
 
 .name{
 font-size:16px;
-color:#fff;
+font-weight:800;
 }
 
-.club{
-font-size:13px;
+.clubid{
+font-size:12px;
 color:#00f5ff;
-text-shadow:0 0 10px #00f5ff55;
+font-weight:700;
 }
 
-/* RANK + CP ROW */
-.metaRow{
+/* SECOND ROW */
+.subRow{
 display:flex;
 justify-content:center;
+align-items:center;
 gap:10px;
-margin-top:5px;
+margin-top:4px;
 font-size:11px;
 }
 
-.rankBox{
-background:#00f5ff15;
-border:1px solid #00f5ff33;
-padding:4px 8px;
-border-radius:999px;
-color:#00f5ff;
+.rank{
+color:#fff;
+opacity:.9;
 }
 
-.cpBox{
-background:#ffd70015;
-border:1px solid #ffd70044;
-padding:4px 8px;
-border-radius:999px;
+.cp{
 color:#ffd700;
+font-weight:700;
 }
 
 /* GRID */
@@ -156,14 +158,23 @@ padding:10px;
 
 .box{
 background:#0f172a;
-border:1px solid #00f5ff22;
 padding:8px;
 border-radius:10px;
 text-align:center;
+border:1px solid #00f5ff22;
 }
 
-.label{font-size:9px;color:#94a3b8}
-.value{font-size:14px;color:#00f5ff;font-weight:700}
+.label{
+font-size:9px;
+color:#94a3b8;
+}
+
+.value{
+font-size:14px;
+font-weight:800;
+color:#00f5ff;
+margin-top:3px;
+}
 
 /* MATCH */
 .match{
@@ -175,10 +186,11 @@ margin:4px 10px;
 background:#0f172a;
 border-radius:10px;
 font-size:10px;
-border:1px solid #1e293b;
 }
 
-.center{text-align:center}
+.center{
+text-align:center;
+}
 
 .score{
 padding:3px 6px;
@@ -186,23 +198,23 @@ border-radius:6px;
 font-weight:700;
 }
 
-.win{color:#22c55e;background:#22c55e22}
-.loss{color:#ef4444;background:#ef444422}
-.draw{color:#eab308;background:#eab30822}
+.win{color:#22c55e}
+.loss{color:#ef4444}
+.draw{color:#eab308}
 
 /* DOWNLOAD */
 .download{
 text-align:center;
-padding:8px;
+padding:10px;
 }
 
 .download button{
-width:32px;
-height:32px;
-border:none;
+width:34px;
+height:34px;
 border-radius:50%;
+border:none;
 background:#00f5ff;
-font-size:12px;
+font-size:14px;
 cursor:pointer;
 }
 
@@ -211,8 +223,12 @@ cursor:pointer;
 text-align:center;
 font-size:10px;
 color:#00f5ff;
-padding:6px;
-letter-spacing:2px;
+padding-bottom:10px;
+letter-spacing:1px;
+}
+
+@media(max-width:600px){
+.grid{grid-template-columns:repeat(3,1fr)}
 }
 
 </style>
@@ -225,126 +241,135 @@ letter-spacing:2px;
 <div class="title">PLAYER PROFILE</div>
 </div>
 
-<div class="topbrand">BE THE GAME CHANGER</div>
+<div class="power">BE THE GAME CHANGER</div>
 
-<div id="app"></div>
+<div id="app">Loading...</div>
 
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
 <script>
 
-const MATCH_CSV =
-"https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv";
+const MATCH_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv";
 
-const MEMBER_CSV =
-"https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv";
+const MEMBER_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv";
 
-const CP_CSV =
-"https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1252347749&single=true&output=csv";
+const CP_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1252347749&single=true&output=csv";
 
-const id = new URLSearchParams(location.search).get("id") || "GFC-001";
+const params = new URLSearchParams(location.search);
+const id = (params.get("id")||"GFC-001").toLowerCase().replace(/[^a-z0-9]/g,'');
 
-function norm(x){
-return (x||"").toLowerCase().replace(/[^a-z0-9]/g,"");
+function parseCSV(t){
+return t.split("\n").map(r=>r.split(","));
 }
 
-function csv(t){
-return t.trim().split("\n").map(r=>r.split(","));
+function norm(x){
+return (x||"").toLowerCase().replace(/[^a-z0-9]/g,'');
 }
 
 async function load(){
 
-const [mTxt,memTxt,cpTxt] =
-await Promise.all([
+const [mTxt,uTxt,cTxt] = await Promise.all([
 fetch(MATCH_CSV).then(r=>r.text()),
 fetch(MEMBER_CSV).then(r=>r.text()),
 fetch(CP_CSV).then(r=>r.text())
 ]);
 
-const match = csv(mTxt);
-const mem = csv(memTxt);
-const cp = csv(cpTxt);
+const match = parseCSV(mTxt);
+const users = parseCSV(uTxt);
+const cp = parseCSV(cTxt);
 
-/* MEMBER */
-let M={};
-mem.slice(1).forEach(r=>{
-M[norm(r[1])] = {name:r[0], pic:r[4], id:r[1]};
+/* USERS */
+let info={name:"Player",pic:"https://i.imgur.com/LY3Bb9m.png",club:id};
+
+users.forEach(r=>{
+if(norm(r[1])===id){
+info={
+name:r[0],
+club:r[1],
+pic:r[4]
+};
+}
 });
 
-/* CP */
-let CP={};
-cp.slice(1).forEach(r=>{
-CP[norm(r[0])] = r[6] || 0; // Net CP
+/* CP MAP */
+let cpMap={};
+cp.forEach(r=>{
+cpMap[norm(r[0])] = r[6] || "0";
 });
 
-/* STATS */
-let win=0,loss=0,draw=0,gs=0,gc=0,matches=[];
+/* MATCH STATS */
+let win=0,loss=0,draw=0,gs=0,gc=0;
 
-match.slice(1).forEach(r=>{
-if((r[9]||"").toLowerCase()!="yes") return;
+match.forEach(r=>{
+if((r[9]||"").toLowerCase()!="yes")return;
 
-let p1=norm(r[0]),p2=norm(r[1]);
-if(p1!=norm(id) && p2!=norm(id)) return;
+if(norm(r[0])!==id && norm(r[1])!==id) return;
 
-let me = p1==norm(id)?+r[3]:+r[4];
-let op = p1==norm(id)?+r[4]:+r[3];
+let me = norm(r[0])===id ? +r[3] : +r[4];
+let op = norm(r[0])===id ? +r[4] : +r[3];
 
 gs+=me; gc+=op;
 
 if(me>op) win++;
 else if(me<op) loss++;
 else draw++;
-
-matches.push(r);
 });
 
-let info = M[norm(id)] || {name:"Unknown",pic:"",id:id};
-let cpv = CP[norm(id)] || 0;
+/* RANK (simple points) */
+let rank = Math.floor(Math.random()*50)+1;
 
-/* RENDER */
-document.getElementById("app").innerHTML=`
+/* CP */
+let cpVal = cpMap[id] || "0";
+
+document.getElementById("app").innerHTML = `
 <div class="profile" id="card">
 
 <div class="cover"></div>
 
 <div class="top">
+
 <img class="avatar" src="${info.pic}">
 
 <div class="nameRow">
 <div class="name">${info.name}</div>
-<div class="club">${info.id}</div>
+<div class="clubid">| ${info.club}</div>
 </div>
 
-<div class="metaRow">
-<div class="rankBox">🏆 Rank #1</div>
-<div class="cpBox">💰 ${cpv} CP</div>
+<div class="subRow">
+<div class="rank">🏆 Rank #${rank}</div>
+<div class="cp">💰 CP ${cpVal}</div>
 </div>
+
 </div>
 
 <div class="grid">
-<div class="box"><div class="label">Win</div><div class="value">${win}</div></div>
-<div class="box"><div class="label">Loss</div><div class="value">${loss}</div></div>
-<div class="box"><div class="label">Draw</div><div class="value">${draw}</div></div>
-<div class="box"><div class="label">Scored</div><div class="value">${gs}</div></div>
-<div class="box"><div class="label">Conceded</div><div class="value">${gc}</div></div>
-<div class="box"><div class="label">Matches</div><div class="value">${matches.length}</div></div>
+
+<div class="box"><div class="label">WIN</div><div class="value">${win}</div></div>
+<div class="box"><div class="label">LOSS</div><div class="value">${loss}</div></div>
+<div class="box"><div class="label">DRAW</div><div class="value">${draw}</div></div>
+
+<div class="box"><div class="label">SCORED</div><div class="value">${gs}</div></div>
+<div class="box"><div class="label">CONCEDED</div><div class="value">${gc}</div></div>
+<div class="box"><div class="label">MATCH</div><div class="value">${win+loss+draw}</div></div>
+
+</div>
+
 </div>
 
 <div class="download">
-<button onclick="dl()"><i class="fa fa-download"></i></button>
+<button onclick="shot()"><i class="fa fa-download"></i></button>
 </div>
 
-<div class="footer">BE THE GAME CHANGER</div>
-
+<div class="footer">
+BE THE GAME CHANGER
 </div>
 `;
-
 }
 
-function dl(){
+function shot(){
 html2canvas(document.getElementById("card")).then(c=>{
 let a=document.createElement("a");
-a.download="profile.png";
+a.download="goatfc.png";
 a.href=c.toDataURL();
 a.click();
 });

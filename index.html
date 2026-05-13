@@ -1,16 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
 
-<title>ELITE ATHLETE</title>
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-<link rel="icon" type="image/png" href="https://i.imgur.com/LY3Bb9m.png"/>
+<title>PLAYERS HUB</title>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+<link rel="icon"
+type="image/png"
+href="https://i.imgur.com/LY3Bb9m.png">
 
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Rajdhani:wght@400;500;600;700&display=swap"
+rel="stylesheet">
 
 <style>
 
@@ -19,8 +25,6 @@
 --card:#0f172a;
 --cyan:#00f5ff;
 --green:#00ff88;
---yellow:#ffd60a;
---red:#ff4d6d;
 --white:#f8fafc;
 --muted:#94a3b8;
 }
@@ -36,6 +40,7 @@ background:var(--bg);
 font-family:'Rajdhani',sans-serif;
 color:var(--white);
 overflow-x:hidden;
+padding-bottom:20px;
 }
 
 body::before{
@@ -72,6 +77,8 @@ border-bottom:1px solid #00f5ff15;
 position:sticky;
 top:0;
 z-index:999;
+
+text-decoration:none;
 }
 
 .top-left{
@@ -124,7 +131,7 @@ HEADER
 ===================== */
 
 .hero{
-padding:12px 10px 10px;
+padding:14px 10px 12px;
 text-align:center;
 }
 
@@ -151,498 +158,217 @@ margin-top:5px;
 
 font-size:9px;
 font-weight:700;
+
 letter-spacing:3px;
 
 color:var(--muted);
 }
 
 /* =====================
-PROFILE
+MAIN WRAP
 ===================== */
 
-.profile{
-width:calc(100% - 10px);
-
-margin:auto;
-
-background:rgba(15,23,42,.92);
-
-border:1px solid #00f5ff15;
-
-border-radius:22px;
-
-overflow:hidden;
-
-box-shadow:
-0 0 20px #000;
-}
-
-/* COVER */
-
-.cover{
-height:95px;
-
-background:
-linear-gradient(rgba(0,0,0,.15),rgba(0,0,0,.7)),
-url('https://c4.wallpaperflare.com/wallpaper/592/111/659/football-stadium-soccer-hd-wallpaper-preview.jpg');
-
-background-size:cover;
-background-position:center;
-}
-
-/* TOP */
-
-.top{
-text-align:center;
-
-margin-top:-34px;
-
-padding:0 10px 10px;
-}
-
-.avatar-wrap{
-position:relative;
-width:74px;
+.wrap{
+width:min(100% - 10px,480px);
 margin:auto;
 }
 
-.avatar-ring{
-position:absolute;
-inset:-4px;
+/* =====================
+SEARCH
+===================== */
 
-border-radius:50%;
+.search-box{
+width:100%;
 
-background:
-conic-gradient(
-from 0deg,
-var(--cyan),
-var(--green),
-var(--cyan)
-);
+height:42px;
 
-animation:spin 5s linear infinite;
-}
+padding:0 14px;
 
-@keyframes spin{
-100%{
-transform:rotate(360deg);
-}
-}
-
-.avatar{
-position:relative;
-
-width:74px;
-height:74px;
-
-border-radius:50%;
-
-object-fit:cover;
-
-border:3px solid #050816;
-
-background:#111827;
-
-z-index:2;
-}
-
-.online{
-position:absolute;
-right:3px;
-bottom:4px;
-
-width:13px;
-height:13px;
-
-border-radius:50%;
-
-background:var(--green);
-
-border:2px solid #050816;
-
-z-index:5;
-}
-
-/* NAME */
-
-.name-row{
-margin-top:9px;
-
-display:flex;
-justify-content:center;
-align-items:center;
-gap:6px;
-
-flex-wrap:wrap;
-}
-
-.name{
-font-size:17px;
-font-weight:800;
-
-font-family:'Orbitron',sans-serif;
-}
-
-.club-id{
-padding:5px 9px;
-
-border-radius:999px;
-
-background:#00f5ff10;
+border-radius:14px;
 
 border:1px solid #00f5ff20;
-
-font-size:9px;
-font-weight:700;
-
-color:var(--cyan);
-
-display:flex;
-align-items:center;
-gap:4px;
-}
-
-/* BADGES */
-
-.badges{
-display:grid;
-grid-template-columns:1fr 1fr;
-
-gap:7px;
-
-margin-top:10px;
-}
-
-.badge{
-position:relative;
-
-padding:9px;
-
-border-radius:15px;
 
 background:
 linear-gradient(145deg,#111827,#0f172a);
 
-border:1px solid #00f5ff25;
+outline:none;
+
+color:white;
+
+font-size:12px;
+font-weight:700;
+
+font-family:'Rajdhani',sans-serif;
+
+margin-bottom:12px;
 
 box-shadow:
-0 0 8px #00f5ff10;
-
-display:flex;
-align-items:center;
-gap:7px;
-
-overflow:hidden;
+0 0 10px #00f5ff08;
 }
 
-display:flex;
-align-items:center;
-gap:7px;
-
-overflow:hidden;
+.search-box::placeholder{
+color:#94a3b8;
 }
 
-.badge::before{
+.search-box:focus{
+
+border-color:#00f5ff55;
+
+box-shadow:
+0 0 12px #00f5ff22;
+}
+
+/* =====================
+GRID
+===================== */
+
+.grid{
+display:grid;
+
+grid-template-columns:
+repeat(2,1fr);
+
+gap:10px;
+}
+
+/* =====================
+CARD
+===================== */
+
+.card{
+position:relative;
+
+padding:12px 10px;
+
+border-radius:18px;
+
+background:
+linear-gradient(145deg,#111827,#0f172a);
+
+border:1px solid #00f5ff18;
+
+overflow:hidden;
+
+cursor:pointer;
+
+transition:.25s;
+
+text-align:center;
+
+box-shadow:
+0 0 10px #000;
+}
+
+.card::before{
 content:"";
 
 position:absolute;
 
 inset:3px;
 
-border-radius:12px;
+border-radius:14px;
 
-border:1px solid #00f5ff18;
+border:1px solid #00f5ff10;
 
 pointer-events:none;
 }
 
-.badge-icon{
-width:28px;
-height:28px;
+.card:hover{
+transform:translateY(-3px);
 
-display:flex;
-align-items:center;
-justify-content:center;
+border-color:#00f5ff30;
 
-border-radius:10px;
-
-font-size:11px;
+box-shadow:
+0 0 14px #00f5ff18;
 }
 
-.rank-icon{
-background:#00f5ff12;
-color:var(--cyan);
+/* IMAGE */
+
+.card img{
+width:68px;
+height:68px;
+
+border-radius:50%;
+
+object-fit:cover;
+
+border:2px solid #00f5ff;
+
+background:#111827;
+
+box-shadow:
+0 0 10px #00f5ff22;
 }
 
-.cp-icon{
-background:#ffd60a12;
-color:var(--yellow);
-}
+/* NAME */
 
-.badge small{
-display:block;
+.name{
+margin-top:9px;
 
-font-size:8px;
+font-size:13px;
 font-weight:800;
 
-letter-spacing:1px;
-
-color:#00f5ff;
-}
-
-.badge strong{
-font-size:15px;
-font-weight:900;
-
-color:#00f5ff;
-}
-
-/* =====================
-STATS
-===================== */
-
-.stats{
-padding:0 10px 10px;
-
-display:grid;
-grid-template-columns:repeat(3,1fr);
-
-gap:7px;
-}
-
-.stat{
-padding:8px 5px;
-
-border-radius:15px;
-
-background:
-linear-gradient(145deg,#111827,#0f172a);
-
-border:1px solid #ffffff10;
-
-display:flex;
-align-items:center;
-gap:7px;
-}
-
-.stat-icon{
-width:26px;
-height:26px;
-
-display:flex;
-align-items:center;
-justify-content:center;
-
-border-radius:9px;
-
-background:#00f5ff10;
-
-color:var(--cyan);
-
-font-size:10px;
-
-flex-shrink:0;
-}
-
-.stat-info{
-line-height:1;
-}
-
-.stat-value{
-font-size:16px;
-font-weight:800;
-
-font-family:'Orbitron',sans-serif;
-}
-
-.stat-label{
-margin-top:3px;
-
-font-size:8px;
-font-weight:700;
-
-letter-spacing:1px;
-
-text-transform:uppercase;
-
-color:var(--muted);
-}
-
-/* =====================
-MATCHES
-===================== */
-
-.matches{
-padding:0 10px 12px;
-}
-
-.matches-head{
-display:flex;
-align-items:center;
-justify-content:center;
-
-margin-bottom:8px;
-}
-
-.matches-title{
-font-size:11px;
-font-family:'Orbitron',sans-serif;
-font-weight:700;
-}
-
-.match-count{
-padding:4px 7px;
-
-border-radius:999px;
-
-background:#00f5ff10;
-
-border:1px solid #00f5ff20;
-
-font-size:7px;
-font-weight:700;
-
-color:var(--cyan);
-}
-
-.match{
-display:grid;
-grid-template-columns:1fr auto 1fr;
-
-align-items:center;
-
-gap:5px;
-
-padding:9px;
-
-margin-bottom:7px;
-
-border-radius:14px;
-
-background:
-linear-gradient(145deg,#111827,#0f172a);
-
-border:1px solid #ffffff10;
-}
-
-.player{
-display:block;
-min-width:0;
-}
-
-.player.right{
-text-align:right;
-}
-
-.player-avatar{
-width:24px;
-height:24px;
-
-display:flex;
-align-items:center;
-justify-content:center;
-
-border-radius:8px;
-
-background:#0b1220;
-
-border:1px solid #00f5ff15;
-
-color:var(--cyan);
-
-font-size:9px;
-}
-
-.player-name{
-font-size:10px;
-font-weight:700;
-
-max-width:100%;
+line-height:1.3;
 
 white-space:nowrap;
 overflow:hidden;
 text-overflow:ellipsis;
 }
 
-.player-id-small{
-font-size:8px;
-font-weight:700;
+/* ID */
 
-color:var(--muted);
+.id{
+margin-top:5px;
 
-margin-top:2px;
-}
+display:inline-flex;
+align-items:center;
+justify-content:center;
+gap:4px;
 
-.match-center{
-text-align:center;
-}
+padding:5px 8px;
 
-.score{
-padding:4px 7px;
+border-radius:999px;
 
-border-radius:8px;
+background:#00f5ff10;
 
-font-size:10px;
-font-weight:800;
-
-font-family:'Orbitron',sans-serif;
-}
-
-.win{
-background:#00ff8815;
-color:var(--green);
-border:1px solid #00ff8825;
-}
-
-.loss{
-background:#ff4d6d15;
-color:var(--red);
-border:1px solid #ff4d6d25;
-}
-
-.draw{
-background:#ffd60a15;
-color:var(--yellow);
-border:1px solid #ffd60a25;
-}
-
-.match-type{
-margin-top:4px;
+border:1px solid #00f5ff15;
 
 font-size:8px;
 font-weight:700;
 
-letter-spacing:1px;
-
-color:var(--muted);
-
-text-transform:uppercase;
+color:var(--cyan);
 }
 
-/* FOOTER */
+/* EMPTY */
 
-.footer{
-padding:10px;
-
-text-align:center;
-
-font-size:7px;
-letter-spacing:2px;
-
-color:var(--muted);
-
-border-top:1px solid #ffffff10;
-}
-
-.loader{
-padding:50px 20px;
+.empty{
+padding:40px 10px;
 
 text-align:center;
 
 font-size:13px;
 font-weight:700;
 
-color:var(--cyan);
+color:var(--muted);
+}
+
+/* MOBILE */
+
+@media(max-width:420px){
+
+.card{
+padding:10px 8px;
+}
+
+.card img{
+width:62px;
+height:62px;
+}
+
+.name{
+font-size:12px;
+}
+
 }
 
 </style>
@@ -653,8 +379,7 @@ color:var(--cyan);
 <!-- TOPBAR -->
 
 <a href="https://goatfcbd.com"
-class="topbar"
-style="text-decoration:none;">
+class="topbar">
 
 <div class="top-left">
 
@@ -673,514 +398,143 @@ GOAT FC
 
 </a>
 
-<!-- HERO -->
+<!-- HEADER -->
 
 <div class="hero">
 
 <div class="hero-title">
-ELITE ATHLETE
+PLAYERS HUB
 </div>
 
 <div class="hero-sub">
-BE THE GAME CHANGER
+SEARCH YOUR FAVORITE PLAYER
 </div>
 
 </div>
 
-<!-- APP -->
+<!-- WRAP -->
 
-<div id="app">
+<div class="wrap">
 
-<div class="loader">
-<i class="fa-solid fa-spinner fa-spin"></i>
-<br><br>
-Loading Profile...
+<!-- SEARCH -->
+
+<input
+type="text"
+id="search"
+class="search-box"
+placeholder="Search Player Name / ID...">
+
+<!-- GRID -->
+
+<div id="grid"
+class="grid">
+
 </div>
 
 </div>
 
 <script>
 
-const MATCH_CSV='https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv';
+const MEMBER_CSV =
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv";
 
-const MEMBER_CSV='https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv';
+let playersData=[];
 
-const CP_CSV='https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1252347749&single=true&output=csv';
+/* CSV */
 
-const params=new URLSearchParams(location.search);
+function parseCSV(text){
+
+return text
+.split("\n")
+.map(r=>r.split(","));
+
+}
+
+/* NORMALIZE */
 
 function normalize(x){
-return (x||'').toLowerCase().replace(/[^a-z0-9]/g,'');
-}
 
-const playerId=normalize(params.get('id')||'GFC-001');
-
-function csvToArray(str){
-
-const rows=[];
-
-let quote=false,row=[],col='';
-
-for(let i=0;i<str.length;i++){
-
-const c=str[i];
-
-if(c==='"'){
-quote=!quote;
-}
-
-else if(c===','&&!quote){
-row.push(col);
-col='';
-}
-
-else if((c==='\n'||c==='\r')&&!quote){
-
-if(col||row.length){
-
-row.push(col);
-rows.push(row);
-
-row=[];
-col='';
+return (x||"")
+.toLowerCase();
 
 }
 
-}
+/* LOAD */
 
-else{
-col+=c;
-}
+async function loadPlayers(){
 
-}
+const res =
+await fetch(MEMBER_CSV);
 
-if(col||row.length){
+const text =
+await res.text();
 
-row.push(col);
-rows.push(row);
+const rows =
+parseCSV(text);
 
-}
+rows.slice(1).forEach(r=>{
 
-return rows;
+playersData.push({
 
-}
+name:r[0] || "Unknown",
 
-async function load(){
+id:r[1] || "N/A",
 
-try{
-
-const [matchRes,memberRes,cpRes]=await Promise.all([
-
-fetch(MATCH_CSV+'&t='+Date.now()),
-fetch(MEMBER_CSV+'&t='+Date.now()),
-fetch(CP_CSV+'&t='+Date.now())
-
-]);
-
-const matchText=await matchRes.text();
-const memberText=await memberRes.text();
-const cpText=await cpRes.text();
-
-const matchRows=csvToArray(matchText);
-const memberRows=csvToArray(memberText);
-const cpRows=csvToArray(cpText);
-
-const members={};
-
-memberRows.slice(1).forEach(r=>{
-
-if(!r.length)return;
-
-const id=normalize(r[1]);
-
-members[id]={
-
-name:r[0]||'Unknown',
-pic:r[4]||'https://i.imgur.com/LY3Bb9m.png',
-club:r[1]||'N/A'
-
-};
+pic:r[4] ||
+"https://i.imgur.com/LY3Bb9m.png"
 
 });
 
-const cpMap={};
-
-cpRows.slice(1).forEach(r=>{
-
-if(!r.length)return;
-
-cpMap[normalize(r[0])]=r[7]||'0';
-
 });
 
-const board={};
-const matches=[];
-
-matchRows.slice(1).forEach(r=>{
-
-if(!r.length)return;
-
-if((r[9]||'').toLowerCase()!=='yes')return;
-
-const p1=normalize(r[0]);
-const p2=normalize(r[1]);
-
-if(!board[p1]) board[p1]={points:0,win:0,gs:0,gc:0};
-if(!board[p2]) board[p2]={points:0,win:0,gs:0,gc:0};
-
-board[p1].points+=(+r[5]||0);
-board[p2].points+=(+r[6]||0);
-
-if(+r[3]>+r[4]) board[p1].win++;
-if(+r[4]>+r[3]) board[p2].win++;
-
-board[p1].gs+=(+r[3]||0);
-board[p1].gc+=(+r[4]||0);
-
-board[p2].gs+=(+r[4]||0);
-board[p2].gc+=(+r[3]||0);
-
-if(p1===playerId||p2===playerId){
-
-matches.push({
-
-p1:r[0],
-p2:r[1],
-type:r[2],
-s1:+r[3],
-s2:+r[4]
-
-});
+render(playersData);
 
 }
 
-});
+/* RENDER */
 
-const ranking=Object.entries(board)
+function render(data){
 
-.map(([id,v])=>({
+let html='';
 
-id,
-points:v.points,
-win:v.win,
-gd:v.gs-v.gc
+if(data.length===0){
 
-}))
+html=`
 
-.sort((a,b)=>b.points-a.points||b.win-a.win||b.gd-a.gd);
-
-const rank=ranking.findIndex(x=>x.id===playerId)+1;
-
-let win=0,loss=0,draw=0,gs=0,gc=0,seven=0;
-
-matches.forEach(m=>{
-
-let me,op;
-
-if(normalize(m.p1)===playerId){
-
-me=m.s1;
-op=m.s2;
-
-}else{
-
-me=m.s2;
-op=m.s1;
-
-}
-
-gs+=me;
-gc+=op;
-
-if(me>=7) seven++;
-
-if(me>op) win++;
-else if(me<op) loss++;
-else draw++;
-
-});
-
-const total=matches.length;
-
-const wr=((win/(total||1))*100).toFixed(1);
-
-const gr=(gs/(total||1)).toFixed(2);
-
-const info=members[playerId]||{
-
-name:'Unknown Player',
-pic:'https://i.imgur.com/LY3Bb9m.png',
-club:'N/A'
-
-};
-
-const netCP=cpMap[playerId]||'0';
-
-const html=`
-
-<div class="profile">
-
-<div class="cover"></div>
-
-<div class="top">
-
-<div class="avatar-wrap">
-
-<div class="avatar-ring"></div>
-
-<img class="avatar"
-crossorigin="anonymous"
-src="${info.pic}">
-
-<div class="online"></div>
-
+<div class="empty">
+<i class="fa-solid fa-magnifying-glass"></i>
+<br><br>
+No Player Found
 </div>
 
-<div class="name-row">
+`;
+
+document
+.getElementById("grid")
+.innerHTML=html;
+
+return;
+
+}
+
+data.forEach(p=>{
+
+html += `
+
+<div class="card"
+onclick="openProfile('${p.id}')">
+
+<img src="${p.pic}">
 
 <div class="name">
-${info.name}
+${p.name}
 </div>
 
-<div class="club-id">
+<div class="id">
+
 <i class="fa-solid fa-shield-halved"></i>
-${info.club}
-</div>
 
-</div>
-
-<div class="badges">
-
-<div class="badge">
-
-<div class="badge-icon rank-icon">
-<i class="fa-solid fa-trophy"></i>
-</div>
-
-<div>
-<small>RANK</small>
-<strong>#${rank||'-'}</strong>
-</div>
-
-</div>
-
-<div class="badge">
-
-<div class="badge-icon cp-icon">
-<i class="fa-solid fa-coins"></i>
-</div>
-
-<div>
-<small>CP</small>
-<strong>${netCP}</strong>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- STATS -->
-
-<div class="stats">
-
-<div class="stat">
-
-<div class="stat-icon">
-<i class="fa-solid fa-medal"></i>
-</div>
-
-<div class="stat-info">
-<div class="stat-value">${win}</div>
-<div class="stat-label">Wins</div>
-</div>
-
-</div>
-
-<div class="stat">
-
-<div class="stat-icon">
-<i class="fa-solid fa-heart-crack"></i>
-</div>
-
-<div class="stat-info">
-<div class="stat-value">${loss}</div>
-<div class="stat-label">Loss</div>
-</div>
-
-</div>
-
-<div class="stat">
-
-<div class="stat-icon">
-<i class="fa-solid fa-handshake"></i>
-</div>
-
-<div class="stat-info">
-<div class="stat-value">${draw}</div>
-<div class="stat-label">Draw</div>
-</div>
-
-</div>
-
-<div class="stat">
-
-<div class="stat-icon">
-<i class="fa-solid fa-gamepad"></i>
-</div>
-
-<div class="stat-info">
-<div class="stat-value">${total}</div>
-<div class="stat-label">Match</div>
-</div>
-
-</div>
-
-<div class="stat">
-
-<div class="stat-icon">
-<i class="fa-solid fa-chart-line"></i>
-</div>
-
-<div class="stat-info">
-<div class="stat-value">${wr}</div>
-<div class="stat-label">Win%</div>
-</div>
-
-</div>
-
-<div class="stat">
-
-<div class="stat-icon">
-<i class="fa-solid fa-bullseye"></i>
-</div>
-
-<div class="stat-info">
-<div class="stat-value">${gr}</div>
-<div class="stat-label">Goal R</div>
-</div>
-
-</div>
-
-<div class="stat">
-
-<div class="stat-icon">
-<i class="fa-solid fa-futbol"></i>
-</div>
-
-<div class="stat-info">
-<div class="stat-value">${gs}</div>
-<div class="stat-label">Scored</div>
-</div>
-
-</div>
-
-<div class="stat">
-
-<div class="stat-icon">
-<i class="fa-solid fa-shield"></i>
-</div>
-
-<div class="stat-info">
-<div class="stat-value">${gc}</div>
-<div class="stat-label">Against</div>
-</div>
-
-</div>
-
-<div class="stat">
-
-<div class="stat-icon">
-<i class="fa-solid fa-crown"></i>
-</div>
-
-<div class="stat-info">
-<div class="stat-value">${seven}</div>
-<div class="stat-label">7+ Goal</div>
-</div>
-
-</div>
-
-</div>
-
-<!-- MATCHES -->
-
-<div class="matches">
-
-<div class="matches-head">
-
-<div class="matches-title">
-RECENT MATCHES
-</div>
-
-</div>
-
-${matches.reverse().slice(0,5).map(m=>{
-
-let me,op,cls;
-
-if(normalize(m.p1)===playerId){
-
-me=m.s1;
-op=m.s2;
-
-}else{
-
-me=m.s2;
-op=m.s1;
-
-}
-
-if(me>op) cls='win';
-else if(me<op) cls='loss';
-else cls='draw';
-
-return `
-
-<div class="match">
-
-<div class="player">
-
-<div>
-
-<div class="player-name">
-${members[normalize(m.p1)]?.name||m.p1}
-</div>
-
-<div class="player-id-small">
-${m.p1}
-</div>
-
-</div>
-
-</div>
-
-<div class="match-center">
-
-<div class="score ${cls}">
-${m.s1}-${m.s2}
-</div>
-
-<div class="match-type">
-${m.type}
-</div>
-
-</div>
-
-<div class="player right">
-
-<div>
-
-<div class="player-name">
-${members[normalize(m.p2)]?.name||m.p2}
-</div>
-
-<div class="player-id-small">
-${m.p2}
-</div>
-
-</div>
+${p.id}
 
 </div>
 
@@ -1188,41 +542,51 @@ ${m.p2}
 
 `;
 
-}).join('')}
+});
 
-</div>
-
-<div class="footer">
-POWERED BY GOAT FC
-</div>
-
-</div>
-
-`;
-
-document.getElementById('app').innerHTML=html;
-
-}catch(err){
-
-console.error(err);
-
-document.getElementById('app').innerHTML=`
-
-<div class="loader">
-
-<i class="fa-solid fa-triangle-exclamation"></i>
-<br><br>
-Profile Failed To Load
-
-</div>
-
-`;
+document
+.getElementById("grid")
+.innerHTML = html;
 
 }
 
+/* SEARCH */
+
+document
+.getElementById("search")
+
+.addEventListener("input",function(){
+
+const value =
+normalize(this.value);
+
+const filtered =
+playersData.filter(p=>
+
+normalize(p.name)
+.includes(value)
+
+||
+
+normalize(p.id)
+.includes(value)
+
+);
+
+render(filtered);
+
+});
+
+/* OPEN PROFILE */
+
+function openProfile(id){
+
+window.location.href =
+"profile/?id="+id;
+
 }
 
-load();
+loadPlayers();
 
 </script>
 

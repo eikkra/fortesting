@@ -4,174 +4,196 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>GOAT FC Profile</title>
+<title>GOAT FC Player Profile</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
 <style>
 
 *{margin:0;padding:0;box-sizing:border-box}
 
 body{
-background:#020617;
-color:#fff;
-font-family:Segoe UI;
-overflow-x:hidden;
+    font-family:Segoe UI,sans-serif;
+    background:#020617;
+    color:#fff;
 }
 
-/* HEADER */
+/* BG */
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:
+    radial-gradient(circle at top,#00f5ff11,transparent 40%),
+    radial-gradient(circle at bottom,#ff00ff10,transparent 40%);
+    z-index:-1;
+}
+
+/* HEADER WRAP */
 .header{
-text-align:center;
-padding:10px 10px 2px;
+    padding:10px 8px 0;
+    text-align:center;
 }
 
+/* ROW 1 */
+.header-top{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:8px;
+}
+
+/* LOGO */
 .logo{
-width:32px;
-filter:drop-shadow(0 0 10px #00f5ff);
+    width:32px;
+    filter:drop-shadow(0 0 10px #00f5ff);
 }
 
+/* TITLE */
 .title{
-font-size:16px;
-font-weight:800;
-color:#00f5ff;
-letter-spacing:1px;
+    font-size:16px;
+    font-weight:900;
+    letter-spacing:1px;
+    background:linear-gradient(90deg,#00f5ff,#00ff99,#00f5ff);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
 }
 
+/* SLOGAN */
 .slogan{
-font-size:10px;
-color:#94a3b8;
-margin-top:2px;
+    font-size:10px;
+    color:#94a3b8;
+    margin-top:2px;
+    letter-spacing:2px;
 }
 
 /* CARD */
-.card{
-width:min(720px,95%);
-margin:auto;
-background:#08111f;
-border:1px solid #00f5ff22;
-border-radius:16px;
-overflow:hidden;
-box-shadow:0 0 20px #00f5ff11;
+.profile{
+    width:min(95%,720px);
+    margin:10px auto;
+    background:#08111f;
+    border:1px solid #00f5ff22;
+    border-radius:16px;
+    overflow:hidden;
 }
 
 /* COVER */
 .cover{
-height:85px;
-background:url('https://c4.wallpaperflare.com/wallpaper/398/874/541/champions-league-stadium-wallpaper-preview.jpg');
-background-size:cover;
-background-position:center;
+    height:85px;
+    background:
+    linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.7)),
+    url("https://c4.wallpaperflare.com/wallpaper/398/874/541/champions-league-stadium-wallpaper-preview.jpg");
+    background-size:cover;
 }
 
-/* TOP */
+/* TOP AREA */
 .top{
-text-align:center;
-margin-top:-35px;
-padding-bottom:8px;
+    text-align:center;
+    margin-top:-35px;
 }
 
+/* AVATAR */
 .avatar{
-width:70px;height:70px;
-border-radius:50%;
-border:2px solid #00f5ff;
-box-shadow:0 0 15px #00f5ff33;
-object-fit:cover;
+    width:70px;
+    height:70px;
+    border-radius:50%;
+    border:2px solid #00f5ff;
+    object-fit:cover;
 }
 
+/* NAME + ID ROW */
 .nameRow{
-display:flex;
-justify-content:center;
-gap:6px;
-margin-top:5px;
-font-size:15px;
-font-weight:700;
+    margin-top:5px;
+    font-size:15px;
+    font-weight:800;
 }
 
-.name{color:#fff}
-.cid{color:#00f5ff}
+.clubid{
+    color:#00f5ff;
+    font-size:12px;
+}
 
+/* RANK ROW */
 .rankRow{
-display:flex;
-justify-content:center;
-gap:8px;
-font-size:11px;
-color:#94a3b8;
-margin-top:4px;
+    margin-top:4px;
+    font-size:11px;
+    color:#eab308;
 }
 
-.cp{
-color:#fbbf24;
+/* CP ROW */
+.cpRow{
+    margin-top:4px;
+    font-size:12px;
+    color:#22c55e;
 }
 
-/* STATS */
+/* GRID */
 .grid{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:6px;
-padding:8px;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:6px;
+    padding:10px;
 }
 
+/* BOX */
 .box{
-background:#0f172a;
-border:1px solid #00f5ff22;
-border-radius:10px;
-padding:6px;
-text-align:center;
+    background:#0f172a;
+    border:1px solid #00f5ff22;
+    border-radius:10px;
+    padding:7px;
+    text-align:center;
 }
 
-.label{font-size:9px;color:#94a3b8}
-.value{font-size:13px;color:#00f5ff;font-weight:700}
+.label{
+    font-size:9px;
+    color:#94a3b8;
+}
 
-/* MATCHES */
-.matchWrap{
-padding:8px;
+.value{
+    font-size:14px;
+    font-weight:800;
+    color:#00f5ff;
+}
+
+/* MATCH */
+.matches{
+    padding:6px 10px 10px;
 }
 
 .matchTitle{
-text-align:center;
-font-size:11px;
-color:#00f5ff;
-margin-bottom:6px;
-}
-
-.matchGrid{
-display:flex;
-overflow-x:auto;
-gap:6px;
-padding-bottom:6px;
-scroll-snap-type:x mandatory;
+    text-align:center;
+    font-size:11px;
+    color:#00f5ff;
+    margin-bottom:5px;
 }
 
 .match{
-min-width:160px;
-background:#0f172a;
-border:1px solid #1e293b;
-border-radius:10px;
-padding:6px;
-scroll-snap-align:start;
-font-size:10px;
+    display:grid;
+    grid-template-columns:1fr auto 1fr;
+    gap:6px;
+    padding:6px;
+    background:#0f172a;
+    border:1px solid #1e293b;
+    border-radius:10px;
+    margin-bottom:5px;
+    font-size:10px;
 }
 
-.mTop{
-display:flex;
-justify-content:space-between;
-font-size:9px;
-color:#94a3b8;
+.center{
+    text-align:center;
 }
 
 .score{
-text-align:center;
-font-weight:800;
-margin:4px 0;
-}
-
-.type{
-text-align:center;
-font-size:8px;
-color:#64748b;
+    font-weight:800;
+    padding:2px 6px;
+    border-radius:6px;
 }
 
 /* COLORS */
-.win{color:#22c55e}
-.loss{color:#ef4444}
-.draw{color:#eab308}
+.win{background:#22c55e22;color:#22c55e}
+.loss{background:#ef444422;color:#ef4444}
+.draw{background:#eab30822;color:#eab308}
 
 </style>
 </head>
@@ -179,150 +201,177 @@ color:#64748b;
 <body>
 
 <div class="header">
+
+<div class="header-top">
 <img class="logo" src="https://i.imgur.com/LY3Bb9m.png">
 <div class="title">PLAYER PROFILE</div>
-<div class="slogan">BE A GAME CHANGER</div>
 </div>
 
-<div class="card" id="card">
+<div class="slogan">BE A GAME CHANGER</div>
+
+</div>
+
+<div id="app"></div>
+
+<script>
+
+/* ===== CSV LINKS ===== */
+
+const MATCH_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv";
+
+const MEMBER_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv";
+
+const CP_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1252347749&single=true&output=csv";
+
+/* ===== ID ===== */
+
+const id = new URLSearchParams(location.search).get("id") || "GFC-001";
+
+const norm = x => (x||"").toLowerCase().replace(/[^a-z0-9]/g,"");
+
+/* ===== CSV ===== */
+
+function parseCSV(t){
+return t.trim().split("\n").map(r=>r.split(","));
+}
+
+/* ===== LOAD ===== */
+
+async function load(){
+
+try{
+
+const [m1,m2,m3] = await Promise.all([
+fetch(MATCH_CSV).then(r=>r.text()),
+fetch(MEMBER_CSV).then(r=>r.text()),
+fetch(CP_CSV).then(r=>r.text())
+]);
+
+const matches = parseCSV(m1);
+const members = parseCSV(m2);
+const cps = parseCSV(m3);
+
+/* MEMBER MAP */
+let memberMap={};
+members.slice(1).forEach(r=>{
+memberMap[norm(r[1])] = {
+name:r[0],
+pic:r[4]
+};
+});
+
+/* CP MAP */
+let cpMap={};
+cps.slice(1).forEach(r=>{
+cpMap[norm(r[0])] = r[6] || 0; // Net CP
+});
+
+/* PLAYER */
+const p = memberMap[norm(id)] || {
+name:"Unknown",
+pic:"https://i.imgur.com/LY3Bb9m.png"
+};
+
+const cp = cpMap[norm(id)] || 0;
+
+/* STATS */
+let win=0,loss=0,draw=0;
+
+matches.slice(1).forEach(r=>{
+
+if((r[9]||"").toLowerCase()!="yes") return;
+
+let p1 = norm(r[0]);
+let p2 = norm(r[1]);
+
+if(p1!=norm(id) && p2!=norm(id)) return;
+
+let s1=+r[3], s2=+r[4];
+
+if(p1==norm(id)){
+if(s1>s2) win++;
+else if(s1<s2) loss++;
+else draw++;
+}else{
+if(s2>s1) win++;
+else if(s2<s1) loss++;
+else draw++;
+}
+
+});
+
+/* RANK SIMPLE */
+let totalWin = win;
+
+/* UI */
+
+document.getElementById("app").innerHTML = `
+
+<div class="profile">
 
 <div class="cover"></div>
 
 <div class="top">
 
-<img id="img" class="avatar">
+<img class="avatar" src="${p.pic}">
 
 <div class="nameRow">
-<div class="name" id="name">Loading</div>
-<div class="cid" id="cid">...</div>
+${p.name}
+</div>
+
+<div class="clubid">
+${id}
 </div>
 
 <div class="rankRow">
-<div>🏆 Rank #<span id="rank">0</span></div>
-<div>🪙 CP: <span class="cp" id="cp">0</span></div>
+🏆 OVERALL RANK • #${totalWin}
+</div>
+
+<div class="cpRow">
+🪙 NET CP • ${cp}
 </div>
 
 </div>
 
 <div class="grid">
 
-<div class="box"><div class="label">Win</div><div class="value" id="win"></div></div>
-<div class="box"><div class="label">Loss</div><div class="value" id="loss"></div></div>
-<div class="box"><div class="label">Draw</div><div class="value" id="draw"></div></div>
-<div class="box"><div class="label">Match</div><div class="value" id="match"></div></div>
+<div class="box"><div class="label">WIN</div><div class="value">${win}</div></div>
+<div class="box"><div class="label">LOSS</div><div class="value">${loss}</div></div>
+<div class="box"><div class="label">DRAW</div><div class="value">${draw}</div></div>
 
 </div>
 
-<div class="matchWrap">
-
+<div class="matches">
 <div class="matchTitle">RECENT MATCHES</div>
 
-<div class="matchGrid" id="matches"></div>
-
-</div>
-
-</div>
-
-<script>
-
-const M = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv";
-const U = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv";
-const C = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1252347749&single=true&output=csv";
-
-const id = new URLSearchParams(location.search).get("id")?.toLowerCase() || "gfc001";
-
-function norm(x){
-return (x||"").toLowerCase().replace(/[^a-z0-9]/g,"");
-}
-
-function csv(t){
-return t.split("\n").map(r=>r.split(","));
-}
-
-async function load(){
-
-const [m,u,c] = await Promise.all([
-fetch(M).then(r=>r.text()),
-fetch(U).then(r=>r.text()),
-fetch(C).then(r=>r.text())
-]);
-
-const Mx = csv(m);
-const Ux = csv(u);
-const Cx = csv(c);
-
-/* USER */
-let user = Ux.find(r=>norm(r[1])===id);
-document.getElementById("name").innerText = user?.[0] || "Player";
-document.getElementById("cid").innerText = user?.[1] || id;
-document.getElementById("img").src = user?.[4] || "https://i.imgur.com/LY3Bb9m.png";
-
-/* CP */
-let cp = Cx.find(r=>norm(r[0])===id);
-document.getElementById("cp").innerText = cp?.[7] || 0;
-
-/* STATS */
-let win=0,loss=0,draw=0;
-
-let matches=[];
-
-Mx.slice(1).forEach(r=>{
-
-if(norm(r[9])!=="yes") return;
-
-let p1=norm(r[0]);
-let p2=norm(r[1]);
-
-if(p1!==id && p2!==id) return;
+${matches.slice(-5).map(r=>{
 
 let s1=+r[3], s2=+r[4];
 
-let me = p1===id ? s1 : s2;
-let op = p1===id ? s2 : s1;
+let cls = s1>s2?"win":s1<s2?"loss":"draw";
 
-if(me>op) win++;
-else if(me<op) loss++;
-else draw++;
-
-matches.push({
-p1:r[0],
-p2:r[1],
-s1,s2,
-type:r[2]
-});
-
-});
-
-document.getElementById("win").innerText=win;
-document.getElementById("loss").innerText=loss;
-document.getElementById("draw").innerText=draw;
-document.getElementById("match").innerText=matches.length;
-
-/* RECENT 20 SLIDE STYLE */
-let box = document.getElementById("matches");
-
-matches.slice(-20).reverse().forEach(m=>{
-
-let cls = (m.s1>m.s2)?"win":(m.s1<m.s2)?"loss":"draw";
-
-box.innerHTML += `
+return `
 <div class="match">
-
-<div class="mTop">
-<span>${m.p1}</span>
-<span>${m.p2}</span>
+<div>${r[0]}</div>
+<div class="center">
+<div class="score ${cls}">${s1}-${s2}</div>
 </div>
-
-<div class="score ${cls}">
-${m.s1} - ${m.s2}
-</div>
-
-<div class="type">${m.type}</div>
-
+<div>${r[1]}</div>
 </div>
 `;
 
-});
+}).join("")}
+
+</div>
+
+</div>
+
+`;
+
+}catch(e){
+document.getElementById("app").innerHTML="LOAD ERROR";
+console.log(e);
+}
 
 }
 

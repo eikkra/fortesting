@@ -1,135 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GOAT FC Player Profile</title>
-<link rel="icon" type="image/png" href="https://i.imgur.com/LY3Bb9m.png">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ELITE ATHLETE</title>
+
+<link rel="icon" type="image/png" href="https://i.imgur.com/LY3Bb9m.png"/>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 
-/* =========================
-TOPBAR
-========================= */
-
-.topbar{
-
-position:sticky;
-top:0;
-z-index:9999;
-
-height:46px;
-
-padding:0 14px;
-
-display:flex;
-align-items:center;
-justify-content:space-between;
-
-text-decoration:none;
-
-background:rgba(2,6,23,.88);
-
-backdrop-filter:blur(10px);
-
-border-bottom:1px solid #00f5ff22;
-
-box-shadow:
-0 0 15px #00f5ff11;
-
+:root{
+--bg:#050816;
+--card:#0b1120;
+--card2:#0f172a;
+--line:#1e293b;
+--cyan:#00f5ff;
+--green:#00ff88;
+--red:#ff4d6d;
+--yellow:#ffd60a;
+--text:#f8fafc;
+--muted:#94a3b8;
 }
 
-.topbar-left{
-
-display:flex;
-align-items:center;
-gap:8px;
-
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
 }
 
-.topbar-logo{
-
-width:26px;
-
-filter:
-drop-shadow(0 0 6px #00f5ff);
-
+html{
+scroll-behavior:smooth;
 }
-
-.topbar-text{
-
-font-size:13px;
-font-weight:800;
-
-letter-spacing:1px;
-
-background:
-linear-gradient(
-90deg,
-#00f5ff,
-#00ff88
-);
-
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
-
-}
-
-.topbar-right{
-
-width:28px;
-height:28px;
-
-display:flex;
-align-items:center;
-justify-content:center;
-
-border-radius:50%;
-
-background:#00f5ff11;
-
-border:1px solid #00f5ff33;
-
-color:#00f5ff;
-
-font-size:12px;
-
-}
-
-/* MOBILE */
-
-@media(max-width:768px){
-
-.topbar{
-
-height:42px;
-
-padding:0 10px;
-
-}
-
-.topbar-logo{
-
-width:23px;
-
-}
-
-.topbar-text{
-
-font-size:12px;
-
-}
-
-}
-
-*{margin:0;padding:0;box-sizing:border-box}
 
 body{
-font-family:'Segoe UI',sans-serif;
-background:#020617;
-color:#fff;
+background:var(--bg);
+color:var(--text);
+font-family:'Rajdhani',sans-serif;
 overflow-x:hidden;
+position:relative;
 }
 
 body::before{
@@ -137,267 +49,790 @@ content:"";
 position:fixed;
 inset:0;
 background:
-radial-gradient(circle at top left,#00f5ff11,transparent 25%),
-radial-gradient(circle at bottom right,#00ff8811,transparent 25%);
+radial-gradient(circle at top left,#00f5ff15,transparent 25%),
+radial-gradient(circle at bottom right,#00ff8810,transparent 25%);
+z-index:-2;
+}
+
+body::after{
+content:"";
+position:fixed;
+inset:0;
+background-image:
+linear-gradient(#ffffff05 1px,transparent 1px),
+linear-gradient(90deg,#ffffff05 1px,transparent 1px);
+background-size:30px 30px;
 z-index:-1;
+opacity:.25;
 }
 
-.header{
+/* =========================
+TOPBAR
+========================= */
+
+.topbar{
+position:sticky;
+top:0;
+z-index:9999;
+
+height:62px;
+
 display:flex;
-justify-content:center;
 align-items:center;
-gap:8px;
-padding:12px 10px 2px;
+justify-content:space-between;
+
+padding:0 18px;
+
+background:rgba(3,7,18,.82);
+
+backdrop-filter:blur(12px);
+
+border-bottom:1px solid #00f5ff22;
+
+box-shadow:
+0 0 30px #00f5ff10;
 }
 
-.logo{
-width:34px;
-filter:drop-shadow(0 0 10px #00f5ff);
+.topbar-left{
+display:flex;
+align-items:center;
+gap:12px;
 }
 
-.title{
-font-size:19px;
+.topbar-logo{
+width:38px;
+filter:
+drop-shadow(0 0 8px #00f5ff)
+drop-shadow(0 0 18px #00f5ff55);
+}
+
+.brand{
+display:flex;
+flex-direction:column;
+line-height:1;
+}
+
+.brand-title{
+font-family:'Orbitron',sans-serif;
+font-size:16px;
 font-weight:800;
-text-transform:uppercase;
-letter-spacing:1px;
-background:linear-gradient(90deg,#00f5ff,#00ff88,#00f5ff);
-background-size:300%;
+letter-spacing:2px;
+
+background:linear-gradient(90deg,var(--cyan),var(--green));
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
-animation:rgbMove 6s linear infinite;
 }
 
-@keyframes rgbMove{
+.brand-sub{
+font-size:10px;
+letter-spacing:3px;
+color:var(--muted);
+margin-top:4px;
+}
+
+.topbar-right{
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.nav-btn{
+width:38px;
+height:38px;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+border-radius:14px;
+
+background:linear-gradient(145deg,#0f172a,#09101d);
+
+border:1px solid #00f5ff25;
+
+color:var(--cyan);
+
+font-size:14px;
+
+transition:.3s;
+}
+
+.nav-btn:hover{
+transform:translateY(-2px);
+box-shadow:0 0 15px #00f5ff55;
+}
+
+/* =========================
+HEADER
+========================= */
+
+.hero{
+padding:30px 14px 18px;
+text-align:center;
+}
+
+.hero-title{
+font-family:'Orbitron',sans-serif;
+font-size:38px;
+font-weight:800;
+letter-spacing:3px;
+
+background:
+linear-gradient(
+90deg,
+#00f5ff,
+#ffffff,
+#00ff88,
+#00f5ff
+);
+
+background-size:300%;
+
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+
+animation:move 8s linear infinite;
+}
+
+@keyframes move{
 0%{background-position:0%}
 100%{background-position:300%}
 }
 
-.powered{
-text-align:center;
-font-size:10px;
-color:#00f5ff;
-margin-bottom:10px;
+.hero-sub{
+margin-top:10px;
 
-letter-spacing:3px;
-
-width:100%;
-
+font-size:13px;
+letter-spacing:5px;
 text-transform:uppercase;
 
-font-weight:700;
+color:var(--muted);
+}
 
-opacity:.85;
+/* =========================
+APP
+========================= */
+
+#app{
+padding-bottom:30px;
 }
 
 .loader{
+width:min(100% - 18px,850px);
+
+margin:auto;
+padding:80px 20px;
+
 text-align:center;
-padding:40px;
-color:#00f5ff;
+
+background:rgba(15,23,42,.7);
+
+border:1px solid #00f5ff15;
+
+border-radius:28px;
+
+font-size:20px;
+font-weight:700;
+color:var(--cyan);
+
+backdrop-filter:blur(10px);
 }
+
+/* =========================
+PROFILE
+========================= */
 
 .profile{
-width:min(100% - 14px,700px);
+width:min(100% - 18px,850px);
+
 margin:auto;
-border-radius:18px;
+
+background:rgba(11,17,32,.85);
+
+border:1px solid #00f5ff18;
+
+border-radius:30px;
+
 overflow:hidden;
-background:#08111f;
-border:1px solid #00f5ff22;
-box-shadow:0 0 25px #00f5ff11;
+
+backdrop-filter:blur(10px);
+
+box-shadow:
+0 0 30px #00f5ff08,
+0 0 80px #000;
 }
+
+/* COVER */
 
 .cover{
-height:95px;
+height:220px;
+
 background:
-linear-gradient(rgba(0,0,0,.15),rgba(0,0,0,.40)),
-url('https://c4.wallpaperflare.com/wallpaper/398/874/541/champions-league-stadium-wallpaper-preview.jpg');
+linear-gradient(rgba(0,0,0,.25),rgba(0,0,0,.7)),
+url('https://images.unsplash.com/photo-1517927033932-b3d18e61fb3a?q=80&w=1400&auto=format&fit=crop');
+
 background-size:cover;
 background-position:center;
+
+position:relative;
 }
 
+.cover::after{
+content:"";
+position:absolute;
+inset:0;
+background:
+linear-gradient(to top,#0b1120 0%,transparent 60%);
+}
+
+/* PROFILE TOP */
+
 .top{
+position:relative;
+margin-top:-85px;
+padding:0 20px 25px;
 text-align:center;
-margin-top:-38px;
-padding:0 10px 10px;
+z-index:5;
+}
+
+.avatar-wrap{
+position:relative;
+width:140px;
+margin:auto;
+}
+
+.avatar-ring{
+position:absolute;
+inset:-8px;
+border-radius:50%;
+
+background:
+conic-gradient(
+from 0deg,
+var(--cyan),
+var(--green),
+var(--cyan)
+);
+
+animation:spin 5s linear infinite;
+filter:blur(.5px);
+}
+
+@keyframes spin{
+100%{
+transform:rotate(360deg);
+}
 }
 
 .avatar{
-width:76px;
-height:76px;
-border-radius:50%;
+position:relative;
+
+width:140px;
+height:140px;
+
 object-fit:cover;
-border:2px solid #00f5ff;
-background:#0f172a;
-box-shadow:0 0 10px #00f5ff,0 0 20px #00f5ff22;
+
+border-radius:50%;
+
+border:5px solid #07101d;
+
+background:#111827;
+
+z-index:2;
 }
 
-.name-row,.rank-row{
+.online{
+position:absolute;
+right:10px;
+bottom:12px;
+
+width:22px;
+height:22px;
+
+background:var(--green);
+
+border:3px solid #07101d;
+
+border-radius:50%;
+
+z-index:5;
+
+box-shadow:
+0 0 15px var(--green);
+}
+
+/* NAME */
+
+.name-row{
+margin-top:18px;
+
 display:flex;
 justify-content:center;
 align-items:center;
-gap:8px;
+gap:10px;
 flex-wrap:wrap;
-margin-top:8px;
 }
 
 .name{
-font-size:17px;
-font-weight:700;
+font-size:34px;
+font-weight:800;
+font-family:'Orbitron',sans-serif;
+letter-spacing:1px;
 }
 
-.clubid{
+.club{
+padding:8px 14px;
+
+border-radius:999px;
+
+background:#00f5ff10;
+
+border:1px solid #00f5ff35;
+
+color:var(--cyan);
+
 font-size:13px;
 font-weight:700;
-color:#00f5ff;
+letter-spacing:1px;
 }
 
-.rank,.cp{
-padding:5px 11px;
+.player-id{
+margin-top:10px;
+
+display:inline-flex;
+align-items:center;
+gap:8px;
+
+padding:10px 18px;
+
+background:#ffffff05;
+
+border:1px solid #ffffff10;
+
 border-radius:999px;
-font-size:10px;
+
+font-size:13px;
 font-weight:700;
+
+color:#cbd5e1;
 }
 
-.rank{
-background:#00f5ff11;
-border:1px solid #00f5ff55;
-color:#00f5ff;
+/* BADGES */
+
+.badges{
+display:flex;
+justify-content:center;
+gap:14px;
+flex-wrap:wrap;
+
+margin-top:22px;
 }
 
-.cp{
-background:#ffd70011;
-border:1px solid #ffd70055;
-color:#ffd700;
+.badge{
+min-width:160px;
+
+padding:16px 18px;
+
+border-radius:22px;
+
+background:
+linear-gradient(145deg,#111827,#0b1120);
+
+border:1px solid #ffffff10;
+
+display:flex;
+align-items:center;
+gap:14px;
 }
 
-.grid{
+.badge i{
+width:46px;
+height:46px;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+border-radius:14px;
+
+font-size:18px;
+}
+
+.rank-icon{
+background:#00f5ff15;
+color:var(--cyan);
+}
+
+.cp-icon{
+background:#ffd60a15;
+color:var(--yellow);
+}
+
+.badge small{
+display:block;
+font-size:11px;
+letter-spacing:2px;
+color:var(--muted);
+margin-bottom:4px;
+}
+
+.badge strong{
+font-size:20px;
+font-weight:800;
+}
+
+/* STATS */
+
+.stats{
+padding:0 18px 20px;
+
 display:grid;
 grid-template-columns:repeat(3,1fr);
-gap:7px;
-padding:10px;
+gap:16px;
 }
 
-.box{
-background:linear-gradient(145deg,#0f172a,#07101d);
-border:1px solid #00f5ff22;
-border-radius:12px;
-padding:9px 5px;
-text-align:center;
+.stat-card{
+position:relative;
+
+padding:18px;
+
+border-radius:24px;
+
+background:
+linear-gradient(145deg,#0f172a,#09111d);
+
+border:1px solid #ffffff10;
+
+overflow:hidden;
+
+transition:.3s;
 }
 
-.label{
-font-size:9px;
-color:#94a3b8;
+.stat-card:hover{
+transform:translateY(-3px);
+border-color:#00f5ff30;
+box-shadow:0 0 20px #00f5ff15;
+}
+
+.stat-card::before{
+content:"";
+position:absolute;
+top:-40px;
+right:-40px;
+
+width:90px;
+height:90px;
+
+background:#00f5ff10;
+
+border-radius:50%;
+}
+
+.stat-top{
+display:flex;
+align-items:center;
+justify-content:space-between;
+}
+
+.stat-label{
+font-size:12px;
+letter-spacing:2px;
 text-transform:uppercase;
+color:var(--muted);
 }
 
-.value{
-margin-top:4px;
-font-size:15px;
-font-weight:700;
-color:#00f5ff;
+.stat-icon{
+font-size:16px;
+color:var(--cyan);
 }
+
+.stat-value{
+margin-top:14px;
+
+font-size:34px;
+font-weight:800;
+font-family:'Orbitron',sans-serif;
+}
+
+/* MATCHES */
 
 .matches{
-padding:4px 10px 10px;
+padding:0 18px 22px;
+}
+
+.matches-head{
+display:flex;
+align-items:center;
+justify-content:space-between;
+
+margin-bottom:16px;
 }
 
 .matches-title{
-text-align:center;
-color:#00f5ff;
-margin-bottom:6px;
-font-size:11px;
+font-size:22px;
+font-weight:800;
+font-family:'Orbitron',sans-serif;
+}
+
+.match-count{
+padding:8px 14px;
+
+border-radius:999px;
+
+background:#00f5ff10;
+
+border:1px solid #00f5ff25;
+
+font-size:12px;
 font-weight:700;
+
+color:var(--cyan);
 }
 
 .match{
 display:grid;
 grid-template-columns:1fr auto 1fr;
+
+gap:14px;
 align-items:center;
-gap:6px;
-background:#0f172a;
-border:1px solid #1e293b;
-border-radius:10px;
-padding:7px 8px;
-margin-bottom:5px;
-font-size:10px;
+
+padding:18px;
+
+margin-bottom:14px;
+
+border-radius:24px;
+
+background:
+linear-gradient(145deg,#111827,#0b1120);
+
+border:1px solid #ffffff10;
+
+transition:.3s;
+}
+
+.match:hover{
+transform:translateY(-2px);
+border-color:#00f5ff25;
 }
 
 .player{
-font-size:10px;
-font-weight:600;
+display:flex;
+align-items:center;
+gap:12px;
 }
 
-.player small{
-display:block;
-font-size:8px;
-color:#00f5ff;
-margin-top:1px;
+.player.right{
+justify-content:flex-end;
+text-align:right;
 }
 
-.left{text-align:left}
-.right{text-align:right}
-.center{text-align:center}
+.player-avatar{
+width:42px;
+height:42px;
+
+border-radius:14px;
+
+background:#0f172a;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+font-size:15px;
+
+color:var(--cyan);
+
+border:1px solid #00f5ff20;
+}
+
+.player-name{
+font-size:15px;
+font-weight:700;
+}
+
+.player-id-small{
+font-size:11px;
+color:var(--muted);
+margin-top:2px;
+}
+
+.match-center{
+text-align:center;
+}
 
 .score{
-font-weight:700;
-padding:3px 7px;
-border-radius:7px;
-font-size:10px;
+padding:10px 18px;
+
+border-radius:16px;
+
+font-size:20px;
+font-weight:800;
+font-family:'Orbitron',sans-serif;
+
+display:inline-block;
 }
 
-.type{
-font-size:8px;
-margin-top:2px;
-color:#94a3b8;
+.win{
+background:#00ff8815;
+color:var(--green);
+border:1px solid #00ff8830;
 }
 
-.win{background:#22c55e22;color:#22c55e}
-.loss{background:#ef444422;color:#ef4444}
-.draw{background:#eab30822;color:#eab308}
+.loss{
+background:#ff4d6d15;
+color:var(--red);
+border:1px solid #ff4d6d30;
+}
+
+.draw{
+background:#ffd60a15;
+color:var(--yellow);
+border:1px solid #ffd60a30;
+}
+
+.match-type{
+margin-top:8px;
+
+font-size:11px;
+letter-spacing:2px;
+text-transform:uppercase;
+
+color:var(--muted);
+}
+
+/* FOOTER */
 
 .footer{
+padding:22px;
+
 text-align:center;
-padding:10px;
-font-size:10px;
-color:#00f5ff;
-letter-spacing:1px;
+
+border-top:1px solid #ffffff10;
+
+color:var(--muted);
+
+font-size:12px;
+letter-spacing:3px;
 }
+
+/* MOBILE */
 
 @media(max-width:768px){
-.grid{grid-template-columns:repeat(3,1fr)}
-.name{font-size:15px}
+
+.topbar{
+height:58px;
+padding:0 12px;
 }
+
+.hero-title{
+font-size:28px;
+}
+
+.cover{
+height:170px;
+}
+
+.avatar-wrap{
+width:110px;
+}
+
+.avatar{
+width:110px;
+height:110px;
+}
+
+.name{
+font-size:22px;
+}
+
+.badge{
+width:100%;
+}
+
+.stats{
+grid-template-columns:repeat(2,1fr);
+gap:12px;
+}
+
+.stat-value{
+font-size:24px;
+}
+
+.match{
+grid-template-columns:1fr;
+text-align:center;
+}
+
+.player,
+.player.right{
+justify-content:center;
+text-align:center;
+}
+
+.player{
+flex-direction:column;
+}
+
+.player.right{
+flex-direction:column;
+}
+
+}
+
 </style>
 </head>
+
 <body>
 
-<a href="https://goatfcbd.com" class="topbar">
+<!-- TOPBAR -->
+
+<a href="https://goatfcbd.com" class="topbar" style="text-decoration:none;">
 
 <div class="topbar-left">
 
 <img src="https://i.imgur.com/LY3Bb9m.png" class="topbar-logo">
 
-<div class="topbar-text">
-GOAT FC
+<div class="brand">
+<div class="brand-title">GOAT FC</div>
+<div class="brand-sub">ELITE ESPORTS</div>
 </div>
 
 </div>
 
 <div class="topbar-right">
+
+<div class="nav-btn">
 <i class="fa-solid fa-house"></i>
+</div>
+
 </div>
 
 </a>
 
-<div class="header">
-<img class="logo" src="https://i.imgur.com/LY3Bb9m.png">
-<div class="title">PLAYER PROFILE</div>
+<!-- HERO -->
+
+<div class="hero">
+
+<div class="hero-title">
+ELITE ATHLETE
 </div>
 
-<div class="powered">BE THE GAME CHANGER</div>
+<div class="hero-sub">
+Be The Game Changer
+</div>
+
+</div>
+
+<!-- APP -->
 
 <div id="app">
-<div class="loader">Loading Profile...</div>
+
+<div class="loader">
+<i class="fa-solid fa-spinner fa-spin"></i>
+&nbsp;
+Loading Player Profile...
+</div>
+
 </div>
 
 <script>
@@ -417,27 +852,37 @@ return (x||'').toLowerCase().replace(/[^a-z0-9]/g,'');
 const playerId=normalize(params.get('id')||'GFC-001');
 
 function csvToArray(str){
+
 const rows=[];
+
 let quote=false,row=[],col='';
 
 for(let i=0;i<str.length;i++){
+
 const c=str[i];
 
 if(c==='"'){
 quote=!quote;
-}else if(c===','&&!quote){
+}
+else if(c===','&&!quote){
 row.push(col);
 col='';
-}else if((c==='\n'||c==='\r')&&!quote){
+}
+else if((c==='\n'||c==='\r')&&!quote){
+
 if(col||row.length){
 row.push(col);
 rows.push(row);
+
 row=[];
 col='';
 }
-}else{
+
+}
+else{
 col+=c;
 }
+
 }
 
 if(col||row.length){
@@ -446,6 +891,7 @@ rows.push(row);
 }
 
 return rows;
+
 }
 
 async function load(){
@@ -469,20 +915,29 @@ const cpRows=csvToArray(cpText);
 const members={};
 
 memberRows.slice(1).forEach(r=>{
+
 if(!r.length)return;
+
 const id=normalize(r[1]);
+
 members[id]={
+
 name:r[0]||'Unknown',
 pic:r[4]||'https://i.imgur.com/LY3Bb9m.png',
 club:r[1]||'N/A'
+
 };
+
 });
 
 const cpMap={};
 
 cpRows.slice(1).forEach(r=>{
+
 if(!r.length)return;
+
 cpMap[normalize(r[0])]=r[7]||'0';
+
 });
 
 const board={};
@@ -491,6 +946,7 @@ const matches=[];
 matchRows.slice(1).forEach(r=>{
 
 if(!r.length)return;
+
 if((r[9]||'').toLowerCase()!=='yes')return;
 
 const p1=normalize(r[0]);
@@ -507,28 +963,37 @@ if(+r[4]>+r[3]) board[p2].win++;
 
 board[p1].gs+=(+r[3]||0);
 board[p1].gc+=(+r[4]||0);
+
 board[p2].gs+=(+r[4]||0);
 board[p2].gc+=(+r[3]||0);
 
 if(p1===playerId||p2===playerId){
+
 matches.push({
+
 p1:r[0],
 p2:r[1],
 type:r[2],
 s1:+r[3],
 s2:+r[4]
+
 });
+
 }
 
 });
 
 const ranking=Object.entries(board)
+
 .map(([id,v])=>({
+
 id,
 points:v.points,
 win:v.win,
 gd:v.gs-v.gc
+
 }))
+
 .sort((a,b)=>b.points-a.points||b.win-a.win||b.gd-a.gd);
 
 const rank=ranking.findIndex(x=>x.id===playerId)+1;
@@ -540,11 +1005,15 @@ matches.forEach(m=>{
 let me,op;
 
 if(normalize(m.p1)===playerId){
+
 me=m.s1;
 op=m.s2;
+
 }else{
+
 me=m.s2;
 op=m.s1;
+
 }
 
 gs+=me;
@@ -559,69 +1028,194 @@ else draw++;
 });
 
 const total=matches.length;
+
 const wr=((win/(total||1))*100).toFixed(1);
+
 const gr=(gs/(total||1)).toFixed(2);
 
 const info=members[playerId]||{
+
 name:'Unknown Player',
 pic:'https://i.imgur.com/LY3Bb9m.png',
 club:'N/A'
+
 };
 
 const netCP=cpMap[playerId]||'0';
 
 const html=`
+
 <div class="profile">
+
 <div class="cover"></div>
 
 <div class="top">
+
+<div class="avatar-wrap">
+
+<div class="avatar-ring"></div>
+
 <img class="avatar" crossorigin="anonymous" src="${info.pic}">
 
+<div class="online"></div>
+
+</div>
+
 <div class="name-row">
-<div class="name">${info.name}</div>
 
-<div style="
-color:#64748b;
-font-size:13px;
-font-weight:700;
-">
-|
+<div class="name">
+${info.name}
 </div>
 
-<div class="clubid">${info.club}</div>
+<div class="club">
+<i class="fa-solid fa-shield-halved"></i>
+&nbsp;
+${info.club}
 </div>
 
-<div class="rank-row">
-<div class="rank">🏆 OVERALL RANK #${rank||'-'}</div>
-<div class="cp">🪙 ${netCP} CP</div>
-</div>
 </div>
 
-<div class="grid">
-<div class="box"><div class="label">🟢Wins</div><div class="value">${win}</div></div>
-<div class="box"><div class="label">🔴Loss</div><div class="value">${loss}</div></div>
-<div class="box"><div class="label">🟡Draw</div><div class="value">${draw}</div></div>
-<div class="box"><div class="label">🎮Matches</div><div class="value">${total}</div></div>
-<div class="box"><div class="label">📊Win Rate</div><div class="value">${wr}%</div></div>
-<div class="box"><div class="label">📈Goal Rate</div><div class="value">${gr}</div></div>
-<div class="box"><div class="label">⚽Scored</div><div class="value">${gs}</div></div>
-<div class="box"><div class="label">🥅Conceded</div><div class="value">${gc}</div></div>
-<div class="box"><div class="label">👑7+ Goals</div><div class="value">${seven}</div></div>
+<div class="player-id">
+<i class="fa-solid fa-id-card"></i>
+${playerId.toUpperCase()}
 </div>
+
+<div class="badges">
+
+<div class="badge">
+
+<i class="fa-solid fa-trophy rank-icon"></i>
+
+<div>
+<small>GLOBAL RANK</small>
+<strong>#${rank||'-'}</strong>
+</div>
+
+</div>
+
+<div class="badge">
+
+<i class="fa-solid fa-coins cp-icon"></i>
+
+<div>
+<small>NET CP</small>
+<strong>${netCP}</strong>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- STATS -->
+
+<div class="stats">
+
+<div class="stat-card">
+<div class="stat-top">
+<div class="stat-label">Wins</div>
+<div class="stat-icon"><i class="fa-solid fa-medal"></i></div>
+</div>
+<div class="stat-value">${win}</div>
+</div>
+
+<div class="stat-card">
+<div class="stat-top">
+<div class="stat-label">Loss</div>
+<div class="stat-icon"><i class="fa-solid fa-heart-crack"></i></div>
+</div>
+<div class="stat-value">${loss}</div>
+</div>
+
+<div class="stat-card">
+<div class="stat-top">
+<div class="stat-label">Draw</div>
+<div class="stat-icon"><i class="fa-solid fa-handshake"></i></div>
+</div>
+<div class="stat-value">${draw}</div>
+</div>
+
+<div class="stat-card">
+<div class="stat-top">
+<div class="stat-label">Matches</div>
+<div class="stat-icon"><i class="fa-solid fa-gamepad"></i></div>
+</div>
+<div class="stat-value">${total}</div>
+</div>
+
+<div class="stat-card">
+<div class="stat-top">
+<div class="stat-label">Win Rate</div>
+<div class="stat-icon"><i class="fa-solid fa-chart-line"></i></div>
+</div>
+<div class="stat-value">${wr}%</div>
+</div>
+
+<div class="stat-card">
+<div class="stat-top">
+<div class="stat-label">Goal Rate</div>
+<div class="stat-icon"><i class="fa-solid fa-bullseye"></i></div>
+</div>
+<div class="stat-value">${gr}</div>
+</div>
+
+<div class="stat-card">
+<div class="stat-top">
+<div class="stat-label">Scored</div>
+<div class="stat-icon"><i class="fa-solid fa-futbol"></i></div>
+</div>
+<div class="stat-value">${gs}</div>
+</div>
+
+<div class="stat-card">
+<div class="stat-top">
+<div class="stat-label">Conceded</div>
+<div class="stat-icon"><i class="fa-solid fa-shield"></i></div>
+</div>
+<div class="stat-value">${gc}</div>
+</div>
+
+<div class="stat-card">
+<div class="stat-top">
+<div class="stat-label">7+ Goals</div>
+<div class="stat-icon"><i class="fa-solid fa-crown"></i></div>
+</div>
+<div class="stat-value">${seven}</div>
+</div>
+
+</div>
+
+<!-- MATCHES -->
 
 <div class="matches">
-<div class="matches-title">RECENT 5 MATCHES</div>
+
+<div class="matches-head">
+
+<div class="matches-title">
+RECENT MATCHES
+</div>
+
+<div class="match-count">
+${matches.length} Games
+</div>
+
+</div>
 
 ${matches.reverse().slice(0,5).map(m=>{
 
 let me,op,cls;
 
 if(normalize(m.p1)===playerId){
+
 me=m.s1;
 op=m.s2;
+
 }else{
+
 me=m.s2;
 op=m.s1;
+
 }
 
 if(me>op) cls='win';
@@ -629,35 +1223,95 @@ else if(me<op) cls='loss';
 else cls='draw';
 
 return `
+
 <div class="match">
-<div class="left player">
+
+<div class="player">
+
+<div class="player-avatar">
+<i class="fa-solid fa-user"></i>
+</div>
+
+<div>
+
+<div class="player-name">
 ${members[normalize(m.p1)]?.name||m.p1}
-<small>${m.p1}</small>
 </div>
 
-<div class="center">
-<div class="score ${cls}">${m.s1}-${m.s2}</div>
-<div class="type">${m.type}</div>
+<div class="player-id-small">
+${m.p1}
 </div>
 
-<div class="right player">
+</div>
+
+</div>
+
+<div class="match-center">
+
+<div class="score ${cls}">
+${m.s1} - ${m.s2}
+</div>
+
+<div class="match-type">
+${m.type}
+</div>
+
+</div>
+
+<div class="player right">
+
+<div>
+
+<div class="player-name">
 ${members[normalize(m.p2)]?.name||m.p2}
-<small>${m.p2}</small>
 </div>
-</div>`;
+
+<div class="player-id-small">
+${m.p2}
+</div>
+
+</div>
+
+<div class="player-avatar">
+<i class="fa-solid fa-user"></i>
+</div>
+
+</div>
+
+</div>
+
+`;
 
 }).join('')}
 
 </div>
 
-<div class="footer">POWERED BY GOAT FC</div>
-</div>`;
+<div class="footer">
+POWERED BY GOAT FC • NEXT GEN ESPORTS
+</div>
+
+</div>
+
+`;
 
 document.getElementById('app').innerHTML=html;
 
 }catch(err){
+
 console.error(err);
-document.getElementById('app').innerHTML=`<div class="loader">Profile Failed To Load</div>`;
+
+document.getElementById('app').innerHTML=`
+
+<div class="loader">
+
+<i class="fa-solid fa-triangle-exclamation"></i>
+<br><br>
+Failed To Load Profile
+
+</div>
+
+`;
+
 }
 
 }
@@ -665,5 +1319,6 @@ document.getElementById('app').innerHTML=`<div class="loader">Profile Failed To 
 load();
 
 </script>
+
 </body>
 </html>

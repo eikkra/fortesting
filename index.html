@@ -61,8 +61,17 @@ animation:rgbMove 6s linear infinite;
 text-align:center;
 font-size:10px;
 color:#00f5ff;
-margin-bottom:8px;
-letter-spacing:1px;
+margin-bottom:10px;
+
+letter-spacing:4px;
+
+width:100%;
+
+text-transform:uppercase;
+
+font-weight:700;
+
+opacity:.85;
 }
 
 .loader{
@@ -85,7 +94,7 @@ box-shadow:0 0 25px #00f5ff11;
 height:95px;
 background:
 linear-gradient(rgba(0,0,0,.15),rgba(0,0,0,.40)),
-url('https://c4.wallpaperflare.com/wallpaper/398/874/541/champions-league-stadium-wallpaper-preview.jpg');
+url('https://wallpaperaccess.com/full/9305823.jpg');
 background-size:cover;
 background-position:center;
 }
@@ -437,7 +446,16 @@ const html=`
 
 <div class="name-row">
 <div class="name">${info.name}</div>
-<div class="| clubid">${info.club}</div>
+
+<div style="
+color:#64748b;
+font-size:13px;
+font-weight:700;
+">
+|
+</div>
+
+<div class="clubid">${info.club}</div>
 </div>
 
 <div class="rank-row">

@@ -353,14 +353,14 @@ color:var(--yellow);
 .badge small{
 display:block;
 
-font-size:6px;
+font-size:8px;
 letter-spacing:1px;
 
 color:var(--muted);
 }
 
 .badge strong{
-font-size:13px;
+font-size:15px;
 font-weight:800;
 }
 
@@ -444,7 +444,7 @@ padding:0 10px 12px;
 .matches-head{
 display:flex;
 align-items:center;
-justify-content:space-between;
+justify-content:center;
 
 margin-bottom:8px;
 }
@@ -491,13 +491,11 @@ border:1px solid #ffffff10;
 }
 
 .player{
-display:flex;
-align-items:center;
-gap:5px;
+display:block;
+min-width:0;
 }
 
 .player.right{
-justify-content:flex-end;
 text-align:right;
 }
 
@@ -521,10 +519,10 @@ font-size:9px;
 }
 
 .player-name{
-font-size:9px;
+font-size:10px;
 font-weight:700;
 
-max-width:60px;
+max-width:100%;
 
 white-space:nowrap;
 overflow:hidden;
@@ -1076,10 +1074,6 @@ ${info.club}
 RECENT MATCHES
 </div>
 
-<div class="match-count">
-${matches.length} MATCH
-</div>
-
 </div>
 
 ${matches.reverse().slice(0,5).map(m=>{
@@ -1107,10 +1101,6 @@ return `
 <div class="match">
 
 <div class="player">
-
-<div class="player-avatar">
-<i class="fa-solid fa-user"></i>
-</div>
 
 <div>
 
@@ -1150,10 +1140,6 @@ ${members[normalize(m.p2)]?.name||m.p2}
 ${m.p2}
 </div>
 
-</div>
-
-<div class="player-avatar">
-<i class="fa-solid fa-user"></i>
 </div>
 
 </div>

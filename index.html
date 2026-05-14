@@ -2,18 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+<title>GOAT FC STATISTICS</title>
 
-<title>PLAYERS HUB</title>
-
-<link rel="icon"
-type="image/png"
-href="https://i.imgur.com/LY3Bb9m.png">
+<link rel="icon" type="image/png" href="https://i.imgur.com/LY3Bb9m.png">
 
 <link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
 
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Rajdhani:wght@400;500;600;700&display=swap"
 rel="stylesheet">
@@ -25,6 +21,8 @@ rel="stylesheet">
 --card:#0f172a;
 --cyan:#00f5ff;
 --green:#00ff88;
+--yellow:#ffd60a;
+--red:#ff4d6d;
 --white:#f8fafc;
 --muted:#94a3b8;
 }
@@ -40,7 +38,7 @@ background:var(--bg);
 font-family:'Rajdhani',sans-serif;
 color:var(--white);
 overflow-x:hidden;
-padding-bottom:25px;
+padding-bottom:20px;
 }
 
 body::before{
@@ -55,12 +53,10 @@ radial-gradient(circle at bottom right,#00ff8810,transparent 25%);
 z-index:-1;
 }
 
-/* =========================
-TOPBAR
-========================= */
+/* TOPBAR */
 
 .topbar{
-height:50px;
+height:48px;
 
 display:flex;
 align-items:center;
@@ -88,7 +84,7 @@ gap:8px;
 }
 
 .top-logo{
-width:23px;
+width:24px;
 
 filter:
 drop-shadow(0 0 5px #00f5ff);
@@ -126,12 +122,10 @@ color:var(--cyan);
 font-size:11px;
 }
 
-/* =========================
-HEADER
-========================= */
+/* HERO */
 
 .hero{
-padding:18px 12px 14px;
+padding:16px 12px 14px;
 text-align:center;
 }
 
@@ -154,35 +148,31 @@ linear-gradient(
 }
 
 .hero-sub{
-margin-top:7px;
+margin-top:6px;
 
 font-size:10px;
 font-weight:700;
 
-letter-spacing:4px;
+letter-spacing:3px;
 
 color:var(--muted);
 }
 
-/* =========================
-WRAP
-========================= */
+/* WRAP */
 
 .wrap{
-width:min(100% - 20px,1400px);
+width:min(100% - 16px,1400px);
 margin:auto;
 }
 
-/* =========================
-SEARCH
-========================= */
+/* SEARCH */
 
 .search-box{
 width:100%;
 
-height:50px;
+height:48px;
 
-padding:0 16px;
+padding:0 15px;
 
 border-radius:16px;
 
@@ -200,10 +190,10 @@ font-weight:700;
 
 font-family:'Rajdhani',sans-serif;
 
-margin-bottom:18px;
+margin-bottom:14px;
 
 box-shadow:
-0 0 12px #00f5ff08;
+0 0 10px #00f5ff08;
 }
 
 .search-box::placeholder{
@@ -215,48 +205,47 @@ color:#94a3b8;
 border-color:#00f5ff55;
 
 box-shadow:
-0 0 14px #00f5ff22;
+0 0 12px #00f5ff22;
 }
 
-/* =========================
-GRID
-========================= */
+/* GRID */
 
-.grid{
+#data{
 display:grid;
 
 grid-template-columns:
-repeat(auto-fit,minmax(220px,1fr));
+repeat(auto-fit,minmax(330px,1fr));
 
-gap:16px;
+gap:14px;
 }
 
-/* =========================
-CARD
-========================= */
+/* CARD */
 
 .card{
 position:relative;
 
-padding:14px 12px;
+padding:14px;
 
 border-radius:22px;
 
 background:
 linear-gradient(145deg,#111827,#0f172a);
 
-border:1px solid #00f5ff18;
+border:1px solid #00f5ff15;
 
 overflow:hidden;
 
-cursor:pointer;
+box-shadow:
+0 0 16px #000;
 
 transition:.25s;
+}
 
-text-align:center;
+.card:hover{
+transform:translateY(-4px);
 
 box-shadow:
-0 0 10px #000;
+0 0 18px #00f5ff15;
 }
 
 .card::before{
@@ -273,59 +262,62 @@ border:1px solid #00f5ff10;
 pointer-events:none;
 }
 
-.card:hover{
-transform:translateY(-4px);
+/* RANK COLORS */
 
-border-color:#00f5ff35;
-
-box-shadow:
-0 0 16px #00f5ff18;
+.rank1{
+border-color:gold;
+box-shadow:0 0 18px rgba(255,215,0,.25);
 }
 
-/* IMAGE */
-
-.card img{
-width:78px;
-height:78px;
-
-border-radius:50%;
-
-object-fit:cover;
-
-border:2px solid #00f5ff;
-
-background:#111827;
-
-box-shadow:
-0 0 14px #00f5ff30;
+.rank2{
+border-color:silver;
+box-shadow:0 0 18px rgba(192,192,192,.2);
 }
 
-/* NAME */
+.rank3{
+border-color:#cd7f32;
+box-shadow:0 0 18px rgba(205,127,50,.2);
+}
 
-.name{
-margin-top:11px;
+.top10{
+border-color:#a855f7;
+box-shadow:0 0 18px rgba(168,85,247,.2);
+}
 
-font-size:16px;
+/* PLAYER */
+
+.player-head{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:10px;
+
+margin-bottom:12px;
+}
+
+.player-left{
+min-width:0;
+}
+
+.player-name{
+font-size:18px;
 font-weight:800;
-
-line-height:1.3;
 
 white-space:nowrap;
 overflow:hidden;
 text-overflow:ellipsis;
+
+color:white;
 }
 
-/* ID */
-
-.id{
-margin-top:8px;
+.player-id{
+margin-top:4px;
 
 display:inline-flex;
 align-items:center;
-justify-content:center;
-gap:6px;
+gap:5px;
 
-padding:7px 12px;
+padding:5px 10px;
 
 border-radius:999px;
 
@@ -333,114 +325,144 @@ background:#00f5ff10;
 
 border:1px solid #00f5ff20;
 
-font-size:11px;
-font-weight:800;
+font-size:10px;
+font-weight:700;
 
 color:var(--cyan);
 }
 
-/* EMPTY */
+/* RANK */
 
-.empty{
-padding:50px 10px;
+.rank-badge{
+width:42px;
+height:42px;
 
-text-align:center;
+border-radius:14px;
 
-font-size:15px;
-font-weight:700;
+display:flex;
+align-items:center;
+justify-content:center;
 
-color:var(--muted);
+font-family:'Orbitron',sans-serif;
+font-size:14px;
+font-weight:800;
 
-grid-column:1/-1;
+background:#00f5ff10;
+
+border:1px solid #00f5ff20;
+
+color:var(--cyan);
+
+flex-shrink:0;
 }
 
-/* =========================
-TABLET
-========================= */
-
-@media(max-width:900px){
+/* STATS */
 
 .grid{
+display:grid;
 
 grid-template-columns:
 repeat(3,1fr);
 
-}
-
-}
-
-/* =========================
-MOBILE
-========================= */
-
-@media(max-width:768px){
-
-.wrap{
-width:min(100% - 10px,480px);
-}
-
-.grid{
-
-grid-template-columns:
-repeat(2,1fr);
-
-gap:10px;
-}
-
-.hero-title{
-font-size:17px;
-}
-
-.hero-sub{
-font-size:8px;
-letter-spacing:3px;
-}
-
-.search-box{
-height:42px;
-font-size:12px;
-}
-
-.card{
-padding:12px 8px;
-border-radius:18px;
-}
-
-.card img{
-width:62px;
-height:62px;
-}
-
-.name{
-font-size:12px;
-}
-
-.id{
-font-size:9px;
-padding:6px 10px;
-}
-
-}
-
-/* SMALL MOBILE */
-
-@media(max-width:420px){
-
-.grid{
 gap:8px;
 }
 
-.card img{
-width:58px;
-height:58px;
+.box{
+padding:8px 6px;
+
+border-radius:14px;
+
+background:
+linear-gradient(145deg,#0f172a,#111827);
+
+border:1px solid #ffffff10;
+
+text-align:center;
 }
 
-.name{
-font-size:11px;
+.box-value{
+font-size:15px;
+font-weight:800;
+
+font-family:'Orbitron',sans-serif;
+
+color:white;
 }
 
-.id{
+.box-label{
+margin-top:4px;
+
 font-size:8px;
+font-weight:700;
+
+letter-spacing:1px;
+
+text-transform:uppercase;
+
+color:var(--muted);
+}
+
+/* COLORS */
+
+.win-text{color:#00ff88;}
+.loss-text{color:#ff4d6d;}
+.draw-text{color:#ffd60a;}
+.match-text{color:#00f5ff;}
+.rate-text{color:#38bdf8;}
+.goal-text{color:#22c55e;}
+.con-text{color:#f97316;}
+.diff-text{color:#a855f7;}
+.seven-text{color:#facc15;}
+.friendly-text{color:#06b6d4;}
+.tour-text{color:#fb7185;}
+
+/* DOWNLOAD */
+
+.download{
+margin-top:12px;
+}
+
+.download button{
+width:100%;
+height:42px;
+
+border:none;
+
+border-radius:14px;
+
+background:
+linear-gradient(90deg,#00f5ff,#00ff88);
+
+color:#001018;
+
+font-size:13px;
+font-weight:800;
+
+font-family:'Orbitron',sans-serif;
+
+cursor:pointer;
+
+transition:.2s;
+}
+
+.download button:hover{
+transform:scale(.98);
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+#data{
+grid-template-columns:1fr;
+}
+
+.grid{
+grid-template-columns:repeat(2,1fr);
+}
+
+.player-name{
+font-size:16px;
 }
 
 }
@@ -477,11 +499,11 @@ GOAT FC
 <div class="hero">
 
 <div class="hero-title">
-PLAYERS HUB
+GOAT FC STATISTICS
 </div>
 
 <div class="hero-sub">
-SEARCH YOUR FAVORITE PLAYER
+ELITE PLAYER PERFORMANCE SYSTEM
 </div>
 
 </div>
@@ -494,120 +516,305 @@ SEARCH YOUR FAVORITE PLAYER
 type="text"
 id="search"
 class="search-box"
-placeholder="Search Player Name / ID...">
+placeholder="Search Player Name / Club ID..."
+oninput="render()">
 
-<div id="grid"
-class="grid">
-
-</div>
+<div id="data"></div>
 
 </div>
 
 <script>
 
-const MEMBER_CSV =
-"https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv";
+const MATCH_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLEME9M9cSy9FvfHvcx2gMPkp1H5Dj4YaKufPRsAyon8Tf-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv";
 
-let playersData=[];
+const MEMBER_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLEME9M9cSy9FvfHvcx2gMPkp1H5Dj4YaKufPRsAyon8Tf-lo7VbkQ6/pub?gid=133947099&single=true&output=csv";
 
-/* CSV */
+let players={}, members={}, cache={};
 
 function parseCSV(text){
 
-return text
-.split("\n")
-.map(r=>r.split(","));
+const rows=[];
+let cur=[], val="", q=false;
+
+for(let i=0;i<text.length;i++){
+
+let c=text[i];
+
+if(c=='"'){
+
+if(q && text[i+1]=='"'){
+val+='"';
+i++;
+}else q=!q;
 
 }
 
-/* NORMALIZE */
+else if(c==','&&!q){
+cur.push(val);
+val="";
+}
 
-function normalize(x){
+else if((c=='\n'||c=='\r')&&!q){
 
-return (x||"")
-.toLowerCase();
+if(val||cur.length){
+
+cur.push(val);
+rows.push(cur);
+
+cur=[];
+val="";
 
 }
 
-/* LOAD */
+}
 
-async function loadPlayers(){
+else{
+val+=c;
+}
 
-const res =
-await fetch(MEMBER_CSV);
+}
 
-const text =
-await res.text();
+return rows;
 
-const rows =
-parseCSV(text);
+}
 
-playersData=[];
+function normalize(id){
+return (id||"")
+.toLowerCase()
+.replace(/[^a-z0-9]/g,'');
+}
 
-rows.slice(1).forEach(r=>{
+async function getData(url){
 
-playersData.push({
+if(cache[url]) return cache[url];
 
-name:r[0] || "Unknown",
+let t=await fetch(url+"&t="+Date.now())
+.then(r=>r.text());
 
-id:r[1] || "N/A",
+cache[url]=t;
 
-pic:r[4] ||
-"https://i.imgur.com/LY3Bb9m.png"
+return t;
+
+}
+
+async function loadMembers(){
+
+let rows=parseCSV(await getData(MEMBER_URL))
+.slice(1);
+
+rows.forEach(c=>{
+
+if(c[1] && !c[1].includes("#VALUE")){
+
+members[normalize(c[1])] = c[0];
+
+}
 
 });
 
+}
+
+async function loadMatches(){
+
+let rows=parseCSV(await getData(MATCH_URL))
+.slice(1);
+
+rows.forEach(c=>{
+
+let P1=c[0],
+P2=c[1];
+
+let s1=Number(c[3]),
+s2=Number(c[4]);
+
+let approved=(c[9]||"").toLowerCase();
+
+if(
+!P1 || !P2 ||
+P1.includes("#VALUE") ||
+P2.includes("#VALUE") ||
+isNaN(s1) ||
+isNaN(s2) ||
+approved!=="yes"
+) return;
+
+update(P1,s1,s2,c[2]);
+update(P2,s2,s1,c[2]);
+
 });
 
-render(playersData);
+}
+
+function update(id,s,c,t){
+
+if(!players[id]){
+
+players[id]={
+match:0,
+win:0,
+loss:0,
+draw:0,
+gs:0,
+gc:0,
+diff:0,
+rate:0,
+seven:0,
+friendly:0,
+other:0
+};
 
 }
 
-/* RENDER */
+let p=players[id];
 
-function render(data){
+p.match++;
 
-let html='';
+p.gs+=s;
+p.gc+=c;
 
-if(data.length===0){
+p.diff=p.gs-p.gc;
 
-html=`
+if(t==="Friendly") p.friendly++;
+else p.other++;
 
-<div class="empty">
-<i class="fa-solid fa-magnifying-glass"></i>
-<br><br>
-No Player Found
-</div>
+if(s>c) p.win++;
+else if(s<c) p.loss++;
+else p.draw++;
 
-`;
+if(s>=7) p.seven++;
 
-document
-.getElementById("grid")
-.innerHTML=html;
-
-return;
+p.winp=(p.win/p.match)*100;
+p.rate=(p.gs/p.match);
 
 }
 
-data.forEach(p=>{
+function render(){
+
+let q=normalize(
+document.getElementById("search").value
+);
+
+let sorted=Object.entries(players)
+
+.sort((a,b)=>b[1].win-a[1].win);
+
+let html="";
+
+sorted.forEach(([id,p],i)=>{
+
+let name=
+members[normalize(id)]
+||"Unknown Player";
+
+if(
+q &&
+!(
+normalize(id).includes(q)
+||
+normalize(name).includes(q)
+)
+) return;
+
+let cls="card";
+
+if(i===0) cls+=" rank1";
+else if(i===1) cls+=" rank2";
+else if(i===2) cls+=" rank3";
+else if(i<10) cls+=" top10";
 
 html += `
 
-<div class="card"
-onclick="openProfile('${p.id}')">
+<div class="${cls}">
 
-<img src="${p.pic}">
+<div class="player-head">
 
-<div class="name">
-${p.name}
+<div class="player-left">
+
+<div class="player-name">
+${name}
 </div>
 
-<div class="id">
-
+<div class="player-id">
 <i class="fa-solid fa-shield-halved"></i>
+${id}
+</div>
 
-${p.id}
+</div>
 
+<div class="rank-badge">
+#${i+1}
+</div>
+
+</div>
+
+<div class="grid">
+
+<div class="box">
+<div class="box-value win-text">${p.win}</div>
+<div class="box-label">Wins</div>
+</div>
+
+<div class="box">
+<div class="box-value loss-text">${p.loss}</div>
+<div class="box-label">Loss</div>
+</div>
+
+<div class="box">
+<div class="box-value draw-text">${p.draw}</div>
+<div class="box-label">Draw</div>
+</div>
+
+<div class="box">
+<div class="box-value match-text">${p.match}</div>
+<div class="box-label">Match</div>
+</div>
+
+<div class="box">
+<div class="box-value rate-text">${p.winp.toFixed(1)}%</div>
+<div class="box-label">Win Rate</div>
+</div>
+
+<div class="box">
+<div class="box-value goal-text">${p.rate.toFixed(2)}</div>
+<div class="box-label">Goal Rate</div>
+</div>
+
+<div class="box">
+<div class="box-value goal-text">${p.gs}</div>
+<div class="box-label">Scored</div>
+</div>
+
+<div class="box">
+<div class="box-value con-text">${p.gc}</div>
+<div class="box-label">Against</div>
+</div>
+
+<div class="box">
+<div class="box-value diff-text">${p.diff}</div>
+<div class="box-label">Diff.</div>
+</div>
+
+<div class="box">
+<div class="box-value seven-text">${p.seven}</div>
+<div class="box-label">7+ Goal</div>
+</div>
+
+<div class="box">
+<div class="box-value friendly-text">${p.friendly}</div>
+<div class="box-label">Friendly</div>
+</div>
+
+<div class="box">
+<div class="box-value tour-text">${p.other}</div>
+<div class="box-label">Tournament</div>
+</div>
+
+</div>
+
+<div class="download">
+<button onclick="downloadCard(this)">
+DOWNLOAD CARD
+</button>
 </div>
 
 </div>
@@ -616,53 +823,43 @@ ${p.id}
 
 });
 
-document
-.getElementById("grid")
-.innerHTML = html;
+document.getElementById("data").innerHTML=html;
 
 }
 
-/* SEARCH */
+function downloadCard(btn){
 
-document
-.getElementById("search")
+html2canvas(btn.closest(".card"))
+.then(c=>{
 
-.addEventListener("input",function(){
+let a=document.createElement("a");
 
-const value =
-normalize(this.value);
+a.download="GOAT_FC_STATS.jpg";
 
-const filtered =
-playersData.filter(p=>
+a.href=c.toDataURL("image/jpeg");
 
-normalize(p.name)
-.includes(value)
-
-||
-
-normalize(p.id)
-.includes(value)
-
-);
-
-render(filtered);
+a.click();
 
 });
 
-/* OPEN PROFILE */
+}
 
-function openProfile(id){
+async function init(){
 
-window.location.href =
-"profile/?id="+id;
+await Promise.all([
+loadMembers(),
+loadMatches()
+]);
+
+render();
 
 }
 
-/* LOAD */
-
-loadPlayers();
+init();
 
 </script>
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
 </body>
 </html>

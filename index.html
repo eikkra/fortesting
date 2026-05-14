@@ -1,116 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GOAT FC STATISTICS</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>GOAT FC PRO DASHBOARD</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Orbitron:wght@600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
 
 <style>
 
+:root{
+--bg:#050816;
+--card:#0b1220;
+--cyan:#00f5ff;
+--green:#00ff88;
+--yellow:#ffd60a;
+--red:#ff4d6d;
+--muted:#94a3b8;
+}
+
 body{
 margin:0;
-font-family:'Rajdhani',sans-serif;
-background:#050816;
+font-family:'Rajdhani';
+background:var(--bg);
 color:white;
 }
 
 .header{
 text-align:center;
-padding:15px;
+padding:18px;
 }
 
 .header h1{
-color:#00f5ff;
+font-family:'Orbitron';
+color:var(--cyan);
+font-size:22px;
 margin:0;
-text-shadow:0 0 10px #00f5ff;
 }
 
-.search{
-text-align:center;
+.toggle{
+display:flex;
+justify-content:center;
+gap:10px;
 margin:10px;
 }
 
-.search input{
-width:90%;
-max-width:400px;
-padding:10px;
+.toggle button{
+padding:6px 12px;
 border-radius:10px;
-border:1px solid #00f5ff;
-background:#000;
+border:1px solid #00f5ff40;
+background:#0b1220;
 color:#00f5ff;
-outline:none;
+cursor:pointer;
 }
 
-/* GRID */
-#data{
+.toggle button.active{
+background:#00f5ff;
+color:black;
+}
+
+#grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-gap:12px;
+gap:10px;
 padding:10px;
 }
 
-/* CARD */
 .card{
-background:linear-gradient(145deg,#0b1220,#020617);
-border:1px solid rgba(0,245,255,0.25);
-border-radius:16px;
-padding:12px;
-box-shadow:0 0 12px rgba(0,245,255,0.15);
+background:linear-gradient(145deg,#0b1220,#060a14);
+border:1px solid #00f5ff30;
+border-radius:14px;
+padding:10px;
+box-shadow:0 0 10px #000;
 }
 
-/* TOP */
-.title{
+.top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:6px;
+}
+
+.name{
 font-weight:700;
-margin-bottom:10px;
-color:#22c55e;
+font-size:14px;
 }
 
-/* BOX GRID (COMPACT FIX) */
-.grid{
+.id{
+color:var(--cyan);
+font-size:12px;
+}
+
+.badge{
+font-size:11px;
+padding:3px 8px;
+border-radius:20px;
+background:#00f5ff15;
+border:1px solid #00f5ff30;
+}
+
+.stats{
 display:grid;
 grid-template-columns:repeat(3,1fr);
 gap:6px;
 }
 
 .box{
-padding:6px;
+background:#0a1020;
+border:1px solid #00f5ff20;
 border-radius:8px;
-font-size:12px;
-background:rgba(0,245,255,0.05);
-border:1px solid rgba(0,245,255,0.2);
-
-/* 🔥 COMPACT FIX */
-line-height:1.1;
+padding:5px 6px;   /* 🔥 compact */
+font-size:11px;
+text-align:center;
 }
 
-/* COLORS */
-.win{color:#22c55e}
-.loss{color:#ef4444}
-.draw{color:#facc15}
-
-/* ID COLOR FIX */
-.id{
-color:#00f5ff;
-font-weight:700;
-}
-
-.name{
-color:#ffffff;
-font-weight:700;
-}
-
-/* BUTTON */
-button{
-margin-top:8px;
-padding:6px 10px;
-border:none;
-border-radius:8px;
-background:#00f5ff;
-cursor:pointer;
-}
+.rank{color:gold}
+.cp{color:#ffd60a}
 
 </style>
 </head>
@@ -121,121 +127,129 @@ cursor:pointer;
 <h1>GOAT FC STATISTICS</h1>
 </div>
 
-<div class="search">
-<input id="search" placeholder="Search player..." oninput="render()">
+<div class="toggle">
+<button class="active" onclick="setMode('overall')">Overall</button>
+<button onclick="setMode('monthly')">Monthly</button>
 </div>
 
-<div id="data"></div>
+<div id="grid"></div>
 
 <script>
 
-const MATCH_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLEME9M9cSy9FvfHvcx2gMPkp1H5Dj4YaKufPRsAyon8Tf-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv";
+const CSV="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLEME9M9cSy9FvfHvcx2gMPkp1H5Dj4YaKufPRsAyon8Tf-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv";
 
-const MEMBER_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLEME9M9cSy9FvfHvcx2gMPkp1H5Dj4YaKufPRsAyon8Tf-lo7VbkQ6/pub?gid=133947099&single=true&output=csv";
+let mode="overall";
+let data={};
 
-let players={}, members={};
-
-function parseCSV(t){
-let r=[],c=[],v="",q=0;
-for(let i=0;i<t.length;i++){
-let x=t[i];
-if(x=='"'){q=!q}
-else if(x==","&&!q){c.push(v);v=""}
-else if((x=="\n")&&!q){c.push(v);r.push(c);c=[];v=""}
-else v+=x;
+function csvToArray(str){
+let rows=[],row=[],val="",q=false;
+for(let c of str){
+if(c=='"') q=!q;
+else if(c==','&&!q){row.push(val);val=""}
+else if(c=='\n'){row.push(val);rows.push(row);row=[];val=""}
+else val+=c;
 }
-return r;
+return rows;
 }
 
-function norm(x){
-return (x||"").toLowerCase().replace(/[^a-z0-9]/g,"");
+function normalize(x){
+return (x||"").toLowerCase().replace(/[^a-z0-9]/g,'');
 }
 
-/* MEMBERS */
-async function loadMembers(){
-let d=await fetch(MEMBER_URL).then(r=>r.text());
-parseCSV(d).slice(1).forEach(r=>{
-members[norm(r[1])] = r[0];
-});
-}
-
-/* MATCH FIXED (NEW STRUCTURE) */
-async function loadMatches(){
-let d=await fetch(MATCH_URL).then(r=>r.text());
-let rows=parseCSV(d).slice(1);
+async function load(){
+let txt=await fetch(CSV).then(r=>r.text());
+let rows=csvToArray(txt).slice(1);
 
 rows.forEach(r=>{
-
 let p1=r[0], p2=r[1];
+let type=r[2];
 let s1=+r[3], s2=+r[4];
-let approved=(r[9]||"").toLowerCase();
+let p1pt=+r[5], p2pt=+r[6];
+let date=r[11];
 
-if(!p1||!p2||approved!=="yes") return;
+if(!p1||!p2||isNaN(s1)||isNaN(s2)) return;
 
-if(!players[p1]) players[p1]={win:0,loss:0,draw:0,match:0,gs:0,gc:0};
-if(!players[p2]) players[p2]={win:0,loss:0,draw:0,match:0,gs:0,gc:0};
-
-let a=players[p1], b=players[p2];
-
-a.match++; b.match++;
-a.gs+=s1; a.gc+=s2;
-b.gs+=s2; b.gc+=s1;
-
-if(s1>s2){a.win++;b.loss++}
-else if(s2>s1){b.win++;a.loss++}
-else{a.draw++;b.draw++}
-
+add(p1,s1,s2,p1pt,type,date);
+add(p2,s2,s1,p2pt,type,date);
 });
+
+render();
 }
 
-/* RENDER */
+function add(id,gs,gc,pt,type,date){
+
+if(!data[id]){
+data[id]={win:0,loss:0,draw:0,gs:0,gc:0,pt:0,match:0};
+}
+
+let d=data[id];
+
+d.match++;
+d.gs+=gs;
+d.gc+=gc;
+d.pt+=pt;
+
+if(gs>gc) d.win++;
+else if(gs<gc) d.loss++;
+else d.draw++;
+
+d.diff=d.gs-d.gc;
+d.wr=(d.win/d.match*100).toFixed(1);
+d.rate=(d.gs/d.match).toFixed(2);
+}
+
 function render(){
 
-let q=norm(document.getElementById("search").value);
-
-let arr=Object.entries(players)
-.sort((a,b)=>b[1].win-a[1].win);
+let arr=Object.entries(data)
+.sort((a,b)=>b[1].pt-a[1].pt||b[1].win-a[1].win||b[1].diff-a[1].diff);
 
 let html="";
 
-arr.forEach(([id,p])=>{
+arr.forEach(([id,p],i)=>{
 
-let name=members[norm(id)]||"Unknown";
-
-if(q && !(norm(id).includes(q)||norm(name).includes(q))) return;
+let rankClass=i==0?"rank":"";
 
 html+=`
 <div class="card">
 
-<div class="title">
-<span class="name">${name}</span>
-<span class="id">(${id})</span>
+<div class="top">
+<div>
+<div class="name">${id}</div>
+<div class="id">${id}</div>
+</div>
+<div class="badge ${rankClass}">#${i+1}</div>
 </div>
 
-<div class="grid">
+<div class="stats">
 
-<div class="box win"><i class="fa fa-trophy"></i> Win: ${p.win}</div>
-<div class="box loss"><i class="fa fa-times"></i> Loss: ${p.loss}</div>
-<div class="box draw"><i class="fa fa-handshake"></i> Draw: ${p.draw}</div>
+<div class="box">🏆 ${p.win}</div>
+<div class="box">❌ ${p.loss}</div>
+<div class="box">🤝 ${p.draw}</div>
 
-<div class="box"><i class="fa fa-gamepad"></i> Match: ${p.match}</div>
-<div class="box"><i class="fa fa-futbol"></i> GS: ${p.gs}</div>
-<div class="box"><i class="fa fa-shield"></i> GC: ${p.gc}</div>
+<div class="box">🎮 ${p.match}</div>
+<div class="box">📊 ${p.wr}%</div>
+<div class="box">⚽ ${p.rate}</div>
+
+<div class="box">⚽ ${p.gs}</div>
+<div class="box">🛡 ${p.gc}</div>
+<div class="box">📈 ${p.diff}</div>
 
 </div>
 
-</div>`;
+</div>
+`;
 });
 
-document.getElementById("data").innerHTML=html;
+document.getElementById("grid").innerHTML=html;
 }
 
-async function init(){
-await loadMembers();
-await loadMatches();
-render();
+function setMode(m){
+mode=m;
+document.querySelectorAll(".toggle button").forEach(b=>b.classList.remove("active"));
+event.target.classList.add("active");
 }
-init();
+
+load();
 
 </script>
 

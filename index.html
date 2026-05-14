@@ -3,17 +3,13 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-<title>GOAT FC STATISTICS</title>
+<title>GOAT FC Statistics</title>
 
 <link rel="icon" href="https://i.imgur.com/LY3Bb9m.png">
-
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
-
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
 <style>
-
 :root{
 --bg:#030712;
 --card:#071426;
@@ -31,7 +27,7 @@ box-sizing:border-box;
 }
 
 body{
-background:#020617;
+background:var(--bg);
 font-family:'Rajdhani',sans-serif;
 color:white;
 overflow-x:hidden;
@@ -41,15 +37,11 @@ body::before{
 content:"";
 position:fixed;
 inset:0;
-
 background:
-radial-gradient(circle at top left,#00f5ff15,transparent 30%),
+radial-gradient(circle at top left,#00f5ff18,transparent 30%),
 radial-gradient(circle at bottom right,#00ff8810,transparent 30%);
-
 z-index:-1;
 }
-
-/* TOPBAR */
 
 .topbar{
 height:50px;
@@ -57,11 +49,12 @@ display:flex;
 align-items:center;
 justify-content:space-between;
 padding:0 14px;
-
-background:#030712ee;
+background:#020617ee;
 backdrop-filter:blur(10px);
-
 border-bottom:1px solid #00f5ff15;
+position:sticky;
+top:0;
+z-index:999;
 }
 
 .top-left{
@@ -86,23 +79,17 @@ color:var(--cyan);
 .home-btn{
 width:30px;
 height:30px;
-
 display:flex;
 align-items:center;
 justify-content:center;
-
 border-radius:10px;
-
 background:#0f172a;
-
-border:1px solid #00f5ff25;
+border:1px solid #00f5ff20;
 color:var(--cyan);
 }
 
-/* HERO */
-
 .hero{
-padding:20px 12px 10px;
+padding:18px 12px 10px;
 text-align:center;
 }
 
@@ -110,7 +97,6 @@ text-align:center;
 font-family:'Orbitron',sans-serif;
 font-size:28px;
 font-weight:800;
-
 background:linear-gradient(90deg,#00f5ff,#ffffff,#00ff88);
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
@@ -123,39 +109,24 @@ letter-spacing:2px;
 color:var(--muted);
 }
 
-/* SEARCH */
-
 .search-wrap{
-padding:10px 14px 20px;
+padding:10px 14px 18px;
 display:flex;
 justify-content:center;
 }
 
 .search{
 width:100%;
-max-width:500px;
-
+max-width:550px;
 padding:13px 16px;
-
 border-radius:16px;
-
-border:1px solid #00f5ff35;
-
 background:#071426;
-
+border:1px solid #00f5ff35;
 color:white;
-
 outline:none;
-
 font-size:14px;
 font-family:'Rajdhani';
 }
-
-.search:focus{
-box-shadow:0 0 15px #00f5ff35;
-}
-
-/* FILTER */
 
 .filters{
 display:flex;
@@ -167,18 +138,13 @@ flex-wrap:wrap;
 
 .filter-btn{
 padding:10px 18px;
-
 border:none;
 border-radius:12px;
-
 background:#071426;
-
-color:#00f5ff;
-
 border:1px solid #00f5ff25;
-
-font-family:'Rajdhani';
+color:#00f5ff;
 font-weight:700;
+font-family:'Rajdhani';
 cursor:pointer;
 }
 
@@ -187,49 +153,22 @@ background:#00f5ff;
 color:#001018;
 }
 
-/* GRID */
-
 #data{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(310px,1fr));
+grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
 gap:16px;
-
 padding:0 14px 25px;
 }
 
-/* CARD */
-
 .card{
 background:linear-gradient(145deg,#071426,#08111f);
-
 border-radius:24px;
-
 padding:14px;
-
 border:1px solid #00f5ff20;
-
-box-shadow:
-0 0 15px #000,
-0 0 12px #00f5ff10;
-
+box-shadow:0 0 15px #000,0 0 10px #00f5ff10;
 position:relative;
-
 overflow:hidden;
 }
-
-.card::before{
-content:"";
-
-position:absolute;
-inset:0;
-
-background:
-linear-gradient(120deg,transparent,rgba(255,255,255,.03),transparent);
-
-pointer-events:none;
-}
-
-/* RANK */
 
 .rank1{
 border-color:gold;
@@ -251,7 +190,31 @@ border-color:#a855f7;
 box-shadow:0 0 16px #a855f7;
 }
 
-/* PLAYER */
+.top-row{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:12px;
+}
+
+.badge{
+padding:7px 12px;
+border-radius:12px;
+font-size:12px;
+font-weight:800;
+}
+
+.rank-badge{
+background:#00f5ff15;
+border:1px solid #00f5ff30;
+color:#00f5ff;
+}
+
+.mode-badge{
+background:#00ff8815;
+border:1px solid #00ff8830;
+color:#00ff88;
+}
 
 .player{
 text-align:center;
@@ -271,45 +234,6 @@ font-weight:700;
 color:#00f5ff;
 }
 
-/* RANK + TYPE */
-
-.top-row{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:12px;
-}
-
-.rank-badge{
-padding:7px 12px;
-
-border-radius:12px;
-
-background:#00f5ff15;
-
-border:1px solid #00f5ff30;
-
-font-size:13px;
-font-weight:800;
-color:#00f5ff;
-}
-
-.type-badge{
-padding:7px 12px;
-
-border-radius:12px;
-
-background:#00ff8815;
-
-border:1px solid #00ff8830;
-
-font-size:13px;
-font-weight:800;
-color:#00ff88;
-}
-
-/* GRID */
-
 .grid{
 display:grid;
 grid-template-columns:repeat(3,1fr);
@@ -318,13 +242,9 @@ gap:8px;
 
 .box{
 padding:10px 6px;
-
 border-radius:14px;
-
 background:#081a2d;
-
 border:1px solid #00f5ff20;
-
 text-align:center;
 }
 
@@ -337,19 +257,15 @@ color:#94a3b8;
 
 .box-value{
 margin-top:4px;
-font-size:18px;
+font-size:17px;
 font-weight:800;
 font-family:'Orbitron';
 }
-
-/* COLORS */
 
 .win{color:#00ff88;}
 .loss{color:#ff4d6d;}
 .draw{color:#ffd60a;}
 .cyan{color:#00f5ff;}
-
-/* BUTTON */
 
 .download{
 margin-top:14px;
@@ -358,96 +274,56 @@ text-align:center;
 
 .download button{
 padding:10px 18px;
-
 border:none;
 border-radius:14px;
-
 background:#00f5ff;
-
 color:#001018;
-
 font-weight:800;
 font-family:'Rajdhani';
-
 cursor:pointer;
 }
 
-/* MOBILE */
+.loader{
+padding:50px 20px;
+text-align:center;
+font-size:18px;
+color:#00f5ff;
+}
 
 @media(max-width:768px){
-
-.hero-title{
-font-size:21px;
+.hero-title{font-size:22px;}
+#data{grid-template-columns:1fr;padding:0 10px 20px;}
+.box-value{font-size:14px;}
 }
-
-#data{
-grid-template-columns:1fr;
-padding:0 10px 20px;
-}
-
-.grid{
-grid-template-columns:repeat(3,1fr);
-}
-
-.box-value{
-font-size:15px;
-}
-
-}
-
 </style>
 </head>
-
 <body>
 
 <div class="topbar">
-
 <div class="top-left">
 <img src="https://i.imgur.com/LY3Bb9m.png" class="top-logo">
 <div class="top-title">GOAT FC</div>
 </div>
-
 <div class="home-btn">🏠</div>
-
 </div>
 
 <div class="hero">
-
-<div class="hero-title">
-GOAT FC STATISTICS
-</div>
-
-<div class="hero-sub">
-ELITE PERFORMANCE DASHBOARD
-</div>
-
+<div class="hero-title">GOAT FC STATISTICS</div>
+<div class="hero-sub">ELITE PERFORMANCE DASHBOARD</div>
 </div>
 
 <div class="search-wrap">
-
-<input
-type="text"
-id="search"
-class="search"
-placeholder="Search Player Name or Club ID..."
-oninput="render()"
-/>
-
+<input type="text" id="search" class="search" placeholder="Search Player Name or Club ID..." oninput="render()">
 </div>
 
 <div class="filters">
-
-<button class="filter-btn active" onclick="setMode('overall',this)">
-OVERALL
-</button>
-
-<button class="filter-btn" onclick="setMode('monthly',this)">
-MONTHLY
-</button>
-
+<button class="filter-btn active" onclick="changeMode('overall',this)">OVERALL</button>
+<button class="filter-btn" onclick="changeMode('monthly',this)">MONTHLY</button>
 </div>
 
-<div id="data"></div>
+<div id="data">
+<div class="loader">Loading Statistics...</div>
+</div>
 
 <script>
 
@@ -455,166 +331,166 @@ const MATCH_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0X
 
 const MEMBER_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLEME9M9cSy9FvfHvcx2gMPkp1H5Dj4YaKufPRsAyon8Tf-lo7VbkQ6/pub?gid=133947099&single=true&output=csv';
 
-let players={};
-let monthlyPlayers={};
+let overallData={};
+let monthlyData={};
 let members={};
-
 let currentMode='overall';
 
-function setMode(mode,btn){
-
+function changeMode(mode,btn){
 currentMode=mode;
-
-document.querySelectorAll('.filter-btn')
-.forEach(x=>x.classList.remove('active'));
-
+document.querySelectorAll('.filter-btn').forEach(x=>x.classList.remove('active'));
 btn.classList.add('active');
-
 render();
-
-}
-
-function parseCSV(str){
-
-const rows=[];
-let quote=false,row=[],col='';
-
-for(let i=0;i<str.length;i++){
-
-const c=str[i];
-
-if(c==='"'){
-quote=!quote;
-}
-
-else if(c===','&&!quote){
-row.push(col);
-col='';
-}
-
-else if((c==='\n'||c==='\r')&&!quote){
-
-if(col||row.length){
-
-row.push(col);
-rows.push(row);
-
-row=[];
-col='';
-
-}
-
-}
-
-else{
-col+=c;
-}
-
-}
-
-if(col||row.length){
-
-row.push(col);
-rows.push(row);
-
-}
-
-return rows;
-
 }
 
 function normalize(x){
-return (x||'').toLowerCase().replace(/[^a-z0-9]/g,'');
+return (x||'').toString().toLowerCase().replace(/[^a-z0-9]/g,'');
 }
 
-function updatePlayer(store,id,s,c){
+function parseCSV(text){
+const rows=[];
+let row=[];
+let col='';
+let insideQuote=false;
 
+for(let i=0;i<text.length;i++){
+const char=text[i];
+
+if(char==='"'){
+insideQuote=!insideQuote;
+}
+else if(char===',' && !insideQuote){
+row.push(col);
+col='';
+}
+else if((char==='\n' || char==='\r') && !insideQuote){
+if(col || row.length){
+row.push(col);
+rows.push(row);
+row=[];
+col='';
+}
+}
+else{
+col+=char;
+}
+}
+
+if(col || row.length){
+row.push(col);
+rows.push(row);
+}
+
+return rows;
+}
+
+function createPlayer(store,id){
 if(!store[id]){
-
 store[id]={
-
 match:0,
 win:0,
 loss:0,
 draw:0,
 gs:0,
 gc:0,
-seven:0
-
+diff:0,
+seven:0,
+winp:0,
+rate:0
 };
-
 }
+}
+
+function updateStats(store,id,scored,conceded){
+createPlayer(store,id);
 
 const p=store[id];
 
 p.match++;
-p.gs+=s;
-p.gc+=c;
+p.gs+=scored;
+p.gc+=conceded;
+p.diff=p.gs-p.gc;
 
-if(s>c)p.win++;
-else if(s<c)p.loss++;
+if(scored>conceded) p.win++;
+else if(scored<conceded) p.loss++;
 else p.draw++;
 
-if(s>=7)p.seven++;
+if(scored>=7) p.seven++;
 
-p.diff=p.gs-p.gc;
 p.winp=((p.win/p.match)*100)||0;
 p.rate=(p.gs/p.match)||0;
-
 }
 
-async function init(){
+async function load(){
 
-const [matchText,memberText]=await Promise.all([
+try{
 
-fetch(MATCH_URL+'&t='+Date.now()).then(r=>r.text()),
-fetch(MEMBER_URL+'&t='+Date.now()).then(r=>r.text())
-
+const [matchRes,memberRes]=await Promise.all([
+fetch(MATCH_URL+'&t='+Date.now()),
+fetch(MEMBER_URL+'&t='+Date.now())
 ]);
 
-const matchRows=parseCSV(matchText).slice(1);
-const memberRows=parseCSV(memberText).slice(1);
+const matchText=await matchRes.text();
+const memberText=await memberRes.text();
 
-memberRows.forEach(r=>{
+const matchRows=parseCSV(matchText);
+const memberRows=parseCSV(memberText);
 
-members[normalize(r[1])]={
+memberRows.slice(1).forEach(r=>{
+if(!r.length) return;
 
-name:r[0]||'Unknown'
+const id=normalize(r[1]);
 
+members[id]={
+name:r[0]||'Unknown Player'
 };
-
 });
 
-const currentMonth=new Date().getMonth()+1;
+const now=new Date();
+const currentMonth=now.getMonth()+1;
+const currentYear=now.getFullYear();
 
-matchRows.forEach(r=>{
+matchRows.slice(1).forEach(r=>{
 
-if(!r.length)return;
+if(!r.length) return;
 
-if((r[9]||'').toLowerCase()!=='yes')return;
+const approved=(r[9]||'').toLowerCase().trim();
+if(approved!=='yes') return;
 
 const p1=normalize(r[0]);
 const p2=normalize(r[1]);
 
-const s1=+r[3]||0;
-const s2=+r[4]||0;
+const s1=parseInt(r[3])||0;
+const s2=parseInt(r[4])||0;
 
-updatePlayer(players,p1,s1,s2);
-updatePlayer(players,p2,s2,s1);
+if(!p1 || !p2) return;
 
-const date=r[11]||'';
-const m=new Date(date).getMonth()+1;
+updateStats(overallData,p1,s1,s2);
+updateStats(overallData,p2,s2,s1);
 
-if(m===currentMonth){
+const dateStr=r[11]||'';
+const matchDate=new Date(dateStr);
 
-updatePlayer(monthlyPlayers,p1,s1,s2);
-updatePlayer(monthlyPlayers,p2,s2,s1);
+if(!isNaN(matchDate)){
+
+const m=matchDate.getMonth()+1;
+const y=matchDate.getFullYear();
+
+if(m===currentMonth && y===currentYear){
+updateStats(monthlyData,p1,s1,s2);
+updateStats(monthlyData,p2,s2,s1);
+}
 
 }
 
 });
 
 render();
+
+}catch(err){
+console.error(err);
+document.getElementById('data').innerHTML=`<div class="loader">Failed To Load Data</div>`;
+}
 
 }
 
@@ -623,57 +499,52 @@ function render(){
 const q=normalize(document.getElementById('search').value);
 
 const source=currentMode==='overall'
-?players
-:monthlyPlayers;
+?overallData
+:monthlyData;
 
 const sorted=Object.entries(source)
-.sort((a,b)=>b[1].win-a[1].win);
+.sort((a,b)=>{
+
+if(b[1].win!==a[1].win)
+return b[1].win-a[1].win;
+
+if(b[1].diff!==a[1].diff)
+return b[1].diff-a[1].diff;
+
+return b[1].gs-a[1].gs;
+
+});
 
 let html='';
 
-sorted.forEach(([id,p],i)=>{
+sorted.forEach(([id,p],index)=>{
 
 const name=members[id]?.name||'Unknown Player';
 
-if(q && !(
-normalize(name).includes(q)
-||
-normalize(id).includes(q)
-)) return;
+if(q){
+if(!normalize(name).includes(q) && !normalize(id).includes(q)){
+return;
+}
+}
 
 let cls='card';
 
-if(i===0) cls+=' rank1';
-else if(i===1) cls+=' rank2';
-else if(i===2) cls+=' rank3';
-else if(i<10) cls+=' top10';
+if(index===0) cls+=' rank1';
+else if(index===1) cls+=' rank2';
+else if(index===2) cls+=' rank3';
+else if(index<10) cls+=' top10';
 
 html+=`
-
 <div class="${cls}">
 
 <div class="top-row">
-
-<div class="rank-badge">
-#${i+1}
-</div>
-
-<div class="type-badge">
-${currentMode.toUpperCase()}
-</div>
-
+<div class="badge rank-badge">RANK #${index+1}</div>
+<div class="badge mode-badge">${currentMode.toUpperCase()}</div>
 </div>
 
 <div class="player">
-
-<div class="player-name">
-${name}
-</div>
-
-<div class="player-id">
-${id.toUpperCase()}
-</div>
-
+<div class="player-name">${name}</div>
+<div class="player-id">${id.toUpperCase()}</div>
 </div>
 
 <div class="grid">
@@ -731,42 +602,32 @@ ${id.toUpperCase()}
 </div>
 
 <div class="download">
-
-<button onclick="downloadCard(this)">
-Download Card
-</button>
-
+<button onclick="downloadCard(this)">Download Card</button>
 </div>
 
-</div>
-
-`;
+</div>`;
 
 });
+
+if(!html){
+html='<div class="loader">No Data Found</div>';
+}
 
 document.getElementById('data').innerHTML=html;
 
 }
 
 function downloadCard(btn){
-
 html2canvas(btn.closest('.card')).then(canvas=>{
-
 const a=document.createElement('a');
-
-a.download='GOAT_FC_STATS.jpg';
-
+a.download='GOAT_FC_STATISTICS.jpg';
 a.href=canvas.toDataURL('image/jpeg');
-
 a.click();
-
 });
-
 }
 
-init();
+load();
 
 </script>
-
 </body>
 </html>

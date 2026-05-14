@@ -1,122 +1,161 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>GOAT FC PRO DASHBOARD</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GOAT FC STATISTICS</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Orbitron:wght@600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
 
-:root{
---bg:#050816;
---card:#0b1220;
---cyan:#00f5ff;
---green:#00ff88;
---yellow:#ffd60a;
---red:#ff4d6d;
---muted:#94a3b8;
-}
-
 body{
 margin:0;
-font-family:'Rajdhani';
-background:var(--bg);
-color:white;
+font-family:'Rajdhani',sans-serif;
+background:#050816;
+color:#fff;
 }
 
+/* HEADER */
 .header{
 text-align:center;
-padding:18px;
+padding:14px;
+}
+
+.header img{
+width:45px;
+filter:drop-shadow(0 0 10px #00f5ff);
 }
 
 .header h1{
-font-family:'Orbitron';
-color:var(--cyan);
+margin:6px 0 0;
 font-size:22px;
-margin:0;
+color:#00f5ff;
+text-shadow:0 0 10px #00f5ff;
 }
 
-.toggle{
-display:flex;
-justify-content:center;
-gap:10px;
+.desc{
+font-size:12px;
+color:#94a3b8;
+margin-top:6px;
+}
+
+/* SEARCH */
+.search{
+text-align:center;
 margin:10px;
 }
 
-.toggle button{
-padding:6px 12px;
+.search input{
+width:90%;
+max-width:400px;
+padding:10px;
 border-radius:10px;
-border:1px solid #00f5ff40;
-background:#0b1220;
+border:1px solid #00f5ff;
+background:#0a0f1c;
 color:#00f5ff;
-cursor:pointer;
+outline:none;
 }
 
-.toggle button.active{
-background:#00f5ff;
-color:black;
-}
-
-#grid{
+/* GRID WRAP */
+#data{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-gap:10px;
-padding:10px;
+grid-template-columns:repeat(3,1fr);
+gap:12px;
+padding:12px;
 }
 
+/* CARD */
 .card{
-background:linear-gradient(145deg,#0b1220,#060a14);
-border:1px solid #00f5ff30;
-border-radius:14px;
-padding:10px;
+background:linear-gradient(145deg,#0b1220,#0a1a2a);
+border:1px solid #00f5ff22;
+border-radius:18px;
+padding:12px;
 box-shadow:0 0 10px #000;
+transition:.25s;
 }
 
-.top{
+.card:hover{
+transform:translateY(-3px);
+border-color:#00f5ff55;
+box-shadow:0 0 18px #00f5ff22;
+}
+
+/* RANK COLORS */
+.rank1{border:1px solid gold;box-shadow:0 0 14px gold;}
+.rank2{border:1px solid silver;box-shadow:0 0 14px silver;}
+.rank3{border:1px solid #cd7f32;box-shadow:0 0 14px #cd7f32;}
+.top10{border:1px solid #a855f7;}
+
+/* PLAYER */
+.club{
 display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:6px;
+flex-direction:column;
+gap:4px;
+text-align:center;
+margin-bottom:10px;
 }
 
-.name{
-font-weight:700;
-font-size:14px;
-}
-
-.id{
-color:var(--cyan);
+.player-label{
 font-size:12px;
+color:#94a3b8;
 }
 
-.badge{
-font-size:11px;
-padding:3px 8px;
-border-radius:20px;
-background:#00f5ff15;
-border:1px solid #00f5ff30;
+.player-name{
+font-size:16px;
+font-weight:700;
+color:#22c55e;
 }
 
-.stats{
+.player-id{
+font-size:12px;
+color:#00f5ff;
+}
+
+/* STATS GRID */
+.grid{
 display:grid;
 grid-template-columns:repeat(3,1fr);
 gap:6px;
 }
 
+/* BOX */
 .box{
-background:#0a1020;
-border:1px solid #00f5ff20;
-border-radius:8px;
-padding:5px 6px;   /* 🔥 compact */
-font-size:11px;
+padding:7px;
+border-radius:10px;
+font-size:12px;
+font-weight:600;
+text-align:center;
+
+background:rgba(0,245,255,0.05);
+border:1px solid rgba(0,245,255,0.2);
+box-shadow:0 0 6px rgba(0,245,255,0.15);
+}
+
+/* BUTTON */
+.download{
+margin-top:10px;
 text-align:center;
 }
 
-.rank{color:gold}
-.cp{color:#ffd60a}
+.download button{
+padding:6px 14px;
+border:none;
+border-radius:8px;
+background:#00f5ff;
+color:#000;
+font-weight:700;
+cursor:pointer;
+}
+
+/* RESPONSIVE */
+@media(max-width:1024px){
+#data{grid-template-columns:repeat(2,1fr);}
+}
+
+@media(max-width:650px){
+#data{grid-template-columns:1fr;}
+}
 
 </style>
 </head>
@@ -124,134 +163,151 @@ text-align:center;
 <body>
 
 <div class="header">
+<img src="https://i.imgur.com/LY3Bb9m.png">
 <h1>GOAT FC STATISTICS</h1>
+<div class="desc">
+Official performance dashboard (Approved matches only)
+</div>
 </div>
 
-<div class="toggle">
-<button class="active" onclick="setMode('overall')">Overall</button>
-<button onclick="setMode('monthly')">Monthly</button>
+<div class="search">
+<input type="text" id="search" placeholder="Search Name or Club ID..." oninput="render()">
 </div>
 
-<div id="grid"></div>
+<div id="data"></div>
 
 <script>
 
-const CSV="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLEME9M9cSy9FvfHvcx2gMPkp1H5Dj4YaKufPRsAyon8Tf-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv";
+const MATCH_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLEME9M9cSy9FvfHvcx2gMPkp1H5Dj4YaKufPRsAyon8Tf-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv";
+const MEMBER_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLEME9M9cSy9FvfHvcx2gMPkp1H5Dj4YaKufPRsAyon8Tf-lo7VbkQ6/pub?gid=133947099&single=true&output=csv";
 
-let mode="overall";
-let data={};
+let players={}, members={}, cache={};
 
-function csvToArray(str){
-let rows=[],row=[],val="",q=false;
-for(let c of str){
-if(c=='"') q=!q;
-else if(c==','&&!q){row.push(val);val=""}
-else if(c=='\n'){row.push(val);rows.push(row);row=[];val=""}
+function parseCSV(text){
+let rows=[],cur=[],val="",q=false;
+for(let c of text){
+if(c=='"'){q=!q;}
+else if(c==','&&!q){cur.push(val);val="";}
+else if((c=='\n'||c=='\r')&&!q){if(cur.length){cur.push(val);rows.push(cur);cur=[];val="";}}
 else val+=c;
 }
 return rows;
 }
 
-function normalize(x){
-return (x||"").toLowerCase().replace(/[^a-z0-9]/g,'');
+function normalize(id){
+return (id||"").toLowerCase().replace(/[^a-z0-9]/g,'');
 }
 
-async function load(){
-let txt=await fetch(CSV).then(r=>r.text());
-let rows=csvToArray(txt).slice(1);
+async function get(url){
+if(cache[url]) return cache[url];
+let t=await fetch(url).then(r=>r.text());
+cache[url]=t;
+return t;
+}
+
+async function loadMembers(){
+let rows=parseCSV(await get(MEMBER_URL)).slice(1);
+rows.forEach(r=>{
+members[normalize(r[1])] = r[0];
+});
+}
+
+async function loadMatches(){
+let rows=parseCSV(await get(MATCH_URL)).slice(1);
 
 rows.forEach(r=>{
-let p1=r[0], p2=r[1];
-let type=r[2];
-let s1=+r[3], s2=+r[4];
-let p1pt=+r[5], p2pt=+r[6];
-let date=r[11];
-
-if(!p1||!p2||isNaN(s1)||isNaN(s2)) return;
-
-add(p1,s1,s2,p1pt,type,date);
-add(p2,s2,s1,p2pt,type,date);
+let P1=r[0],P2=r[1];
+let s1=+r[3],s2=+r[4];
+if(r[9]!="yes")return;
+update(P1,s1,s2);
+update(P2,s2,s1);
 });
-
-render();
 }
 
-function add(id,gs,gc,pt,type,date){
-
-if(!data[id]){
-data[id]={win:0,loss:0,draw:0,gs:0,gc:0,pt:0,match:0};
+function update(id,s,c){
+if(!players[id]){
+players[id]={win:0,loss:0,draw:0,match:0,gs:0,gc:0};
 }
+let p=players[id];
+p.match++;
+p.gs+=s;
+p.gc+=c;
 
-let d=data[id];
+if(s>c)p.win++;
+else if(s<c)p.loss++;
+else p.draw++;
 
-d.match++;
-d.gs+=gs;
-d.gc+=gc;
-d.pt+=pt;
-
-if(gs>gc) d.win++;
-else if(gs<gc) d.loss++;
-else d.draw++;
-
-d.diff=d.gs-d.gc;
-d.wr=(d.win/d.match*100).toFixed(1);
-d.rate=(d.gs/d.match).toFixed(2);
+p.winp=(p.win/p.match)*100;
+p.rate=(p.gs/p.match);
+p.diff=p.gs-p.gc;
 }
 
 function render(){
+let q=normalize(document.getElementById("search").value);
 
-let arr=Object.entries(data)
-.sort((a,b)=>b[1].pt-a[1].pt||b[1].win-a[1].win||b[1].diff-a[1].diff);
+let sorted=Object.entries(players).sort((a,b)=>b[1].win-a[1].win);
 
 let html="";
 
-arr.forEach(([id,p],i)=>{
+sorted.forEach(([id,p],i)=>{
 
-let rankClass=i==0?"rank":"";
+let name=members[normalize(id)]||"Unknown";
+
+if(q && !(normalize(id).includes(q)||normalize(name).includes(q))) return;
+
+let cls="card";
+if(i===0)cls+=" rank1";
+else if(i===1)cls+=" rank2";
+else if(i===2)cls+=" rank3";
+else if(i<10)cls+=" top10";
 
 html+=`
-<div class="card">
-
-<div class="top">
-<div>
-<div class="name">${id}</div>
-<div class="id">${id}</div>
-</div>
-<div class="badge ${rankClass}">#${i+1}</div>
+<div class="${cls}">
+<div class="club">
+<div class="player-label">Player</div>
+<div class="player-name">${name}</div>
+<div class="player-id">${id}</div>
 </div>
 
-<div class="stats">
-
-<div class="box">🏆 ${p.win}</div>
-<div class="box">❌ ${p.loss}</div>
-<div class="box">🤝 ${p.draw}</div>
-
-<div class="box">🎮 ${p.match}</div>
-<div class="box">📊 ${p.wr}%</div>
-<div class="box">⚽ ${p.rate}</div>
-
-<div class="box">⚽ ${p.gs}</div>
-<div class="box">🛡 ${p.gc}</div>
-<div class="box">📈 ${p.diff}</div>
-
+<div class="grid">
+<div class="box">Win ${p.win}</div>
+<div class="box">Loss ${p.loss}</div>
+<div class="box">Draw ${p.draw}</div>
+<div class="box">Match ${p.match}</div>
+<div class="box">Win% ${p.winp.toFixed(1)}</div>
+<div class="box">Rate ${p.rate.toFixed(2)}</div>
+<div class="box">Scored ${p.gs}</div>
+<div class="box">Against ${p.gc}</div>
+<div class="box">Diff ${p.diff}</div>
 </div>
 
+<div class="download">
+<button onclick="downloadCard(this)">Download</button>
 </div>
-`;
+</div>`;
 });
 
-document.getElementById("grid").innerHTML=html;
+document.getElementById("data").innerHTML=html;
 }
 
-function setMode(m){
-mode=m;
-document.querySelectorAll(".toggle button").forEach(b=>b.classList.remove("active"));
-event.target.classList.add("active");
+function downloadCard(btn){
+html2canvas(btn.closest(".card")).then(c=>{
+let a=document.createElement("a");
+a.download="GOAT_STATS.jpg";
+a.href=c.toDataURL("image/jpeg");
+a.click();
+});
 }
 
-load();
+async function init(){
+await Promise.all([loadMembers(),loadMatches()]);
+render();
+}
+init();
 
 </script>
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
 </body>
 </html>

@@ -27,6 +27,8 @@ rel="stylesheet">
 --card:#0f172a;
 --cyan:#00f5ff;
 --green:#00ff88;
+--purple:#c084fc;
+--yellow:#fbbf24;
 --white:#f8fafc;
 --muted:#94a3b8;
 }
@@ -42,7 +44,7 @@ background:var(--bg);
 font-family:'Rajdhani',sans-serif;
 color:var(--white);
 overflow-x:hidden;
-padding-bottom:20px;
+padding-bottom:25px;
 }
 
 body::before{
@@ -57,18 +59,18 @@ radial-gradient(circle at bottom right,#00ff8810,transparent 25%);
 z-index:-1;
 }
 
-/* =====================
+/* =========================
 TOPBAR
-===================== */
+========================= */
 
 .topbar{
-height:46px;
+height:52px;
 
 display:flex;
 align-items:center;
 justify-content:space-between;
 
-padding:0 12px;
+padding:0 14px;
 
 background:rgba(5,8,22,.88);
 
@@ -86,19 +88,19 @@ text-decoration:none;
 .top-left{
 display:flex;
 align-items:center;
-gap:7px;
+gap:8px;
 }
 
 .top-logo{
-width:22px;
+width:24px;
 
 filter:
-drop-shadow(0 0 5px #00f5ff);
+drop-shadow(0 0 6px #00f5ff);
 }
 
 .top-title{
 font-family:'Orbitron',sans-serif;
-font-size:10px;
+font-size:11px;
 font-weight:700;
 letter-spacing:1px;
 
@@ -110,14 +112,14 @@ linear-gradient(90deg,var(--cyan),var(--green));
 }
 
 .home-btn{
-width:28px;
-height:28px;
+width:30px;
+height:30px;
 
 display:flex;
 align-items:center;
 justify-content:center;
 
-border-radius:9px;
+border-radius:10px;
 
 background:#111827;
 
@@ -125,21 +127,21 @@ border:1px solid #00f5ff20;
 
 color:var(--cyan);
 
-font-size:10px;
+font-size:11px;
 }
 
-/* =====================
+/* =========================
 HEADER
-===================== */
+========================= */
 
 .hero{
-padding:14px 10px 12px;
+padding:18px 12px 14px;
 text-align:center;
 }
 
 .hero-title{
 font-family:'Orbitron',sans-serif;
-font-size:17px;
+font-size:22px;
 font-weight:800;
 letter-spacing:2px;
 
@@ -156,39 +158,37 @@ linear-gradient(
 }
 
 .hero-sub{
-margin-top:5px;
+margin-top:7px;
 
-font-size:9px;
+font-size:10px;
 font-weight:700;
 
-letter-spacing:3px;
+letter-spacing:4px;
 
 color:var(--muted);
-
-line-height:1.5;
 }
 
-/* =====================
+/* =========================
 WRAP
-===================== */
+========================= */
 
 .wrap{
-width:min(100% - 10px,480px);
+width:min(100% - 20px,1400px);
 margin:auto;
 }
 
-/* =====================
+/* =========================
 SEARCH
-===================== */
+========================= */
 
 .search-box{
 width:100%;
 
-height:42px;
+height:52px;
 
-padding:0 14px;
+padding:0 18px;
 
-border-radius:14px;
+border-radius:18px;
 
 border:1px solid #00f5ff20;
 
@@ -199,15 +199,15 @@ outline:none;
 
 color:white;
 
-font-size:12px;
+font-size:14px;
 font-weight:700;
 
 font-family:'Rajdhani',sans-serif;
 
-margin-bottom:12px;
+margin-bottom:18px;
 
 box-shadow:
-0 0 10px #00f5ff08;
+0 0 12px #00f5ff08;
 }
 
 .search-box::placeholder{
@@ -219,19 +219,32 @@ color:#94a3b8;
 border-color:#00f5ff55;
 
 box-shadow:
-0 0 12px #00f5ff22;
+0 0 14px #00f5ff22;
 }
 
-/* =====================
+/* =========================
+GRID
+========================= */
+
+.players-grid{
+display:grid;
+
+grid-template-columns:
+repeat(auto-fit,minmax(350px,1fr));
+
+gap:16px;
+}
+
+/* =========================
 CARD
-===================== */
+========================= */
 
 .card{
 position:relative;
 
-padding:12px;
+padding:14px;
 
-border-radius:18px;
+border-radius:22px;
 
 background:
 linear-gradient(145deg,#111827,#0f172a);
@@ -240,10 +253,10 @@ border:1px solid #00f5ff18;
 
 overflow:hidden;
 
-margin-bottom:10px;
-
 box-shadow:
-0 0 10px #000;
+0 0 18px #000;
+
+transition:.25s;
 }
 
 .card::before{
@@ -251,64 +264,85 @@ content:"";
 
 position:absolute;
 
-inset:3px;
+inset:4px;
 
-border-radius:14px;
+border-radius:18px;
 
 border:1px solid #00f5ff10;
 
 pointer-events:none;
 }
 
-/* =====================
-TOP INFO
-===================== */
+.card:hover{
+transform:translateY(-4px);
 
-.player-top{
+border-color:#00f5ff30;
+
+box-shadow:
+0 0 18px #00f5ff15;
+}
+
+/* =========================
+TOP ROW
+========================= */
+
+.top-row{
 display:flex;
 align-items:center;
 justify-content:space-between;
 
 gap:10px;
+
+padding:12px;
+
+border-radius:16px;
+
+background:
+linear-gradient(145deg,#0b1220,#0f172a);
+
+border:1px solid #ffffff10;
 }
 
-.player-left{
-min-width:0;
-}
+/* NAME */
 
 .player-name{
-font-size:14px;
+font-size:20px;
 font-weight:800;
+
+line-height:1.2;
 
 white-space:nowrap;
 overflow:hidden;
 text-overflow:ellipsis;
 }
 
-.player-id{
-margin-top:4px;
+/* CLUB ID */
 
-display:inline-flex;
+.club-id{
+display:flex;
 align-items:center;
-gap:5px;
+justify-content:center;
+gap:6px;
 
-padding:5px 8px;
+padding:8px 12px;
 
 border-radius:999px;
 
 background:#00f5ff10;
 
-border:1px solid #00f5ff15;
-
-font-size:8px;
-font-weight:700;
+border:1px solid #00f5ff20;
 
 color:var(--cyan);
+
+font-size:11px;
+font-weight:800;
+
+white-space:nowrap;
 }
 
-/* =====================
-INFO GRID
-===================== */
+/* =========================
+MIDDLE ROW
+========================= */
 
 .info-grid{
 display:grid;
@@ -316,15 +350,15 @@ display:grid;
 grid-template-columns:
 1fr 1fr;
 
-gap:8px;
+gap:12px;
 
 margin-top:12px;
 }
 
 .info-box{
-padding:9px;
+padding:12px;
 
-border-radius:14px;
+border-radius:16px;
 
 background:
 linear-gradient(145deg,#0b1220,#0f172a);
@@ -333,18 +367,18 @@ border:1px solid #ffffff10;
 }
 
 .info-label{
-font-size:7px;
+font-size:8px;
 font-weight:700;
 
-letter-spacing:1px;
+letter-spacing:2px;
 
 color:var(--muted);
 
-margin-bottom:4px;
+margin-bottom:6px;
 }
 
 .info-value{
-font-size:11px;
+font-size:14px;
 font-weight:800;
 
 word-break:break-word;
@@ -353,30 +387,30 @@ word-break:break-word;
 /* COLORS */
 
 .konami{
-color:#fbbf24;
+color:var(--yellow);
 }
 
 .device{
-color:#c084fc;
+color:var(--purple);
 }
 
-/* =====================
-FB BUTTON
-===================== */
+/* =========================
+FACEBOOK ROW
+========================= */
 
 .fb-btn{
-margin-top:10px;
+margin-top:12px;
 
 width:100%;
 
-height:38px;
+height:48px;
 
-border-radius:14px;
+border-radius:16px;
 
 display:flex;
 align-items:center;
 justify-content:center;
-gap:8px;
+gap:10px;
 
 text-decoration:none;
 
@@ -387,7 +421,7 @@ border:1px solid #1877f220;
 
 color:#4ea1ff;
 
-font-size:11px;
+font-size:13px;
 font-weight:800;
 
 transition:.25s;
@@ -400,48 +434,121 @@ box-shadow:
 0 0 12px #1877f220;
 }
 
-/* =====================
+/* =========================
 EMPTY
-===================== */
+========================= */
 
 .empty{
-padding:40px 10px;
+padding:50px 10px;
 
 text-align:center;
 
-font-size:13px;
+font-size:16px;
 font-weight:700;
 
 color:var(--muted);
 }
 
-/* =====================
+/* =========================
 FOOTER
-===================== */
+========================= */
 
 .footer{
-margin-top:18px;
+margin-top:22px;
 
 text-align:center;
 
-font-size:9px;
+font-size:10px;
 font-weight:700;
 
-letter-spacing:2px;
+letter-spacing:3px;
 
 color:#64748b;
 }
 
-/* MOBILE */
+/* =========================
+TABLET
+========================= */
 
-@media(max-width:420px){
+@media(max-width:900px){
+
+.players-grid{
+
+grid-template-columns:
+repeat(2,1fr);
+
+}
 
 .player-name{
-font-size:13px;
+font-size:18px;
+}
+
+}
+
+/* =========================
+MOBILE
+========================= */
+
+@media(max-width:768px){
+
+.wrap{
+width:min(100% - 10px,480px);
+}
+
+.players-grid{
+
+grid-template-columns:
+1fr;
+
+gap:12px;
+}
+
+.hero-title{
+font-size:17px;
+}
+
+.hero-sub{
+font-size:8px;
+letter-spacing:3px;
+}
+
+.search-box{
+height:42px;
+font-size:12px;
+}
+
+.card{
+padding:12px;
+}
+
+.top-row{
+padding:10px;
+}
+
+.player-name{
+font-size:14px;
+}
+
+.club-id{
+font-size:8px;
+padding:6px 9px;
+}
+
+.info-grid{
+gap:8px;
+}
+
+.info-box{
+padding:10px;
 }
 
 .info-value{
-font-size:10px;
+font-size:11px;
+}
+
+.fb-btn{
+height:40px;
+font-size:11px;
 }
 
 }
@@ -473,7 +580,7 @@ GOAT FC
 
 </a>
 
-<!-- HEADER -->
+<!-- HERO -->
 
 <div class="hero">
 
@@ -497,7 +604,8 @@ id="searchInput"
 class="search-box"
 placeholder="Search By Club ID...">
 
-<div id="players">
+<div id="players"
+class="players-grid">
 
 </div>
 
@@ -579,15 +687,15 @@ wrap.innerHTML += `
 
 <div class="card">
 
-<div class="player-top">
+<!-- ROW 1 -->
 
-<div class="player-left">
+<div class="top-row">
 
 <div class="player-name">
 ${p["Player Name"] || "Unknown"}
 </div>
 
-<div class="player-id">
+<div class="club-id">
 
 <i class="fa-solid fa-shield-halved"></i>
 
@@ -597,7 +705,7 @@ ${p["Your Club ID"] || "N/A"}
 
 </div>
 
-</div>
+<!-- ROW 2 -->
 
 <div class="info-grid">
 
@@ -626,6 +734,8 @@ ${p["DEVICE NAME"] || "N/A"}
 </div>
 
 </div>
+
+<!-- ROW 3 -->
 
 <a href="${p["Facebook URL"] || "#"}"
 target="_blank"

@@ -1,159 +1,217 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GOAT FC STATISTICS</title>
+<title>MATCH RULES</title>
 
 <link rel="icon" href="https://i.imgur.com/LY3Bb9m.png">
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 
 :root{
 --bg:#050816;
---card:#0f172a;
+--glass:rgba(15,23,42,.75);
 --cyan:#00f5ff;
 --green:#00ff88;
+--pink:#ff2bd6;
+--yellow:#ffd60a;
 --muted:#94a3b8;
 }
 
-*{margin:0;padding:0;box-sizing:border-box;}
+*{margin:0;padding:0;box-sizing:border-box}
 
 body{
-background:var(--bg);
-font-family:'Rajdhani',sans-serif;
-color:white;
+font-family:'Noto Sans Bengali',sans-serif;
+background:radial-gradient(circle at top,#0b1a33,#050816 70%);
+color:#fff;
+padding:12px;
+}
+
+/* BACK GLOW */
+body::before{
+content:"";
+position:fixed;
+inset:0;
+background:
+radial-gradient(circle at top left,#00f5ff12,transparent 30%),
+radial-gradient(circle at bottom right,#ff2bd610,transparent 30%);
+z-index:-1;
+}
+
+/* CONTAINER */
+.container{
+max-width:1100px;
+margin:auto;
 }
 
 /* HEADER */
 .header{
-text-align:center;
-padding:15px;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+gap:8px;
+
+padding:18px;
+border-radius:20px;
+
+background:var(--glass);
+border:1px solid #00f5ff25;
+
+box-shadow:
+0 0 15px #00f5ff20,
+0 0 30px #ff2bd610;
 }
 
-.header img{
-width:45px;
-filter:drop-shadow(0 0 10px var(--cyan));
+.logo{
+width:55px;
+filter:drop-shadow(0 0 8px #00f5ff)
+       drop-shadow(0 0 12px #ff2bd6);
+animation:glow 3s infinite alternate;
 }
 
-.header h1{
-font-family:'Orbitron';
-font-size:22px;
-color:var(--cyan);
-text-shadow:0 0 10px var(--cyan);
+@keyframes glow{
+0%{filter:drop-shadow(0 0 5px #00f5ff)}
+50%{filter:drop-shadow(0 0 12px #ff2bd6)}
+100%{filter:drop-shadow(0 0 5px #00ff88)}
 }
 
-.desc{
+.title{
+font-family:'Orbitron',sans-serif;
+font-size:26px;
+
+background:linear-gradient(90deg,#00f5ff,#ff2bd6,#00ff88);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+background-size:300%;
+animation:rgb 6s linear infinite;
+}
+
+@keyframes rgb{
+to{background-position:300%}
+}
+
+.subtitle{
 font-size:12px;
 color:var(--muted);
-margin-top:5px;
 }
 
-/* SEARCH */
-.search{
-text-align:center;
-margin:10px;
+/* TABS */
+.tabs{
+display:flex;
+justify-content:center;
+gap:10px;
+flex-wrap:wrap;
+margin:15px 0;
 }
 
-.search input{
-width:90%;
-max-width:400px;
-padding:10px;
-border-radius:10px;
-border:1px solid var(--cyan);
-background:#0b1220;
-color:var(--cyan);
-outline:none;
+.tab-btn{
+padding:10px 14px;
+border-radius:999px;
+border:1px solid #00f5ff25;
+background:#111827;
+color:#fff;
+font-weight:700;
+cursor:pointer;
+transition:.3s;
 }
 
-/* GRID */
-#data{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-gap:12px;
-padding:10px;
+.tab-btn.active{
+background:linear-gradient(135deg,#00f5ff,#ff2bd6);
+color:#000;
+box-shadow:0 0 18px #00f5ff55;
 }
 
 /* CARD */
 .card{
-background:linear-gradient(145deg,#0b1220,#0f172a);
-border:1px solid #00f5ff25;
-border-radius:16px;
-padding:12px;
-box-shadow:0 0 12px rgba(0,245,255,0.08);
-transition:0.3s;
+background:var(--glass);
+padding:18px;
+border-radius:18px;
+
+border:1px solid #00f5ff20;
+box-shadow:0 0 15px #000;
 }
 
-.card:hover{
-transform:translateY(-3px);
-box-shadow:0 0 18px rgba(0,245,255,0.2);
+/* SECTION TITLE */
+.section-title{
+color:#00f5ff;
+font-size:18px;
+font-family:'Orbitron',sans-serif;
+margin-bottom:12px;
 }
 
-/* RANK COLORS */
-.rank1{border:1px solid gold;}
-.rank2{border:1px solid silver;}
-.rank3{border:1px solid #cd7f32;}
-.top10{border:1px solid #a855f7;}
+/* RULE ITEM */
+.rule-item{
+padding:10px 0;
+border-bottom:1px solid rgba(255,255,255,.08);
+line-height:1.8;
+font-size:13px;
+}
 
-/* NAME ROW */
-.club{
-display:flex;
-flex-wrap:wrap;
-gap:6px;
-align-items:center;
-font-size:14px;
+.rule-item strong{
+color:#00ff88;
+}
+
+/* ROOM */
+.room-setting{
+margin-top:16px;
+padding-top:14px;
+border-top:1px solid #00f5ff25;
+}
+
+.room-type{
+text-align:center;
+font-size:13px;
 margin-bottom:10px;
+color:var(--muted);
 }
 
-.player-name{
-color:#22c55e;
+.room-type span{
+color:#00ff88;
 font-weight:700;
-font-family:'Orbitron';
 }
 
-.player-id{
-color:var(--cyan);
+.room-wrap{
+display:flex;
+overflow-x:auto;
+gap:10px;
+scroll-snap-type:x mandatory;
+}
+
+.room-card{
+min-width:100%;
+scroll-snap-align:center;
+background:#0b1426;
+border-radius:14px;
+border:1px solid #00f5ff25;
+padding:10px;
+}
+
+.room-table{
+width:100%;
+border-collapse:collapse;
 font-size:12px;
 }
 
-/* BOX GRID */
-.grid{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:6px;
+.room-table th{
+background:#111827;
+color:#00f5ff;
 }
 
-.box{
-padding:6px;
-border-radius:8px;
-font-size:12px;
-font-weight:600;
-background:rgba(0,245,255,0.05);
-border:1px solid rgba(0,245,255,0.2);
+.room-table th,
+.room-table td{
+border:1px solid #1f2a44;
+padding:8px;
 text-align:center;
-}
-
-/* DOWNLOAD */
-.download{
-text-align:center;
-margin-top:10px;
-}
-
-button{
-padding:6px 12px;
-border:none;
-border-radius:8px;
-background:var(--cyan);
-color:black;
-font-weight:700;
-cursor:pointer;
 }
 
 /* MOBILE */
 @media(max-width:768px){
-#data{grid-template-columns:1fr;}
-.grid{grid-template-columns:repeat(2,1fr);}
+.title{font-size:22px}
+.tab-btn{font-size:11px}
 }
 
 </style>
@@ -161,102 +219,56 @@ cursor:pointer;
 
 <body>
 
+<div class="container">
+
 <div class="header">
-<img src="https://i.imgur.com/LY3Bb9m.png">
-<h1>GOAT FC STATISTICS</h1>
-<div class="desc">Overall + Monthly Performance Dashboard</div>
+<img class="logo" src="https://i.imgur.com/LY3Bb9m.png">
+<div class="title">MATCH RULES</div>
+<div class="subtitle">GOAT FC Official Rulebook</div>
 </div>
 
-<div class="search">
-<input type="text" id="search" placeholder="Search Player / Club ID..." oninput="render()">
+<div class="tabs">
+<button class="tab-btn active" onclick="openTab('tour',this)">🏆 Tournament</button>
+<button class="tab-btn" onclick="openTab('friendly',this)">🤝 Friendly</button>
 </div>
 
-<div id="data"></div>
+<!-- TOURNAMENT -->
+<div id="tour" class="tab-content active">
+<div class="card">
+
+<div class="section-title">🏆 Tournament Rules</div>
+
+<div class="rule-item">১) রেজিস্ট্রেশন তথ্য অবশ্যই একই থাকতে হবে।</div>
+<div class="rule-item">২) সময়মতো ম্যাচ না খেললে 1-0 loss হবে।</div>
+<div class="rule-item">৩) ম্যাচ শেষে ভিডিও proof বাধ্যতামূলক।</div>
+<div class="rule-item">৪) Disconnect হলে 93 min থেকে resume করতে হবে।</div>
+<div class="rule-item">৫) Score submit অবশ্যই website এ করতে হবে।</div>
+
+</div>
+</div>
+
+<!-- FRIENDLY -->
+<div id="friendly" class="tab-content">
+<div class="card">
+
+<div class="section-title">🤝 Friendly Rules</div>
+
+<div class="rule-item">১) জয়ী player score submit করবে।</div>
+<div class="rule-item">২) 50 match limit per month।</div>
+<div class="rule-item">৩) একই player এর সাথে max 5 match।</div>
+
+</div>
+</div>
+
+</div>
 
 <script>
-
-const MATCH_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLEME9M9cSy9FvfHvcx2gMPkp1H5Dj4YaKufPRsAyon8Tf-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv";
-const MEMBER_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLEME9M9cSy9FvfHvcx2gMPkp1H5Dj4YaKufPRsAyon8Tf-lo7VbkQ6/pub?gid=133947099&single=true&output=csv";
-
-let players={}, members={}, cache={};
-
-function normalize(x){
-return (x||"").toLowerCase().replace(/[^a-z0-9]/g,'');
+function openTab(id,btn){
+document.querySelectorAll('.tab-content').forEach(x=>x.classList.remove('active'));
+document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+btn.classList.add('active');
 }
-
-function parseCSV(t){
-return t.split("\n").map(r=>r.split(","));
-}
-
-async function load(){
-const res=await fetch(MATCH_URL);
-const text=await res.text();
-const rows=parseCSV(text);
-
-rows.slice(1).forEach(c=>{
-let p1=c[0],p2=c[1];
-let s1=+c[3],s2=+c[4];
-let type=c[2];
-
-if(!players[p1]) players[p1]={win:0,loss:0,draw:0,match:0,gs:0,gc:0};
-if(!players[p2]) players[p2]={win:0,loss:0,draw:0,match:0,gs:0,gc:0};
-
-players[p1].match++; players[p2].match++;
-players[p1].gs+=s1; players[p1].gc+=s2;
-players[p2].gs+=s2; players[p2].gc+=s1;
-
-if(s1>s2) players[p1].win++, players[p2].loss++;
-else if(s2>s1) players[p2].win++, players[p1].loss++;
-else players[p1].draw++, players[p2].draw++;
-});
-
-render();
-}
-
-function render(){
-let q=normalize(document.getElementById("search").value);
-let data=Object.entries(players);
-
-let html="";
-
-data.sort((a,b)=>b[1].win-a[1].win).forEach(([id,p],i)=>{
-
-if(q && !normalize(id).includes(q)) return;
-
-let cls="card";
-if(i==0) cls+=" rank1";
-else if(i==1) cls+=" rank2";
-else if(i==2) cls+=" rank3";
-else if(i<10) cls+=" top10";
-
-html+=`
-<div class="${cls}">
-<div class="club">
-<span class="player-name">${id}</span>
-<span class="player-id">(${id})</span>
-</div>
-
-<div class="grid">
-<div class="box">🏆 ${p.win}</div>
-<div class="box">❌ ${p.loss}</div>
-<div class="box">🤝 ${p.draw}</div>
-<div class="box">🎮 ${p.match}</div>
-<div class="box">⚽ ${p.gs}</div>
-<div class="box">🥅 ${p.gc}</div>
-</div>
-
-<div class="download">
-<button>Download</button>
-</div>
-</div>
-`;
-});
-
-document.getElementById("data").innerHTML=html;
-}
-
-load();
-
 </script>
 
 </body>

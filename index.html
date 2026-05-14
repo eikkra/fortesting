@@ -3,17 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>GOAT FC STATISTICS</title>
+<link rel="icon" href="https://i.imgur.com/LY3Bb9m.png">
 
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
 
+:root{
+--bg:#050816;
+--cyan:#00f5ff;
+--green:#00ff88;
+--muted:#94a3b8;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
 body{
-margin:0;
+background:var(--bg);
 font-family:'Rajdhani',sans-serif;
-background:#050816;
-color:#fff;
+color:white;
 }
 
 /* HEADER */
@@ -24,137 +34,129 @@ padding:14px;
 
 .header img{
 width:45px;
-filter:drop-shadow(0 0 10px #00f5ff);
+filter:drop-shadow(0 0 10px var(--cyan));
 }
 
 .header h1{
-margin:6px 0 0;
+margin:5px 0;
 font-size:22px;
-color:#00f5ff;
-text-shadow:0 0 10px #00f5ff;
+color:var(--cyan);
+text-shadow:0 0 10px var(--cyan);
 }
 
 .desc{
 font-size:12px;
-color:#94a3b8;
-margin-top:6px;
+color:var(--muted);
 }
 
 /* SEARCH */
 .search{
 text-align:center;
-margin:10px;
+padding:10px;
 }
 
 .search input{
-width:90%;
+width:92%;
 max-width:400px;
 padding:10px;
 border-radius:10px;
-border:1px solid #00f5ff;
-background:#0a0f1c;
-color:#00f5ff;
+border:1px solid var(--cyan);
+background:#0b1220;
+color:var(--cyan);
 outline:none;
 }
 
-/* GRID WRAP */
+/* GRID */
 #data{
 display:grid;
-grid-template-columns:repeat(3,1fr);
+grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
 gap:12px;
 padding:12px;
 }
 
-/* CARD */
+/* CARD (MAIN STYLE) */
 .card{
-background:linear-gradient(145deg,#0b1220,#0a1a2a);
-border:1px solid #00f5ff22;
-border-radius:18px;
+background:linear-gradient(145deg,#0b1220,#050816);
+border:1px solid rgba(0,245,255,0.2);
+border-radius:16px;
 padding:12px;
-box-shadow:0 0 10px #000;
-transition:.25s;
+box-shadow:0 0 12px rgba(0,245,255,0.1);
+transition:0.3s;
 }
 
 .card:hover{
 transform:translateY(-3px);
-border-color:#00f5ff55;
-box-shadow:0 0 18px #00f5ff22;
+border-color:var(--cyan);
 }
 
-/* RANK COLORS */
-.rank1{border:1px solid gold;box-shadow:0 0 14px gold;}
-.rank2{border:1px solid silver;box-shadow:0 0 14px silver;}
-.rank3{border:1px solid #cd7f32;box-shadow:0 0 14px #cd7f32;}
-.top10{border:1px solid #a855f7;}
-
-/* PLAYER */
-.club{
+/* TOP INFO */
+.top{
 display:flex;
-flex-direction:column;
-gap:4px;
-text-align:center;
+justify-content:space-between;
+align-items:center;
 margin-bottom:10px;
 }
 
-.player-label{
-font-size:12px;
-color:#94a3b8;
-}
-
-.player-name{
-font-size:16px;
+.name{
 font-weight:700;
-color:#22c55e;
+font-size:15px;
+color:white;
 }
 
-.player-id{
+.id{
 font-size:12px;
-color:#00f5ff;
+color:var(--cyan);
 }
 
-/* STATS GRID */
+/* SECTION TITLE */
+.section-title{
+font-size:11px;
+color:var(--muted);
+margin:8px 0 4px;
+letter-spacing:1px;
+}
+
+/* BOX GRID */
 .grid{
 display:grid;
 grid-template-columns:repeat(3,1fr);
 gap:6px;
 }
 
-/* BOX */
 .box{
 padding:7px;
 border-radius:10px;
-font-size:12px;
-font-weight:600;
-text-align:center;
-
 background:rgba(0,245,255,0.05);
-border:1px solid rgba(0,245,255,0.2);
-box-shadow:0 0 6px rgba(0,245,255,0.15);
+border:1px solid rgba(0,245,255,0.15);
+font-size:12px;
+text-align:center;
 }
 
+/* RANK COLORS */
+.rank1{border:1px solid gold;}
+.rank2{border:1px solid silver;}
+.rank3{border:1px solid #cd7f32;}
+.top10{border:1px solid #a855f7;}
+
 /* BUTTON */
-.download{
+.btn{
 margin-top:10px;
 text-align:center;
 }
 
-.download button{
-padding:6px 14px;
+button{
+padding:6px 12px;
 border:none;
 border-radius:8px;
-background:#00f5ff;
-color:#000;
-font-weight:700;
+background:var(--cyan);
+color:black;
 cursor:pointer;
+font-weight:700;
 }
 
-/* RESPONSIVE */
-@media(max-width:1024px){
-#data{grid-template-columns:repeat(2,1fr);}
-}
-
-@media(max-width:650px){
-#data{grid-template-columns:1fr;}
+/* MOBILE */
+@media(max-width:768px){
+.grid{grid-template-columns:repeat(2,1fr);}
 }
 
 </style>
@@ -165,13 +167,11 @@ cursor:pointer;
 <div class="header">
 <img src="https://i.imgur.com/LY3Bb9m.png">
 <h1>GOAT FC STATISTICS</h1>
-<div class="desc">
-Official performance dashboard (Approved matches only)
-</div>
+<div class="desc">Overall + Monthly Performance Dashboard</div>
 </div>
 
 <div class="search">
-<input type="text" id="search" placeholder="Search Name or Club ID..." oninput="render()">
+<input type="text" id="search" placeholder="Search Player or ID..." oninput="render()">
 </div>
 
 <div id="data"></div>
@@ -185,129 +185,108 @@ let players={}, members={}, cache={};
 
 function parseCSV(text){
 let rows=[],cur=[],val="",q=false;
-for(let c of text){
+for(let i=0;i<text.length;i++){
+let c=text[i];
 if(c=='"'){q=!q;}
 else if(c==','&&!q){cur.push(val);val="";}
-else if((c=='\n'||c=='\r')&&!q){if(cur.length){cur.push(val);rows.push(cur);cur=[];val="";}}
+else if((c=='\n'||c=='\r')&&!q){
+if(val||cur.length){cur.push(val);rows.push(cur);cur=[];val="";}
+}
 else val+=c;
 }
 return rows;
 }
 
-function normalize(id){
-return (id||"").toLowerCase().replace(/[^a-z0-9]/g,'');
+function normalize(x){
+return (x||"").toLowerCase().replace(/[^a-z0-9]/g,'');
 }
 
-async function get(url){
-if(cache[url]) return cache[url];
-let t=await fetch(url).then(r=>r.text());
-cache[url]=t;
-return t;
-}
+async function load(){
+let m=await fetch(MATCH_URL).then(r=>r.text());
+let u=await fetch(MEMBER_URL).then(r=>r.text());
 
-async function loadMembers(){
-let rows=parseCSV(await get(MEMBER_URL)).slice(1);
-rows.forEach(r=>{
+let match=parseCSV(m).slice(1);
+let member=parseCSV(u).slice(1);
+
+member.forEach(r=>{
 members[normalize(r[1])] = r[0];
 });
-}
 
-async function loadMatches(){
-let rows=parseCSV(await get(MATCH_URL)).slice(1);
-
-rows.forEach(r=>{
-let P1=r[0],P2=r[1];
+match.forEach(r=>{
+let p1=r[0],p2=r[1];
 let s1=+r[3],s2=+r[4];
-if(r[9]!="yes")return;
-update(P1,s1,s2);
-update(P2,s2,s1);
+let type=(r[2]||"").toLowerCase();
+
+if(!players[p1]) players[p1]={w:0,l:0,d:0,m:0,gs:0,gc:0};
+if(!players[p2]) players[p2]={w:0,l:0,d:0,m:0,gs:0,gc:0};
+
+players[p1].m++;players[p2].m++;
+players[p1].gs+=s1;players[p1].gc+=s2;
+players[p2].gs+=s2;players[p2].gc+=s1;
+
+if(s1>s2) players[p1].w++,players[p2].l++;
+else if(s2>s1) players[p2].w++,players[p1].l++;
+else players[p1].d++,players[p2].d++;
 });
-}
 
-function update(id,s,c){
-if(!players[id]){
-players[id]={win:0,loss:0,draw:0,match:0,gs:0,gc:0};
-}
-let p=players[id];
-p.match++;
-p.gs+=s;
-p.gc+=c;
-
-if(s>c)p.win++;
-else if(s<c)p.loss++;
-else p.draw++;
-
-p.winp=(p.win/p.match)*100;
-p.rate=(p.gs/p.match);
-p.diff=p.gs-p.gc;
+render();
 }
 
 function render(){
 let q=normalize(document.getElementById("search").value);
-
-let sorted=Object.entries(players).sort((a,b)=>b[1].win-a[1].win);
-
 let html="";
 
-sorted.forEach(([id,p],i)=>{
+Object.keys(players).forEach((id,i)=>{
 
+let p=players[id];
 let name=members[normalize(id)]||"Unknown";
 
 if(q && !(normalize(id).includes(q)||normalize(name).includes(q))) return;
 
 let cls="card";
-if(i===0)cls+=" rank1";
-else if(i===1)cls+=" rank2";
-else if(i===2)cls+=" rank3";
-else if(i<10)cls+=" top10";
+if(i==0) cls+=" rank1";
+else if(i==1) cls+=" rank2";
+else if(i==2) cls+=" rank3";
+else if(i<10) cls+=" top10";
 
 html+=`
 <div class="${cls}">
-<div class="club">
-<div class="player-label">Player</div>
-<div class="player-name">${name}</div>
-<div class="player-id">${id}</div>
+
+<div class="top">
+<div class="name">${name}</div>
+<div class="id">${id}</div>
 </div>
 
+<div class="section-title">OVERALL</div>
 <div class="grid">
-<div class="box">Win ${p.win}</div>
-<div class="box">Loss ${p.loss}</div>
-<div class="box">Draw ${p.draw}</div>
-<div class="box">Match ${p.match}</div>
-<div class="box">Win% ${p.winp.toFixed(1)}</div>
-<div class="box">Rate ${p.rate.toFixed(2)}</div>
-<div class="box">Scored ${p.gs}</div>
-<div class="box">Against ${p.gc}</div>
-<div class="box">Diff ${p.diff}</div>
+<div class="box">Wins ${p.w}</div>
+<div class="box">Loss ${p.l}</div>
+<div class="box">Draw ${p.d}</div>
+<div class="box">Match ${p.m}</div>
+<div class="box">GS ${p.gs}</div>
+<div class="box">GC ${p.gc}</div>
 </div>
 
-<div class="download">
-<button onclick="downloadCard(this)">Download</button>
+<div class="section-title">MONTHLY</div>
+<div class="grid">
+<div class="box">Win% ${(p.w/(p.m||1)*100).toFixed(1)}</div>
+<div class="box">Avg GS ${(p.gs/(p.m||1)).toFixed(1)}</div>
+<div class="box">Avg GC ${(p.gc/(p.m||1)).toFixed(1)}</div>
 </div>
+
+<div class="btn">
+<button>Download</button>
+</div>
+
 </div>`;
 });
 
 document.getElementById("data").innerHTML=html;
 }
 
-function downloadCard(btn){
-html2canvas(btn.closest(".card")).then(c=>{
-let a=document.createElement("a");
-a.download="GOAT_STATS.jpg";
-a.href=c.toDataURL("image/jpeg");
-a.click();
-});
-}
-
-async function init(){
-await Promise.all([loadMembers(),loadMatches()]);
-render();
-}
-init();
+load();
 
 </script>
-
-<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
 </body>
 </html>

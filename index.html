@@ -770,12 +770,12 @@ ${id}
 </div>
 
 <div class="box">
-<div class="box-value rate-text">${p.winp.toFixed(1)}%</div>
+<div class="box-value rate-text">${p.winp ? p.winp.toFixed(1) : "0.0"}%</div>
 <div class="box-label">Win Rate</div>
 </div>
 
 <div class="box">
-<div class="box-value goal-text">${p.rate.toFixed(2)}</div>
+<div class="box-value goal-text">${p.rate ? p.rate.toFixed(2) : "0.00"}</div>
 <div class="box-label">Goal Rate</div>
 </div>
 
@@ -812,9 +812,12 @@ ${id}
 </div>
 
 <div class="download">
+
 <button onclick="downloadCard(this)">
+<i class="fa-solid fa-download"></i>
 DOWNLOAD CARD
 </button>
+
 </div>
 
 </div>

@@ -36,7 +36,7 @@ box-sizing:border-box;
 body{
 background:var(--bg);
 font-family:'Rajdhani',sans-serif;
-color:var(--white);
+color:white;
 overflow-x:hidden;
 padding-bottom:20px;
 }
@@ -200,21 +200,13 @@ box-shadow:
 color:#94a3b8;
 }
 
-.search-box:focus{
-
-border-color:#00f5ff55;
-
-box-shadow:
-0 0 12px #00f5ff22;
-}
-
 /* GRID */
 
 #data{
 display:grid;
 
 grid-template-columns:
-repeat(auto-fit,minmax(330px,1fr));
+repeat(auto-fit,minmax(340px,1fr));
 
 gap:14px;
 }
@@ -241,13 +233,6 @@ box-shadow:
 transition:.25s;
 }
 
-.card:hover{
-transform:translateY(-4px);
-
-box-shadow:
-0 0 18px #00f5ff15;
-}
-
 .card::before{
 content:"";
 
@@ -262,6 +247,13 @@ border:1px solid #00f5ff10;
 pointer-events:none;
 }
 
+.card:hover{
+transform:translateY(-3px);
+
+box-shadow:
+0 0 18px #00f5ff18;
+}
+
 /* RANK COLORS */
 
 .rank1{
@@ -271,12 +263,12 @@ box-shadow:0 0 18px rgba(255,215,0,.25);
 
 .rank2{
 border-color:silver;
-box-shadow:0 0 18px rgba(192,192,192,.2);
+box-shadow:0 0 18px rgba(192,192,192,.25);
 }
 
 .rank3{
 border-color:#cd7f32;
-box-shadow:0 0 18px rgba(205,127,50,.2);
+box-shadow:0 0 18px rgba(205,127,50,.25);
 }
 
 .top10{
@@ -290,9 +282,10 @@ box-shadow:0 0 18px rgba(168,85,247,.2);
 display:flex;
 align-items:center;
 justify-content:space-between;
+
 gap:10px;
 
-margin-bottom:12px;
+margin-bottom:14px;
 }
 
 .player-left{
@@ -311,7 +304,7 @@ color:white;
 }
 
 .player-id{
-margin-top:4px;
+margin-top:5px;
 
 display:inline-flex;
 align-items:center;
@@ -325,13 +318,11 @@ background:#00f5ff10;
 
 border:1px solid #00f5ff20;
 
-font-size:10px;
+font-size:11px;
 font-weight:700;
 
 color:var(--cyan);
 }
-
-/* RANK */
 
 .rank-badge{
 width:42px;
@@ -344,7 +335,7 @@ align-items:center;
 justify-content:center;
 
 font-family:'Orbitron',sans-serif;
-font-size:14px;
+font-size:13px;
 font-weight:800;
 
 background:#00f5ff10;
@@ -360,10 +351,7 @@ flex-shrink:0;
 
 .grid{
 display:grid;
-
-grid-template-columns:
-repeat(3,1fr);
-
+grid-template-columns:repeat(3,1fr);
 gap:8px;
 }
 
@@ -385,8 +373,6 @@ font-size:15px;
 font-weight:800;
 
 font-family:'Orbitron',sans-serif;
-
-color:white;
 }
 
 .box-label{
@@ -404,17 +390,17 @@ color:var(--muted);
 
 /* COLORS */
 
-.win-text{color:#00ff88;}
-.loss-text{color:#ff4d6d;}
-.draw-text{color:#ffd60a;}
-.match-text{color:#00f5ff;}
-.rate-text{color:#38bdf8;}
-.goal-text{color:#22c55e;}
-.con-text{color:#f97316;}
-.diff-text{color:#a855f7;}
-.seven-text{color:#facc15;}
-.friendly-text{color:#06b6d4;}
-.tour-text{color:#fb7185;}
+.win{color:#00ff88;}
+.loss{color:#ff4d6d;}
+.draw{color:#ffd60a;}
+.match{color:#00f5ff;}
+.rate{color:#38bdf8;}
+.score{color:#22c55e;}
+.con{color:#fb7185;}
+.diff{color:#a855f7;}
+.seven{color:#facc15;}
+.friendly{color:#06b6d4;}
+.tour{color:#f97316;}
 
 /* DOWNLOAD */
 
@@ -441,12 +427,6 @@ font-weight:800;
 font-family:'Orbitron',sans-serif;
 
 cursor:pointer;
-
-transition:.2s;
-}
-
-.download button:hover{
-transform:scale(.98);
 }
 
 /* MOBILE */
@@ -529,48 +509,53 @@ const MATCH_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0X
 
 const MEMBER_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLEME9M9cSy9FvfHvcx2gMPkp1H5Dj4YaKufPRsAyon8Tf-lo7VbkQ6/pub?gid=133947099&single=true&output=csv";
 
-let players={}, members={}, cache={};
+let players={};
+let members={};
 
 function parseCSV(text){
 
 const rows=[];
-let cur=[], val="", q=false;
+let row=[];
+let col='';
+let q=false;
 
 for(let i=0;i<text.length;i++){
 
-let c=text[i];
+const c=text[i];
 
-if(c=='"'){
-
-if(q && text[i+1]=='"'){
-val+='"';
-i++;
-}else q=!q;
-
+if(c === '"'){
+q=!q;
 }
 
-else if(c==','&&!q){
-cur.push(val);
-val="";
+else if(c === ',' && !q){
+row.push(col);
+col='';
 }
 
-else if((c=='\n'||c=='\r')&&!q){
+else if((c === '\n' || c === '\r') && !q){
 
-if(val||cur.length){
+if(col || row.length){
 
-cur.push(val);
-rows.push(cur);
+row.push(col);
+rows.push(row);
 
-cur=[];
-val="";
+row=[];
+col='';
 
 }
 
 }
 
 else{
-val+=c;
+col+=c;
 }
+
+}
+
+if(col || row.length){
+
+row.push(col);
+rows.push(row);
 
 }
 
@@ -578,78 +563,68 @@ return rows;
 
 }
 
-function normalize(id){
-return (id||"")
+function normalize(x){
+return (x || "")
 .toLowerCase()
 .replace(/[^a-z0-9]/g,'');
 }
 
-async function getData(url){
+async function loadData(){
 
-if(cache[url]) return cache[url];
+const [matchRes, memberRes] = await Promise.all([
 
-let t=await fetch(url+"&t="+Date.now())
-.then(r=>r.text());
+fetch(MATCH_URL + "&t=" + Date.now()),
+fetch(MEMBER_URL + "&t=" + Date.now())
 
-cache[url]=t;
+]);
 
-return t;
+const matchText = await matchRes.text();
+const memberText = await memberRes.text();
 
-}
+const matchRows = parseCSV(matchText);
+const memberRows = parseCSV(memberText);
 
-async function loadMembers(){
+/* MEMBERS */
 
-let rows=parseCSV(await getData(MEMBER_URL))
-.slice(1);
+memberRows.slice(1).forEach(r=>{
 
-rows.forEach(c=>{
+if(!r.length) return;
 
-if(c[1] && !c[1].includes("#VALUE")){
-
-members[normalize(c[1])] = c[0];
-
-}
+members[normalize(r[1])] = r[0] || "Unknown";
 
 });
 
-}
+/* MATCHES */
 
-async function loadMatches(){
+matchRows.slice(1).forEach(r=>{
 
-let rows=parseCSV(await getData(MATCH_URL))
-.slice(1);
+if(!r.length) return;
 
-rows.forEach(c=>{
+if((r[9] || "").toLowerCase() !== "yes") return;
 
-let P1=c[0],
-P2=c[1];
+const p1 = normalize(r[0]);
+const p2 = normalize(r[1]);
 
-let s1=Number(c[3]),
-s2=Number(c[4]);
+const s1 = +r[3] || 0;
+const s2 = +r[4] || 0;
 
-let approved=(c[9]||"").toLowerCase();
+const type = r[2] || "";
 
-if(
-!P1 || !P2 ||
-P1.includes("#VALUE") ||
-P2.includes("#VALUE") ||
-isNaN(s1) ||
-isNaN(s2) ||
-approved!=="yes"
-) return;
-
-update(P1,s1,s2,c[2]);
-update(P2,s2,s1,c[2]);
+update(p1,s1,s2,type);
+update(p2,s2,s1,type);
 
 });
 
+render();
+
 }
 
-function update(id,s,c,t){
+function update(id,s,c,type){
 
 if(!players[id]){
 
 players[id]={
+
 match:0,
 win:0,
 loss:0,
@@ -657,54 +632,53 @@ draw:0,
 gs:0,
 gc:0,
 diff:0,
-rate:0,
 seven:0,
 friendly:0,
 other:0
+
 };
 
 }
 
-let p=players[id];
+const p = players[id];
 
 p.match++;
 
-p.gs+=s;
-p.gc+=c;
+p.gs += s;
+p.gc += c;
 
-p.diff=p.gs-p.gc;
+p.diff = p.gs - p.gc;
 
-if(t==="Friendly") p.friendly++;
+if(type === "Friendly") p.friendly++;
 else p.other++;
 
-if(s>c) p.win++;
-else if(s<c) p.loss++;
+if(s > c) p.win++;
+else if(s < c) p.loss++;
 else p.draw++;
 
-if(s>=7) p.seven++;
+if(s >= 7) p.seven++;
 
-p.winp=(p.win/p.match)*100;
-p.rate=(p.gs/p.match);
+p.winp = ((p.win / p.match) * 100);
+p.rate = (p.gs / p.match);
 
 }
 
 function render(){
 
-let q=normalize(
+const q = normalize(
 document.getElementById("search").value
 );
 
-let sorted=Object.entries(players)
+const sorted = Object.entries(players)
 
 .sort((a,b)=>b[1].win-a[1].win);
 
-let html="";
+let html='';
 
 sorted.forEach(([id,p],i)=>{
 
-let name=
-members[normalize(id)]
-||"Unknown Player";
+const name =
+members[normalize(id)] || "Unknown Player";
 
 if(
 q &&
@@ -750,62 +724,62 @@ ${id}
 <div class="grid">
 
 <div class="box">
-<div class="box-value win-text">${p.win}</div>
+<div class="box-value win">${p.win}</div>
 <div class="box-label">Wins</div>
 </div>
 
 <div class="box">
-<div class="box-value loss-text">${p.loss}</div>
+<div class="box-value loss">${p.loss}</div>
 <div class="box-label">Loss</div>
 </div>
 
 <div class="box">
-<div class="box-value draw-text">${p.draw}</div>
+<div class="box-value draw">${p.draw}</div>
 <div class="box-label">Draw</div>
 </div>
 
 <div class="box">
-<div class="box-value match-text">${p.match}</div>
+<div class="box-value match">${p.match}</div>
 <div class="box-label">Match</div>
 </div>
 
 <div class="box">
-<div class="box-value rate-text">${p.winp ? p.winp.toFixed(1) : "0.0"}%</div>
-<div class="box-label">Win Rate</div>
+<div class="box-value rate">${p.winp.toFixed(1)}%</div>
+<div class="box-label">Win%</div>
 </div>
 
 <div class="box">
-<div class="box-value goal-text">${p.rate ? p.rate.toFixed(2) : "0.00"}</div>
+<div class="box-value score">${p.rate.toFixed(2)}</div>
 <div class="box-label">Goal Rate</div>
 </div>
 
 <div class="box">
-<div class="box-value goal-text">${p.gs}</div>
+<div class="box-value score">${p.gs}</div>
 <div class="box-label">Scored</div>
 </div>
 
 <div class="box">
-<div class="box-value con-text">${p.gc}</div>
+<div class="box-value con">${p.gc}</div>
 <div class="box-label">Against</div>
 </div>
 
 <div class="box">
-<div class="box-value diff-text">${p.diff}</div>
-<div class="box-label">Diff.</div>
+<div class="box-value diff">${p.diff}</div>
+<div class="box-label">Diff</div>
 </div>
 
 <div class="box">
-<div class="box-value seven-text">${p.seven}</div>
+<div class="box-value seven">${p.seven}</div>
 <div class="box-label">7+ Goal</div>
 </div>
 
 <div class="box">
-<div class="box-value friendly-text">${p.friendly}</div>
+<div class="box-value friendly">${p.friendly}</div>
 <div class="box-label">Friendly</div>
 </div>
 
 <div class="box">
-<div class="box-value tour-text">${p.other}</div>
+<div class="box-value tour">${p.other}</div>
 <div class="box-label">Tournament</div>
 </div>
 
@@ -814,7 +788,6 @@ ${id}
 <div class="download">
 
 <button onclick="downloadCard(this)">
-<i class="fa-solid fa-download"></i>
 DOWNLOAD CARD
 </button>
 
@@ -826,20 +799,19 @@ DOWNLOAD CARD
 
 });
 
-document.getElementById("data").innerHTML=html;
+document.getElementById("data").innerHTML = html;
 
 }
 
 function downloadCard(btn){
 
-html2canvas(btn.closest(".card"))
-.then(c=>{
+html2canvas(btn.closest(".card")).then(canvas=>{
 
-let a=document.createElement("a");
+const a=document.createElement("a");
+
+a.href=canvas.toDataURL("image/jpeg");
 
 a.download="GOAT_FC_STATS.jpg";
-
-a.href=c.toDataURL("image/jpeg");
 
 a.click();
 
@@ -847,18 +819,7 @@ a.click();
 
 }
 
-async function init(){
-
-await Promise.all([
-loadMembers(),
-loadMatches()
-]);
-
-render();
-
-}
-
-init();
+loadData();
 
 </script>
 

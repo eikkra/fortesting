@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>PLAYERS HUB</title>
+
+<link rel="icon"
+type="image/png"
+href="https://i.imgur.com/LY3Bb9m.png">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Rajdhani:wght@400;500;600;700&display=swap"
+rel="stylesheet">
+
+<style>
+
+:root{
+--bg:#050816;
+--card:#0f172a;
+--cyan:#00f5ff;
+--green:#00ff88;
+--white:#f8fafc;
+--muted:#94a3b8;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+background:var(--bg);
+font-family:'Rajdhani',sans-serif;
+color:var(--white);
+overflow-x:hidden;
+padding-bottom:25px;
+}
+
+body::before{
+content:"";
+position:fixed;
+inset:0;
+
+background:
+radial-gradient(circle at top left,#00f5ff12,transparent 25%),
+radial-gradient(circle at bottom right,#00ff8810,transparent 25%);
+
+z-index:-1;
+}
+
+/* =========================
+TOPBAR
+========================= */
+
+.topbar{
+height:50px;
+
+display:flex;
+align-items:center;
+justify-content:space-between;
+
+padding:0 14px;
+
+background:rgba(5,8,22,.88);
+
+backdrop-filter:blur(10px);
+
+border-bottom:1px solid #00f5ff15;
+
+position:sticky;
+top:0;
+z-index:999;
+
+text-decoration:none;
+}
+
+.top-left{
+display:flex;
+align-items:center;
+gap:8px;
+}
+
+.top-logo{
+width:23px;
+
+filter:
+drop-shadow(0 0 5px #00f5ff);
+}
+
+.top-title{
+font-family:'Orbitron',sans-serif;
+font-size:11px;
+font-weight:700;
+letter-spacing:1px;
+
+background:
+linear-gradient(90deg,var(--cyan),var(--green));
+
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+.home-btn{
+width:30px;
+height:30px;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+border-radius:10px;
+
+background:#111827;
+
+border:1px solid #00f5ff20;
+
+color:var(--cyan);
+
+font-size:11px;
+}
+
+/* =========================
+HEADER
+========================= */
+
+.hero{
+padding:18px 12px 14px;
+text-align:center;
+}
+
+.hero-title{
+font-family:'Orbitron',sans-serif;
+font-size:22px;
+font-weight:800;
+letter-spacing:2px;
+
+background:
+linear-gradient(
+90deg,
+#00f5ff,
+#ffffff,
+#00ff88
+);
+
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+.hero-sub{
+margin-top:7px;
+
+font-size:10px;
+font-weight:700;
+
+letter-spacing:4px;
+
+color:var(--muted);
+}
+
+/* =========================
+WRAP
+========================= */
+
+.wrap{
+width:min(100% - 20px,1400px);
+margin:auto;
+}
+
+/* =========================
+SEARCH
+========================= */
+
+.search-box{
+width:100%;
+
+height:50px;
+
+padding:0 16px;
+
+border-radius:16px;
+
+border:1px solid #00f5ff20;
+
+background:
+linear-gradient(145deg,#111827,#0f172a);
+
+outline:none;
+
+color:white;
+
+font-size:14px;
+font-weight:700;
+
+font-family:'Rajdhani',sans-serif;
+
+margin-bottom:18px;
+
+box-shadow:
+0 0 12px #00f5ff08;
+}
+
+.search-box::placeholder{
+color:#94a3b8;
+}
+
+.search-box:focus{
+
+border-color:#00f5ff55;
+
+box-shadow:
+0 0 14px #00f5ff22;
+}
+
+/* =========================
+GRID
+========================= */
+
+.grid{
+display:grid;
+
+grid-template-columns:
+repeat(auto-fit,minmax(220px,1fr));
+
+gap:16px;
+}
+
+/* =========================
+CARD
+========================= */
+
+.card{
+position:relative;
+
+padding:14px 12px;
+
+border-radius:22px;
+
+background:
+linear-gradient(145deg,#111827,#0f172a);
+
+border:1px solid #00f5ff18;
+
+overflow:hidden;
+
+cursor:pointer;
+
+transition:.25s;
+
+text-align:center;
+
+box-shadow:
+0 0 10px #000;
+}
+
+.card::before{
+content:"";
+
+position:absolute;
+
+inset:4px;
+
+border-radius:18px;
+
+border:1px solid #00f5ff10;
+
+pointer-events:none;
+}
+
+.card:hover{
+transform:translateY(-4px);
+
+border-color:#00f5ff35;
+
+box-shadow:
+0 0 16px #00f5ff18;
+}
+
+/* IMAGE */
+
+.card img{
+width:78px;
+height:78px;
+
+border-radius:50%;
+
+object-fit:cover;
+
+border:2px solid #00f5ff;
+
+background:#111827;
+
+box-shadow:
+0 0 14px #00f5ff30;
+}
+
+/* NAME */
+
+.name{
+margin-top:11px;
+
+font-size:16px;
+font-weight:800;
+
+line-height:1.3;
+
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;
+}
+
+/* ID */
+
+.id{
+margin-top:8px;
+
+display:inline-flex;
+align-items:center;
+justify-content:center;
+gap:6px;
+
+padding:7px 12px;
+
+border-radius:999px;
+
+background:#00f5ff10;
+
+border:1px solid #00f5ff20;
+
+font-size:11px;
+font-weight:800;
+
+color:var(--cyan);
+}
+
+/* EMPTY */
+
+.empty{
+padding:50px 10px;
+
+text-align:center;
+
+font-size:15px;
+font-weight:700;
+
+color:var(--muted);
+
+grid-column:1/-1;
+}
+
+/* =========================
+TABLET
+========================= */
+
+@media(max-width:900px){
+
+.grid{
+
+grid-template-columns:
+repeat(3,1fr);
+
+}
+
+}
+
+/* =========================
+MOBILE
+========================= */
+
+@media(max-width:768px){
+
+.wrap{
+width:min(100% - 10px,480px);
+}
+
+.grid{
+
+grid-template-columns:
+repeat(2,1fr);
+
+gap:10px;
+}
+
+.hero-title{
+font-size:17px;
+}
+
+.hero-sub{
+font-size:8px;
+letter-spacing:3px;
+}
+
+.search-box{
+height:42px;
+font-size:12px;
+}
+
+.card{
+padding:12px 8px;
+border-radius:18px;
+}
+
+.card img{
+width:62px;
+height:62px;
+}
+
+.name{
+font-size:12px;
+}
+
+.id{
+font-size:9px;
+padding:6px 10px;
+}
+
+}
+
+/* SMALL MOBILE */
+
+@media(max-width:420px){
+
+.grid{
+gap:8px;
+}
+
+.card img{
+width:58px;
+height:58px;
+}
+
+.name{
+font-size:11px;
+}
+
+.id{
+font-size:8px;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- TOPBAR -->
+
+<a href="https://goatfcbd.com"
+class="topbar">
+
+<div class="top-left">
+
+<img src="https://i.imgur.com/LY3Bb9m.png"
+class="top-logo">
+
+<div class="top-title">
+GOAT FC
+</div>
+
+</div>
+
+<div class="home-btn">
+<i class="fa-solid fa-house"></i>
+</div>
+
+</a>
+
+<!-- HERO -->
+
+<div class="hero">
+
+<div class="hero-title">
+PLAYERS HUB
+</div>
+
+<div class="hero-sub">
+SEARCH YOUR FAVORITE PLAYER
+</div>
+
+</div>
+
+<!-- WRAP -->
+
+<div class="wrap">
+
+<input
+type="text"
+id="search"
+class="search-box"
+placeholder="Search Player Name / ID...">
+
+<div id="grid"
+class="grid">
+
+</div>
+
+</div>
+
+<script>
+
+const MEMBER_CSV =
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv";
+
+let playersData=[];
+
+/* CSV */
+
+function parseCSV(text){
+
+return text
+.split("\n")
+.map(r=>r.split(","));
+
+}
+
+/* NORMALIZE */
+
+function normalize(x){
+
+return (x||"")
+.toLowerCase();
+
+}
+
+/* LOAD */
+
+async function loadPlayers(){
+
+const res =
+await fetch(MEMBER_CSV);
+
+const text =
+await res.text();
+
+const rows =
+parseCSV(text);
+
+playersData=[];
+
+rows.slice(1).forEach(r=>{
+
+playersData.push({
+
+name:r[0] || "Unknown",
+
+id:r[1] || "N/A",
+
+pic:r[4] ||
+"https://i.imgur.com/LY3Bb9m.png"
+
+});
+
+});
+
+render(playersData);
+
+}
+
+/* RENDER */
+
+function render(data){
+
+let html='';
+
+if(data.length===0){
+
+html=`
+
+<div class="empty">
+<i class="fa-solid fa-magnifying-glass"></i>
+<br><br>
+No Player Found
+</div>
+
+`;
+
+document
+.getElementById("grid")
+.innerHTML=html;
+
+return;
+
+}
+
+data.forEach(p=>{
+
+html += `
+
+<div class="card"
+onclick="openProfile('${p.id}')">
+
+<img src="${p.pic}">
+
+<div class="name">
+${p.name}
+</div>
+
+<div class="id">
+
+<i class="fa-solid fa-shield-halved"></i>
+
+${p.id}
+
+</div>
+
+</div>
+
+`;
+
+});
+
+document
+.getElementById("grid")
+.innerHTML = html;
+
+}
+
+/* SEARCH */
+
+document
+.getElementById("search")
+
+.addEventListener("input",function(){
+
+const value =
+normalize(this.value);
+
+const filtered =
+playersData.filter(p=>
+
+normalize(p.name)
+.includes(value)
+
+||
+
+normalize(p.id)
+.includes(value)
+
+);
+
+render(filtered);
+
+});
+
+/* OPEN PROFILE */
+
+function openProfile(id){
+
+window.location.href =
+"profile/?id="+id;
+
+}
+
+/* LOAD */
+
+loadPlayers();
+
+</script>
+
+</body>
+</html>

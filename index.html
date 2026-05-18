@@ -427,34 +427,39 @@ body::after {
 .stat-friendly .stat-val { color:#a78bfa; }
 .stat-tour .stat-val  { color:#f472b6; }
 
-/* CARD FOOT */
-.card-foot {
-  padding:10px 14px 13px;
+/* DOWNLOAD ICON in card head */
+.dl-icon-btn {
   display:flex;
   align-items:center;
-  justify-content:flex-end;
-}
-.dl-btn {
-  display:inline-flex;
-  align-items:center;
-  gap:7px;
-  padding:7px 16px;
-  background:transparent;
-  border:1px solid rgba(0,245,255,0.3);
-  border-radius:6px;
+  justify-content:center;
+  width:28px; height:28px;
+  border-radius:7px;
+  background:rgba(0,245,255,0.07);
+  border:1px solid rgba(0,245,255,0.22);
   color:var(--cyan);
-  font-family:'Exo 2',sans-serif;
   font-size:12px;
-  font-weight:600;
-  letter-spacing:1px;
-  text-transform:uppercase;
   cursor:pointer;
+  flex-shrink:0;
   transition:all 0.2s;
 }
-.dl-btn:hover {
+.dl-icon-btn:hover {
   background:var(--cyan);
   color:#000;
-  box-shadow:0 0 18px rgba(0,245,255,0.42);
+  box-shadow:0 0 12px rgba(0,245,255,0.45);
+}
+
+/* POWERED BY footer */
+.powered-by {
+  position:relative;
+  z-index:10;
+  text-align:center;
+  padding:10px 0 20px;
+  font-family:'Orbitron',sans-serif;
+  font-size:9px;
+  letter-spacing:3px;
+  color:var(--muted);
+  text-transform:uppercase;
+  opacity:0.5;
 }
 
 /* LOADING */
@@ -671,7 +676,10 @@ function render(){
           <div class="player-name">${name}</div>
           <div class="player-id"><i class="fa-solid fa-id-badge" style="margin-right:4px;"></i>${id}</div>
         </div>
-        ${rankIcon(rank)}
+        <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+          ${rankIcon(rank)}
+          <button class="dl-icon-btn" title="Download" onclick="downloadCard(this)"><i class="fa-solid fa-download"></i></button>
+        </div>
       </div>
 
       <div class="winbar-wrap">
@@ -745,12 +753,6 @@ function render(){
           <span class="stat-val">${p.other}</span>
           <span class="stat-lbl">Tourney</span>
         </div>
-      </div>
-
-      <div class="card-foot">
-        <button class="dl-btn" onclick="downloadCard(this)">
-          <i class="fa-solid fa-download"></i> Download
-        </button>
       </div>
     </div>`;
   });

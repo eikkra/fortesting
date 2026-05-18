@@ -1,733 +1,367 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>GOAT FC — Leaderboard</title>
+<title>Goat FC Leaderboard</title>
 <link rel="icon" type="image/png" href="https://i.imgur.com/LY3Bb9m.png">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="UTF-8">
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
 <style>
-:root {
-  --bg:       #050810;
-  --bg2:      #080d1a;
-  --panel:    rgba(10,16,36,0.85);
-  --border:   rgba(0,240,255,0.12);
-  --cyan:     #00f0ff;
-  --green:    #00ff88;
-  --gold:     #ffd700;
-  --silver:   #c0c0c0;
-  --bronze:   #cd7f32;
-  --red:      #ff3a5c;
-  --text:     #c8e0f0;
-  --dim:      rgba(200,224,240,0.45);
-  --font-hd:  'Orbitron', sans-serif;
-  --font-bd:  'Rajdhani', sans-serif;
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+
+body{
+  font-family:'Oswald',sans-serif;
+  background:linear-gradient(135deg,#020617,#0a0f1e);
+  color:#e2e8f0;
+  min-height:100vh;
+  overflow-x:hidden;
 }
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-html { scroll-behavior: smooth; }
-
-body {
-  font-family: var(--font-bd);
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  overflow-x: hidden;
-}
-
-/* ── GRID BG ── */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
+/* subtle grid */
+body::before{
+  content:'';
+  position:fixed;inset:0;
   background-image:
-    linear-gradient(rgba(0,240,255,.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,240,255,.03) 1px, transparent 1px);
-  background-size: 40px 40px;
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* ── SCANLINES ── */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(0,0,0,.08) 2px,
-    rgba(0,0,0,.08) 4px
-  );
-  pointer-events: none;
-  z-index: 1;
-  opacity: .4;
+    linear-gradient(rgba(0,245,255,.022) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,245,255,.022) 1px,transparent 1px);
+  background-size:48px 48px;
+  pointer-events:none;z-index:0;
 }
 
 /* ── TOPBAR ── */
-.topbar {
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  height: 50px;
-  padding: 0 18px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  text-decoration: none;
-  background: rgba(5,8,16,.92);
-  backdrop-filter: blur(14px);
-  border-bottom: 1px solid var(--border);
-  box-shadow: 0 0 30px rgba(0,240,255,.06), inset 0 -1px 0 rgba(0,240,255,.1);
+.topbar{
+  position:sticky;top:0;z-index:999;
+  height:46px;padding:0 14px;
+  display:flex;align-items:center;justify-content:space-between;
+  text-decoration:none;
+  background:rgba(2,6,23,.93);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(0,245,255,.1);
+  box-shadow:0 2px 24px rgba(0,0,0,.5);
 }
-
-.topbar-left { display: flex; align-items: center; gap: 10px; }
-
-.topbar-logo {
-  width: 28px;
-  filter: drop-shadow(0 0 8px var(--cyan));
+.topbar-left{display:flex;align-items:center;gap:8px;}
+.topbar-logo{width:26px;filter:drop-shadow(0 0 6px #00f5ff);}
+.topbar-text{
+  font-size:13px;font-weight:800;letter-spacing:2px;
+  background:linear-gradient(90deg,#00f5ff,#00ff88);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
 }
-
-.topbar-text {
-  font-family: var(--font-hd);
-  font-size: 12px;
-  font-weight: 900;
-  letter-spacing: 3px;
-  background: linear-gradient(90deg, var(--cyan), var(--green));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.topbar-right{
+  width:28px;height:28px;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:50%;
+  background:rgba(0,245,255,.07);
+  border:1px solid rgba(0,245,255,.2);
+  color:#00f5ff;font-size:12px;
+  transition:.2s;
 }
-
-.topbar-right {
-  width: 30px; height: 30px;
-  display: flex; align-items: center; justify-content: center;
-  border-radius: 6px;
-  background: rgba(0,240,255,.06);
-  border: 1px solid rgba(0,240,255,.2);
-  color: var(--cyan);
-  font-size: 12px;
-  transition: .2s;
-}
-.topbar-right:hover { background: rgba(0,240,255,.15); box-shadow: 0 0 14px rgba(0,240,255,.3); }
+.topbar-right:hover{background:rgba(0,245,255,.16);box-shadow:0 0 14px rgba(0,245,255,.3);}
 
 /* ── WRAPPER ── */
-.wrapper {
-  position: relative;
-  z-index: 2;
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 20px 14px 40px;
+.wrapper{
+  position:relative;z-index:1;
+  max-width:900px;margin:0 auto;
+  padding:0 10px 40px;
 }
 
-/* ── HERO HEADER ── */
-.hero {
-  text-align: center;
-  padding: 18px 0 14px;
+/* ── HEADER ── */
+.header{
+  display:flex;align-items:center;justify-content:center;
+  gap:10px;padding:18px 10px 6px;
+}
+.logo{width:42px;filter:drop-shadow(0 0 10px #00ffcc);}
+h1{
+  font-size:20px;font-weight:700;letter-spacing:2px;
+  color:#00ffcc;margin:0;
+  animation:glowTitle 2.5s ease-in-out infinite alternate;
+}
+@keyframes glowTitle{
+  from{text-shadow:0 0 5px #00ffcc;}
+  to  {text-shadow:0 0 18px #00ffff,0 0 35px #00ffff44;}
 }
 
-.hero-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 12px;
-  border-radius: 2px;
-  border: 1px solid rgba(0,240,255,.25);
-  background: rgba(0,240,255,.05);
-  font-size: 10px;
-  letter-spacing: 3px;
-  color: var(--cyan);
-  font-family: var(--font-hd);
-  margin-bottom: 12px;
-  animation: borderPulse 3s infinite;
-}
-
-@keyframes borderPulse {
-  0%,100% { border-color: rgba(0,240,255,.2); }
-  50%      { border-color: rgba(0,240,255,.55); }
-}
-
-.hero-dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--green);
-  box-shadow: 0 0 8px var(--green);
-  animation: blink 1.4s infinite;
-}
-
-@keyframes blink { 0%,100%{opacity:1;} 50%{opacity:.2;} }
-
-.hero h1 {
-  font-family: var(--font-hd);
-  font-size: clamp(22px, 5vw, 38px);
-  font-weight: 900;
-  letter-spacing: 4px;
-  line-height: 1;
-  background: linear-gradient(160deg, #fff 10%, var(--cyan) 55%, var(--green) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: none;
-  margin-bottom: 6px;
-}
-
-.hero-sub {
-  font-size: 12px;
-  color: var(--dim);
-  letter-spacing: 2px;
-  font-weight: 500;
-}
-
-/* ── STAT BAR ── */
-.statbar {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-  margin: 16px 0;
-}
-
-.stat-box {
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 10px 8px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-  transition: border-color .3s;
-}
-
-.stat-box::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--cyan), transparent);
-  opacity: .5;
-}
-
-.stat-box:hover { border-color: rgba(0,240,255,.35); }
-
-.stat-label {
-  font-size: 9px;
-  letter-spacing: 2px;
-  color: var(--dim);
-  font-family: var(--font-hd);
-  margin-bottom: 4px;
-}
-
-.stat-val {
-  font-family: var(--font-hd);
-  font-size: clamp(16px, 3vw, 22px);
-  font-weight: 900;
-  color: var(--cyan);
-  text-shadow: 0 0 12px rgba(0,240,255,.5);
+.desc{
+  font-size:12px;opacity:.5;
+  margin-bottom:12px;text-align:center;letter-spacing:.5px;
 }
 
 /* ── TABS ── */
-.tabs {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 14px;
+.tabs{margin:0 0 10px;display:flex;justify-content:center;gap:8px;}
+.tabs button{
+  padding:6px 18px;
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:20px;
+  background:rgba(255,255,255,.04);
+  color:rgba(255,255,255,.45);
+  font-family:'Oswald',sans-serif;
+  font-size:12px;font-weight:600;letter-spacing:1px;
+  cursor:pointer;transition:.2s;
+}
+.tabs button:hover{
+  background:rgba(0,245,255,.07);
+  color:#e2e8f0;
+  border-color:rgba(0,245,255,.25);
+}
+.tabs button.active{
+  background:linear-gradient(90deg,rgba(0,255,204,.15),rgba(0,195,255,.12));
+  color:#fff;
+  border-color:rgba(0,245,255,.45);
+  box-shadow:0 0 14px rgba(0,245,255,.15);
 }
 
-.tab-btn {
-  flex: 1;
-  padding: 10px 0;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  background: var(--panel);
-  color: var(--dim);
-  font-family: var(--font-hd);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  cursor: pointer;
-  transition: .2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
+/* ── STATS ROW ── */
+.stats{
+  display:flex;justify-content:center;
+  gap:6px;flex-wrap:wrap;
+  margin-bottom:12px;
+}
+.stat{
+  padding:5px 13px;
+  border-radius:20px;
+  background:rgba(0,255,200,.05);
+  border:1px solid rgba(0,255,200,.11);
+  font-size:12px;color:rgba(255,255,255,.65);
+  animation:statGlow 2.5s ease-in-out infinite alternate;
+}
+.stat span{color:#00ffcc;font-weight:700;}
+@keyframes statGlow{
+  from{box-shadow:0 0 4px rgba(0,255,200,.08);}
+  to  {box-shadow:0 0 12px rgba(0,255,200,.22);}
 }
 
-.tab-btn i { font-size: 12px; }
-
-.tab-btn:hover {
-  background: rgba(0,240,255,.06);
-  border-color: rgba(0,240,255,.3);
-  color: var(--cyan);
-}
-
-.tab-btn.active {
-  background: linear-gradient(135deg, rgba(0,240,255,.15), rgba(0,255,136,.1));
-  border-color: rgba(0,240,255,.45);
-  color: #fff;
-  box-shadow: 0 0 16px rgba(0,240,255,.15), inset 0 0 20px rgba(0,240,255,.05);
-}
-
-/* ── TABLE CARD ── */
-.card {
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  overflow: hidden;
-  backdrop-filter: blur(10px);
+/* ── CARD ── */
+.card{
+  background:rgba(255,255,255,.03);
+  backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:12px;
+  padding:10px;
+  margin-top:4px;
+  overflow-x:auto;
 }
 
 /* ── TABLE ── */
-table {
-  width: 100%;
-  border-collapse: collapse;
+table{width:100%;border-collapse:collapse;}
+
+th{
+  color:#00ffcc;
+  font-size:12px;font-weight:600;letter-spacing:1px;
+  padding:8px 6px;
+  border-bottom:1px solid rgba(0,255,200,.1);
+}
+th:nth-child(1){width:5%;text-align:center;}
+th:nth-child(2){width:30%;text-align:left;}
+th:nth-child(n+3){text-align:center;}
+
+td{padding:8px 6px;font-size:13px;}
+td:nth-child(1){text-align:center;}
+td:nth-child(n+3){text-align:center;}
+
+.player{text-align:left;}
+.pid{font-size:10px;opacity:.45;letter-spacing:.5px;margin-top:1px;}
+
+tbody tr{
+  border-bottom:1px solid rgba(255,255,255,.05);
+  transition:background .15s;
+}
+tbody tr:last-child{border-bottom:none;}
+tbody tr:hover{background:rgba(255,255,255,.025);}
+
+/* ── RANK 1 GOLD ── */
+.rank1{
+  background:linear-gradient(90deg,rgba(255,215,0,.17) 0%,transparent 65%);
+  animation:goldGlow 2.5s ease-in-out infinite alternate;
+}
+@keyframes goldGlow{
+  from{box-shadow:inset 0 0 8px rgba(255,215,0,.12),inset 3px 0 0 rgba(255,215,0,.35);}
+  to  {box-shadow:inset 0 0 24px rgba(255,215,0,.3), inset 3px 0 0 rgba(255,215,0,.8);}
 }
 
-thead tr {
-  background: rgba(0,240,255,.04);
-  border-bottom: 1px solid rgba(0,240,255,.15);
+/* ── RANK 2 SILVER ── */
+.rank2{
+  background:linear-gradient(90deg,rgba(192,192,192,.14) 0%,transparent 65%);
+  animation:silverGlow 2.5s ease-in-out infinite alternate;
+}
+@keyframes silverGlow{
+  from{box-shadow:inset 0 0 8px rgba(192,192,192,.1), inset 3px 0 0 rgba(192,192,192,.3);}
+  to  {box-shadow:inset 0 0 22px rgba(192,192,192,.28),inset 3px 0 0 rgba(192,192,192,.7);}
 }
 
-th {
-  font-family: var(--font-hd);
-  font-size: 10px;
-  letter-spacing: 2px;
-  color: var(--dim);
-  padding: 11px 8px;
-  text-transform: uppercase;
-  font-weight: 700;
-  white-space: nowrap;
+/* ── RANK 3 BRONZE ── */
+.rank3{
+  background:linear-gradient(90deg,rgba(205,127,50,.15) 0%,transparent 65%);
+  animation:bronzeGlow 2.5s ease-in-out infinite alternate;
+}
+@keyframes bronzeGlow{
+  from{box-shadow:inset 0 0 8px rgba(205,127,50,.1), inset 3px 0 0 rgba(205,127,50,.3);}
+  to  {box-shadow:inset 0 0 22px rgba(205,127,50,.28),inset 3px 0 0 rgba(205,127,50,.7);}
 }
 
-th:first-child { width: 44px; text-align: center; }
-th:nth-child(2) { text-align: left; }
-
-td {
-  padding: 9px 8px;
-  font-size: 13px;
-  font-weight: 600;
-  white-space: nowrap;
+/* ── TOP 4-10 ── */
+.top10{
+  background:linear-gradient(90deg,rgba(0,255,150,.07) 0%,transparent 65%);
+  border-left:2px solid rgba(0,255,150,.25);
+  animation:topGlow 3s ease-in-out infinite alternate;
 }
-
-td:first-child { text-align: center; }
-
-tbody tr {
-  border-bottom: 1px solid rgba(255,255,255,.04);
-  transition: background .15s;
-}
-
-tbody tr:last-child { border-bottom: none; }
-
-tbody tr:hover { background: rgba(0,240,255,.04); }
-
-/* ── RANK BADGE ── */
-.rank-num {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 26px; height: 26px;
-  border-radius: 4px;
-  font-family: var(--font-hd);
-  font-size: 11px;
-  font-weight: 900;
-  background: rgba(255,255,255,.05);
-  color: var(--dim);
-  border: 1px solid rgba(255,255,255,.08);
-}
-
-/* ── MEDAL ROWS ── */
-.rank1 { background: linear-gradient(90deg, rgba(255,215,0,.1) 0%, transparent 60%); }
-.rank2 { background: linear-gradient(90deg, rgba(192,192,192,.08) 0%, transparent 60%); }
-.rank3 { background: linear-gradient(90deg, rgba(205,127,50,.09) 0%, transparent 60%); }
-.top10 { border-left: 2px solid rgba(0,240,255,.3); }
-
-.rank1 .rank-num { background: rgba(255,215,0,.15); border-color: rgba(255,215,0,.4); color: var(--gold); box-shadow: 0 0 10px rgba(255,215,0,.2); }
-.rank2 .rank-num { background: rgba(192,192,192,.12); border-color: rgba(192,192,192,.35); color: var(--silver); box-shadow: 0 0 10px rgba(192,192,192,.15); }
-.rank3 .rank-num { background: rgba(205,127,50,.12); border-color: rgba(205,127,50,.35); color: var(--bronze); box-shadow: 0 0 10px rgba(205,127,50,.15); }
-
-/* ── PLAYER CELL ── */
-.player-cell { text-align: left; }
-
-.player-name {
-  font-size: 13px;
-  font-weight: 700;
-  color: #e8f4ff;
-  letter-spacing: .5px;
-}
-
-.rank1 .player-name { color: var(--gold); }
-.rank2 .player-name { color: var(--silver); }
-.rank3 .player-name { color: var(--bronze); }
-
-.player-id {
-  font-family: var(--font-hd);
-  font-size: 9px;
-  letter-spacing: 1.5px;
-  color: var(--dim);
-  margin-top: 1px;
-}
-
-/* ── POINTS PILL ── */
-.pts-val {
-  font-family: var(--font-hd);
-  font-weight: 900;
-  font-size: 14px;
-  color: #fff;
-}
-
-.rank1 .pts-val { color: var(--gold); text-shadow: 0 0 10px rgba(255,215,0,.4); }
-.rank2 .pts-val { color: var(--silver); }
-.rank3 .pts-val { color: var(--bronze); }
-
-/* ── WIN% BAR ── */
-.win-wrap {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  min-width: 70px;
-}
-
-.win-bar-bg {
-  flex: 1;
-  height: 4px;
-  border-radius: 2px;
-  background: rgba(255,255,255,.08);
-  overflow: hidden;
-}
-
-.win-bar-fill {
-  height: 100%;
-  border-radius: 2px;
-  background: linear-gradient(90deg, var(--cyan), var(--green));
-  box-shadow: 0 0 6px rgba(0,240,255,.4);
-  transition: width .6s ease;
-}
-
-.win-pct {
-  font-family: var(--font-hd);
-  font-size: 11px;
-  color: var(--cyan);
-  min-width: 34px;
-  text-align: right;
-}
-
-/* ── GD PILL ── */
-.gd-pos { color: var(--green); }
-.gd-neg { color: var(--red); }
-.gd-zero { color: var(--dim); }
-
-/* ── LOADER ── */
-#loader {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
-  padding: 50px 0;
-}
-
-.loader-ring {
-  width: 44px; height: 44px;
-  border: 3px solid rgba(0,240,255,.1);
-  border-top-color: var(--cyan);
-  border-right-color: var(--green);
-  border-radius: 50%;
-  animation: spin .7s linear infinite;
-}
-
-@keyframes spin { to { transform: rotate(360deg); } }
-
-.loader-text {
-  font-family: var(--font-hd);
-  font-size: 11px;
-  letter-spacing: 3px;
-  color: var(--dim);
-  animation: blink 1.4s infinite;
-}
-
-/* ── CORNER ACCENT ── */
-.card-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 14px;
-  border-bottom: 1px solid var(--border);
-  background: rgba(0,240,255,.02);
-}
-
-.card-title {
-  font-family: var(--font-hd);
-  font-size: 10px;
-  letter-spacing: 3px;
-  color: var(--dim);
-}
-
-.refresh-badge {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 9px;
-  letter-spacing: 1.5px;
-  color: var(--green);
-  font-family: var(--font-hd);
-}
-
-.refresh-dot {
-  width: 5px; height: 5px;
-  border-radius: 50%;
-  background: var(--green);
-  box-shadow: 0 0 6px var(--green);
-  animation: blink 2s infinite;
+@keyframes topGlow{
+  from{border-left-color:rgba(0,255,150,.18);}
+  to  {border-left-color:rgba(0,255,150,.55);}
 }
 
 /* ── MOBILE ── */
-@media (max-width: 600px) {
-  .wrapper { padding: 14px 8px 30px; }
-
-  .hero h1 { letter-spacing: 2px; }
-
-  .statbar { grid-template-columns: repeat(2,1fr); gap: 6px; }
-
-  th, td { padding: 8px 5px; font-size: 12px; }
-
-  .win-bar-bg { display: none; }
-  .win-wrap { min-width: auto; }
-
-  th:nth-child(6),
-  td:nth-child(6),
-  th:nth-child(7),
-  td:nth-child(7) { display: none; }
-
-  .player-name { font-size: 12px; }
+@media(max-width:600px){
+  .wrapper{padding:0 6px 30px;}
+  h1{font-size:17px;}
+  .player{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:110px;}
+  td,th{font-size:11px;padding:7px 4px;}
 }
-
-/* ── ENTRY ANIMATION ── */
-@keyframes rowIn {
-  from { opacity: 0; transform: translateX(-10px); }
-  to   { opacity: 1; transform: translateX(0); }
-}
-
-tbody tr { animation: rowIn .3s ease both; }
 
 </style>
 </head>
-
 <body>
 
-<!-- TOPBAR -->
-<a href="https://goatfcbd.com" class="topbar" style="text-decoration:none;">
+<a href="https://goatfcbd.com" class="topbar">
   <div class="topbar-left">
     <img src="https://i.imgur.com/LY3Bb9m.png" class="topbar-logo" alt="logo">
-    <span class="topbar-text">GOAT FC</span>
+    <div class="topbar-text">GOAT FC</div>
   </div>
-  <div class="topbar-right">
-    <i class="fa-solid fa-house"></i>
-  </div>
+  <div class="topbar-right"><i class="fa-solid fa-house"></i></div>
 </a>
 
 <div class="wrapper">
 
-  <!-- HERO -->
-  <div class="hero">
-    <div class="hero-badge">
-      <div class="hero-dot"></div>
-      LIVE RANKING
-    </div>
-    <h1>LEADERBOARD</h1>
-    <div class="hero-sub">PERFORMANCE · GOALS · CONSISTENCY</div>
+  <div class="header">
+    <img src="https://i.imgur.com/LY3Bb9m.png" class="logo" alt="logo">
+    <h1>GOAT FC LEADERBOARD</h1>
   </div>
 
-  <!-- STATS -->
-  <div class="statbar">
-    <div class="stat-box">
-      <div class="stat-label">MATCHES</div>
-      <div class="stat-val" id="s-m">—</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">GOALS</div>
-      <div class="stat-val" id="s-g">—</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">POINTS</div>
-      <div class="stat-val" id="s-p">—</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">PER MATCH</div>
-      <div class="stat-val" id="s-pm">—</div>
-    </div>
-  </div>
+  <div class="desc">Live competitive ranking based on performance, goals &amp; consistency.</div>
 
-  <!-- TABS -->
   <div class="tabs">
-    <button class="tab-btn active" id="monthlyBtn" onclick="loadData('monthly')">
-      <i class="fa-solid fa-calendar-week"></i> MONTHLY
-    </button>
-    <button class="tab-btn" id="overallBtn" onclick="loadData('overall')">
-      <i class="fa-solid fa-trophy"></i> OVERALL
-    </button>
+    <button onclick="loadData('monthly')" id="monthlyBtn" class="active">Monthly</button>
+    <button onclick="loadData('overall')" id="overallBtn">Overall</button>
   </div>
 
-  <!-- TABLE -->
+  <div class="stats">
+    <div class="stat">Match: <span id="m">0</span></div>
+    <div class="stat">Goal: <span id="g">0</span></div>
+    <div class="stat">Points: <span id="p">0</span></div>
+    <div class="stat">Per Match: <span id="pm">0</span></div>
+  </div>
+
   <div class="card">
-    <div class="card-header">
-      <span class="card-title" id="card-label">MONTHLY RANKING</span>
-      <span class="refresh-badge"><div class="refresh-dot"></div>AUTO-REFRESH 30s</span>
-    </div>
-
-    <div id="loader">
-      <div class="loader-ring"></div>
-      <div class="loader-text">LOADING DATA...</div>
-    </div>
-
-    <table id="main-table" style="display:none;">
+    <table>
       <thead>
         <tr>
           <th>#</th>
-          <th style="text-align:left">PLAYER</th>
-          <th>PTS</th>
+          <th style="text-align:left">Player</th>
+          <th>Pts</th>
           <th>M</th>
-          <th>WIN%</th>
+          <th>Win%</th>
           <th>GF</th>
           <th>GA</th>
           <th>GD</th>
         </tr>
       </thead>
-      <tbody id="tbody"></tbody>
+      <tbody id="table"></tbody>
     </table>
   </div>
 
 </div>
 
 <script>
-const SHEET_L = "https://opensheet.elk.sh/1DSPKPaU1ZQYbFM4iYbE1VXgDAXU-FCT7--QhYJsNf1M/Leaderboard%20Goat%20FC";
-const SHEET_M = "https://opensheet.elk.sh/1DSPKPaU1ZQYbFM4iYbE1VXgDAXU-FCT7--QhYJsNf1M/CLUB%20MEMBERS";
 
-let currentType = "monthly";
+const L="https://opensheet.elk.sh/1DSPKPaU1ZQYbFM4iYbE1VXgDAXU-FCT7--QhYJsNf1M/Leaderboard%20Goat%20FC";
+const M="https://opensheet.elk.sh/1DSPKPaU1ZQYbFM4iYbE1VXgDAXU-FCT7--QhYJsNf1M/CLUB%20MEMBERS";
 
-function g(id){ return document.getElementById(id); }
+let type="overall";
 
-function gdClass(v){
-  const n = +v || 0;
-  return n > 0 ? 'gd-pos' : n < 0 ? 'gd-neg' : 'gd-zero';
-}
+async function loadData(t){
+  type=t;
+  document.getElementById("overallBtn").classList.remove("active");
+  document.getElementById("monthlyBtn").classList.remove("active");
+  document.getElementById(t+"Btn").classList.add("active");
 
-function gdLabel(v){
-  const n = +v || 0;
-  return n > 0 ? '+'+n : n;
-}
+  let[ld,md]=await Promise.all([
+    fetch(L).then(r=>r.json()),
+    fetch(M).then(r=>r.json())
+  ]);
 
-async function loadData(type) {
-  currentType = type;
+  let map={};
+  md.forEach(x=>{
+    if(x["Club ID Number"]) map[x["Club ID Number"].trim()]=x["Full Name"];
+  });
 
-  // tabs
-  g('monthlyBtn').classList.toggle('active', type === 'monthly');
-  g('overallBtn').classList.toggle('active', type === 'overall');
-  g('card-label').textContent = type === 'monthly' ? 'MONTHLY RANKING' : 'OVERALL RANKING';
+  ld=ld.filter(r=>map[r["Club_ID"]?.trim()]);
 
-  // show loader
-  g('loader').style.display = 'flex';
-  g('main-table').style.display = 'none';
+  ld.sort((a,b)=>{
+    let Am=+(type==="overall"?a["Overall_PL"]:a["Monthly_PL"])||0;
+    let Bm=+(type==="overall"?b["Overall_PL"]:b["Monthly_PL"])||0;
+    if(Am===0&&Bm>0)return 1;
+    if(Bm===0&&Am>0)return -1;
 
-  try {
-    const [ld, md] = await Promise.all([
-      fetch(SHEET_L).then(r => r.json()),
-      fetch(SHEET_M).then(r => r.json())
-    ]);
+    let Ap=+(type==="overall"?a["Overall_Point"]:a["Monthly_Point"])||0;
+    let Bp=+(type==="overall"?b["Overall_Point"]:b["Monthly_Point"])||0;
+    if(Bp!==Ap)return Bp-Ap;
 
-    // build member map
-    const map = {};
-    md.forEach(x => {
-      if (x["Club ID Number"]) map[x["Club ID Number"].trim()] = x["Full Name"];
-    });
+    let Aw=+(type==="overall"?a["Overall_Win%"]:a["Monthly_Win%"])||0;
+    let Bw=+(type==="overall"?b["Overall_Win%"]:b["Monthly_Win%"])||0;
+    if(Bw!==Aw)return Bw-Aw;
 
-    // filter + sort
-    let rows = ld.filter(r => map[r["Club_ID"]?.trim()]);
+    let Agd=+(type==="overall"?a["Total GD"]:a["Montly GD"])||0;
+    let Bgd=+(type==="overall"?b["Total GD"]:b["Montly GD"])||0;
+    return Bgd-Agd;
+  });
 
-    rows.sort((a, b) => {
-      const am = +(type === 'overall' ? a["Overall_PL"] : a["Monthly_PL"]) || 0;
-      const bm = +(type === 'overall' ? b["Overall_PL"] : b["Monthly_PL"]) || 0;
-      if (am === 0 && bm > 0) return 1;
-      if (bm === 0 && am > 0) return -1;
+  let tbody=document.getElementById("table");
+  tbody.innerHTML="";
 
-      const ap = +(type === 'overall' ? a["Overall_Point"] : a["Monthly_Point"]) || 0;
-      const bp = +(type === 'overall' ? b["Overall_Point"] : b["Monthly_Point"]) || 0;
-      if (bp !== ap) return bp - ap;
+  let totalM=0,totalG=0,totalP=0;
 
-      const aw = +(type === 'overall' ? a["Overall_Win%"] : a["Monthly_Win%"]) || 0;
-      const bw = +(type === 'overall' ? b["Overall_Win%"] : b["Monthly_Win%"]) || 0;
-      if (bw !== aw) return bw - aw;
+  ld.forEach((r,i)=>{
+    let cls=i==0?"rank1":i==1?"rank2":i==2?"rank3":i<10?"top10":"";
 
-      const agd = +(type === 'overall' ? a["Total GD"] : a["Montly GD"]) || 0;
-      const bgd = +(type === 'overall' ? b["Total GD"] : b["Montly GD"]) || 0;
-      return bgd - agd;
-    });
+    let m  =+(t==="overall"?r["Overall_PL"]:r["Monthly_PL"])||0;
+    let gf =+(t==="overall"?r["Total GF"]:r["Montly GF"])||0;
+    let pt =+(t==="overall"?r["Overall_Point"]:r["Monthly_Point"])||0;
+    let win=((+(t==="overall"?r["Overall_Win%"]:r["Monthly_Win%"])||0)*100).toFixed(1);
+    let ga =t==="overall"?r["Total GA"]:r["Montly GA"];
+    let gd =t==="overall"?r["Total GD"]:r["Montly GD"];
 
-    // totals
-    let totalM = 0, totalG = 0, totalP = 0;
+    totalM+=m; totalG+=gf; totalP+=pt;
 
-    const tbody = g('tbody');
-    tbody.innerHTML = '';
+    let medal=i==0?"🥇":i==1?"🥈":i==2?"🥉":i+1;
 
-    rows.forEach((r, i) => {
-      const cls = i === 0 ? 'rank1' : i === 1 ? 'rank2' : i === 2 ? 'rank3' : i < 10 ? 'top10' : '';
-      const m   = +(type === 'overall' ? r["Overall_PL"] : r["Monthly_PL"]) || 0;
-      const gf  = +(type === 'overall' ? r["Total GF"]   : r["Montly GF"])  || 0;
-      const pt  = +(type === 'overall' ? r["Overall_Point"] : r["Monthly_Point"]) || 0;
-      const win = ((+(type === 'overall' ? r["Overall_Win%"] : r["Monthly_Win%"]) || 0) * 100).toFixed(1);
-      const ga  = r[type === 'overall' ? "Total GA" : "Montly GA"] ?? '—';
-      const gd  = r[type === 'overall' ? "Total GD" : "Montly GD"] ?? '0';
-      const name = map[r["Club_ID"].trim()];
-      const cid  = r["Club_ID"];
-
-      totalM += m;
-      totalG += gf;
-      totalP += pt;
-
-      const tr = document.createElement('tr');
-      tr.className = cls;
-      tr.style.animationDelay = (i * 28) + 'ms';
-
-      tr.innerHTML = `
-        <td><span class="rank-num">${i + 1}</span></td>
-        <td class="player-cell">
-          <div class="player-name">${name}</div>
-          <div class="player-id">${cid}</div>
+    tbody.innerHTML+=`
+      <tr class="${cls}">
+        <td>${medal}</td>
+        <td class="player">
+          ${map[r["Club_ID"]]}
+          <div class="pid">${r["Club_ID"]}</div>
         </td>
-        <td><span class="pts-val">${pt}</span></td>
-        <td style="color:var(--dim)">${m}</td>
-        <td>
-          <div class="win-wrap">
-            <div class="win-bar-bg">
-              <div class="win-bar-fill" style="width:${Math.min(win,100)}%"></div>
-            </div>
-            <span class="win-pct">${win}%</span>
-          </div>
-        </td>
-        <td style="color:#7ee8a2">${gf}</td>
-        <td style="color:var(--dim)">${ga}</td>
-        <td class="${gdClass(gd)}">${gdLabel(gd)}</td>
-      `;
-      tbody.appendChild(tr);
-    });
+        <td>${pt}</td>
+        <td>${m}</td>
+        <td>${win}%</td>
+        <td>${gf}</td>
+        <td>${ga}</td>
+        <td>${gd}</td>
+      </tr>`;
+  });
 
-    const match = Math.round(totalM / 2);
-    const per   = match ? (totalG / match).toFixed(2) : '0';
-    g('s-m').textContent  = match;
-    g('s-g').textContent  = totalG;
-    g('s-p').textContent  = totalP;
-    g('s-pm').textContent = per;
-
-    g('loader').style.display = 'none';
-    g('main-table').style.display = '';
-
-  } catch(e) {
-    g('loader').innerHTML = '<div class="loader-text" style="color:#ff3a5c">ERROR LOADING DATA</div>';
-    console.error(e);
-  }
+  let match=Math.round(totalM/2);
+  let per=match?(totalG/match).toFixed(2):0;
+  document.getElementById("m").innerText=match;
+  document.getElementById("g").innerText=totalG;
+  document.getElementById("p").innerText=totalP;
+  document.getElementById("pm").innerText=per;
 }
 
-loadData('monthly');
-setInterval(() => loadData(currentType), 30000);
+loadData("monthly");
+setInterval(()=>loadData(type),30000);
+
 </script>
-
 </body>
 </html>

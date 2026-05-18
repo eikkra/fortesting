@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GOAT FC STATISTICS</title>
+<title>PLAYER STATISTICS</title>
 <link rel="icon" type="image/png" href="https://i.imgur.com/LY3Bb9m.png">
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -11,8 +11,6 @@
 <style>
 :root {
   --cyan: #00f5ff;
-  --cyan-dim: rgba(0,245,255,0.15);
-  --cyan-glow: rgba(0,245,255,0.4);
   --green: #39ff14;
   --red: #ff2d55;
   --yellow: #ffd700;
@@ -21,7 +19,6 @@
   --bg: #020812;
   --bg2: #050f1a;
   --bg3: #071524;
-  --surface: rgba(0,245,255,0.04);
   --border: rgba(0,245,255,0.2);
   --text: #e2f4ff;
   --muted: #4a7a8a;
@@ -40,7 +37,7 @@ body {
   overflow-x:hidden;
 }
 
-/* ─── SCANLINE OVERLAY ─── */
+/* SCANLINE OVERLAY */
 body::before {
   content:'';
   position:fixed;
@@ -56,7 +53,7 @@ body::before {
   z-index:1000;
 }
 
-/* ─── ANIMATED BG GRID ─── */
+/* ANIMATED BG GRID */
 body::after {
   content:'';
   position:fixed;
@@ -74,22 +71,113 @@ body::after {
   100%{background-position:40px 40px;}
 }
 
-/* ─── HEADER ─── */
+/* AMBIENT LIGHT ORBS */
+.orb {
+  position:fixed;
+  border-radius:50%;
+  pointer-events:none;
+  z-index:1;
+  filter:blur(80px);
+}
+.orb1 {
+  width:360px; height:360px;
+  top:-100px; left:-80px;
+  background:radial-gradient(circle, rgba(0,245,255,0.08) 0%, transparent 70%);
+  animation:orbFloat 9s ease-in-out infinite;
+}
+.orb2 {
+  width:300px; height:300px;
+  top:35%; right:-90px;
+  background:radial-gradient(circle, rgba(57,255,20,0.06) 0%, transparent 70%);
+  animation:orbFloat 11s ease-in-out infinite;
+  animation-delay:-4s;
+}
+.orb3 {
+  width:260px; height:260px;
+  bottom:-80px; left:25%;
+  background:radial-gradient(circle, rgba(191,0,255,0.055) 0%, transparent 70%);
+  animation:orbFloat 13s ease-in-out infinite;
+  animation-delay:-7s;
+}
+@keyframes orbFloat {
+  0%,100%{transform:translateY(0) scale(1);}
+  50%{transform:translateY(-28px) scale(1.07);}
+}
+
+/* TOPBAR */
+.topbar {
+  position:sticky;
+  top:0;
+  z-index:999;
+  height:50px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 16px;
+  background:rgba(2,8,18,0.92);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(0,245,255,0.1);
+  box-shadow:0 2px 20px rgba(0,0,0,0.5);
+  text-decoration:none;
+  color:inherit;
+}
+.topbar-line {
+  position:absolute;
+  bottom:0; left:0; right:0;
+  height:1px;
+  background:linear-gradient(90deg, transparent, var(--cyan), transparent);
+  opacity:0.35;
+}
+.top-left {
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+.top-logo {
+  width:26px;
+  filter:drop-shadow(0 0 7px var(--cyan));
+}
+.top-title {
+  font-family:'Orbitron',sans-serif;
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:1.5px;
+  background:linear-gradient(90deg, var(--cyan), var(--green));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.home-btn {
+  width:32px; height:32px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:8px;
+  background:rgba(0,245,255,0.07);
+  border:1px solid rgba(0,245,255,0.18);
+  color:var(--cyan);
+  font-size:12px;
+  transition:all 0.2s;
+}
+.home-btn:hover {
+  background:rgba(0,245,255,0.14);
+  box-shadow:0 0 10px rgba(0,245,255,0.28);
+}
+
+/* HEADER */
 .header {
   position:relative;
   z-index:10;
   text-align:center;
-  padding:28px 16px 20px;
-  border-bottom:1px solid var(--border);
-  background:linear-gradient(180deg, rgba(0,245,255,0.05) 0%, transparent 100%);
+  padding:26px 16px 18px;
+  border-bottom:1px solid rgba(0,245,255,0.09);
+  background:linear-gradient(180deg, rgba(0,245,255,0.04) 0%, transparent 100%);
 }
-
 .header-badge {
   display:inline-flex;
   align-items:center;
-  gap:8px;
-  background:rgba(0,245,255,0.08);
-  border:1px solid rgba(0,245,255,0.3);
+  gap:7px;
+  background:rgba(0,245,255,0.07);
+  border:1px solid rgba(0,245,255,0.24);
   border-radius:4px;
   padding:3px 10px;
   font-size:10px;
@@ -97,53 +185,37 @@ body::after {
   color:var(--cyan);
   text-transform:uppercase;
   margin-bottom:14px;
-  animation:pulse-badge 3s ease-in-out infinite;
+  animation:pulseBadge 3s ease-in-out infinite;
 }
-@keyframes pulse-badge {
-  0%,100%{box-shadow:0 0 6px rgba(0,245,255,0.3);}
-  50%{box-shadow:0 0 16px rgba(0,245,255,0.6);}
+@keyframes pulseBadge {
+  0%,100%{box-shadow:0 0 6px rgba(0,245,255,0.22);}
+  50%{box-shadow:0 0 18px rgba(0,245,255,0.52);}
 }
-
-.header-main {
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:14px;
-  flex-wrap:wrap;
+@keyframes blink {
+  0%,100%{opacity:0.35;}
+  50%{opacity:1;}
 }
-
-.header-logo {
-  width:52px;
-  filter:drop-shadow(0 0 12px var(--cyan)) drop-shadow(0 0 24px var(--cyan));
-  animation:logo-pulse 4s ease-in-out infinite;
-}
-@keyframes logo-pulse {
-  0%,100%{filter:drop-shadow(0 0 12px var(--cyan)) drop-shadow(0 0 24px var(--cyan));}
-  50%{filter:drop-shadow(0 0 20px var(--cyan)) drop-shadow(0 0 40px var(--cyan)) drop-shadow(0 0 60px rgba(0,245,255,0.3));}
-}
-
 .header h1 {
   font-family:'Orbitron',sans-serif;
-  font-size:clamp(20px,5vw,34px);
+  font-size:clamp(18px,5vw,32px);
   font-weight:900;
   letter-spacing:2px;
   color:var(--cyan);
   text-shadow:
     0 0 8px var(--cyan),
     0 0 20px var(--cyan),
-    0 0 40px rgba(0,245,255,0.5);
+    0 0 40px rgba(0,245,255,0.4);
   line-height:1.1;
 }
-
 .header-desc {
   margin-top:10px;
-  font-size:12px;
+  font-size:11px;
   color:var(--muted);
   letter-spacing:1.5px;
   text-transform:uppercase;
 }
 
-/* ─── SEARCH ─── */
+/* SEARCH */
 .search-wrap {
   position:relative;
   z-index:10;
@@ -151,13 +223,11 @@ body::after {
   display:flex;
   justify-content:center;
 }
-
 .search-box {
   position:relative;
   width:100%;
   max-width:440px;
 }
-
 .search-box i {
   position:absolute;
   left:14px;
@@ -165,9 +235,8 @@ body::after {
   transform:translateY(-50%);
   color:var(--cyan);
   font-size:14px;
-  opacity:0.7;
+  opacity:0.55;
 }
-
 .search-box input {
   width:100%;
   padding:12px 16px 12px 40px;
@@ -184,10 +253,10 @@ body::after {
 .search-box input::placeholder { color:var(--muted); }
 .search-box input:focus {
   border-color:var(--cyan);
-  box-shadow:0 0 0 3px rgba(0,245,255,0.12), 0 0 20px rgba(0,245,255,0.15);
+  box-shadow:0 0 0 3px rgba(0,245,255,0.1), 0 0 20px rgba(0,245,255,0.12);
 }
 
-/* ─── GRID ─── */
+/* GRID */
 #data {
   position:relative;
   z-index:10;
@@ -197,7 +266,7 @@ body::after {
   padding:10px 14px 30px;
 }
 
-/* ─── CARD ─── */
+/* CARD */
 .card {
   background:linear-gradient(135deg, var(--bg2) 0%, var(--bg3) 100%);
   border:1px solid var(--border);
@@ -212,13 +281,12 @@ body::after {
   from{opacity:0; transform:translateY(16px);}
   to{opacity:1; transform:translateY(0);}
 }
-
 .card:hover {
   transform:translateY(-3px);
-  box-shadow:0 8px 32px rgba(0,245,255,0.15);
+  box-shadow:0 8px 30px rgba(0,245,255,0.12);
 }
 
-/* Rank glow strips */
+/* Rank top strip */
 .card::before {
   content:'';
   position:absolute;
@@ -226,27 +294,27 @@ body::after {
   height:2px;
   background:var(--border);
   border-radius:12px 12px 0 0;
+  z-index:2;
 }
-.rank1::before { background:linear-gradient(90deg,transparent,var(--gold),transparent); box-shadow:0 0 12px var(--gold); }
+.rank1::before { background:linear-gradient(90deg,transparent,var(--gold),transparent); box-shadow:0 0 14px var(--gold); }
 .rank2::before { background:linear-gradient(90deg,transparent,var(--silver),transparent); box-shadow:0 0 10px var(--silver); }
 .rank3::before { background:linear-gradient(90deg,transparent,var(--bronze),transparent); box-shadow:0 0 10px var(--bronze); }
 .top10::before { background:linear-gradient(90deg,transparent,var(--purple),transparent); }
 
-.rank1 { border-color:rgba(255,215,0,0.35); box-shadow:0 0 14px rgba(255,215,0,0.2); }
-.rank2 { border-color:rgba(192,192,192,0.35); box-shadow:0 0 14px rgba(192,192,192,0.15); }
-.rank3 { border-color:rgba(205,127,50,0.35); box-shadow:0 0 12px rgba(205,127,50,0.2); }
-.top10 { border-color:rgba(191,0,255,0.3); }
+.rank1 { border-color:rgba(255,215,0,0.33); box-shadow:0 0 18px rgba(255,215,0,0.13); }
+.rank2 { border-color:rgba(192,192,192,0.33); box-shadow:0 0 14px rgba(192,192,192,0.1); }
+.rank3 { border-color:rgba(205,127,50,0.33); box-shadow:0 0 12px rgba(205,127,50,0.13); }
+.top10 { border-color:rgba(191,0,255,0.22); }
 
-/* ─── CARD HEADER ─── */
+/* CARD HEAD */
 .card-head {
   display:flex;
   align-items:center;
   justify-content:space-between;
   padding:14px 16px 10px;
-  border-bottom:1px solid rgba(0,245,255,0.08);
+  border-bottom:1px solid rgba(0,245,255,0.07);
   gap:8px;
 }
-
 .rank-badge {
   display:flex;
   align-items:center;
@@ -258,10 +326,10 @@ body::after {
   font-weight:700;
   flex-shrink:0;
 }
-.rank-badge.r1 { background:rgba(255,215,0,0.15); color:var(--gold); border:1px solid rgba(255,215,0,0.4); }
-.rank-badge.r2 { background:rgba(192,192,192,0.12); color:var(--silver); border:1px solid rgba(192,192,192,0.35); }
-.rank-badge.r3 { background:rgba(205,127,50,0.12); color:var(--bronze); border:1px solid rgba(205,127,50,0.35); }
-.rank-badge.rn { background:rgba(0,245,255,0.08); color:var(--muted); border:1px solid var(--border); }
+.rank-badge.r1 { background:rgba(255,215,0,0.14); color:var(--gold); border:1px solid rgba(255,215,0,0.38); }
+.rank-badge.r2 { background:rgba(192,192,192,0.11); color:var(--silver); border:1px solid rgba(192,192,192,0.32); }
+.rank-badge.r3 { background:rgba(205,127,50,0.11); color:var(--bronze); border:1px solid rgba(205,127,50,0.32); }
+.rank-badge.rn { background:rgba(0,245,255,0.07); color:var(--muted); border:1px solid var(--border); }
 
 .player-info { flex:1; min-width:0; }
 .player-name {
@@ -276,41 +344,58 @@ body::after {
 .player-id {
   font-size:11px;
   color:var(--cyan);
-  opacity:0.7;
+  opacity:0.62;
   letter-spacing:0.5px;
   margin-top:2px;
 }
-
 .rank-icon { font-size:20px; }
 
-/* ─── STATS GRID ─── */
+/* WIN BAR */
+.winbar-wrap { padding:10px 14px 4px; }
+.winbar-label {
+  display:flex;
+  justify-content:space-between;
+  font-size:10px;
+  color:var(--muted);
+  letter-spacing:1px;
+  margin-bottom:5px;
+  text-transform:uppercase;
+}
+.winbar-track {
+  height:5px;
+  background:rgba(0,0,0,0.4);
+  border-radius:3px;
+  overflow:hidden;
+  border:1px solid rgba(0,245,255,0.08);
+}
+.winbar-fill {
+  height:100%;
+  background:linear-gradient(90deg, var(--green), #00ff88);
+  border-radius:3px;
+  box-shadow:0 0 8px rgba(57,255,20,0.48);
+}
+
+/* STATS */
 .stats-grid {
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:7px;
   padding:12px 14px;
 }
-
 .stat-box {
   background:rgba(0,0,0,0.3);
-  border:1px solid rgba(0,245,255,0.13);
+  border:1px solid rgba(0,245,255,0.11);
   border-radius:8px;
   padding:9px 6px 7px;
   text-align:center;
-  transition:border-color 0.2s, background 0.2s;
-  position:relative;
-  overflow:hidden;
+  transition:border-color 0.2s, background 0.2s, box-shadow 0.2s;
 }
 .stat-box:hover {
-  border-color:rgba(0,245,255,0.35);
-  background:rgba(0,245,255,0.07);
+  border-color:rgba(0,245,255,0.3);
+  background:rgba(0,245,255,0.055);
+  box-shadow:0 0 10px rgba(0,245,255,0.09);
 }
-
-.stat-box .stat-icon {
-  font-size:13px;
-  margin-bottom:4px;
-  display:block;
-}
+.stat-box .stat-icon { font-size:13px; margin-bottom:4px; display:block; }
 .stat-box .stat-val {
   font-family:'Orbitron',sans-serif;
   font-size:15px;
@@ -326,10 +411,8 @@ body::after {
   margin-top:3px;
   display:block;
 }
-
-/* Coloring specific stats */
-.stat-win .stat-icon { color:var(--green); }
-.stat-win .stat-val  { color:var(--green); }
+.stat-win .stat-icon  { color:var(--green); }
+.stat-win .stat-val   { color:var(--green); }
 .stat-loss .stat-icon { color:var(--red); }
 .stat-loss .stat-val  { color:var(--red); }
 .stat-draw .stat-icon { color:var(--yellow); }
@@ -344,49 +427,20 @@ body::after {
 .stat-friendly .stat-val { color:#a78bfa; }
 .stat-tour .stat-val  { color:#f472b6; }
 
-/* ─── WIN RATE BAR ─── */
-.winbar-wrap {
-  padding:0 14px 4px;
-}
-.winbar-label {
-  display:flex;
-  justify-content:space-between;
-  font-size:10px;
-  color:var(--muted);
-  letter-spacing:1px;
-  margin-bottom:5px;
-  text-transform:uppercase;
-}
-.winbar-track {
-  height:5px;
-  background:rgba(0,0,0,0.4);
-  border-radius:3px;
-  overflow:hidden;
-  border:1px solid rgba(0,245,255,0.1);
-}
-.winbar-fill {
-  height:100%;
-  background:linear-gradient(90deg, var(--green), #00ff88);
-  border-radius:3px;
-  transition:width 0.8s cubic-bezier(.23,1,.32,1);
-  box-shadow:0 0 8px rgba(57,255,20,0.6);
-}
-
-/* ─── CARD FOOTER ─── */
+/* CARD FOOT */
 .card-foot {
   padding:10px 14px 13px;
   display:flex;
   align-items:center;
   justify-content:flex-end;
 }
-
 .dl-btn {
   display:inline-flex;
   align-items:center;
   gap:7px;
   padding:7px 16px;
   background:transparent;
-  border:1px solid rgba(0,245,255,0.35);
+  border:1px solid rgba(0,245,255,0.3);
   border-radius:6px;
   color:var(--cyan);
   font-family:'Exo 2',sans-serif;
@@ -400,11 +454,10 @@ body::after {
 .dl-btn:hover {
   background:var(--cyan);
   color:#000;
-  box-shadow:0 0 16px rgba(0,245,255,0.4);
+  box-shadow:0 0 18px rgba(0,245,255,0.42);
 }
-.dl-btn i { font-size:11px; }
 
-/* ─── LOADING STATE ─── */
+/* LOADING */
 #loading {
   position:fixed;
   inset:0;
@@ -417,8 +470,8 @@ body::after {
   gap:20px;
 }
 .loader-ring {
-  width:60px;height:60px;
-  border:3px solid rgba(0,245,255,0.15);
+  width:60px; height:60px;
+  border:3px solid rgba(0,245,255,0.12);
   border-top-color:var(--cyan);
   border-radius:50%;
   animation:spin 0.9s linear infinite;
@@ -429,12 +482,10 @@ body::after {
   font-size:11px;
   letter-spacing:3px;
   color:var(--cyan);
-  opacity:0.7;
   animation:blink 1.5s ease-in-out infinite;
 }
-@keyframes blink { 0%,100%{opacity:0.4;} 50%{opacity:0.9;} }
 
-/* ─── EMPTY STATE ─── */
+/* EMPTY */
 .empty {
   text-align:center;
   padding:60px 20px;
@@ -443,42 +494,59 @@ body::after {
   letter-spacing:1px;
   grid-column:1/-1;
 }
-.empty i { font-size:36px; margin-bottom:12px; display:block; opacity:0.4; }
+.empty i { font-size:36px; margin-bottom:12px; display:block; opacity:0.38; }
 
-/* ─── MOBILE ─── */
+/* MOBILE */
 @media(max-width:600px) {
-  .header { padding:20px 12px 16px; }
+  .header { padding:18px 12px 14px; }
   #data { grid-template-columns:1fr; gap:10px; padding:8px 10px 20px; }
-  .stats-grid { grid-template-columns:repeat(3,1fr); gap:6px; }
+  .stats-grid { gap:5px; }
   .stat-box { padding:8px 4px 6px; }
   .stat-box .stat-val { font-size:13px; }
-  .header h1 { font-size:20px; }
+  .header h1 { font-size:19px; }
 }
 </style>
 </head>
 
 <body>
 
+<!-- AMBIENT ORBS -->
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+
+<!-- LOADING -->
 <div id="loading">
   <div class="loader-ring"></div>
   <div class="loader-text">LOADING MATCH DATA...</div>
 </div>
 
+<!-- TOPBAR -->
+<a href="https://goatfcbd.com" class="topbar">
+  <div class="top-left">
+    <img src="https://i.imgur.com/LY3Bb9m.png" class="top-logo" alt="GOAT FC">
+    <div class="top-title">GOAT FC</div>
+  </div>
+  <div class="home-btn">
+    <i class="fa-solid fa-house"></i>
+  </div>
+  <div class="topbar-line"></div>
+</a>
+
+<!-- HEADER -->
 <div class="header">
   <div class="header-badge">
     <i class="fa-solid fa-circle" style="font-size:6px; color:var(--green); animation:blink 1.2s infinite;"></i>
     LIVE DASHBOARD
   </div>
-  <div class="header-main">
-    <img class="header-logo" src="https://i.imgur.com/LY3Bb9m.png" alt="GOAT FC">
-    <h1>GOAT FC STATISTICS</h1>
-  </div>
+  <h1>PLAYER STATISTICS</h1>
   <div class="header-desc">
     <i class="fa-solid fa-shield-halved" style="color:var(--cyan); margin-right:5px;"></i>
     Official Performance Dashboard &mdash; Approved Matches Only
   </div>
 </div>
 
+<!-- SEARCH -->
 <div class="search-wrap">
   <div class="search-box">
     <i class="fa-solid fa-magnifying-glass"></i>
@@ -486,6 +554,7 @@ body::after {
   </div>
 </div>
 
+<!-- CARDS -->
 <div id="data"></div>
 
 <script>
@@ -548,8 +617,6 @@ function update(id,s,c,t){
   p.rate=(p.gs/p.match);
 }
 
-const RANK_ICONS = ['🥇','🥈','🥉'];
-
 function rankBadge(i){
   if(i===0) return `<div class="rank-badge r1"><i class="fa-solid fa-crown"></i></div>`;
   if(i===1) return `<div class="rank-badge r2">#2</div>`;
@@ -569,7 +636,7 @@ function diffColor(d){ return d>0?'var(--green)':d<0?'var(--red)':'var(--muted)'
 function render(){
   let q=normalize(document.getElementById("search").value);
   let sorted=Object.entries(players).sort((a,b)=>b[1].win-a[1].win);
-  let filtered=sorted.filter(([id,p],i)=>{
+  let filtered=sorted.filter(([id])=>{
     let name=members[normalize(id)]||"";
     return !q||(normalize(id).includes(q)||normalize(name).includes(q));
   });
@@ -585,10 +652,8 @@ function render(){
 
   let html="";
   filtered.forEach(([id,p],fi)=>{
-    // use original sorted rank for badge
     let rank=sorted.findIndex(([sid])=>sid===id);
     let name=members[normalize(id)]||"Unknown Player";
-
     let cls="card";
     if(rank===0) cls+=" rank1";
     else if(rank===1) cls+=" rank2";
@@ -694,11 +759,23 @@ function render(){
 }
 
 function downloadCard(btn){
-  html2canvas(btn.closest(".card"),{backgroundColor:'#050f1a', scale:2}).then(c=>{
+  // Hide button before screenshot so it doesn't appear in image
+  btn.style.visibility='hidden';
+  const card=btn.closest(".card");
+
+  html2canvas(card,{
+    backgroundColor:'#050f1a',
+    scale:2,
+    useCORS:true,
+    logging:false
+  }).then(canvas=>{
+    btn.style.visibility='visible';
     let a=document.createElement("a");
     a.download="GOAT_FC_STATS.jpg";
-    a.href=c.toDataURL("image/jpeg",0.95);
+    a.href=canvas.toDataURL("image/jpeg",0.95);
     a.click();
+  }).catch(()=>{
+    btn.style.visibility='visible';
   });
 }
 

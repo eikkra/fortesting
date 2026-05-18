@@ -215,11 +215,43 @@ body::after {
   text-transform:uppercase;
 }
 
+/* TABS */
+.tabs-wrap {
+  position:relative;
+  z-index:10;
+  display:flex;
+  justify-content:center;
+  gap:8px;
+  padding:14px 14px 0;
+}
+.tab-btn {
+  padding:7px 18px;
+  border:1px solid rgba(0,245,255,0.25);
+  border-radius:20px;
+  background:rgba(0,245,255,0.06);
+  color:var(--muted);
+  font-family:'Orbitron',sans-serif;
+  font-size:10px;
+  letter-spacing:1.5px;
+  cursor:pointer;
+  transition:all 0.25s;
+}
+.tab-btn:hover {
+  border-color:var(--cyan);
+  color:var(--cyan);
+}
+.tab-btn.active {
+  background:linear-gradient(90deg, rgba(0,245,255,0.18), rgba(57,255,20,0.12));
+  border-color:var(--cyan);
+  color:var(--cyan);
+  box-shadow:0 0 14px rgba(0,245,255,0.22);
+}
+
 /* SEARCH */
 .search-wrap {
   position:relative;
   z-index:10;
-  padding:16px 14px;
+  padding:14px 14px;
   display:flex;
   justify-content:center;
 }
@@ -326,10 +358,12 @@ body::after {
   font-weight:700;
   flex-shrink:0;
 }
-.rank-badge.r1 { background:rgba(255,215,0,0.14); color:var(--gold); border:1px solid rgba(255,215,0,0.38); }
-.rank-badge.r2 { background:rgba(192,192,192,0.11); color:var(--silver); border:1px solid rgba(192,192,192,0.32); }
-.rank-badge.r3 { background:rgba(205,127,50,0.11); color:var(--bronze); border:1px solid rgba(205,127,50,0.32); }
-.rank-badge.rn { background:rgba(0,245,255,0.07); color:var(--muted); border:1px solid var(--border); }
+.rank-badge.r1 { background:linear-gradient(135deg,rgba(255,215,0,0.25),rgba(255,180,0,0.1)); color:var(--gold); border:1px solid rgba(255,215,0,0.5); box-shadow:0 0 8px rgba(255,215,0,0.3); }
+.rank-badge.r2 { background:linear-gradient(135deg,rgba(192,192,192,0.22),rgba(160,160,160,0.08)); color:var(--silver); border:1px solid rgba(192,192,192,0.45); box-shadow:0 0 8px rgba(192,192,192,0.2); }
+.rank-badge.r3 { background:linear-gradient(135deg,rgba(205,127,50,0.22),rgba(180,100,30,0.08)); color:var(--bronze); border:1px solid rgba(205,127,50,0.45); box-shadow:0 0 8px rgba(205,127,50,0.25); }
+.rank-badge.r-top { background:linear-gradient(135deg,rgba(0,245,255,0.15),rgba(0,200,255,0.06)); color:var(--cyan); border:1px solid rgba(0,245,255,0.4); box-shadow:0 0 6px rgba(0,245,255,0.2); }
+.rank-badge.r-purple { background:linear-gradient(135deg,rgba(191,0,255,0.15),rgba(150,0,200,0.06)); color:#d466ff; border:1px solid rgba(191,0,255,0.35); box-shadow:0 0 6px rgba(191,0,255,0.18); }
+.rank-badge.rn { background:rgba(0,245,255,0.05); color:var(--muted); border:1px solid rgba(0,245,255,0.15); }
 
 .player-info { flex:1; min-width:0; }
 .player-name {
@@ -426,6 +460,7 @@ body::after {
 .stat-seven .stat-val { color:var(--gold); }
 .stat-friendly .stat-val { color:#a78bfa; }
 .stat-tour .stat-val  { color:#f472b6; }
+.stat-pts .stat-val   { color:#00f5ff; }
 
 /* DOWNLOAD ICON in card head */
 .dl-icon-btn {
@@ -551,6 +586,12 @@ body::after {
   </div>
 </div>
 
+<!-- TABS -->
+<div class="tabs-wrap">
+  <button class="tab-btn active" id="monthlyBtn" onclick="switchTab('monthly')">Monthly</button>
+  <button class="tab-btn" id="overallBtn" onclick="switchTab('overall')">Overall</button>
+</div>
+
 <!-- SEARCH -->
 <div class="search-wrap">
   <div class="search-box">
@@ -565,91 +606,197 @@ body::after {
 <div class="powered-by"><i class="fa-solid fa-bolt" style="margin-right:5px;"></i>POWERED BY GOAT FC</div>
 
 <script>
-const MATCH_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv";
-const MEMBER_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv";
+// ── CONFIG ──────────────────────────────────────────────────────────────
+const MATCH_URL  = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv";
+const MEMBER_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv";
 
-let players={}, members={}, cache={};
+// ── STATE ────────────────────────────────────────────────────────────────
+// overall & monthly players stored separately
+let overallPlayers  = {};   // { clubId: { win, loss, draw, match, gs, gc, diff, pts, winp, rate, seven, friendly, other, month } }
+let monthlyPlayers  = {};
+let members         = {};
+let cache           = {};
+let currentTab      = "monthly";
 
-function parseCSV(text){
-  const rows=[]; let cur=[], val="", q=false;
-  for(let i=0;i<text.length;i++){
-    let c=text[i];
-    if(c==='"'){ if(q && text[i+1]==='"'){val+='"';i++;} else q=!q; }
-    else if(c===','&&!q){ cur.push(val); val=""; }
-    else if((c==='\n'||c==='\r')&&!q){
-      if(val||cur.length){ cur.push(val); rows.push(cur); cur=[]; val=""; }
-    } else val+=c;
+// Detect current month string from match date column (e.g. "2025-05")
+// We'll tag each match with its YYYY-MM and compare to the latest month present
+let latestMonth     = "";
+
+// ── CSV PARSER ───────────────────────────────────────────────────────────
+function parseCSV(text) {
+  const rows = [];
+  let cur = [], val = "", q = false;
+  for (let i = 0; i < text.length; i++) {
+    let c = text[i];
+    if (c === '"') {
+      if (q && text[i+1] === '"') { val += '"'; i++; }
+      else q = !q;
+    } else if (c === ',' && !q) { cur.push(val); val = ""; }
+    else if ((c === '\n' || c === '\r') && !q) {
+      if (val || cur.length) { cur.push(val); rows.push(cur); cur = []; val = ""; }
+    } else val += c;
   }
-  if(val||cur.length) rows.push([...cur, val]);
+  if (val || cur.length) rows.push([...cur, val]);
   return rows;
 }
 
-function normalize(id){ return (id||"").toLowerCase().replace(/[^a-z0-9]/g,''); }
+function normalize(id) { return (id || "").toLowerCase().replace(/[^a-z0-9]/g, ''); }
 
-async function getData(url){
-  if(cache[url]) return cache[url];
-  let t=await fetch(url+"&t="+Date.now()).then(r=>r.text());
-  cache[url]=t; return t;
+async function getData(url) {
+  if (cache[url]) return cache[url];
+  let t = await fetch(url + "&t=" + Date.now()).then(r => r.text());
+  cache[url] = t;
+  return t;
 }
 
-async function loadMembers(){
-  let rows=parseCSV(await getData(MEMBER_URL)).slice(1);
-  rows.forEach(c=>{
-    if(c[1]&&!c[1].includes("#VALUE")) members[normalize(c[1])]=c[0];
+// ── MEMBERS ──────────────────────────────────────────────────────────────
+async function loadMembers() {
+  let rows = parseCSV(await getData(MEMBER_URL)).slice(1);
+  rows.forEach(c => {
+    if (c[1] && !c[1].includes("#VALUE"))
+      members[normalize(c[1])] = c[0];
   });
 }
 
-async function loadMatches(){
-  let rows=parseCSV(await getData(MATCH_URL)).slice(1);
-  rows.forEach(c=>{
-    let P1=c[0], P2=c[1];
-    let s1=Number(c[3]), s2=Number(c[4]);
-    let approved=(c[9]||"").toLowerCase();
-    if(!P1||!P2||P1.includes("#VALUE")||P2.includes("#VALUE")||isNaN(s1)||isNaN(s2)||approved!=="yes") return;
-    update(P1,s1,s2,c[2]);
-    update(P2,s2,s1,c[2]);
+// ── STAT UPDATE ──────────────────────────────────────────────────────────
+function getOrCreate(store, id) {
+  if (!store[id]) store[id] = {
+    match: 0, win: 0, loss: 0, draw: 0,
+    gs: 0, gc: 0, diff: 0, rate: 0,
+    seven: 0, friendly: 0, other: 0,
+    pts: 0, winp: 0
+  };
+  return store[id];
+}
+
+function applyResult(store, id, s, c, matchType) {
+  let p = getOrCreate(store, id);
+  p.match++;
+  p.gs += s;
+  p.gc += c;
+  p.diff = p.gs - p.gc;
+  if (matchType === "Friendly") p.friendly++;
+  else p.other++;
+  if (s > c)      { p.win++;  p.pts += 3; }
+  else if (s < c) { p.loss++; }
+  else            { p.draw++; p.pts += 1; }
+  if (s >= 7) p.seven++;
+  p.winp = (p.win / p.match) * 100;
+  p.rate  = (p.gs / p.match);
+}
+
+// ── MATCHES ──────────────────────────────────────────────────────────────
+async function loadMatches() {
+  let rows = parseCSV(await getData(MATCH_URL)).slice(1);
+
+  // First pass: find latest month
+  rows.forEach(c => {
+    let approved = (c[9] || "").toLowerCase();
+    if (approved !== "yes") return;
+    // c[5] or c[6] may hold date — try to find a date-like column
+    // Column index: 0=P1, 1=P2, 2=matchType, 3=s1, 4=s2, 5=date?, ...
+    // Try columns 5,6,7 for date
+    for (let di = 5; di <= 8; di++) {
+      let d = (c[di] || "").trim();
+      let m = d.match(/(\d{4})[\/\-](\d{1,2})/);
+      if (m) {
+        let ym = m[1] + "-" + m[2].padStart(2, "0");
+        if (ym > latestMonth) latestMonth = ym;
+        break;
+      }
+    }
+  });
+
+  // Second pass: process rows
+  rows.forEach(c => {
+    let P1 = c[0], P2 = c[1];
+    let s1 = Number(c[3]), s2 = Number(c[4]);
+    let approved = (c[9] || "").toLowerCase();
+    if (!P1 || !P2 || P1.includes("#VALUE") || P2.includes("#VALUE") || isNaN(s1) || isNaN(s2) || approved !== "yes") return;
+
+    let matchType = c[2] || "";
+
+    // Detect match month
+    let matchMonth = "";
+    for (let di = 5; di <= 8; di++) {
+      let d = (c[di] || "").trim();
+      let m = d.match(/(\d{4})[\/\-](\d{1,2})/);
+      if (m) { matchMonth = m[1] + "-" + m[2].padStart(2, "0"); break; }
+    }
+
+    // Overall — always add
+    applyResult(overallPlayers, P1, s1, s2, matchType);
+    applyResult(overallPlayers, P2, s2, s1, matchType);
+
+    // Monthly — only if match is in latest month (or if no date found, skip monthly)
+    if (latestMonth && matchMonth === latestMonth) {
+      applyResult(monthlyPlayers, P1, s1, s2, matchType);
+      applyResult(monthlyPlayers, P2, s2, s1, matchType);
+    }
+  });
+
+  // If monthly ended up empty (no date column found), fall back to overall for monthly too
+  if (Object.keys(monthlyPlayers).length === 0) {
+    monthlyPlayers = overallPlayers;
+  }
+}
+
+// ── SORTING (identical logic to leaderboard) ─────────────────────────────
+// 1) inactive (0 matches) goes last
+// 2) pts DESC
+// 3) win% DESC
+// 4) GD DESC
+function sortPlayers(store) {
+  return Object.entries(store).sort((a, b) => {
+    let am = a[1].match, bm = b[1].match;
+    if (am === 0 && bm > 0) return 1;
+    if (bm === 0 && am > 0) return -1;
+    if (b[1].pts  !== a[1].pts)  return b[1].pts  - a[1].pts;
+    if (b[1].winp !== a[1].winp) return b[1].winp - a[1].winp;
+    return b[1].diff - a[1].diff;
   });
 }
 
-function update(id,s,c,t){
-  if(!players[id]) players[id]={match:0,win:0,loss:0,draw:0,gs:0,gc:0,diff:0,rate:0,seven:0,friendly:0,other:0};
-  let p=players[id];
-  p.match++; p.gs+=s; p.gc+=c; p.diff=p.gs-p.gc;
-  if(t==="Friendly") p.friendly++; else p.other++;
-  if(s>c) p.win++;
-  else if(s<c) p.loss++;
-  else p.draw++;
-  if(s>=7) p.seven++;
-  p.winp=(p.win/p.match)*100;
-  p.rate=(p.gs/p.match);
+// ── TAB SWITCH ───────────────────────────────────────────────────────────
+function switchTab(tab) {
+  currentTab = tab;
+  document.getElementById("monthlyBtn").classList.toggle("active", tab === "monthly");
+  document.getElementById("overallBtn").classList.toggle("active", tab === "overall");
+  render();
 }
 
-function rankBadge(i){
-  if(i===0) return `<div class="rank-badge r1"><i class="fa-solid fa-crown"></i></div>`;
-  if(i===1) return `<div class="rank-badge r2">#2</div>`;
-  if(i===2) return `<div class="rank-badge r3">#3</div>`;
+// ── BADGE HELPERS ────────────────────────────────────────────────────────
+function rankBadge(i) {
+  if (i === 0) return `<div class="rank-badge r1"><i class="fa-solid fa-crown"></i></div>`;
+  if (i === 1) return `<div class="rank-badge r2"><i class="fa-solid fa-medal"></i></div>`;
+  if (i === 2) return `<div class="rank-badge r3"><i class="fa-solid fa-award"></i></div>`;
+  if (i < 6)   return `<div class="rank-badge r-top">#${i+1}</div>`;
+  if (i < 10)  return `<div class="rank-badge r-purple">#${i+1}</div>`;
   return `<div class="rank-badge rn">#${i+1}</div>`;
 }
 
-function rankIcon(i){
-  if(i===0) return `<span class="rank-icon">🥇</span>`;
-  if(i===1) return `<span class="rank-icon">🥈</span>`;
-  if(i===2) return `<span class="rank-icon">🥉</span>`;
+function rankIcon(i) {
+  if (i === 0) return `<span class="rank-icon">🥇</span>`;
+  if (i === 1) return `<span class="rank-icon">🥈</span>`;
+  if (i === 2) return `<span class="rank-icon">🥉</span>`;
   return '';
 }
 
-function diffColor(d){ return d>0?'var(--green)':d<0?'var(--red)':'var(--muted)'; }
+function diffColor(d) { return d > 0 ? 'var(--green)' : d < 0 ? 'var(--red)' : 'var(--muted)'; }
 
-function render(){
-  let q=normalize(document.getElementById("search").value);
-  let sorted=Object.entries(players).sort((a,b)=>b[1].win-a[1].win);
-  let filtered=sorted.filter(([id])=>{
-    let name=members[normalize(id)]||"";
-    return !q||(normalize(id).includes(q)||normalize(name).includes(q));
+// ── RENDER ───────────────────────────────────────────────────────────────
+function render() {
+  let q = normalize(document.getElementById("search").value);
+  let store = currentTab === "monthly" ? monthlyPlayers : overallPlayers;
+  let sorted = sortPlayers(store);
+
+  let filtered = sorted.filter(([id]) => {
+    let name = members[normalize(id)] || "";
+    return !q || (normalize(id).includes(q) || normalize(name).includes(q));
   });
 
-  if(!filtered.length){
-    document.getElementById("data").innerHTML=`
+  if (!filtered.length) {
+    document.getElementById("data").innerHTML = `
       <div class="empty">
         <i class="fa-solid fa-user-slash"></i>
         No players found matching "<strong>${document.getElementById("search").value}</strong>"
@@ -657,21 +804,21 @@ function render(){
     return;
   }
 
-  let html="";
-  filtered.forEach(([id,p],fi)=>{
-    let rank=sorted.findIndex(([sid])=>sid===id);
-    let name=members[normalize(id)]||"Unknown Player";
-    let cls="card";
-    if(rank===0) cls+=" rank1";
-    else if(rank===1) cls+=" rank2";
-    else if(rank===2) cls+=" rank3";
-    else if(rank<10) cls+=" top10";
+  let html = "";
+  filtered.forEach(([id, p], fi) => {
+    let rank = sorted.findIndex(([sid]) => sid === id);
+    let name = members[normalize(id)] || "Unknown Player";
+    let cls = "card";
+    if (rank === 0) cls += " rank1";
+    else if (rank === 1) cls += " rank2";
+    else if (rank === 2) cls += " rank3";
+    else if (rank < 10) cls += " top10";
 
-    let barW=Math.min(p.winp,100).toFixed(1);
-    let diffSign=p.diff>0?'+':'';
+    let barW = Math.min(p.winp, 100).toFixed(1);
+    let diffSign = p.diff > 0 ? '+' : '';
 
-    html+=`
-    <div class="${cls}" style="animation-delay:${fi*0.04}s">
+    html += `
+    <div class="${cls}" style="animation-delay:${fi * 0.04}s">
       <div class="card-head">
         ${rankBadge(rank)}
         <div class="player-info">
@@ -759,267 +906,194 @@ function render(){
     </div>`;
   });
 
-  document.getElementById("data").innerHTML=html;
+  document.getElementById("data").innerHTML = html;
 }
 
-function downloadCard(btn){
+// ── DOWNLOAD CARD ────────────────────────────────────────────────────────
+function downloadCard(btn) {
   const card = btn.closest(".card");
 
-  // Read data from the card DOM
-  const name    = card.querySelector(".player-name").textContent.trim();
-  const clubId  = card.querySelector(".player-id").textContent.replace(/\s+/g,' ').trim();
-  const barPct  = parseFloat(card.querySelector(".winbar-fill").style.width)||0;
-  const winPct  = card.querySelector(".winbar-label span:last-child").textContent.trim();
+  const name   = card.querySelector(".player-name").textContent.trim();
+  const clubId = card.querySelector(".player-id").textContent.replace(/\s+/g, ' ').trim();
+  const barPct = parseFloat(card.querySelector(".winbar-fill").style.width) || 0;
+  const winPct = card.querySelector(".winbar-label span:last-child").textContent.trim();
 
-  // Rank strip color
   let stripColor = "#00f5ff";
-  if(card.classList.contains("rank1")) stripColor="#ffd700";
-  else if(card.classList.contains("rank2")) stripColor="#c0c0c0";
-  else if(card.classList.contains("rank3")) stripColor="#cd7f32";
-  else if(card.classList.contains("top10")) stripColor="#bf00ff";
+  if (card.classList.contains("rank1")) stripColor = "#ffd700";
+  else if (card.classList.contains("rank2")) stripColor = "#c0c0c0";
+  else if (card.classList.contains("rank3")) stripColor = "#cd7f32";
+  else if (card.classList.contains("top10")) stripColor = "#bf00ff";
 
-  // Stat boxes
   const boxes = card.querySelectorAll(".stat-box");
   const stats = [];
-  boxes.forEach(b=>{
+  boxes.forEach(b => {
     stats.push({
-      val: b.querySelector(".stat-val").textContent.trim(),
-      lbl: b.querySelector(".stat-lbl").textContent.trim(),
+      val:   b.querySelector(".stat-val").textContent.trim(),
+      lbl:   b.querySelector(".stat-lbl").textContent.trim(),
       color: getComputedStyle(b.querySelector(".stat-val")).color
     });
   });
 
-  // Canvas size
-  const W=600, PAD=24;
-  const HEADER_H=90, BAR_SECTION=54;
-  const COLS=3, ROWS=Math.ceil(stats.length/COLS);
-  const BOX_W=(W-PAD*2-10*(COLS-1))/COLS;
-  const BOX_H=72;
-  const FOOTER_H=44;
-  const H = HEADER_H + BAR_SECTION + ROWS*(BOX_H+8) + FOOTER_H + 20;
+  const W = 600, PAD = 24;
+  const HEADER_H = 90, BAR_SECTION = 54;
+  const COLS = 3, ROWS = Math.ceil(stats.length / COLS);
+  const BOX_W = (W - PAD * 2 - 10 * (COLS - 1)) / COLS;
+  const BOX_H = 72;
+  const FOOTER_H = 44;
+  const H = HEADER_H + BAR_SECTION + ROWS * (BOX_H + 8) + FOOTER_H + 20;
 
-  const cv=document.createElement("canvas");
-  cv.width=W*2; cv.height=H*2;
-  const ctx=cv.getContext("2d");
-  ctx.scale(2,2);
+  const cv = document.createElement("canvas");
+  cv.width = W * 2; cv.height = H * 2;
+  const ctx = cv.getContext("2d");
+  ctx.scale(2, 2);
 
-  // ── BG ──
-  const bg=ctx.createLinearGradient(0,0,W,H);
-  bg.addColorStop(0,"#050f1a");
-  bg.addColorStop(1,"#071524");
-  ctx.fillStyle=bg;
-  roundRect(ctx,0,0,W,H,16);
-  ctx.fill();
+  // BG
+  const bg = ctx.createLinearGradient(0, 0, W, H);
+  bg.addColorStop(0, "#050f1a");
+  bg.addColorStop(1, "#071524");
+  ctx.fillStyle = bg;
+  roundRect(ctx, 0, 0, W, H, 16); ctx.fill();
 
-  // ── BG grid dots ──
+  // Grid dots
   ctx.save();
-  ctx.strokeStyle="rgba(0,245,255,0.06)";
-  ctx.lineWidth=0.5;
-  for(let x=0;x<W;x+=28){
-    ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke();
-  }
-  for(let y=0;y<H;y+=28){
-    ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke();
-  }
+  ctx.strokeStyle = "rgba(0,245,255,0.06)"; ctx.lineWidth = 0.5;
+  for (let x = 0; x < W; x += 28) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
+  for (let y = 0; y < H; y += 28) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
   ctx.restore();
 
-  // ── RANK TOP STRIP ──
+  // Top strip
   ctx.save();
-  const strip=ctx.createLinearGradient(0,0,W,0);
-  strip.addColorStop(0,"transparent");
-  strip.addColorStop(0.5,stripColor);
-  strip.addColorStop(1,"transparent");
-  ctx.shadowColor=stripColor; ctx.shadowBlur=14;
-  ctx.fillStyle=strip;
-  roundRect(ctx,0,0,W,3,0);
-  ctx.fill();
+  const strip = ctx.createLinearGradient(0, 0, W, 0);
+  strip.addColorStop(0, "transparent"); strip.addColorStop(0.5, stripColor); strip.addColorStop(1, "transparent");
+  ctx.shadowColor = stripColor; ctx.shadowBlur = 14;
+  ctx.fillStyle = strip; roundRect(ctx, 0, 0, W, 3, 0); ctx.fill();
   ctx.restore();
 
-  // ── CARD BORDER ──
+  // Border
   ctx.save();
-  ctx.strokeStyle=stripColor==="ffd700"?
-    "rgba(255,215,0,0.33)":
-    (stripColor==="#c0c0c0"?"rgba(192,192,192,0.33)":
-    (stripColor==="#cd7f32"?"rgba(205,127,50,0.33)":
-    (stripColor==="#bf00ff"?"rgba(191,0,255,0.22)":
-    "rgba(0,245,255,0.2)")));
-  ctx.lineWidth=1;
-  roundRect(ctx,0.5,0.5,W-1,H-1,16);
-  ctx.stroke();
+  ctx.strokeStyle = "rgba(0,245,255,0.2)"; ctx.lineWidth = 1;
+  roundRect(ctx, 0.5, 0.5, W - 1, H - 1, 16); ctx.stroke();
   ctx.restore();
 
-  // ── RANK BADGE ──
-  let rankLabel="", rankColor="#4a7a8a", rankBg="rgba(0,245,255,0.07)";
-  if(card.classList.contains("rank1")){rankLabel="★";rankColor="#ffd700";rankBg="rgba(255,215,0,0.14)";}
-  else if(card.classList.contains("rank2")){rankLabel="#2";rankColor="#c0c0c0";rankBg="rgba(192,192,192,0.11)";}
-  else if(card.classList.contains("rank3")){rankLabel="#3";rankColor="#cd7f32";rankBg="rgba(205,127,50,0.11)";}
-  else{
-    const rn=card.querySelector(".rank-badge");
-    rankLabel=rn?rn.textContent.trim():"";
-  }
+  // Rank badge
+  let rankLabel = "", rankColor = "#4a7a8a", rankBg2 = "rgba(0,245,255,0.07)";
+  if (card.classList.contains("rank1"))      { rankLabel = "★"; rankColor = "#ffd700"; rankBg2 = "rgba(255,215,0,0.14)"; }
+  else if (card.classList.contains("rank2")) { rankLabel = "#2"; rankColor = "#c0c0c0"; rankBg2 = "rgba(192,192,192,0.11)"; }
+  else if (card.classList.contains("rank3")) { rankLabel = "#3"; rankColor = "#cd7f32"; rankBg2 = "rgba(205,127,50,0.11)"; }
+  else { const rn = card.querySelector(".rank-badge"); rankLabel = rn ? rn.textContent.trim() : ""; }
 
   ctx.save();
-  ctx.fillStyle=rankBg;
-  roundRect(ctx,PAD,22,30,30,6);
-  ctx.fill();
-  ctx.strokeStyle=rankColor+"66";
-  ctx.lineWidth=1;
-  roundRect(ctx,PAD,22,30,30,6);
-  ctx.stroke();
-  ctx.fillStyle=rankColor;
-  ctx.font="bold 11px 'Orbitron',monospace";
-  ctx.textAlign="center";
-  ctx.textBaseline="middle";
-  ctx.fillText(rankLabel,PAD+15,37);
+  ctx.fillStyle = rankBg2; roundRect(ctx, PAD, 22, 30, 30, 6); ctx.fill();
+  ctx.strokeStyle = rankColor + "66"; ctx.lineWidth = 1; roundRect(ctx, PAD, 22, 30, 30, 6); ctx.stroke();
+  ctx.fillStyle = rankColor; ctx.font = "bold 11px 'Orbitron',monospace";
+  ctx.textAlign = "center"; ctx.textBaseline = "middle";
+  ctx.fillText(rankLabel, PAD + 15, 37);
   ctx.restore();
 
-  // ── RANK EMOJI ──
-  const emoji=card.classList.contains("rank1")?"🥇":
-               card.classList.contains("rank2")?"🥈":
-               card.classList.contains("rank3")?"🥉":"";
-  if(emoji){
-    ctx.font="22px serif";
-    ctx.textAlign="right";
-    ctx.textBaseline="middle";
-    ctx.fillText(emoji,W-PAD,37);
-  }
+  // Rank emoji
+  const emoji = card.classList.contains("rank1") ? "🥇" : card.classList.contains("rank2") ? "🥈" : card.classList.contains("rank3") ? "🥉" : "";
+  if (emoji) { ctx.font = "22px serif"; ctx.textAlign = "right"; ctx.textBaseline = "middle"; ctx.fillText(emoji, W - PAD, 37); }
 
-  // ── PLAYER NAME ──
+  // Name
   ctx.save();
-  ctx.shadowColor="#39ff14"; ctx.shadowBlur=10;
-  ctx.fillStyle="#39ff14";
-  ctx.font="bold 16px 'Orbitron',monospace";
-  ctx.textAlign="left";
-  ctx.textBaseline="alphabetic";
-  const maxNameW = W - PAD*2 - 40 - (emoji?30:0);
-  ctx.fillText(truncate(ctx,name,maxNameW), PAD+38, 34);
+  ctx.shadowColor = "#39ff14"; ctx.shadowBlur = 10; ctx.fillStyle = "#39ff14";
+  ctx.font = "bold 16px 'Orbitron',monospace"; ctx.textAlign = "left"; ctx.textBaseline = "alphabetic";
+  const maxNameW = W - PAD * 2 - 40 - (emoji ? 30 : 0);
+  ctx.fillText(truncate(ctx, name, maxNameW), PAD + 38, 34);
   ctx.restore();
 
-  // ── PLAYER ID ──
-  ctx.fillStyle="rgba(0,245,255,0.55)";
-  ctx.font="11px 'Exo 2',sans-serif";
-  ctx.textAlign="left";
-  ctx.textBaseline="alphabetic";
-  ctx.fillText(clubId, PAD+38, 52);
+  // Club ID
+  ctx.fillStyle = "rgba(0,245,255,0.55)"; ctx.font = "11px 'Exo 2',sans-serif";
+  ctx.textAlign = "left"; ctx.textBaseline = "alphabetic";
+  ctx.fillText(clubId, PAD + 38, 52);
 
-  // ── DIVIDER ──
-  ctx.strokeStyle="rgba(0,245,255,0.07)";
-  ctx.lineWidth=1;
-  ctx.beginPath(); ctx.moveTo(PAD,HEADER_H-10); ctx.lineTo(W-PAD,HEADER_H-10); ctx.stroke();
+  // Divider
+  ctx.strokeStyle = "rgba(0,245,255,0.07)"; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(PAD, HEADER_H - 10); ctx.lineTo(W - PAD, HEADER_H - 10); ctx.stroke();
 
-  // ── WIN RATE LABEL ──
-  let yBar=HEADER_H;
-  ctx.fillStyle="#4a7a8a";
-  ctx.font="10px 'Exo 2',sans-serif";
-  ctx.textAlign="left"; ctx.textBaseline="alphabetic";
-  ctx.fillText("WIN RATE", PAD, yBar+14);
-  ctx.fillStyle="#f97316";
-  ctx.font="bold 11px 'Orbitron',monospace";
-  ctx.textAlign="right";
-  ctx.fillText(winPct, W-PAD, yBar+14);
+  // Win rate label
+  let yBar = HEADER_H;
+  ctx.fillStyle = "#4a7a8a"; ctx.font = "10px 'Exo 2',sans-serif";
+  ctx.textAlign = "left"; ctx.textBaseline = "alphabetic";
+  ctx.fillText("WIN RATE", PAD, yBar + 14);
+  ctx.fillStyle = "#f97316"; ctx.font = "bold 11px 'Orbitron',monospace";
+  ctx.textAlign = "right"; ctx.fillText(winPct, W - PAD, yBar + 14);
 
-  // ── WIN BAR TRACK ──
-  ctx.fillStyle="rgba(0,0,0,0.35)";
-  roundRect(ctx,PAD,yBar+20,W-PAD*2,6,3);
-  ctx.fill();
+  // Bar track
+  ctx.fillStyle = "rgba(0,0,0,0.35)"; roundRect(ctx, PAD, yBar + 20, W - PAD * 2, 6, 3); ctx.fill();
 
-  // ── WIN BAR FILL ──
+  // Bar fill
   ctx.save();
-  const barFill=ctx.createLinearGradient(PAD,0,W-PAD,0);
-  barFill.addColorStop(0,"#39ff14");
-  barFill.addColorStop(1,"#00ff88");
-  ctx.fillStyle=barFill;
-  ctx.shadowColor="#39ff14"; ctx.shadowBlur=8;
-  const fillW=Math.max(0,(W-PAD*2)*(barPct/100));
-  roundRect(ctx,PAD,yBar+20,fillW,6,3);
-  ctx.fill();
+  const barFill = ctx.createLinearGradient(PAD, 0, W - PAD, 0);
+  barFill.addColorStop(0, "#39ff14"); barFill.addColorStop(1, "#00ff88");
+  ctx.fillStyle = barFill; ctx.shadowColor = "#39ff14"; ctx.shadowBlur = 8;
+  const fillW = Math.max(0, (W - PAD * 2) * (barPct / 100));
+  roundRect(ctx, PAD, yBar + 20, fillW, 6, 3); ctx.fill();
   ctx.restore();
 
-  // ── STAT BOXES ──
+  // Stat boxes
   let y0 = HEADER_H + BAR_SECTION;
-  const statColors=[
-    "#39ff14","#ff2d55","#ffd700",
-    "#00f5ff","#f97316","#38bdf8",
-    "#39ff14","#ff2d55","#00f5ff",
-    "#ffd700","#a78bfa","#f472b6"
+  const statColors = [
+    "#39ff14", "#ff2d55", "#ffd700",
+    "#00f5ff", "#f97316", "#38bdf8",
+    "#39ff14", "#ff2d55", "#00f5ff",
+    "#ffd700", "#a78bfa", "#f472b6"
   ];
-
-  stats.forEach((s,i)=>{
-    const col=i%COLS, row=Math.floor(i/COLS);
-    const bx=PAD+col*(BOX_W+10);
-    const by=y0+row*(BOX_H+8);
-
-    // box bg
-    ctx.fillStyle="rgba(0,0,0,0.28)";
-    roundRect(ctx,bx,by,BOX_W,BOX_H,8);
-    ctx.fill();
-    ctx.strokeStyle="rgba(0,245,255,0.12)";
-    ctx.lineWidth=1;
-    roundRect(ctx,bx,by,BOX_W,BOX_H,8);
-    ctx.stroke();
-
-    // value
+  stats.forEach((s, i) => {
+    const col = i % COLS, row = Math.floor(i / COLS);
+    const bx = PAD + col * (BOX_W + 10);
+    const by = y0 + row * (BOX_H + 8);
+    ctx.fillStyle = "rgba(0,0,0,0.28)"; roundRect(ctx, bx, by, BOX_W, BOX_H, 8); ctx.fill();
+    ctx.strokeStyle = "rgba(0,245,255,0.12)"; ctx.lineWidth = 1; roundRect(ctx, bx, by, BOX_W, BOX_H, 8); ctx.stroke();
     ctx.save();
-    ctx.fillStyle=statColors[i]||"#00f5ff";
-    ctx.shadowColor=statColors[i]||"#00f5ff";
-    ctx.shadowBlur=6;
-    ctx.font="bold 18px 'Orbitron',monospace";
-    ctx.textAlign="center";
-    ctx.textBaseline="middle";
-    ctx.fillText(s.val, bx+BOX_W/2, by+BOX_H/2-6);
+    ctx.fillStyle = statColors[i] || "#00f5ff"; ctx.shadowColor = statColors[i] || "#00f5ff"; ctx.shadowBlur = 6;
+    ctx.font = "bold 18px 'Orbitron',monospace"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    ctx.fillText(s.val, bx + BOX_W / 2, by + BOX_H / 2 - 6);
     ctx.restore();
-
-    // label
-    ctx.fillStyle="#4a7a8a";
-    ctx.font="9px 'Exo 2',sans-serif";
-    ctx.textAlign="center";
-    ctx.textBaseline="alphabetic";
-    ctx.fillText(s.lbl.toUpperCase(), bx+BOX_W/2, by+BOX_H-10);
+    ctx.fillStyle = "#4a7a8a"; ctx.font = "9px 'Exo 2',sans-serif";
+    ctx.textAlign = "center"; ctx.textBaseline = "alphabetic";
+    ctx.fillText(s.lbl.toUpperCase(), bx + BOX_W / 2, by + BOX_H - 10);
   });
 
-  // ── FOOTER ──
-  const fyTop = HEADER_H + BAR_SECTION + ROWS*(BOX_H+8) + 14;
-  ctx.strokeStyle="rgba(0,245,255,0.08)";
-  ctx.lineWidth=1;
-  ctx.beginPath(); ctx.moveTo(PAD,fyTop); ctx.lineTo(W-PAD,fyTop); ctx.stroke();
+  // Footer
+  const fyTop = HEADER_H + BAR_SECTION + ROWS * (BOX_H + 8) + 14;
+  ctx.strokeStyle = "rgba(0,245,255,0.08)"; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(PAD, fyTop); ctx.lineTo(W - PAD, fyTop); ctx.stroke();
+  ctx.fillStyle = "rgba(0,245,255,0.25)"; ctx.font = "8px 'Orbitron',monospace";
+  ctx.textAlign = "center"; ctx.textBaseline = "middle";
+  ctx.fillText("⚡ POWERED BY GOAT FC", W / 2, fyTop + 16);
 
-  ctx.fillStyle="rgba(0,245,255,0.25)";
-  ctx.font="8px 'Orbitron',monospace";
-  ctx.textAlign="center";
-  ctx.textBaseline="middle";
-  ctx.fillText("⚡ POWERED BY GOAT FC", W/2, fyTop+16);
-
-  // ── DOWNLOAD ──
-  const a=document.createElement("a");
-  a.download=`GOAT_FC_${name.replace(/\s+/g,"_")}.jpg`;
-  a.href=cv.toDataURL("image/jpeg",0.97);
+  const a = document.createElement("a");
+  a.download = `GOAT_FC_${name.replace(/\s+/g, "_")}.jpg`;
+  a.href = cv.toDataURL("image/jpeg", 0.97);
   a.click();
 }
 
-// Helpers
-function roundRect(ctx,x,y,w,h,r){
+// ── CANVAS HELPERS ───────────────────────────────────────────────────────
+function roundRect(ctx, x, y, w, h, r) {
   ctx.beginPath();
-  ctx.moveTo(x+r,y);
-  ctx.lineTo(x+w-r,y);
-  ctx.quadraticCurveTo(x+w,y,x+w,y+r);
-  ctx.lineTo(x+w,y+h-r);
-  ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
-  ctx.lineTo(x+r,y+h);
-  ctx.quadraticCurveTo(x,y+h,x,y+h-r);
-  ctx.lineTo(x,y+r);
-  ctx.quadraticCurveTo(x,y,x+r,y);
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
   ctx.closePath();
 }
 
-function truncate(ctx,text,maxW){
-  if(ctx.measureText(text).width<=maxW) return text;
-  while(text.length>0 && ctx.measureText(text+"…").width>maxW) text=text.slice(0,-1);
-  return text+"…";
+function truncate(ctx, text, maxW) {
+  if (ctx.measureText(text).width <= maxW) return text;
+  while (text.length > 0 && ctx.measureText(text + "…").width > maxW) text = text.slice(0, -1);
+  return text + "…";
 }
 
-async function init(){
+// ── INIT ─────────────────────────────────────────────────────────────────
+async function init() {
   await Promise.all([loadMembers(), loadMatches()]);
-  document.getElementById("loading").style.display="none";
+  document.getElementById("loading").style.display = "none";
   render();
 }
 init();

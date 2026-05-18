@@ -562,6 +562,8 @@ body::after {
 <!-- CARDS -->
 <div id="data"></div>
 
+<div class="powered-by"><i class="fa-solid fa-bolt" style="margin-right:5px;"></i>POWERED BY GOAT FC</div>
+
 <script>
 const MATCH_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv";
 const MEMBER_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv";
@@ -761,24 +763,258 @@ function render(){
 }
 
 function downloadCard(btn){
-  // Hide button before screenshot so it doesn't appear in image
-  btn.style.visibility='hidden';
-  const card=btn.closest(".card");
+  const card = btn.closest(".card");
 
-  html2canvas(card,{
-    backgroundColor:'#050f1a',
-    scale:2,
-    useCORS:true,
-    logging:false
-  }).then(canvas=>{
-    btn.style.visibility='visible';
-    let a=document.createElement("a");
-    a.download="GOAT_FC_STATS.jpg";
-    a.href=canvas.toDataURL("image/jpeg",0.95);
-    a.click();
-  }).catch(()=>{
-    btn.style.visibility='visible';
+  // Read data from the card DOM
+  const name    = card.querySelector(".player-name").textContent.trim();
+  const clubId  = card.querySelector(".player-id").textContent.replace(/\s+/g,' ').trim();
+  const barPct  = parseFloat(card.querySelector(".winbar-fill").style.width)||0;
+  const winPct  = card.querySelector(".winbar-label span:last-child").textContent.trim();
+
+  // Rank strip color
+  let stripColor = "#00f5ff";
+  if(card.classList.contains("rank1")) stripColor="#ffd700";
+  else if(card.classList.contains("rank2")) stripColor="#c0c0c0";
+  else if(card.classList.contains("rank3")) stripColor="#cd7f32";
+  else if(card.classList.contains("top10")) stripColor="#bf00ff";
+
+  // Stat boxes
+  const boxes = card.querySelectorAll(".stat-box");
+  const stats = [];
+  boxes.forEach(b=>{
+    stats.push({
+      val: b.querySelector(".stat-val").textContent.trim(),
+      lbl: b.querySelector(".stat-lbl").textContent.trim(),
+      color: getComputedStyle(b.querySelector(".stat-val")).color
+    });
   });
+
+  // Canvas size
+  const W=600, PAD=24;
+  const HEADER_H=90, BAR_SECTION=54;
+  const COLS=3, ROWS=Math.ceil(stats.length/COLS);
+  const BOX_W=(W-PAD*2-10*(COLS-1))/COLS;
+  const BOX_H=72;
+  const FOOTER_H=44;
+  const H = HEADER_H + BAR_SECTION + ROWS*(BOX_H+8) + FOOTER_H + 20;
+
+  const cv=document.createElement("canvas");
+  cv.width=W*2; cv.height=H*2;
+  const ctx=cv.getContext("2d");
+  ctx.scale(2,2);
+
+  // ── BG ──
+  const bg=ctx.createLinearGradient(0,0,W,H);
+  bg.addColorStop(0,"#050f1a");
+  bg.addColorStop(1,"#071524");
+  ctx.fillStyle=bg;
+  roundRect(ctx,0,0,W,H,16);
+  ctx.fill();
+
+  // ── BG grid dots ──
+  ctx.save();
+  ctx.strokeStyle="rgba(0,245,255,0.06)";
+  ctx.lineWidth=0.5;
+  for(let x=0;x<W;x+=28){
+    ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke();
+  }
+  for(let y=0;y<H;y+=28){
+    ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke();
+  }
+  ctx.restore();
+
+  // ── RANK TOP STRIP ──
+  ctx.save();
+  const strip=ctx.createLinearGradient(0,0,W,0);
+  strip.addColorStop(0,"transparent");
+  strip.addColorStop(0.5,stripColor);
+  strip.addColorStop(1,"transparent");
+  ctx.shadowColor=stripColor; ctx.shadowBlur=14;
+  ctx.fillStyle=strip;
+  roundRect(ctx,0,0,W,3,0);
+  ctx.fill();
+  ctx.restore();
+
+  // ── CARD BORDER ──
+  ctx.save();
+  ctx.strokeStyle=stripColor==="ffd700"?
+    "rgba(255,215,0,0.33)":
+    (stripColor==="#c0c0c0"?"rgba(192,192,192,0.33)":
+    (stripColor==="#cd7f32"?"rgba(205,127,50,0.33)":
+    (stripColor==="#bf00ff"?"rgba(191,0,255,0.22)":
+    "rgba(0,245,255,0.2)")));
+  ctx.lineWidth=1;
+  roundRect(ctx,0.5,0.5,W-1,H-1,16);
+  ctx.stroke();
+  ctx.restore();
+
+  // ── RANK BADGE ──
+  let rankLabel="", rankColor="#4a7a8a", rankBg="rgba(0,245,255,0.07)";
+  if(card.classList.contains("rank1")){rankLabel="★";rankColor="#ffd700";rankBg="rgba(255,215,0,0.14)";}
+  else if(card.classList.contains("rank2")){rankLabel="#2";rankColor="#c0c0c0";rankBg="rgba(192,192,192,0.11)";}
+  else if(card.classList.contains("rank3")){rankLabel="#3";rankColor="#cd7f32";rankBg="rgba(205,127,50,0.11)";}
+  else{
+    const rn=card.querySelector(".rank-badge");
+    rankLabel=rn?rn.textContent.trim():"";
+  }
+
+  ctx.save();
+  ctx.fillStyle=rankBg;
+  roundRect(ctx,PAD,22,30,30,6);
+  ctx.fill();
+  ctx.strokeStyle=rankColor+"66";
+  ctx.lineWidth=1;
+  roundRect(ctx,PAD,22,30,30,6);
+  ctx.stroke();
+  ctx.fillStyle=rankColor;
+  ctx.font="bold 11px 'Orbitron',monospace";
+  ctx.textAlign="center";
+  ctx.textBaseline="middle";
+  ctx.fillText(rankLabel,PAD+15,37);
+  ctx.restore();
+
+  // ── RANK EMOJI ──
+  const emoji=card.classList.contains("rank1")?"🥇":
+               card.classList.contains("rank2")?"🥈":
+               card.classList.contains("rank3")?"🥉":"";
+  if(emoji){
+    ctx.font="22px serif";
+    ctx.textAlign="right";
+    ctx.textBaseline="middle";
+    ctx.fillText(emoji,W-PAD,37);
+  }
+
+  // ── PLAYER NAME ──
+  ctx.save();
+  ctx.shadowColor="#39ff14"; ctx.shadowBlur=10;
+  ctx.fillStyle="#39ff14";
+  ctx.font="bold 16px 'Orbitron',monospace";
+  ctx.textAlign="left";
+  ctx.textBaseline="alphabetic";
+  const maxNameW = W - PAD*2 - 40 - (emoji?30:0);
+  ctx.fillText(truncate(ctx,name,maxNameW), PAD+38, 34);
+  ctx.restore();
+
+  // ── PLAYER ID ──
+  ctx.fillStyle="rgba(0,245,255,0.55)";
+  ctx.font="11px 'Exo 2',sans-serif";
+  ctx.textAlign="left";
+  ctx.textBaseline="alphabetic";
+  ctx.fillText(clubId, PAD+38, 52);
+
+  // ── DIVIDER ──
+  ctx.strokeStyle="rgba(0,245,255,0.07)";
+  ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(PAD,HEADER_H-10); ctx.lineTo(W-PAD,HEADER_H-10); ctx.stroke();
+
+  // ── WIN RATE LABEL ──
+  let yBar=HEADER_H;
+  ctx.fillStyle="#4a7a8a";
+  ctx.font="10px 'Exo 2',sans-serif";
+  ctx.textAlign="left"; ctx.textBaseline="alphabetic";
+  ctx.fillText("WIN RATE", PAD, yBar+14);
+  ctx.fillStyle="#f97316";
+  ctx.font="bold 11px 'Orbitron',monospace";
+  ctx.textAlign="right";
+  ctx.fillText(winPct, W-PAD, yBar+14);
+
+  // ── WIN BAR TRACK ──
+  ctx.fillStyle="rgba(0,0,0,0.35)";
+  roundRect(ctx,PAD,yBar+20,W-PAD*2,6,3);
+  ctx.fill();
+
+  // ── WIN BAR FILL ──
+  ctx.save();
+  const barFill=ctx.createLinearGradient(PAD,0,W-PAD,0);
+  barFill.addColorStop(0,"#39ff14");
+  barFill.addColorStop(1,"#00ff88");
+  ctx.fillStyle=barFill;
+  ctx.shadowColor="#39ff14"; ctx.shadowBlur=8;
+  const fillW=Math.max(0,(W-PAD*2)*(barPct/100));
+  roundRect(ctx,PAD,yBar+20,fillW,6,3);
+  ctx.fill();
+  ctx.restore();
+
+  // ── STAT BOXES ──
+  let y0 = HEADER_H + BAR_SECTION;
+  const statColors=[
+    "#39ff14","#ff2d55","#ffd700",
+    "#00f5ff","#f97316","#38bdf8",
+    "#39ff14","#ff2d55","#00f5ff",
+    "#ffd700","#a78bfa","#f472b6"
+  ];
+
+  stats.forEach((s,i)=>{
+    const col=i%COLS, row=Math.floor(i/COLS);
+    const bx=PAD+col*(BOX_W+10);
+    const by=y0+row*(BOX_H+8);
+
+    // box bg
+    ctx.fillStyle="rgba(0,0,0,0.28)";
+    roundRect(ctx,bx,by,BOX_W,BOX_H,8);
+    ctx.fill();
+    ctx.strokeStyle="rgba(0,245,255,0.12)";
+    ctx.lineWidth=1;
+    roundRect(ctx,bx,by,BOX_W,BOX_H,8);
+    ctx.stroke();
+
+    // value
+    ctx.save();
+    ctx.fillStyle=statColors[i]||"#00f5ff";
+    ctx.shadowColor=statColors[i]||"#00f5ff";
+    ctx.shadowBlur=6;
+    ctx.font="bold 18px 'Orbitron',monospace";
+    ctx.textAlign="center";
+    ctx.textBaseline="middle";
+    ctx.fillText(s.val, bx+BOX_W/2, by+BOX_H/2-6);
+    ctx.restore();
+
+    // label
+    ctx.fillStyle="#4a7a8a";
+    ctx.font="9px 'Exo 2',sans-serif";
+    ctx.textAlign="center";
+    ctx.textBaseline="alphabetic";
+    ctx.fillText(s.lbl.toUpperCase(), bx+BOX_W/2, by+BOX_H-10);
+  });
+
+  // ── FOOTER ──
+  const fyTop = HEADER_H + BAR_SECTION + ROWS*(BOX_H+8) + 14;
+  ctx.strokeStyle="rgba(0,245,255,0.08)";
+  ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(PAD,fyTop); ctx.lineTo(W-PAD,fyTop); ctx.stroke();
+
+  ctx.fillStyle="rgba(0,245,255,0.25)";
+  ctx.font="8px 'Orbitron',monospace";
+  ctx.textAlign="center";
+  ctx.textBaseline="middle";
+  ctx.fillText("⚡ POWERED BY GOAT FC", W/2, fyTop+16);
+
+  // ── DOWNLOAD ──
+  const a=document.createElement("a");
+  a.download=`GOAT_FC_${name.replace(/\s+/g,"_")}.jpg`;
+  a.href=cv.toDataURL("image/jpeg",0.97);
+  a.click();
+}
+
+// Helpers
+function roundRect(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.lineTo(x+w-r,y);
+  ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+  ctx.lineTo(x+w,y+h-r);
+  ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  ctx.lineTo(x+r,y+h);
+  ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+  ctx.lineTo(x,y+r);
+  ctx.quadraticCurveTo(x,y,x+r,y);
+  ctx.closePath();
+}
+
+function truncate(ctx,text,maxW){
+  if(ctx.measureText(text).width<=maxW) return text;
+  while(text.length>0 && ctx.measureText(text+"…").width>maxW) text=text.slice(0,-1);
+  return text+"…";
 }
 
 async function init(){
@@ -789,6 +1025,5 @@ async function init(){
 init();
 </script>
 
-<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 </body>
 </html>

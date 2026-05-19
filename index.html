@@ -6,7 +6,7 @@
 <title>ELITE ATHLETE — GOAT FC</title>
 <link rel="icon" type="image/png" href="https://i.imgur.com/LY3Bb9m.png"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@500;600;700&family=Space+Mono:wght@400;700&family=Exo+2:wght@700;800;900&family=Syne:wght@700;800&family=Bebas+Neue&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@500;600;700&family=Space+Mono:wght@400;700&family=Exo+2:wght@700;800;900&display=swap" rel="stylesheet">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -27,8 +27,6 @@
 --muted:#5a5a80;
 --muted2:#383860;
 --stat-accent:#7dd3fc;
-/* NEW: stat number color — soft warm gold */
---stat-num-color:#fcd34d;
 }
 
 @keyframes rgbBorder{
@@ -141,7 +139,7 @@ border-radius:6px;overflow:hidden;
 box-shadow:0 0 60px rgba(0,240,255,0.03),0 0 120px rgba(191,0,255,0.03);
 }
 
-/* ── COVER ── */
+/* ── COVER — clear, no blur, shorter ── */
 .cover{
 height:100px;
 position:relative;overflow:hidden;
@@ -153,6 +151,7 @@ width:100%;height:100%;
 object-fit:cover;
 object-position:center 35%;
 opacity:0.88;
+/* NO filter/blur */
 }
 
 .cover-overlay{
@@ -181,6 +180,7 @@ background:linear-gradient(90deg,rgba(0,240,255,0.025),rgba(191,0,255,0.025));
 gap:12px;
 }
 
+/* AVATAR — bigger */
 .avatar-frame{
 flex-shrink:0;
 width:62px;height:62px;
@@ -195,11 +195,11 @@ animation:rgbBorder 4s linear infinite;
 
 .name-stack{min-width:0;flex:1;}
 
-/* PLAYER NAME — Syne font: geometric bold */
+/* PLAYER NAME — gaming font */
 .player-name{
-font-family:'Syne',sans-serif;
-font-size:17px;font-weight:800;
-letter-spacing:2px;
+font-family:'Exo 2',sans-serif;
+font-size:17px;font-weight:900;
+letter-spacing:1.5px;
 line-height:1.1;
 background:linear-gradient(90deg,#ffffff 0%,#a0d4ff 60%,#bf00ff 100%);
 -webkit-background-clip:text;-webkit-text-fill-color:transparent;
@@ -215,13 +215,13 @@ box-shadow:0 0 9px var(--neon-green);
 animation:pulse 1.5s ease-in-out infinite;
 }
 
-/* CLUB ID — Bebas Neue: bold condensed sporty */
+/* CLUB ID — pro pill */
 .club-id-pill{
 display:inline-flex;align-items:center;gap:6px;
 margin-top:5px;
-font-family:'Bebas Neue',sans-serif;
-font-size:13px;font-weight:400;
-letter-spacing:3px;
+font-family:'Exo 2',sans-serif;
+font-size:10px;font-weight:800;
+letter-spacing:2px;
 color:var(--neon-cyan);
 text-shadow:0 0 10px rgba(0,240,255,0.7);
 border:1px solid rgba(0,240,255,0.3);
@@ -263,6 +263,7 @@ color:var(--neon-cyan);
 box-shadow:0 0 10px rgba(0,240,255,0.2);
 }
 
+/* label bold + light color */
 .rank-label{
 font-family:'Exo 2',sans-serif;
 font-size:8px;font-weight:800;
@@ -298,7 +299,7 @@ text-transform:uppercase;
 margin-bottom:8px;
 }
 
-/* WLD — unified outline */
+/* WLD — bold labels, lighter color */
 .wld-row{
 display:grid;grid-template-columns:1fr 1fr 1fr;
 gap:6px;margin-bottom:7px;
@@ -307,18 +308,14 @@ gap:6px;margin-bottom:7px;
 .wld-cell{
 border-radius:4px;padding:10px 8px;
 display:flex;align-items:center;gap:8px;
-/* unified common outline — same as stat-cell */
-background:var(--surface2);
-border:1px solid rgba(100,120,200,0.18);
-box-shadow:inset 0 0 0 1px rgba(255,255,255,0.03);
+background:var(--surface2);border:1px solid var(--border2);
 transition:transform .2s;
 }
 .wld-cell:hover{transform:translateY(-1px);}
 
-/* Keep subtle tint but same outline */
-.wld-cell.win-cell{background:rgba(0,255,136,0.04);}
-.wld-cell.loss-cell{background:rgba(255,0,122,0.04);}
-.wld-cell.draw-cell{background:rgba(245,255,0,0.025);}
+.wld-cell.win-cell{border-color:rgba(0,255,136,0.2);background:rgba(0,255,136,0.04);box-shadow:0 0 14px rgba(0,255,136,0.07);}
+.wld-cell.loss-cell{border-color:rgba(255,0,122,0.2);background:rgba(255,0,122,0.04);box-shadow:0 0 14px rgba(255,0,122,0.07);}
+.wld-cell.draw-cell{border-color:rgba(245,255,0,0.2);background:rgba(245,255,0,0.04);box-shadow:0 0 14px rgba(245,255,0,0.07);}
 
 .wld-bar{width:3px;height:32px;border-radius:99px;flex-shrink:0;}
 .wld-bar.w{background:var(--neon-green);box-shadow:0 0 8px var(--neon-green);}
@@ -330,6 +327,7 @@ transition:transform .2s;
 .wld-num.l{color:var(--neon-pink);text-shadow:0 0 10px var(--neon-pink);}
 .wld-num.d{color:var(--neon-yellow);text-shadow:0 0 10px var(--neon-yellow);}
 
+/* bold + lighter label */
 .wld-lbl{
 font-family:'Exo 2',sans-serif;
 font-size:8px;font-weight:800;
@@ -338,30 +336,29 @@ color:#93c5fd;
 margin-top:2px;text-transform:uppercase;
 }
 
-/* STAT GRID — same unified outline */
+/* STAT GRID — common accent color for all numbers */
 .stat-grid{
 display:grid;grid-template-columns:repeat(3,1fr);gap:5px;
 }
 
 .stat-cell{
 background:var(--surface2);
-border:1px solid rgba(100,120,200,0.18);
-box-shadow:inset 0 0 0 1px rgba(255,255,255,0.03);
-border-radius:4px;
+border:1px solid var(--border);border-radius:4px;
 padding:10px 6px;
 display:flex;flex-direction:column;align-items:center;gap:3px;
 text-align:center;transition:all .2s;
 }
 .stat-cell:hover{background:var(--surface3);transform:translateY(-1px);}
 
-/* stat numbers — soft warm gold */
+/* all stat numbers same light accent color */
 .stat-num{
 font-family:'Orbitron',sans-serif;
 font-size:17px;font-weight:900;line-height:1;
-color:var(--stat-num-color);
-text-shadow:0 0 10px rgba(252,211,77,0.45);
+color:#7dd3fc;
+text-shadow:0 0 10px rgba(125,211,252,0.5);
 }
 
+/* bold + lighter label for stat */
 .stat-lbl{
 font-family:'Exo 2',sans-serif;
 font-size:7px;font-weight:800;
@@ -429,18 +426,18 @@ width:2.5px;border-radius:1px;
 .match-player.left{padding-left:2px;}
 
 .mp-name{
-font-family:'Syne',sans-serif;
-font-size:11px;font-weight:700;
+font-family:'Exo 2',sans-serif;
+font-size:11px;font-weight:800;
 color:var(--text);line-height:1.15;
 white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-max-width:100%;letter-spacing:0.5px;
+max-width:100%;letter-spacing:0.3px;
 }
 
-/* Club ID in match rows — Bebas Neue */
+/* Club ID — bigger, bold, single common glow color (cyan) */
 .mp-id{
-font-family:'Bebas Neue',sans-serif;
-font-size:11px;font-weight:400;
-letter-spacing:2px;
+font-family:'Exo 2',sans-serif;
+font-size:9px;font-weight:800;
+letter-spacing:1.2px;
 margin-top:2px;
 color:var(--neon-cyan);
 text-shadow:0 0 8px rgba(0,240,255,0.65);
@@ -477,6 +474,7 @@ text-shadow:0 0 8px var(--neon-yellow);
 box-shadow:0 0 10px rgba(245,255,0,0.08);
 }
 
+/* MATCH TYPE — bigger, bold, light color */
 .match-type-lbl{
 font-family:'Exo 2',sans-serif;
 font-size:7.5px;font-weight:800;
@@ -528,7 +526,7 @@ display:block;font-size:22px;margin-bottom:14px;
 .match-row{grid-template-columns:1fr 46px 1fr;}
 .score-badge{font-size:10px;padding:3px 2px;}
 .mp-name{font-size:10px;}
-.mp-id{font-size:10px;}
+.mp-id{font-size:8px;}
 .avatar-frame{width:52px;height:52px;}
 }
 
@@ -543,7 +541,7 @@ display:block;font-size:22px;margin-bottom:14px;
 .match-row{grid-template-columns:1fr 60px 1fr;}
 .avatar-frame{width:70px;height:70px;}
 .mp-name{font-size:12px;}
-.mp-id{font-size:12px;}
+.mp-id{font-size:10px;}
 }
 </style>
 </head>
@@ -558,7 +556,7 @@ display:block;font-size:22px;margin-bottom:14px;
 <div class="home-btn"><i class="fa-solid fa-house"></i></div>
 </a>
 
-<!-- HERO -->
+<!-- HERO: no "Player Profile" box, just title + slogan -->
 <div class="hero">
 <div class="hero-title">ELITE ATHLETE</div>
 <div class="hero-slogan">BE THE GAME CHANGER</div>
@@ -658,12 +656,14 @@ const recent=matches.slice().reverse().slice(0,5);
 document.getElementById('app').innerHTML=`
 <div class="profile">
 
+  <!-- COVER: clear HD image, shorter, no blur -->
   <div class="cover">
     <img class="cover-img" src="${COVER_IMG}" alt="Stadium" crossorigin="anonymous" onerror="this.style.display='none'">
     <div class="cover-overlay"></div>
     <div class="cover-grid"></div>
   </div>
 
+  <!-- NAME ROW: avatar bigger, online dot inline after name, LIVE text removed -->
   <div class="name-row">
     <div class="avatar-frame">
       <img crossorigin="anonymous" src="${info.pic}" alt="${info.name}" onerror="this.src='https://i.imgur.com/LY3Bb9m.png'">
@@ -678,6 +678,7 @@ document.getElementById('app').innerHTML=`
     </div>
   </div>
 
+  <!-- RANK + CP: bold labels with light blue color -->
   <div class="rank-strip">
     <div class="rank-cell">
       <div class="rank-icon-box trophy"><i class="fa-solid fa-trophy"></i></div>
@@ -697,6 +698,7 @@ document.getElementById('app').innerHTML=`
 
   <div class="sdiv"></div>
 
+  <!-- STATS: WLD bolds labels, stat grid same color -->
   <div class="stats-section">
     <div class="sec-label">Performance Overview</div>
 
@@ -745,6 +747,7 @@ document.getElementById('app').innerHTML=`
 
   <div class="sdiv"></div>
 
+  <!-- MATCHES: club IDs bigger/bold/same cyan, match type bigger/bold/light -->
   <div class="matches-section">
     <div class="matches-head">
       <div class="matches-title">RECENT MATCHES</div>

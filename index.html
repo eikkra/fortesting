@@ -247,13 +247,13 @@ tbody tr:last-child td { border-bottom:none; }
 .val-net-pos {
   color:var(--gold);
   font-family:'Orbitron',sans-serif;
-  font-size:13px; font-weight:700;
+  font-size:11px; font-weight:700;
   text-shadow:0 0 8px rgba(255,215,0,0.5);
 }
 .val-net-neg {
   color:var(--red);
   font-family:'Orbitron',sans-serif;
-  font-size:13px; font-weight:700;
+  font-size:11px; font-weight:700;
 }
 
 /* ── COIN ICON ── */
@@ -287,10 +287,6 @@ tbody tr:last-child td { border-bottom:none; }
   cursor:not-allowed;
 }
 
-/* ── ROW GLOWS ── */
-.row-rank1 td { background:linear-gradient(90deg,rgba(255,215,0,0.07),transparent); }
-.row-rank2 td { background:linear-gradient(90deg,rgba(192,192,192,0.06),transparent); }
-.row-rank3 td { background:linear-gradient(90deg,rgba(205,127,50,0.06),transparent); }
 
 /* ── LOADING ── */
 #loading {
@@ -389,7 +385,7 @@ tbody tr:last-child td { border-bottom:none; }
     white-space:nowrap;
   }
   .player-name { max-width:72px; font-size:9px; }
-  .val-net-pos, .val-net-neg { font-size:10px; }
+  .val-net-pos, .val-net-neg { font-size:9px; }
   .btn-claim {
     padding:4px 7px; font-size:9px; gap:3px;
     border-radius:5px;
@@ -518,7 +514,7 @@ async function loadData(){
       const clubId  = club["Player Club ID"]||"—";
 
       const netCls  = net>=0 ? 'val-net-pos' : 'val-net-neg';
-      const netSign = net>0 ? '+' : '';
+      const netSign = '';
 
       const actionBtn = (net>=1000)
         ? `<button class="btn-claim" onclick="withdraw('${clubId}')"><i class="fa-solid fa-coins"></i> Claim</button>`

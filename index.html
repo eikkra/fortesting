@@ -3,578 +3,525 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>ELITE ATHLETE</title>
+<title>ELITE ATHLETE — GOAT FC</title>
 <link rel="icon" type="image/png" href="https://i.imgur.com/LY3Bb9m.png"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@500;600;700&family=Orbitron:wght@700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 
 :root{
---bg:#0a0a0a;
---surface:#111111;
---surface2:#181818;
---surface3:#1f1f1f;
---border:#2a2a2a;
---border2:#333;
---accent:#e8ff47;
---accent2:#00d4ff;
---text:#f5f5f5;
---muted:#666;
---muted2:#444;
---red:#ff4444;
---green:#00cc66;
---draw:#f59e0b;
+--bg:#060610;
+--surface:#0d0d1a;
+--surface2:#111122;
+--surface3:#161628;
+--border:#1e1e3a;
+--border2:#252545;
+--neon-cyan:#00f0ff;
+--neon-purple:#bf00ff;
+--neon-green:#00ff88;
+--neon-pink:#ff007a;
+--neon-yellow:#f5ff00;
+--neon-orange:#ff6a00;
+--text:#eef0ff;
+--muted:#555577;
+--muted2:#383860;
+}
+
+@keyframes rgbBorder{
+0%{border-color:#00f0ff;box-shadow:0 0 14px #00f0ff55,inset 0 0 8px #00f0ff15;}
+33%{border-color:#bf00ff;box-shadow:0 0 14px #bf00ff55,inset 0 0 8px #bf00ff15;}
+66%{border-color:#ff007a;box-shadow:0 0 14px #ff007a55,inset 0 0 8px #ff007a15;}
+100%{border-color:#00f0ff;box-shadow:0 0 14px #00f0ff55,inset 0 0 8px #00f0ff15;}
+}
+
+@keyframes pulseGlow{
+0%,100%{opacity:1;}50%{opacity:0.4;}
+}
+
+@keyframes shimmer{
+0%{background-position:200% center;}
+100%{background-position:-200% center;}
+}
+
+@keyframes rgbGlow{
+0%{text-shadow:0 0 10px #00f0ff,0 0 20px #00f0ff44;}
+33%{text-shadow:0 0 10px #bf00ff,0 0 20px #bf00ff44;}
+66%{text-shadow:0 0 10px #ff007a,0 0 20px #ff007a44;}
+100%{text-shadow:0 0 10px #00f0ff,0 0 20px #00f0ff44;}
 }
 
 body{
 background:var(--bg);
-font-family:'DM Sans',sans-serif;
+font-family:'Rajdhani',sans-serif;
 color:var(--text);
 min-height:100vh;
 overflow-x:hidden;
 }
 
-/* TOPBAR */
-.topbar{
-height:48px;
-display:flex;
-align-items:center;
-justify-content:space-between;
-padding:0 16px;
-background:rgba(10,10,10,0.95);
-border-bottom:1px solid var(--border);
-position:sticky;
-top:0;
-z-index:999;
-backdrop-filter:blur(12px);
-text-decoration:none;
+body::before{
+content:"";
+position:fixed;inset:0;
+background:
+radial-gradient(ellipse at 15% 15%,rgba(0,240,255,0.05) 0%,transparent 45%),
+radial-gradient(ellipse at 85% 85%,rgba(191,0,255,0.05) 0%,transparent 45%),
+radial-gradient(ellipse at 50% 50%,rgba(255,0,122,0.02) 0%,transparent 55%);
+pointer-events:none;z-index:-1;
 }
 
-.top-left{
-display:flex;
-align-items:center;
-gap:8px;
+/* TOPBAR */
+.topbar{
+height:46px;
+display:flex;align-items:center;justify-content:space-between;
+padding:0 14px;
+background:rgba(6,6,16,0.97);
+border-bottom:1px solid rgba(0,240,255,0.12);
+position:sticky;top:0;z-index:999;
+backdrop-filter:blur(14px);
+text-decoration:none;
+box-shadow:0 2px 20px rgba(0,240,255,0.05);
 }
+
+.top-left{display:flex;align-items:center;gap:8px;}
 
 .top-logo{
 width:20px;
-opacity:0.9;
+filter:drop-shadow(0 0 7px #00f0ff) brightness(1.1);
 }
 
 .top-title{
-font-family:'Bebas Neue',sans-serif;
-font-size:15px;
-letter-spacing:3px;
-color:var(--accent);
+font-family:'Orbitron',sans-serif;
+font-size:12px;font-weight:900;letter-spacing:3px;
+background:linear-gradient(90deg,var(--neon-cyan),var(--neon-purple));
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;
 }
 
 .home-btn{
-width:32px;
-height:32px;
-display:flex;
-align-items:center;
-justify-content:center;
-border-radius:8px;
-border:1px solid var(--border);
-color:var(--muted);
-font-size:12px;
+width:30px;height:30px;
+display:flex;align-items:center;justify-content:center;
+border-radius:6px;
+border:1px solid rgba(0,240,255,0.15);
+color:var(--neon-cyan);font-size:11px;
 transition:all .2s;
 }
-
-.home-btn:hover{color:var(--text);}
+.home-btn:hover{background:rgba(0,240,255,0.08);box-shadow:0 0 10px rgba(0,240,255,0.2);}
 
 /* HERO */
-.hero{
-text-align:center;
-padding:20px 16px 12px;
-}
+.hero{text-align:center;padding:14px 16px 8px;}
 
 .hero-tag{
-display:inline-block;
+display:inline-flex;align-items:center;gap:7px;
 font-family:'Space Mono',monospace;
-font-size:9px;
-letter-spacing:4px;
-color:var(--muted);
-border:1px solid var(--border2);
-padding:4px 12px;
-border-radius:2px;
-margin-bottom:10px;
+font-size:8px;letter-spacing:4px;
+color:var(--neon-green);
+text-shadow:0 0 8px var(--neon-green);
+border:1px solid rgba(0,255,136,0.2);
+padding:4px 12px;margin-bottom:7px;
 text-transform:uppercase;
 }
 
+.live-dot{
+width:7px;height:7px;border-radius:50%;
+background:var(--neon-green);
+box-shadow:0 0 8px var(--neon-green);
+animation:pulseGlow 1.5s ease-in-out infinite;
+}
+
 .hero-title{
-font-family:'Bebas Neue',sans-serif;
-font-size:28px;
-letter-spacing:8px;
-color:var(--text);
-line-height:1;
+font-family:'Orbitron',sans-serif;
+font-size:20px;font-weight:900;letter-spacing:6px;
+background:linear-gradient(90deg,#00f0ff,#bf00ff,#ff007a,#f5ff00,#00f0ff);
+background-size:300% auto;
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+animation:shimmer 4s linear infinite;
 }
 
-/* MAIN WRAP */
+/* APP */
 #app{
-width:100%;
-max-width:680px;
+width:100%;max-width:680px;
 margin:0 auto;
-padding:0 12px 40px;
+padding:0 10px 40px;
 }
 
-/* PROFILE CARD */
+/* CARD */
 .profile{
 background:var(--surface);
-border:1px solid var(--border);
-border-radius:4px;
-overflow:hidden;
+border:1px solid rgba(0,240,255,0.1);
+border-radius:6px;overflow:hidden;
+box-shadow:0 0 50px rgba(0,240,255,0.03),0 0 100px rgba(191,0,255,0.03);
 }
 
-/* COVER — stark editorial stripe */
+/* COVER */
 .cover{
-height:80px;
-background:var(--accent);
-position:relative;
-overflow:hidden;
+height:130px;
+position:relative;overflow:hidden;
+background:#05050f;
 }
 
-.cover::before{
-content:"";
-position:absolute;
-inset:0;
+.cover-img{
+width:100%;height:100%;
+object-fit:cover;object-position:center 30%;
+opacity:0.65;
+}
+
+.cover-overlay{
+position:absolute;inset:0;
+background:linear-gradient(0deg,rgba(6,6,16,1) 0%,rgba(6,6,16,0.55) 45%,rgba(6,6,16,0.05) 100%);
+}
+
+.cover-grid{
+position:absolute;inset:0;
 background:
-repeating-linear-gradient(
-90deg,
-transparent,
-transparent 28px,
-rgba(0,0,0,0.08) 28px,
-rgba(0,0,0,0.08) 30px
-);
+repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(0,240,255,0.04) 39px,rgba(0,240,255,0.04) 40px),
+repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(0,240,255,0.02) 39px,rgba(0,240,255,0.02) 40px);
 }
 
-.cover::after{
-content:"GOAT FC";
-font-family:'Bebas Neue',sans-serif;
-font-size:80px;
-letter-spacing:8px;
-color:rgba(0,0,0,0.08);
-position:absolute;
-bottom:-10px;
-right:12px;
-line-height:1;
+/* NAME ROW */
+.name-row{
+display:flex;align-items:center;justify-content:space-between;
+padding:8px 14px 10px;
+border-bottom:1px solid var(--border);
+background:linear-gradient(90deg,rgba(0,240,255,0.03),rgba(191,0,255,0.03));
+gap:8px;
 }
 
-/* PROFILE TOP */
-.profile-top{
-display:flex;
-align-items:flex-end;
-gap:14px;
-padding:0 16px;
-margin-top:-32px;
-position:relative;
-z-index:2;
-}
+.name-left{display:flex;align-items:center;gap:10px;min-width:0;flex:1;}
 
 .avatar-frame{
 flex-shrink:0;
-width:72px;
-height:72px;
-border-radius:4px;
-border:3px solid var(--accent);
+width:50px;height:50px;
+border-radius:5px;
+border:2px solid var(--neon-cyan);
 overflow:hidden;
 background:var(--surface2);
-box-shadow:0 0 0 1px var(--bg);
+animation:rgbBorder 4s linear infinite;
 }
 
-.avatar-frame img{
-width:100%;
-height:100%;
-object-fit:cover;
-}
+.avatar-frame img{width:100%;height:100%;object-fit:cover;}
 
-.avatar-info{
-flex:1;
-padding-bottom:10px;
-min-width:0;
-}
+.name-stack{min-width:0;flex:1;}
 
 .player-name{
-font-family:'Bebas Neue',sans-serif;
-font-size:22px;
-letter-spacing:2px;
-line-height:1;
-white-space:nowrap;
-overflow:hidden;
-text-overflow:ellipsis;
+font-family:'Orbitron',sans-serif;
+font-size:13px;font-weight:900;letter-spacing:1px;
+line-height:1.1;
+background:linear-gradient(90deg,#ffffff,#b0ccff);
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
 
-.player-meta{
-display:flex;
-align-items:center;
-gap:8px;
-margin-top:5px;
-flex-wrap:wrap;
-}
-
-.pill{
+.club-id-pill{
+display:inline-flex;align-items:center;gap:5px;
+margin-top:4px;
 font-family:'Space Mono',monospace;
-font-size:9px;
-letter-spacing:1px;
-padding:3px 8px;
-border-radius:2px;
-background:var(--surface3);
-border:1px solid var(--border2);
-color:var(--muted);
+font-size:8px;letter-spacing:1.5px;
+color:var(--neon-cyan);
+text-shadow:0 0 8px var(--neon-cyan);
+border:1px solid rgba(0,240,255,0.25);
+padding:2px 7px;
+background:rgba(0,240,255,0.06);
 }
 
-.pill.active{
-background:rgba(232,255,71,0.1);
-border-color:rgba(232,255,71,0.3);
-color:var(--accent);
+.online-badge{
+display:flex;align-items:center;gap:5px;flex-shrink:0;
+font-family:'Space Mono',monospace;
+font-size:7px;letter-spacing:2px;
+color:var(--neon-green);
+text-shadow:0 0 6px var(--neon-green);
 }
 
-/* STATUS DOT */
-.status-dot{
-width:7px;
-height:7px;
-border-radius:50%;
-background:var(--green);
-box-shadow:0 0 6px var(--green);
-display:inline-block;
+.online-dot{
+width:7px;height:7px;border-radius:50%;
+background:var(--neon-green);
+box-shadow:0 0 9px var(--neon-green);
+animation:pulseGlow 1.5s ease-in-out infinite;
 }
 
-/* DIVIDER */
-.divider{
-height:1px;
-background:var(--border);
-margin:0 16px;
-}
-
-/* RANK + CP STRIP */
-.rank-strip{
-display:grid;
-grid-template-columns:1fr 1fr;
-}
+/* RANK STRIP */
+.rank-strip{display:grid;grid-template-columns:1fr 1fr;}
 
 .rank-cell{
-padding:14px 16px;
-display:flex;
-align-items:center;
-gap:12px;
+padding:11px 14px;
+display:flex;align-items:center;gap:10px;
 }
 
-.rank-cell:first-child{
-border-right:1px solid var(--border);
-}
+.rank-cell:first-child{border-right:1px solid var(--border);}
 
 .rank-icon-box{
-width:36px;
-height:36px;
-display:flex;
-align-items:center;
-justify-content:center;
-border-radius:3px;
-background:rgba(232,255,71,0.08);
-border:1px solid rgba(232,255,71,0.15);
-font-size:14px;
-color:var(--accent);
-flex-shrink:0;
+width:34px;height:34px;
+display:flex;align-items:center;justify-content:center;
+border-radius:4px;font-size:13px;flex-shrink:0;
+}
+
+.rank-icon-box.trophy{
+background:rgba(255,180,0,0.1);
+border:1px solid rgba(255,180,0,0.25);
+color:#ffcc00;
+box-shadow:0 0 10px rgba(255,180,0,0.2);
+}
+
+.rank-icon-box.coin{
+background:rgba(0,240,255,0.1);
+border:1px solid rgba(0,240,255,0.25);
+color:var(--neon-cyan);
+box-shadow:0 0 10px rgba(0,240,255,0.2);
 }
 
 .rank-label{
 font-family:'Space Mono',monospace;
-font-size:8px;
-letter-spacing:2px;
-color:var(--muted);
-text-transform:uppercase;
+font-size:7px;letter-spacing:2px;
+color:var(--muted);text-transform:uppercase;
 }
 
 .rank-value{
-font-family:'Bebas Neue',sans-serif;
-font-size:22px;
-letter-spacing:1px;
-line-height:1.1;
-color:var(--accent);
+font-family:'Orbitron',sans-serif;
+font-size:20px;font-weight:900;letter-spacing:1px;line-height:1.1;
 }
 
-/* STATS GRID */
-.stats-section{
-padding:16px 16px 12px;
+.rank-value.gold{color:#ffcc00;text-shadow:0 0 14px rgba(255,200,0,0.55);}
+.rank-value.cyan{color:var(--neon-cyan);text-shadow:0 0 14px rgba(0,240,255,0.55);}
+
+/* DIVIDER */
+.sdiv{
+height:1px;
+background:linear-gradient(90deg,transparent,var(--border2),transparent);
+margin:0 14px;
 }
 
-.stats-label{
+/* STATS */
+.stats-section{padding:12px 14px;}
+
+.sec-label{
 font-family:'Space Mono',monospace;
-font-size:8px;
-letter-spacing:3px;
-color:var(--muted2);
-text-transform:uppercase;
-margin-bottom:10px;
+font-size:7px;letter-spacing:3px;
+color:var(--muted);text-transform:uppercase;
+margin-bottom:8px;
 }
 
-.stats-grid{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:1px;
-background:var(--border);
-border:1px solid var(--border);
-border-radius:3px;
-overflow:hidden;
+.wld-row{
+display:grid;grid-template-columns:1fr 1fr 1fr;
+gap:6px;margin-bottom:7px;
+}
+
+.wld-cell{
+border-radius:4px;padding:9px 8px;
+display:flex;align-items:center;gap:7px;
+background:var(--surface2);border:1px solid var(--border2);
+transition:transform .2s;
+}
+.wld-cell:hover{transform:translateY(-1px);}
+.wld-cell.win-cell{border-color:rgba(0,255,136,0.2);background:rgba(0,255,136,0.04);box-shadow:0 0 14px rgba(0,255,136,0.07);}
+.wld-cell.loss-cell{border-color:rgba(255,0,122,0.2);background:rgba(255,0,122,0.04);box-shadow:0 0 14px rgba(255,0,122,0.07);}
+.wld-cell.draw-cell{border-color:rgba(245,255,0,0.2);background:rgba(245,255,0,0.04);box-shadow:0 0 14px rgba(245,255,0,0.07);}
+
+.wld-bar{width:3px;height:30px;border-radius:99px;flex-shrink:0;}
+.wld-bar.w{background:var(--neon-green);box-shadow:0 0 8px var(--neon-green);}
+.wld-bar.l{background:var(--neon-pink);box-shadow:0 0 8px var(--neon-pink);}
+.wld-bar.d{background:var(--neon-yellow);box-shadow:0 0 8px var(--neon-yellow);}
+
+.wld-num{font-family:'Orbitron',sans-serif;font-size:20px;font-weight:900;line-height:1;}
+.wld-num.w{color:var(--neon-green);text-shadow:0 0 10px var(--neon-green);}
+.wld-num.l{color:var(--neon-pink);text-shadow:0 0 10px var(--neon-pink);}
+.wld-num.d{color:var(--neon-yellow);text-shadow:0 0 10px var(--neon-yellow);}
+.wld-lbl{font-family:'Space Mono',monospace;font-size:7px;letter-spacing:1.5px;color:var(--muted);margin-top:2px;}
+
+.stat-grid{
+display:grid;grid-template-columns:repeat(3,1fr);gap:5px;
 }
 
 .stat-cell{
 background:var(--surface2);
-padding:12px 10px;
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-gap:4px;
-text-align:center;
-transition:background .15s;
+border:1px solid var(--border);border-radius:4px;
+padding:10px 6px;
+display:flex;flex-direction:column;align-items:center;gap:3px;
+text-align:center;transition:all .2s;
 }
+.stat-cell:hover{background:var(--surface3);transform:translateY(-1px);}
 
-.stat-cell:hover{background:var(--surface3);}
+.stat-num{font-family:'Orbitron',sans-serif;font-size:17px;font-weight:900;line-height:1;}
+.stat-num.c1{color:#00f0ff;text-shadow:0 0 8px rgba(0,240,255,0.6);}
+.stat-num.c2{color:#bf00ff;text-shadow:0 0 8px rgba(191,0,255,0.6);}
+.stat-num.c3{color:#ff6a00;text-shadow:0 0 8px rgba(255,106,0,0.6);}
+.stat-num.c4{color:#00ff88;text-shadow:0 0 8px rgba(0,255,136,0.6);}
+.stat-num.c5{color:#ff007a;text-shadow:0 0 8px rgba(255,0,122,0.6);}
+.stat-num.c6{color:#f5ff00;text-shadow:0 0 8px rgba(245,255,0,0.6);}
 
-.stat-num{
-font-family:'Bebas Neue',sans-serif;
-font-size:22px;
-letter-spacing:1px;
-line-height:1;
-color:var(--text);
-}
-
-.stat-num.green{color:var(--green);}
-.stat-num.red{color:var(--red);}
-.stat-num.yellow{color:var(--draw);}
-.stat-num.cyan{color:var(--accent2);}
-.stat-num.accent{color:var(--accent);}
-
-.stat-lbl{
-font-family:'Space Mono',monospace;
-font-size:7px;
-letter-spacing:1.5px;
-color:var(--muted);
-text-transform:uppercase;
-}
-
-/* WLD ROW */
-.wld-row{
-display:grid;
-grid-template-columns:1fr 1fr 1fr;
-gap:8px;
-margin-top:10px;
-}
-
-.wld-cell{
-padding:10px 8px;
-border-radius:3px;
-display:flex;
-align-items:center;
-gap:8px;
-background:var(--surface2);
-border:1px solid var(--border);
-}
-
-.wld-bar{
-width:3px;
-height:28px;
-border-radius:99px;
-flex-shrink:0;
-}
-
-.wld-bar.w{background:var(--green);}
-.wld-bar.l{background:var(--red);}
-.wld-bar.d{background:var(--draw);}
-
-.wld-info{}
-
-.wld-n{
-font-family:'Bebas Neue',sans-serif;
-font-size:20px;
-letter-spacing:1px;
-line-height:1;
-}
-
-.wld-n.w{color:var(--green);}
-.wld-n.l{color:var(--red);}
-.wld-n.d{color:var(--draw);}
-
-.wld-t{
-font-family:'Space Mono',monospace;
-font-size:7px;
-letter-spacing:1px;
-color:var(--muted);
-margin-top:1px;
-}
+.stat-lbl{font-family:'Space Mono',monospace;font-size:6.5px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;}
 
 /* MATCHES */
-.matches-section{
-padding:0 16px 16px;
+.matches-section{padding:12px 14px 14px;}
+
+.matches-head{
+display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;
 }
 
-.section-head{
-display:flex;
-align-items:center;
-justify-content:space-between;
-margin-bottom:10px;
+.matches-title{
+font-family:'Orbitron',sans-serif;
+font-size:10px;font-weight:900;letter-spacing:3px;
+background:linear-gradient(90deg,var(--neon-cyan),var(--neon-purple));
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;
 }
 
-.section-title{
-font-family:'Bebas Neue',sans-serif;
-font-size:14px;
-letter-spacing:4px;
-color:var(--text);
-}
-
-.match-count-badge{
+.last5-badge{
 font-family:'Space Mono',monospace;
-font-size:8px;
-letter-spacing:1px;
-padding:3px 8px;
-border-radius:2px;
-background:var(--surface3);
-border:1px solid var(--border2);
-color:var(--muted);
+font-size:7px;letter-spacing:2px;padding:3px 8px;
+color:var(--neon-purple);
+border:1px solid rgba(191,0,255,0.3);
+background:rgba(191,0,255,0.08);
+text-shadow:0 0 6px var(--neon-purple);
 }
 
+/* MATCH ROW */
 .match-row{
 display:grid;
-grid-template-columns:1fr 64px 1fr;
-align-items:center;
-gap:6px;
-padding:10px 10px;
-border-radius:3px;
+grid-template-columns:1fr 52px 1fr;
+align-items:center;gap:4px;
+padding:8px 8px 8px 12px;
+border-radius:5px;
 background:var(--surface2);
 border:1px solid var(--border);
 margin-bottom:5px;
-transition:background .15s, border-color .15s;
-cursor:default;
+transition:all .2s;
+position:relative;overflow:hidden;
 }
 
-.match-row:hover{
-background:var(--surface3);
-border-color:var(--border2);
+.match-row::before{
+content:"";position:absolute;left:0;top:0;bottom:0;
+width:2.5px;border-radius:1px;
 }
 
-.match-player{}
+.match-row.win-row{border-color:rgba(0,255,136,0.15);background:rgba(0,255,136,0.025);}
+.match-row.win-row::before{background:var(--neon-green);box-shadow:0 0 8px var(--neon-green);}
 
-.match-player.right{text-align:right;}
+.match-row.loss-row{border-color:rgba(255,0,122,0.15);background:rgba(255,0,122,0.025);}
+.match-row.loss-row::before{background:var(--neon-pink);box-shadow:0 0 8px var(--neon-pink);}
+
+.match-row.draw-row{border-color:rgba(245,255,0,0.12);background:rgba(245,255,0,0.02);}
+.match-row.draw-row::before{background:var(--neon-yellow);box-shadow:0 0 8px var(--neon-yellow);}
+
+.match-row:hover{transform:translateX(2px);border-color:var(--border2);}
+
+.match-player{display:flex;flex-direction:column;}
+.match-player.right{align-items:flex-end;padding-right:4px;}
+.match-player.left{padding-left:2px;}
 
 .mp-name{
-font-size:11px;
-font-weight:500;
-color:var(--text);
-white-space:nowrap;
-overflow:hidden;
-text-overflow:ellipsis;
+font-family:'Rajdhani',sans-serif;
+font-size:11px;font-weight:700;
+color:var(--text);line-height:1.15;
+white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+max-width:100%;letter-spacing:0.3px;
 }
 
 .mp-id{
 font-family:'Space Mono',monospace;
-font-size:8px;
-letter-spacing:1px;
-color:var(--muted);
-margin-top:2px;
+font-size:7.5px;letter-spacing:0.8px;margin-top:2px;
+white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;
 }
 
-.match-center{
-text-align:center;
-}
+.glow-cyan{color:var(--neon-cyan);text-shadow:0 0 6px var(--neon-cyan);}
+.glow-purple{color:var(--neon-purple);text-shadow:0 0 6px var(--neon-purple);}
+.glow-pink{color:var(--neon-pink);text-shadow:0 0 6px var(--neon-pink);}
+.glow-green{color:var(--neon-green);text-shadow:0 0 6px var(--neon-green);}
+.glow-orange{color:var(--neon-orange);text-shadow:0 0 6px var(--neon-orange);}
+
+.score-box{display:flex;flex-direction:column;align-items:center;gap:2px;}
 
 .score-badge{
 display:inline-block;
-font-family:'Bebas Neue',sans-serif;
-font-size:14px;
-letter-spacing:2px;
-padding:4px 8px;
-border-radius:2px;
-width:100%;
+font-family:'Orbitron',sans-serif;
+font-size:11px;font-weight:900;letter-spacing:1px;
+padding:4px 4px;border-radius:3px;
+width:100%;text-align:center;
 }
 
 .score-badge.win{
-background:rgba(0,204,102,0.1);
-color:var(--green);
-border:1px solid rgba(0,204,102,0.2);
+background:rgba(0,255,136,0.1);color:var(--neon-green);
+border:1px solid rgba(0,255,136,0.3);
+text-shadow:0 0 8px var(--neon-green);
+box-shadow:0 0 10px rgba(0,255,136,0.12);
 }
-
 .score-badge.loss{
-background:rgba(255,68,68,0.1);
-color:var(--red);
-border:1px solid rgba(255,68,68,0.2);
+background:rgba(255,0,122,0.1);color:var(--neon-pink);
+border:1px solid rgba(255,0,122,0.3);
+text-shadow:0 0 8px var(--neon-pink);
+box-shadow:0 0 10px rgba(255,0,122,0.12);
 }
-
 .score-badge.draw{
-background:rgba(245,158,11,0.1);
-color:var(--draw);
-border:1px solid rgba(245,158,11,0.2);
+background:rgba(245,255,0,0.08);color:var(--neon-yellow);
+border:1px solid rgba(245,255,0,0.25);
+text-shadow:0 0 8px var(--neon-yellow);
+box-shadow:0 0 10px rgba(245,255,0,0.08);
 }
 
 .match-type-lbl{
 font-family:'Space Mono',monospace;
-font-size:7px;
-letter-spacing:1px;
-color:var(--muted2);
-margin-top:4px;
-text-transform:uppercase;
+font-size:5.5px;letter-spacing:0.5px;
+color:var(--muted2);text-transform:uppercase;text-align:center;
+margin-top:1px;
 }
 
 /* FOOTER */
 .card-footer{
-padding:12px 16px;
-border-top:1px solid var(--border);
-display:flex;
-align-items:center;
-justify-content:space-between;
+padding:10px 14px;border-top:1px solid var(--border);
+display:flex;align-items:center;justify-content:space-between;
+background:rgba(0,240,255,0.015);
 }
 
-.footer-text{
+.footer-brand{
+font-family:'Orbitron',sans-serif;
+font-size:8px;letter-spacing:3px;
+background:linear-gradient(90deg,var(--neon-cyan),var(--neon-purple));
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+
+.footer-right{
 font-family:'Space Mono',monospace;
-font-size:8px;
-letter-spacing:2px;
-color:var(--muted2);
-}
-
-.footer-dot{
-width:5px;
-height:5px;
-border-radius:50%;
-background:var(--accent);
-opacity:0.5;
+font-size:7px;letter-spacing:2px;color:var(--muted2);
 }
 
 /* LOADER */
 .loader{
-padding:60px 20px;
-text-align:center;
-font-family:'Space Mono',monospace;
-font-size:11px;
-letter-spacing:3px;
-color:var(--muted);
+padding:60px 20px;text-align:center;
+font-family:'Orbitron',sans-serif;
+font-size:10px;letter-spacing:4px;color:var(--muted);
+}
+.loader i{
+color:var(--neon-cyan);
+text-shadow:0 0 12px var(--neon-cyan);
+display:block;font-size:22px;margin-bottom:14px;
 }
 
-.loader i{color:var(--accent);}
-
-/* MOBILE */
-@media(max-width:480px){
-.hero-title{font-size:22px;letter-spacing:5px;}
-.player-name{font-size:18px;}
-.stat-num{font-size:18px;}
-.rank-value{font-size:18px;}
-.stats-grid{grid-template-columns:repeat(3,1fr);}
-.score-badge{font-size:12px;padding:3px 5px;}
-.mp-name{font-size:10px;}
+/* RESPONSIVE */
+@media(max-width:400px){
+.hero-title{font-size:15px;letter-spacing:3px;}
+.player-name{font-size:11px;}
+.rank-value{font-size:16px;}
+.wld-num{font-size:16px;}
+.stat-num{font-size:14px;}
+.match-row{grid-template-columns:1fr 46px 1fr;}
+.score-badge{font-size:10px;padding:3px 2px;}
+.mp-name{font-size:9.5px;}
+.mp-id{font-size:6px;}
+.avatar-frame{width:42px;height:42px;}
 }
 
-@media(min-width:769px){
-#app{padding:16px 20px 60px;}
-.cover{height:100px;}
-.profile-top{padding:0 20px;margin-top:-38px;}
-.avatar-frame{width:84px;height:84px;}
-.player-name{font-size:26px;}
-.rank-value{font-size:26px;}
-.stat-num{font-size:26px;}
+@media(min-width:768px){
+#app{padding:12px 20px 60px;}
+.cover{height:160px;}
+.player-name{font-size:17px;}
+.rank-value{font-size:24px;}
+.wld-num{font-size:24px;}
+.stat-num{font-size:20px;}
+.score-badge{font-size:13px;}
+.match-row{grid-template-columns:1fr 60px 1fr;}
+.avatar-frame{width:58px;height:58px;}
+.mp-name{font-size:12px;}
+.mp-id{font-size:8px;}
 }
 </style>
 </head>
-
 <body>
 
 <a href="https://goatfcbd.com" class="topbar" style="text-decoration:none;">
@@ -582,19 +529,17 @@ color:var(--muted);
 <img src="https://i.imgur.com/LY3Bb9m.png" class="top-logo">
 <div class="top-title">GOAT FC</div>
 </div>
-<div class="home-btn">
-<i class="fa-solid fa-house"></i>
-</div>
+<div class="home-btn"><i class="fa-solid fa-house"></i></div>
 </a>
 
 <div class="hero">
-<div class="hero-tag">Player Profile</div>
+<div class="hero-tag"><div class="live-dot"></div>PLAYER PROFILE</div>
 <div class="hero-title">ELITE ATHLETE</div>
 </div>
 
 <div id="app">
 <div class="loader">
-<i class="fa-solid fa-spinner fa-spin" style="font-size:18px;display:block;margin-bottom:14px;"></i>
+<i class="fa-solid fa-spinner fa-spin"></i>
 LOADING PROFILE...
 </div>
 </div>
@@ -604,13 +549,17 @@ const MATCH_CSV='https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0X
 const MEMBER_CSV='https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv';
 const CP_CSV='https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1252347749&single=true&output=csv';
 
+const COVER_IMG='https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=900&q=85';
+
 const params=new URLSearchParams(location.search);
 function normalize(x){return(x||'').toLowerCase().replace(/[^a-z0-9]/g,'');}
 const playerId=normalize(params.get('id')||'GFC-001');
 
+const GLOW=['glow-cyan','glow-purple','glow-pink','glow-green','glow-orange'];
+function gc(i){return GLOW[i%GLOW.length];}
+
 function csvToArray(str){
-const rows=[];
-let quote=false,row=[],col='';
+const rows=[];let quote=false,row=[],col='';
 for(let i=0;i<str.length;i++){
 const c=str[i];
 if(c==='"'){quote=!quote;}
@@ -625,43 +574,32 @@ return rows;
 
 async function load(){
 try{
-const[matchRes,memberRes,cpRes]=await Promise.all([
+const[mR,mbR,cR]=await Promise.all([
 fetch(MATCH_CSV+'&t='+Date.now()),
 fetch(MEMBER_CSV+'&t='+Date.now()),
 fetch(CP_CSV+'&t='+Date.now())
 ]);
-const matchText=await matchRes.text();
-const memberText=await memberRes.text();
-const cpText=await cpRes.text();
-const matchRows=csvToArray(matchText);
-const memberRows=csvToArray(memberText);
-const cpRows=csvToArray(cpText);
+const mT=await mR.text(),mbT=await mbR.text(),cT=await cR.text();
+const mRows=csvToArray(mT),mbRows=csvToArray(mbT),cRows=csvToArray(cT);
 
 const members={};
-memberRows.slice(1).forEach(r=>{
+mbRows.slice(1).forEach(r=>{
 if(!r.length)return;
 const id=normalize(r[1]);
 members[id]={name:r[0]||'Unknown',pic:r[4]||'https://i.imgur.com/LY3Bb9m.png',club:r[1]||'N/A'};
 });
 
 const cpMap={};
-cpRows.slice(1).forEach(r=>{
-if(!r.length)return;
-cpMap[normalize(r[0])]=r[7]||'0';
-});
+cRows.slice(1).forEach(r=>{if(!r.length)return;cpMap[normalize(r[0])]=r[7]||'0';});
 
-const board={};
-const matches=[];
-
-matchRows.slice(1).forEach(r=>{
+const board={};const matches=[];
+mRows.slice(1).forEach(r=>{
 if(!r.length)return;
 if((r[9]||'').toLowerCase()!=='yes')return;
-const p1=normalize(r[0]);
-const p2=normalize(r[1]);
+const p1=normalize(r[0]),p2=normalize(r[1]);
 if(!board[p1])board[p1]={points:0,win:0,gs:0,gc:0,match:0};
 if(!board[p2])board[p2]={points:0,win:0,gs:0,gc:0,match:0};
-board[p1].points+=(+r[5]||0);
-board[p2].points+=(+r[6]||0);
+board[p1].points+=(+r[5]||0);board[p2].points+=(+r[6]||0);
 if(+r[3]>+r[4])board[p1].win++;
 if(+r[4]>+r[3])board[p2].win++;
 board[p1].gs+=(+r[3]||0);board[p1].gc+=(+r[4]||0);
@@ -675,19 +613,15 @@ matches.push({p1:r[0],p2:r[1],type:r[2],s1:+r[3],s2:+r[4]});
 const ranking=Object.entries(board)
 .map(([id,v])=>({id,points:v.points,winPercent:v.match?(v.win/v.match)*100:0,gd:v.gs-v.gc}))
 .sort((a,b)=>b.points-a.points||b.winPercent-a.winPercent||b.gd-a.gd);
-
 const rank=ranking.findIndex(x=>x.id===playerId)+1;
 
-let win=0,loss=0,draw=0,gs=0,gc=0,seven=0;
+let win=0,loss=0,draw=0,gs=0,gcc=0,seven=0;
 matches.forEach(m=>{
 let me,op;
-if(normalize(m.p1)===playerId){me=m.s1;op=m.s2;}
-else{me=m.s2;op=m.s1;}
-gs+=me;gc+=op;
+if(normalize(m.p1)===playerId){me=m.s1;op=m.s2;}else{me=m.s2;op=m.s1;}
+gs+=me;gcc+=op;
 if(me>=7)seven++;
-if(me>op)win++;
-else if(me<op)loss++;
-else draw++;
+if(me>op)win++;else if(me<op)loss++;else draw++;
 });
 
 const total=matches.length;
@@ -695,163 +629,120 @@ const wr=((win/(total||1))*100).toFixed(1);
 const gr=(gs/(total||1)).toFixed(2);
 const info=members[playerId]||{name:'Unknown Player',pic:'https://i.imgur.com/LY3Bb9m.png',club:'N/A'};
 const netCP=cpMap[playerId]||'0';
+const recent=matches.slice().reverse().slice(0,5);
 
-const recentMatches=matches.slice().reverse().slice(0,5);
-
-const html=`
+document.getElementById('app').innerHTML=`
 <div class="profile">
-
-  <div class="cover"></div>
-
-  <div class="profile-top">
-    <div class="avatar-frame">
-      <img crossorigin="anonymous" src="${info.pic}" alt="${info.name}">
-    </div>
-    <div class="avatar-info">
-      <div class="player-name">${info.name}</div>
-      <div class="player-meta">
-        <span class="pill active">${info.club}</span>
-        <span class="pill"><span class="status-dot" style="margin-right:4px;"></span>ONLINE</span>
-      </div>
-    </div>
+  <div class="cover">
+    <img class="cover-img" src="${COVER_IMG}" alt="eFootball Stadium" crossorigin="anonymous" onerror="this.style.display='none'">
+    <div class="cover-overlay"></div>
+    <div class="cover-grid"></div>
   </div>
 
-  <div class="divider" style="margin-top:14px;"></div>
+  <div class="name-row">
+    <div class="name-left">
+      <div class="avatar-frame">
+        <img crossorigin="anonymous" src="${info.pic}" alt="${info.name}" onerror="this.src='https://i.imgur.com/LY3Bb9m.png'">
+      </div>
+      <div class="name-stack">
+        <div class="player-name">${info.name}</div>
+        <div class="club-id-pill"><i class="fa-solid fa-shield-halved"></i>${info.club}</div>
+      </div>
+    </div>
+    <div class="online-badge"><div class="online-dot"></div>LIVE</div>
+  </div>
 
   <div class="rank-strip">
     <div class="rank-cell">
-      <div class="rank-icon-box">
-        <i class="fa-solid fa-trophy"></i>
-      </div>
+      <div class="rank-icon-box trophy"><i class="fa-solid fa-trophy"></i></div>
       <div>
         <div class="rank-label">Overall Rank</div>
-        <div class="rank-value">#${rank||'-'}</div>
+        <div class="rank-value gold">#${rank||'—'}</div>
       </div>
     </div>
     <div class="rank-cell">
-      <div class="rank-icon-box">
-        <i class="fa-solid fa-coins"></i>
-      </div>
+      <div class="rank-icon-box coin"><i class="fa-solid fa-coins"></i></div>
       <div>
         <div class="rank-label">Net CP</div>
-        <div class="rank-value">${netCP}</div>
+        <div class="rank-value cyan">${netCP}</div>
       </div>
     </div>
   </div>
 
-  <div class="divider"></div>
+  <div class="sdiv"></div>
 
   <div class="stats-section">
-    <div class="stats-label">Performance Stats</div>
-
+    <div class="sec-label">Performance Overview</div>
     <div class="wld-row">
-      <div class="wld-cell">
+      <div class="wld-cell win-cell">
         <div class="wld-bar w"></div>
-        <div class="wld-info">
-          <div class="wld-n w">${win}</div>
-          <div class="wld-t">WINS</div>
-        </div>
+        <div><div class="wld-num w">${win}</div><div class="wld-lbl">WINS</div></div>
       </div>
-      <div class="wld-cell">
+      <div class="wld-cell loss-cell">
         <div class="wld-bar l"></div>
-        <div class="wld-info">
-          <div class="wld-n l">${loss}</div>
-          <div class="wld-t">LOSS</div>
-        </div>
+        <div><div class="wld-num l">${loss}</div><div class="wld-lbl">LOSS</div></div>
       </div>
-      <div class="wld-cell">
+      <div class="wld-cell draw-cell">
         <div class="wld-bar d"></div>
-        <div class="wld-info">
-          <div class="wld-n d">${draw}</div>
-          <div class="wld-t">DRAW</div>
-        </div>
+        <div><div class="wld-num d">${draw}</div><div class="wld-lbl">DRAW</div></div>
       </div>
     </div>
-
-    <div class="stats-grid" style="margin-top:10px;">
-      <div class="stat-cell">
-        <div class="stat-num accent">${total}</div>
-        <div class="stat-lbl">Matches</div>
-      </div>
-      <div class="stat-cell">
-        <div class="stat-num cyan">${wr}%</div>
-        <div class="stat-lbl">Win Rate</div>
-      </div>
-      <div class="stat-cell">
-        <div class="stat-num">${gr}</div>
-        <div class="stat-lbl">Goal Ratio</div>
-      </div>
-      <div class="stat-cell">
-        <div class="stat-num green">${gs}</div>
-        <div class="stat-lbl">Scored</div>
-      </div>
-      <div class="stat-cell">
-        <div class="stat-num red">${gc}</div>
-        <div class="stat-lbl">Conceded</div>
-      </div>
-      <div class="stat-cell">
-        <div class="stat-num accent">${seven}</div>
-        <div class="stat-lbl">7+ Goals</div>
-      </div>
+    <div class="stat-grid">
+      <div class="stat-cell"><div class="stat-num c1">${total}</div><div class="stat-lbl">Matches</div></div>
+      <div class="stat-cell"><div class="stat-num c2">${wr}%</div><div class="stat-lbl">Win Rate</div></div>
+      <div class="stat-cell"><div class="stat-num c3">${gr}</div><div class="stat-lbl">Goal Ratio</div></div>
+      <div class="stat-cell"><div class="stat-num c4">${gs}</div><div class="stat-lbl">Scored</div></div>
+      <div class="stat-cell"><div class="stat-num c5">${gcc}</div><div class="stat-lbl">Conceded</div></div>
+      <div class="stat-cell"><div class="stat-num c6">${seven}</div><div class="stat-lbl">7+ Goals</div></div>
     </div>
   </div>
 
-  <div class="divider"></div>
+  <div class="sdiv"></div>
 
-  <div class="matches-section" style="padding-top:14px;">
-    <div class="section-head">
-      <div class="section-title">RECENT MATCHES</div>
-      <div class="match-count-badge">LAST 5</div>
+  <div class="matches-section">
+    <div class="matches-head">
+      <div class="matches-title">RECENT MATCHES</div>
+      <div class="last5-badge">LAST 5</div>
     </div>
-
-    ${recentMatches.map(m=>{
-      let me,op,cls;
-      if(normalize(m.p1)===playerId){me=m.s1;op=m.s2;}
-      else{me=m.s2;op=m.s1;}
-      if(me>op)cls='win';
-      else if(me<op)cls='loss';
-      else cls='draw';
+    ${recent.map((m,i)=>{
+      let me,op,cls,row;
+      if(normalize(m.p1)===playerId){me=m.s1;op=m.s2;}else{me=m.s2;op=m.s1;}
+      if(me>op){cls='win';row='win-row';}else if(me<op){cls='loss';row='loss-row';}else{cls='draw';row='draw-row';}
       return `
-      <div class="match-row">
-        <div class="match-player">
+      <div class="match-row ${row}">
+        <div class="match-player left">
           <div class="mp-name">${members[normalize(m.p1)]?.name||m.p1}</div>
-          <div class="mp-id">${m.p1}</div>
+          <div class="mp-id ${gc(i*2)}">${m.p1}</div>
         </div>
-        <div class="match-center">
+        <div class="score-box">
           <div class="score-badge ${cls}">${m.s1}–${m.s2}</div>
           <div class="match-type-lbl">${m.type}</div>
         </div>
         <div class="match-player right">
           <div class="mp-name">${members[normalize(m.p2)]?.name||m.p2}</div>
-          <div class="mp-id">${m.p2}</div>
+          <div class="mp-id ${gc(i*2+1)}">${m.p2}</div>
         </div>
       </div>`;
     }).join('')}
   </div>
 
   <div class="card-footer">
-    <div class="footer-text">POWERED BY GOAT FC</div>
-    <div class="footer-dot"></div>
-    <div class="footer-text">ELITE ATHLETE</div>
+    <div class="footer-brand">GOAT FC</div>
+    <div class="footer-right">ELITE ATHLETE © 2025</div>
   </div>
-
 </div>
 `;
-
-document.getElementById('app').innerHTML=html;
 
 }catch(err){
 console.error(err);
 document.getElementById('app').innerHTML=`
 <div class="loader">
-<i class="fa-solid fa-triangle-exclamation" style="font-size:20px;display:block;margin-bottom:14px;color:#ff4444;"></i>
+<i class="fa-solid fa-triangle-exclamation" style="color:#ff007a;text-shadow:0 0 12px #ff007a;"></i>
 PROFILE FAILED TO LOAD
 </div>`;
 }
 }
-
 load();
 </script>
-
 </body>
 </html>

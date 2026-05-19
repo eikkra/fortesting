@@ -229,28 +229,11 @@ tbody tr:hover td {
 }
 tbody tr:last-child td { border-bottom:none; }
 
-/* ── RANK CELL ── */
-.rank-cell {
-  font-family:'Orbitron',sans-serif;
-  font-size:11px; font-weight:700;
-  display:inline-flex; align-items:center; justify-content:center;
-  width:32px; height:32px;
-  border-radius:8px;
-}
-.rk1 { background:rgba(255,215,0,0.18); color:var(--gold);   border:1px solid rgba(255,215,0,0.45);  box-shadow:0 0 10px rgba(255,215,0,0.35); }
-.rk2 { background:rgba(192,192,192,0.15); color:#c0c0c0;     border:1px solid rgba(192,192,192,0.4);  box-shadow:0 0 8px rgba(192,192,192,0.2); }
-.rk3 { background:rgba(205,127,50,0.15);  color:#cd7f32;     border:1px solid rgba(205,127,50,0.4);  box-shadow:0 0 8px rgba(205,127,50,0.25); }
-.rk-top { background:rgba(0,245,255,0.1); color:var(--cyan); border:1px solid rgba(0,245,255,0.3);  }
-.rk-n   { background:rgba(255,255,255,0.04); color:var(--muted); border:1px solid rgba(255,255,255,0.08); }
-
 /* ── PLAYER CELL ── */
 .player-name {
   font-size:13px; font-weight:700; color:var(--text);
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
   max-width:160px;
-}
-.player-id {
-  font-size:10px; color:rgba(255,215,0,0.45); margin-top:2px; letter-spacing:0.5px;
 }
 
 /* ── CP VALUES ── */
@@ -395,14 +378,30 @@ tbody tr:last-child td { border-bottom:none; }
 
 /* ── MOBILE ── */
 @media(max-width:600px) {
-  .wrap { padding:10px 8px 0; }
-  th { font-size:9px; padding:10px 7px; letter-spacing:0.8px; }
-  td { font-size:11px; padding:10px 7px; }
-  .player-name { max-width:100px; font-size:12px; }
-  .player-id { font-size:9px; }
-  .val-net-pos, .val-net-neg { font-size:12px; }
-  .btn-claim, .btn-locked { padding:5px 9px; font-size:10px; }
-  .rank-cell { width:28px; height:28px; font-size:10px; }
+  .wrap { padding:8px 4px 0; }
+  .table-card { border-radius:10px; }
+  table { font-size:9px; }
+  th {
+    font-size:8px; padding:8px 4px;
+    letter-spacing:0; white-space:nowrap;
+  }
+  td {
+    font-size:9px; padding:8px 4px;
+    white-space:nowrap;
+  }
+  .player-name { max-width:72px; font-size:9px; }
+  .val-net-pos, .val-net-neg { font-size:10px; }
+  .btn-claim {
+    padding:4px 7px; font-size:9px; gap:3px;
+    border-radius:5px;
+  }
+  .btn-locked {
+    padding:4px 7px; font-size:9px; gap:3px;
+    border-radius:5px;
+  }
+  .btn-claim i, .btn-locked i { display:none; }
+  .header h1 { font-size:16px; }
+  .header-desc { font-size:10px; }
 }
 </style>
 </head>
@@ -438,7 +437,7 @@ tbody tr:last-child td { border-bottom:none; }
     <i class="fa-solid fa-coins" style="font-size:9px;"></i>
     COIN SYSTEM
   </div>
-  <h1>GOAT FC CP CENTRE</h1>
+  <h1>CP CENTRE</h1>
   <div class="header-desc">
     <i class="fa-solid fa-fire" style="color:var(--gold); margin-right:5px;"></i>
     Earn CP &bull; Manage Bids &bull; Claim Rewards &bull; Only the strongest rise
@@ -451,16 +450,15 @@ tbody tr:last-child td { border-bottom:none; }
     <table>
       <thead>
         <tr>
-          <th><i class="fa-solid fa-hashtag"></i></th>
-          <th style="text-align:left">Player</th>
-          <th><i class="fa-solid fa-star" style="color:#a0d4ff;"></i> Base</th>
-          <th><i class="fa-solid fa-trophy" style="color:#c084fc;"></i> Tour</th>
-          <th><i class="fa-solid fa-gift" style="color:var(--gold3);"></i> Bonus</th>
-          <th><i class="fa-solid fa-arrow-up" style="color:var(--green);"></i> Bid+</th>
-          <th><i class="fa-solid fa-tags" style="color:#38bdf8;"></i> Sell</th>
-          <th><i class="fa-solid fa-arrow-down" style="color:var(--red);"></i> Bid-</th>
-          <th><i class="fa-solid fa-coins" style="color:var(--gold);"></i> Net CP</th>
-          <th><i class="fa-solid fa-bolt" style="color:var(--gold);"></i> Action</th>
+          <th style="text-align:left">Club ID</th>
+          <th>Base</th>
+          <th>Tour</th>
+          <th>Bonus</th>
+          <th>Bid+</th>
+          <th>Sell</th>
+          <th>Bid-</th>
+          <th>Net CP</th>
+          <th>Action</th>
         </tr>
       </thead>
       <tbody id="table-body"></tbody>
@@ -487,19 +485,6 @@ tbody tr:last-child td { border-bottom:none; }
 <script>
 const DATA_URL = "https://opensheet.elk.sh/1DSPKPaU1ZQYbFM4iYbE1VXgDAXU-FCT7--QhYJsNf1M/CP_System";
 
-function rankClass(i){
-  if(i===0) return 'rk1';
-  if(i===1) return 'rk2';
-  if(i===2) return 'rk3';
-  if(i<10)  return 'rk-top';
-  return 'rk-n';
-}
-function rankIcon(i){
-  if(i===0) return '<i class="fa-solid fa-crown"></i>';
-  if(i===1) return '<i class="fa-solid fa-medal"></i>';
-  if(i===2) return '<i class="fa-solid fa-award"></i>';
-  return `#${i+1}`;
-}
 function rowClass(i){
   if(i===0) return 'row-rank1';
   if(i===1) return 'row-rank2';
@@ -519,7 +504,7 @@ async function loadData(){
     tbody.innerHTML = "";
 
     if(!data.length){
-      tbody.innerHTML=`<tr class="empty-row"><td colspan="10"><i class="fa-solid fa-coins" style="opacity:0.3; margin-right:8px;"></i>No data available</td></tr>`;
+      tbody.innerHTML=`<tr class="empty-row"><td colspan="9"><i class="fa-solid fa-coins" style="opacity:0.3; margin-right:8px;"></i>No data available</td></tr>`;
       return;
     }
 
@@ -544,10 +529,7 @@ async function loadData(){
       tr.className = rowClass(i);
       tr.style.animationDelay = `${i*0.04}s`;
       tr.innerHTML = `
-        <td><span class="rank-cell ${rankClass(i)}">${rankIcon(i)}</span></td>
-        <td>
-          <div class="player-name">${clubId}</div>
-        </td>
+        <td><div class="player-name">${clubId}</div></td>
         <td><span class="val-base">${base}</span></td>
         <td><span class="val-tour">${tour}</span></td>
         <td><span class="val-bonus">${bonus}</span></td>
@@ -562,7 +544,7 @@ async function loadData(){
 
   } catch(e){
     document.getElementById("table-body").innerHTML=
-      `<tr class="empty-row"><td colspan="10">Failed to load data. Please refresh.</td></tr>`;
+      `<tr class="empty-row"><td colspan="9">Failed to load data. Please refresh.</td></tr>`;
   } finally {
     document.getElementById("loading").style.display="none";
   }

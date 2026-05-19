@@ -148,10 +148,29 @@ body::after{
   letter-spacing:1.5px;text-transform:uppercase;
 }
 
+/* ── PC WRAPPER ── */
+.page-wrap{
+  position:relative;z-index:10;
+  max-width:960px;
+  margin:0 auto;
+  padding:14px 14px 0;
+}
+
+/* ── TABLE CARD ── */
+.table-card{
+  background:linear-gradient(145deg,var(--bg2),var(--bg3));
+  border:1px solid rgba(0,255,65,0.18);
+  border-radius:14px;
+  overflow:hidden;
+  box-shadow:0 0 30px rgba(0,255,65,0.06), 0 0 60px rgba(0,0,0,0.5);
+}
+
 /* ── FILTER ROW ── */
 .filter-wrap{
   position:relative;z-index:10;
-  padding:8px 10px;
+  max-width:960px;
+  margin:0 auto;
+  padding:8px 14px;
   display:flex;align-items:center;gap:5px;
   flex-wrap:nowrap;overflow-x:auto;
   border-bottom:1px solid rgba(0,255,65,0.08);
@@ -205,9 +224,8 @@ body::after{
 
 /* ── TABLE WRAP ── */
 .table-wrap{
-  position:relative;z-index:10;
-  max-height:calc(100vh - 220px);
   overflow:auto;
+  max-height:calc(100vh - 230px);
   scrollbar-width:thin;
   scrollbar-color:rgba(0,255,65,0.18) transparent;
 }
@@ -339,15 +357,16 @@ tbody tr:nth-child(even) td{background:rgba(0,255,65,0.012);}
   .title-badge .title-text{font-size:15px;letter-spacing:2px;}
   .header-desc{font-size:9px;}
 
-  .filter-wrap{padding:6px 8px;gap:4px;}
+  .filter-wrap{padding:6px 8px;gap:4px;margin:0;}
   .sel-type{width:80px;font-size:9px;}
   .inp-date{width:104px;font-size:9px;}
   .filter-btn{height:28px;font-size:8px;padding:0 10px;}
   .reset-btn{height:28px;font-size:9px;padding:0 8px;}
 
+  .page-wrap{padding:8px 6px 0;}
+  .table-card{border-radius:10px;}
   .table-wrap{max-height:calc(100vh - 205px);}
 
-  /* Tighter on mobile */
   col.c-date  {width:16%;}
   col.c-type  {width:14%;}
   col.c-p1    {width:22%;}
@@ -356,12 +375,12 @@ tbody tr:nth-child(even) td{background:rgba(0,255,65,0.012);}
   col.c-point {width:12%;}
 
   th{font-size:8px;padding:7px 3px;letter-spacing:0.3px;}
-  td{font-size:10px;padding:6px 3px;}
-  .td-date{font-size:10px;}
-  .td-score{font-size:12px;}
-  .td-point{font-size:10px;}
-  .td-player{font-size:10px;}
-  .badge{font-size:8px;padding:1px 4px;}
+  td{font-size:12px;padding:7px 3px;}
+  .td-date{font-size:11px;}
+  .td-score{font-size:13px;}
+  .td-point{font-size:12px;}
+  .td-player{font-size:12px;}
+  .badge{font-size:8px;padding:2px 4px;}
 }
 
 @media(max-width:380px){
@@ -373,8 +392,9 @@ tbody tr:nth-child(even) td{background:rgba(0,255,65,0.012);}
   col.c-p2   {width:21%;}
   col.c-score{width:15%;}
   col.c-point{width:12%;}
-  th,td{font-size:9px;padding:6px 2px;}
-  .td-score{font-size:11px;}
+  th{font-size:8px;padding:6px 2px;}
+  td{font-size:11px;padding:6px 2px;}
+  .td-score{font-size:12px;}
 }
 </style>
 </head>
@@ -404,7 +424,7 @@ tbody tr:nth-child(even) td{background:rgba(0,255,65,0.012);}
 <div class="header">
   <div class="title-badge">
     <div class="dot"></div>
-    <div class="title-text"><i class="fa-solid fa-terminal" style="margin-right:8px;opacity:0.75;"></i>LIVE MATCH LOG</div>
+    <div class="title-text"><i class="fa-solid fa-terminal" style="margin-right:8px;opacity:0.75;"></i>MATCH LOG</div>
     <div class="dot"></div>
   </div>
   <div class="header-desc">
@@ -413,7 +433,7 @@ tbody tr:nth-child(even) td{background:rgba(0,255,65,0.012);}
   </div>
 </div>
 
-<!-- FILTER -->
+<!-- FILTER + TABLE wrapped in centered container -->
 <div class="filter-wrap">
   <select id="matchType" class="sel-type">
     <option value="">All Types</option>
@@ -433,26 +453,29 @@ tbody tr:nth-child(even) td{background:rgba(0,255,65,0.012);}
   </button>
 </div>
 
-<!-- TABLE -->
-<div class="table-wrap">
-  <table>
-    <colgroup>
-      <col class="c-date"><col class="c-type">
-      <col class="c-p1"><col class="c-p2">
-      <col class="c-score"><col class="c-point">
-    </colgroup>
-    <thead>
-      <tr>
-        <th>Date</th>
-        <th>Type</th>
-        <th>Player 1</th>
-        <th>Player 2</th>
-        <th>Score</th>
-        <th>Pts</th>
-      </tr>
-    </thead>
-    <tbody id="tableBody"></tbody>
-  </table>
+<div class="page-wrap">
+  <div class="table-card">
+    <div class="table-wrap">
+      <table>
+        <colgroup>
+          <col class="c-date"><col class="c-type">
+          <col class="c-p1"><col class="c-p2">
+          <col class="c-score"><col class="c-point">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Player 1</th>
+            <th>Player 2</th>
+            <th>Score</th>
+            <th>Pts</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+  </div>
 </div>
 
 <div class="powered-by"><i class="fa-solid fa-terminal" style="margin-right:5px;"></i>POWERED BY GOAT FC</div>

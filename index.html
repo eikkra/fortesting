@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GOAT FC MATCH LOGS</title>
 <link rel="icon" type="image/png" href="https://i.imgur.com/LY3Bb9m.png">
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Exo+2:wght@300;400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
@@ -17,19 +17,35 @@
   --green2:#00c832;
   --green3:#39ff14;
   --cyan:  #00f5ff;
-  --red:   #ff3b3b;
   --yellow:#ffd700;
   --win:   #39ff14;
   --loss:  #ff3b3b;
   --draw:  #ffd700;
   --text:  #c8ffd4;
   --muted: #2e5c38;
+
+  /* Match type colors */
+  --friendly-bg:  rgba(0,245,255,0.10);
+  --friendly-cl:  #00f5ff;
+  --friendly-br:  rgba(0,245,255,0.30);
+
+  --solo-bg:      rgba(191,0,255,0.10);
+  --solo-cl:      #d466ff;
+  --solo-br:      rgba(191,0,255,0.30);
+
+  --league-bg:    rgba(255,60,60,0.10);
+  --league-cl:    #ff6b6b;
+  --league-br:    rgba(255,60,60,0.30);
+
+  --coop-bg:      rgba(57,255,20,0.10);
+  --coop-cl:      #39ff14;
+  --coop-br:      rgba(57,255,20,0.30);
 }
 
 *{margin:0;padding:0;box-sizing:border-box;}
 
 body{
-  font-family:'Exo 2',sans-serif;
+  font-family:'Rajdhani',sans-serif;
   background:var(--bg);
   color:var(--text);
   min-height:100vh;
@@ -139,7 +155,8 @@ body::after{
   text-transform:uppercase;
 }
 .header-desc{
-  font-size:10px;color:var(--muted);
+  font-family:'Rajdhani',sans-serif;
+  font-size:11px;color:var(--muted);
   letter-spacing:1.5px;text-transform:uppercase;
 }
 
@@ -157,7 +174,7 @@ body::after{
   border:1px solid rgba(0,255,65,0.18);
   border-radius:14px;
   overflow:hidden;
-  box-shadow:0 0 30px rgba(0,255,65,0.06), 0 0 60px rgba(0,0,0,0.5);
+  box-shadow:0 0 30px rgba(0,255,65,0.06),0 0 60px rgba(0,0,0,0.5);
 }
 
 /* ── FILTER ROW ── */
@@ -181,8 +198,9 @@ body::after{
   border:1px solid rgba(0,255,65,0.22);
   border-radius:5px;
   color:var(--green);
-  font-family:'Share Tech Mono',monospace;
-  font-size:10px;outline:none;
+  font-family:'Rajdhani',sans-serif;
+  font-weight:600;
+  font-size:12px;outline:none;
   flex-shrink:0;transition:border-color 0.2s;
   -webkit-appearance:none;appearance:none;
 }
@@ -192,7 +210,7 @@ body::after{
   box-shadow:0 0 0 2px rgba(0,255,65,0.1);
 }
 .filter-wrap select option{background:#0a1a0c;color:var(--green);}
-.sel-type{width:88px;}
+.sel-type{width:100px;}
 .inp-date{width:116px;}
 
 .filter-btn{
@@ -211,8 +229,8 @@ body::after{
   background:transparent;color:var(--muted);
   border:1px solid rgba(0,255,65,0.15);
   border-radius:5px;
-  font-family:'Exo 2',sans-serif;
-  font-size:10px;font-weight:600;
+  font-family:'Rajdhani',sans-serif;
+  font-size:12px;font-weight:600;
   cursor:pointer;flex-shrink:0;transition:all 0.2s;
 }
 .reset-btn:hover{color:var(--green);border-color:rgba(0,255,65,0.35);}
@@ -251,17 +269,18 @@ th{
   overflow:hidden;
 }
 
-/* Desktop column widths */
-col.c-date  {width:14%;}
-col.c-type  {width:12%;}
-col.c-p1    {width:24%;}
-col.c-p2    {width:24%;}
-col.c-score {width:14%;}
-col.c-point {width:12%;}
+/* Desktop — 5 columns (PTS removed) */
+col.c-date  {width:15%;}
+col.c-type  {width:14%;}
+col.c-p1    {width:27%;}
+col.c-p2    {width:27%;}
+col.c-score {width:17%;}
 
 td{
-  padding:7px 6px;
-  font-size:11px;
+  padding:8px 6px;
+  font-family:'Rajdhani',sans-serif;
+  font-size:14px;
+  font-weight:600;
   text-align:center;
   white-space:nowrap;
   border-bottom:1px solid rgba(0,255,65,0.05);
@@ -276,38 +295,62 @@ tbody tr:nth-child(even) td{background:rgba(0,255,65,0.012);}
 /* ── CELL STYLES ── */
 .td-date{
   font-family:'Share Tech Mono',monospace;
-  font-size:11px;color:var(--cyan);font-weight:600;
+  font-size:13px;
+  color:var(--cyan);
+  font-weight:400;
+  letter-spacing:0.5px;
 }
 
+/* Type badges — each match type gets its own color */
 .badge{
   display:inline-block;
-  padding:2px 5px;border-radius:4px;
-  font-size:9px;font-weight:700;letter-spacing:0.3px;
+  padding:3px 7px;border-radius:4px;
+  font-family:'Rajdhani',sans-serif;
+  font-size:11px;font-weight:700;letter-spacing:0.5px;
   text-transform:uppercase;white-space:nowrap;
 }
-.badge-f{background:rgba(0,245,255,0.1);color:var(--cyan);border:1px solid rgba(0,245,255,0.25);}
-.badge-s{background:rgba(191,0,255,0.1);color:#d466ff;border:1px solid rgba(191,0,255,0.25);}
-.badge-b{background:rgba(255,180,0,0.1);color:#ffb300;border:1px solid rgba(255,180,0,0.25);}
-.badge-l{background:rgba(255,60,60,0.1);color:#ff6b6b;border:1px solid rgba(255,60,60,0.25);}
-.badge-c{background:rgba(57,255,20,0.1);color:var(--green);border:1px solid rgba(57,255,20,0.25);}
-.badge-o{background:rgba(255,255,255,0.06);color:#888;border:1px solid rgba(255,255,255,0.1);}
+.badge-f{
+  background:var(--friendly-bg);
+  color:var(--friendly-cl);
+  border:1px solid var(--friendly-br);
+}
+.badge-s{
+  background:var(--solo-bg);
+  color:var(--solo-cl);
+  border:1px solid var(--solo-br);
+}
+.badge-l{
+  background:var(--league-bg);
+  color:var(--league-cl);
+  border:1px solid var(--league-br);
+}
+.badge-c{
+  background:var(--coop-bg);
+  color:var(--coop-cl);
+  border:1px solid var(--coop-br);
+}
+.badge-o{
+  background:rgba(255,255,255,0.06);
+  color:#888;
+  border:1px solid rgba(255,255,255,0.1);
+}
 
-.td-player{font-size:11px;font-weight:600;color:var(--text);}
+.td-player{
+  font-family:'Rajdhani',sans-serif;
+  font-size:14px;font-weight:600;
+  color:var(--text);
+}
 .p-win {color:var(--win)!important;text-shadow:0 0 6px rgba(57,255,20,0.45);}
 .p-loss{color:var(--loss)!important;}
 .p-draw{color:var(--draw)!important;}
 
 .td-score{
   font-family:'Share Tech Mono',monospace;
-  font-size:13px;font-weight:700;color:var(--text);
-  letter-spacing:1px;
+  font-size:14px;font-weight:700;
+  color:var(--text);
+  letter-spacing:1.5px;
 }
 .score-gold{color:var(--yellow)!important;text-shadow:0 0 8px rgba(255,215,0,0.6);}
-
-.td-point{
-  font-family:'Share Tech Mono',monospace;
-  font-size:11px;color:rgba(0,255,65,0.55);
-}
 
 /* ── LOADING ── */
 #loading{
@@ -332,7 +375,7 @@ tbody tr:nth-child(even) td{background:rgba(0,255,65,0.012);}
 /* ── EMPTY ── */
 .empty-row td{
   text-align:center;padding:40px;
-  color:var(--muted);font-size:12px;letter-spacing:1px;
+  color:var(--muted);font-size:14px;letter-spacing:1px;
 }
 
 /* ── FOOTER ── */
@@ -351,59 +394,58 @@ tbody tr:nth-child(even) td{background:rgba(0,255,65,0.012);}
   .header{padding:14px 10px 12px;}
   .title-badge{padding:8px 16px;gap:8px;}
   .title-badge .title-text{font-size:15px;letter-spacing:2px;}
-  .header-desc{font-size:9px;}
+  .header-desc{font-size:10px;}
 
   .filter-wrap{padding:6px 8px;gap:4px;margin:0;}
-  .sel-type{width:80px;font-size:9px;}
-  .inp-date{width:104px;font-size:9px;}
+  .sel-type{width:90px;font-size:11px;}
+  .inp-date{width:108px;font-size:11px;}
   .filter-btn{height:28px;font-size:8px;padding:0 10px;}
-  .reset-btn{height:28px;font-size:9px;padding:0 8px;}
+  .reset-btn{height:28px;font-size:11px;padding:0 8px;}
 
   .page-wrap{padding:8px 6px 0;}
   .table-card{border-radius:10px;}
   .table-wrap{max-height:calc(100vh - 205px);}
 
-  /* Column widths: Date+Type tight, Players share remaining space */
-  col.c-date  {width:18%;}
-  col.c-type  {width:13%;}
-  col.c-p1    {width:21%;}
-  col.c-p2    {width:21%;}
-  col.c-score {width:15%;}
-  col.c-point {width:12%;}
+  /* 5 columns — Date+Type compact, Players share remaining */
+  col.c-date  {width:20%;}
+  col.c-type  {width:15%;}
+  col.c-p1    {width:24%;}
+  col.c-p2    {width:24%;}
+  col.c-score {width:17%;}
 
   th{font-size:8px;padding:8px 2px;letter-spacing:0.2px;}
-  td{padding:7px 3px;}
 
-  /* সব 4 column একই feel — Date সামান্য ছোট, বাকিগুলো 11px */
-  .td-date   {font-size:10px;letter-spacing:0;}
-  .badge     {font-size:8.5px;padding:2px 4px;letter-spacing:0;}
-  .td-player {font-size:11px;}
-  .td-score  {font-size:12px;}
-  .td-point  {font-size:10.5px;}
+  td{
+    padding:7px 3px;
+    font-size:13px;
+  }
+
+  .td-date  {font-size:11px;letter-spacing:0;}
+  .badge    {font-size:10px;padding:2px 4px;letter-spacing:0;}
+  .td-player{font-size:13px;}
+  .td-score {font-size:13px;letter-spacing:1px;}
 }
 
 /* ══════════════════════════════════════
    MOBILE ≤ 380px
    ══════════════════════════════════════ */
 @media(max-width:380px){
-  .sel-type{width:70px;}
-  .inp-date{width:96px;}
+  .sel-type{width:80px;font-size:10px;}
+  .inp-date{width:98px;font-size:10px;}
 
-  col.c-date  {width:19%;}
-  col.c-type  {width:13%;}
-  col.c-p1    {width:20%;}
-  col.c-p2    {width:20%;}
-  col.c-score {width:16%;}
-  col.c-point {width:12%;}
+  col.c-date  {width:21%;}
+  col.c-type  {width:15%;}
+  col.c-p1    {width:23%;}
+  col.c-p2    {width:23%;}
+  col.c-score {width:18%;}
 
   th{font-size:7.5px;padding:7px 2px;}
-  td{font-size:10px;padding:6px 2px;}
 
-  .td-date   {font-size:9.5px;}
-  .badge     {font-size:8px;padding:2px 3px;}
-  .td-player {font-size:10px;}
-  .td-score  {font-size:11px;}
-  .td-point  {font-size:9.5px;}
+  td{padding:6px 2px;font-size:12px;}
+  .td-date  {font-size:10px;}
+  .badge    {font-size:9px;padding:2px 3px;}
+  .td-player{font-size:12px;}
+  .td-score {font-size:12px;}
 }
 </style>
 </head>
@@ -448,7 +490,6 @@ tbody tr:nth-child(even) td{background:rgba(0,255,65,0.012);}
     <option value="">All Types</option>
     <option value="Friendly">Friendly</option>
     <option value="Solo Tournament">Solo</option>
-    <option value="Bid Tournament">Bid</option>
     <option value="League">League</option>
     <option value="Co-op">Co-op</option>
   </select>
@@ -467,9 +508,11 @@ tbody tr:nth-child(even) td{background:rgba(0,255,65,0.012);}
     <div class="table-wrap">
       <table>
         <colgroup>
-          <col class="c-date"><col class="c-type">
-          <col class="c-p1"><col class="c-p2">
-          <col class="c-score"><col class="c-point">
+          <col class="c-date">
+          <col class="c-type">
+          <col class="c-p1">
+          <col class="c-p2">
+          <col class="c-score">
         </colgroup>
         <thead>
           <tr>
@@ -478,7 +521,6 @@ tbody tr:nth-child(even) td{background:rgba(0,255,65,0.012);}
             <th>Player 1</th>
             <th>Player 2</th>
             <th>Score</th>
-            <th>Pts</th>
           </tr>
         </thead>
         <tbody id="tableBody"></tbody>
@@ -511,7 +553,6 @@ function formatDate(d){
 function typeBadge(t){
   if(t==="Friendly")        return `<span class="badge badge-f">Friendly</span>`;
   if(t==="Solo Tournament") return `<span class="badge badge-s">Solo</span>`;
-  if(t==="Bid Tournament")  return `<span class="badge badge-b">Bid</span>`;
   if(t==="League")          return `<span class="badge badge-l">League</span>`;
   if(t==="Co-op")           return `<span class="badge badge-c">Co-op</span>`;
   return `<span class="badge badge-o">${t||'—'}</span>`;
@@ -531,7 +572,6 @@ function fastCSV(csv){
       p1:(r[0]||"").trim(),
       p2:(r[1]||"").trim(),
       s1:+r[3]||0,s2:+r[4]||0,
-      pt1:+r[5]||0,pt2:+r[6]||0,
       approved:(r[9]||"").toLowerCase().trim()
     });
   }
@@ -548,7 +588,7 @@ async function loadData(){
     render(allData);
   }catch(e){
     document.getElementById("tableBody").innerHTML=
-      `<tr class="empty-row"><td colspan="6">Failed to load data. Please refresh.</td></tr>`;
+      `<tr class="empty-row"><td colspan="5">Failed to load data. Please refresh.</td></tr>`;
   }finally{
     document.getElementById("loading").style.display="none";
   }
@@ -579,7 +619,7 @@ function render(data){
   const limit=Math.min(data.length,500);
 
   if(!limit){
-    tbody.innerHTML=`<tr class="empty-row"><td colspan="6"><i class="fa-solid fa-circle-xmark" style="margin-right:6px;opacity:0.4;"></i>No matches found</td></tr>`;
+    tbody.innerHTML=`<tr class="empty-row"><td colspan="5"><i class="fa-solid fa-circle-xmark" style="margin-right:6px;opacity:0.4;"></i>No matches found</td></tr>`;
     return;
   }
 
@@ -597,7 +637,6 @@ function render(data){
 <td class="${p1c}">${r.p1}</td>
 <td class="${p2c}">${r.p2}</td>
 <td class="td-score${gold}">${r.s1}-${r.s2}</td>
-<td class="td-point">${r.pt1}-${r.pt2}</td>
 </tr>`;
   }
   tbody.innerHTML=parts.join("");

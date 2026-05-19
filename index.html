@@ -36,7 +36,6 @@ body{
   overflow-x:hidden;
 }
 
-/* SCANLINES */
 body::before{
   content:'';position:fixed;inset:0;
   background:repeating-linear-gradient(
@@ -46,7 +45,6 @@ body::before{
   pointer-events:none;z-index:1000;
 }
 
-/* GRID */
 body::after{
   content:'';position:fixed;inset:0;
   background-image:
@@ -58,7 +56,6 @@ body::after{
 }
 @keyframes gridMove{0%{background-position:0 0;}100%{background-position:36px 36px;}}
 
-/* ORBS */
 .orb{position:fixed;border-radius:50%;pointer-events:none;z-index:1;filter:blur(80px);}
 .orb1{width:320px;height:320px;top:-80px;left:-60px;
   background:radial-gradient(circle,rgba(0,255,65,0.07) 0%,transparent 70%);
@@ -113,8 +110,6 @@ body::after{
   border-bottom:1px solid rgba(0,255,65,0.1);
   background:linear-gradient(180deg,rgba(0,255,65,0.04) 0%,transparent 100%);
 }
-
-/* Big title badge */
 .title-badge{
   display:inline-flex;align-items:center;gap:10px;
   background:rgba(0,255,65,0.06);
@@ -148,7 +143,7 @@ body::after{
   letter-spacing:1.5px;text-transform:uppercase;
 }
 
-/* ── PC WRAPPER ── */
+/* ── PAGE WRAP ── */
 .page-wrap{
   position:relative;z-index:10;
   max-width:960px;
@@ -256,7 +251,7 @@ th{
   overflow:hidden;
 }
 
-/* ── COLUMN WIDTHS ── */
+/* Desktop column widths */
 col.c-date  {width:14%;}
 col.c-type  {width:12%;}
 col.c-p1    {width:24%;}
@@ -278,12 +273,12 @@ tbody tr:hover td{background:rgba(0,255,65,0.045)!important;}
 tbody tr:last-child td{border-bottom:none;}
 tbody tr:nth-child(even) td{background:rgba(0,255,65,0.012);}
 
-/* CELLS */
+/* ── CELL STYLES ── */
 .td-date{
   font-family:'Share Tech Mono',monospace;
   font-size:11px;color:var(--cyan);font-weight:600;
 }
-/* type badge */
+
 .badge{
   display:inline-block;
   padding:2px 5px;border-radius:4px;
@@ -297,7 +292,7 @@ tbody tr:nth-child(even) td{background:rgba(0,255,65,0.012);}
 .badge-c{background:rgba(57,255,20,0.1);color:var(--green);border:1px solid rgba(57,255,20,0.25);}
 .badge-o{background:rgba(255,255,255,0.06);color:#888;border:1px solid rgba(255,255,255,0.1);}
 
-.td-player{font-size:9px;font-weight:600;color:var(--text);}
+.td-player{font-size:11px;font-weight:600;color:var(--text);}
 .p-win {color:var(--win)!important;text-shadow:0 0 6px rgba(57,255,20,0.45);}
 .p-loss{color:var(--loss)!important;}
 .p-draw{color:var(--draw)!important;}
@@ -349,7 +344,9 @@ tbody tr:nth-child(even) td{background:rgba(0,255,65,0.012);}
   color:var(--muted);text-transform:uppercase;opacity:0.38;
 }
 
-/* ── MOBILE ── */
+/* ══════════════════════════════════════
+   MOBILE ≤ 600px
+   ══════════════════════════════════════ */
 @media(max-width:600px){
   .header{padding:14px 10px 12px;}
   .title-badge{padding:8px 16px;gap:8px;}
@@ -366,42 +363,47 @@ tbody tr:nth-child(even) td{background:rgba(0,255,65,0.012);}
   .table-card{border-radius:10px;}
   .table-wrap{max-height:calc(100vh - 205px);}
 
-  col.c-date  {width:16%;}
-  col.c-type  {width:14%;}
-  col.c-p1    {width:22%;}
-  col.c-p2    {width:22%;}
-  col.c-score {width:14%;}
+  /* Column widths: Date+Type tight, Players share remaining space */
+  col.c-date  {width:18%;}
+  col.c-type  {width:13%;}
+  col.c-p1    {width:21%;}
+  col.c-p2    {width:21%;}
+  col.c-score {width:15%;}
   col.c-point {width:12%;}
 
-  th{font-size:8px;padding:7px 3px;letter-spacing:0.3px;}
-  td{font-size:12px;padding:7px 3px;}
+  th{font-size:8px;padding:8px 2px;letter-spacing:0.2px;}
+  td{padding:7px 3px;}
 
-  /* FIX: Date ও Type column mobile-এ ছোট font যাতে পুরো text দেখা যায় */
-  .td-date{font-size:9px;}
-  .badge{font-size:7.5px;padding:2px 3px;letter-spacing:0px;}
-
-  .td-score{font-size:13px;}
-  .td-point{font-size:12px;}
-  .td-player{font-size:12px;}
+  /* সব 4 column একই feel — Date সামান্য ছোট, বাকিগুলো 11px */
+  .td-date   {font-size:10px;letter-spacing:0;}
+  .badge     {font-size:8.5px;padding:2px 4px;letter-spacing:0;}
+  .td-player {font-size:11px;}
+  .td-score  {font-size:12px;}
+  .td-point  {font-size:10.5px;}
 }
 
+/* ══════════════════════════════════════
+   MOBILE ≤ 380px
+   ══════════════════════════════════════ */
 @media(max-width:380px){
   .sel-type{width:70px;}
   .inp-date{width:96px;}
-  col.c-date {width:17%;}
-  col.c-type {width:14%;}
-  col.c-p1   {width:21%;}
-  col.c-p2   {width:21%;}
-  col.c-score{width:15%;}
-  col.c-point{width:12%;}
-  th{font-size:8px;padding:6px 2px;}
-  td{font-size:11px;padding:6px 2px;}
 
-  /* FIX: আরও ছোট screen-এ আরও compact */
-  .td-date{font-size:8.5px;}
-  .badge{font-size:7px;padding:1px 3px;}
+  col.c-date  {width:19%;}
+  col.c-type  {width:13%;}
+  col.c-p1    {width:20%;}
+  col.c-p2    {width:20%;}
+  col.c-score {width:16%;}
+  col.c-point {width:12%;}
 
-  .td-score{font-size:12px;}
+  th{font-size:7.5px;padding:7px 2px;}
+  td{font-size:10px;padding:6px 2px;}
+
+  .td-date   {font-size:9.5px;}
+  .badge     {font-size:8px;padding:2px 3px;}
+  .td-player {font-size:10px;}
+  .td-score  {font-size:11px;}
+  .td-point  {font-size:9.5px;}
 }
 </style>
 </head>
@@ -440,7 +442,7 @@ tbody tr:nth-child(even) td{background:rgba(0,255,65,0.012);}
   </div>
 </div>
 
-<!-- FILTER + TABLE wrapped in centered container -->
+<!-- FILTER -->
 <div class="filter-wrap">
   <select id="matchType" class="sel-type">
     <option value="">All Types</option>

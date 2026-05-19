@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>ELITE ATHLETE — GOAT FC</title>
+<title>PLAYERS HUB — GOAT FC</title>
 <link rel="icon" type="image/png" href="https://i.imgur.com/LY3Bb9m.png"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@500;600;700&family=Space+Mono:wght@400;700&family=Exo+2:wght@700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@500;600;700&family=Exo+2:wght@700;800;900&display=swap" rel="stylesheet">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -26,23 +26,32 @@
 --text:#eef0ff;
 --muted:#5a5a80;
 --muted2:#383860;
---stat-accent:#7dd3fc;
-}
-
-@keyframes rgbBorder{
-0%{border-color:#00f0ff;box-shadow:0 0 16px #00f0ff60,inset 0 0 8px #00f0ff18;}
-33%{border-color:#bf00ff;box-shadow:0 0 16px #bf00ff60,inset 0 0 8px #bf00ff18;}
-66%{border-color:#ff007a;box-shadow:0 0 16px #ff007a60,inset 0 0 8px #ff007a18;}
-100%{border-color:#00f0ff;box-shadow:0 0 16px #00f0ff60,inset 0 0 8px #00f0ff18;}
-}
-
-@keyframes pulse{
-0%,100%{opacity:1;}50%{opacity:0.35;}
 }
 
 @keyframes shimmer{
 0%{background-position:200% center;}
 100%{background-position:-200% center;}
+}
+
+@keyframes rgbBorder{
+0%{border-color:#00f0ff;box-shadow:0 0 14px #00f0ff50;}
+33%{border-color:#bf00ff;box-shadow:0 0 14px #bf00ff50;}
+66%{border-color:#ff007a;box-shadow:0 0 14px #ff007a50;}
+100%{border-color:#00f0ff;box-shadow:0 0 14px #00f0ff50;}
+}
+
+@keyframes pulse{
+0%,100%{opacity:1;}50%{opacity:0.3;}
+}
+
+@keyframes fadeUp{
+from{opacity:0;transform:translateY(18px);}
+to{opacity:1;transform:translateY(0);}
+}
+
+@keyframes scanline{
+0%{transform:translateY(-100%);}
+100%{transform:translateY(100vh);}
 }
 
 body{
@@ -51,14 +60,16 @@ font-family:'Rajdhani',sans-serif;
 color:var(--text);
 min-height:100vh;
 overflow-x:hidden;
+padding-bottom:40px;
 }
 
 body::before{
 content:"";
 position:fixed;inset:0;
 background:
-radial-gradient(ellipse at 15% 15%,rgba(0,240,255,0.05) 0%,transparent 45%),
-radial-gradient(ellipse at 85% 85%,rgba(191,0,255,0.05) 0%,transparent 45%);
+radial-gradient(ellipse at 15% 15%,rgba(0,240,255,0.055) 0%,transparent 45%),
+radial-gradient(ellipse at 85% 85%,rgba(191,0,255,0.055) 0%,transparent 45%),
+radial-gradient(ellipse at 50% 50%,rgba(0,255,136,0.02) 0%,transparent 60%);
 pointer-events:none;z-index:-1;
 }
 
@@ -102,7 +113,7 @@ transition:all .2s;
 /* ── HERO ── */
 .hero{
 text-align:center;
-padding:18px 16px 10px;
+padding:20px 16px 14px;
 }
 
 .hero-title{
@@ -124,388 +135,194 @@ color:var(--muted);
 text-transform:uppercase;
 }
 
-/* ── APP ── */
-#app{
-width:100%;max-width:680px;
+/* ── WRAP ── */
+.wrap{
+width:100%;max-width:900px;
 margin:0 auto;
-padding:8px 10px 40px;
+padding:0 10px;
+}
+
+/* ── SEARCH ── */
+.search-wrap{
+position:relative;
+margin-bottom:18px;
+}
+
+.search-icon{
+position:absolute;left:14px;top:50%;transform:translateY(-50%);
+color:var(--neon-cyan);font-size:12px;
+opacity:0.7;pointer-events:none;
+}
+
+.search-box{
+width:100%;
+height:46px;
+padding:0 16px 0 38px;
+border-radius:6px;
+border:1px solid rgba(0,240,255,0.18);
+background:var(--surface);
+outline:none;
+color:var(--text);
+font-size:13px;font-weight:700;
+font-family:'Rajdhani',sans-serif;
+letter-spacing:0.5px;
+transition:all .25s;
+box-shadow:0 0 12px rgba(0,240,255,0.03);
+}
+
+.search-box::placeholder{color:var(--muted);font-weight:600;}
+
+.search-box:focus{
+border-color:rgba(0,240,255,0.45);
+box-shadow:0 0 20px rgba(0,240,255,0.12),inset 0 0 8px rgba(0,240,255,0.04);
+}
+
+/* ── STATS BAR ── */
+.stats-bar{
+display:flex;align-items:center;justify-content:space-between;
+margin-bottom:14px;
+padding:0 2px;
+}
+
+.stats-bar-left{
+font-family:'Exo 2',sans-serif;
+font-size:9px;font-weight:800;
+letter-spacing:2px;color:var(--muted);
+text-transform:uppercase;
+}
+
+.stats-bar-left span{
+color:var(--neon-cyan);
+text-shadow:0 0 8px rgba(0,240,255,0.6);
+}
+
+.stats-bar-right{
+font-family:'Exo 2',sans-serif;
+font-size:8px;font-weight:800;
+letter-spacing:2px;color:var(--muted2);
+text-transform:uppercase;
+}
+
+/* ── GRID ── */
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+gap:10px;
 }
 
 /* ── CARD ── */
-.profile{
+.card{
+position:relative;
 background:var(--surface);
-border:1px solid rgba(0,240,255,0.1);
-border-radius:6px;overflow:hidden;
-box-shadow:0 0 60px rgba(0,240,255,0.03),0 0 120px rgba(191,0,255,0.03);
+border:1px solid var(--border);
+border-radius:6px;
+overflow:hidden;
+cursor:pointer;
+transition:all .22s;
+text-align:center;
+padding:16px 10px 14px;
+animation:fadeUp .35s ease both;
 }
 
-/* ── COVER — clear, no blur, shorter ── */
-.cover{
-height:100px;
-position:relative;overflow:hidden;
-background:#05050f;
-}
-
-.cover-img{
-width:100%;height:100%;
-object-fit:cover;
-object-position:center 35%;
-opacity:0.88;
-/* NO filter/blur */
-}
-
-.cover-overlay{
+.card::after{
+content:"";
 position:absolute;inset:0;
-background:linear-gradient(
-0deg,
-rgba(6,6,16,0.95) 0%,
-rgba(6,6,16,0.3) 50%,
-rgba(6,6,16,0.0) 100%
-);
+background:linear-gradient(135deg,rgba(0,240,255,0.03),transparent 60%,rgba(191,0,255,0.03));
+pointer-events:none;
 }
 
-.cover-grid{
-position:absolute;inset:0;
-background:
-repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(0,240,255,0.03) 39px,rgba(0,240,255,0.03) 40px),
-repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(0,240,255,0.015) 39px,rgba(0,240,255,0.015) 40px);
+.card:hover{
+transform:translateY(-3px);
+border-color:rgba(0,240,255,0.3);
+box-shadow:0 0 24px rgba(0,240,255,0.1),0 8px 30px rgba(0,0,0,0.4);
+background:var(--surface2);
 }
 
-/* ── NAME ROW ── */
-.name-row{
-display:flex;align-items:center;
-padding:10px 14px 12px;
-border-bottom:1px solid var(--border);
-background:linear-gradient(90deg,rgba(0,240,255,0.025),rgba(191,0,255,0.025));
-gap:12px;
-}
-
-/* AVATAR — bigger */
-.avatar-frame{
-flex-shrink:0;
-width:62px;height:62px;
+/* AVATAR */
+.card-avatar{
+width:68px;height:68px;
 border-radius:5px;
-border:2.5px solid var(--neon-cyan);
+border:2px solid var(--neon-cyan);
 overflow:hidden;
 background:var(--surface2);
+margin:0 auto 10px;
 animation:rgbBorder 4s linear infinite;
+flex-shrink:0;
 }
 
-.avatar-frame img{width:100%;height:100%;object-fit:cover;}
+.card-avatar img{
+width:100%;height:100%;
+object-fit:cover;
+}
 
-.name-stack{min-width:0;flex:1;}
-
-/* PLAYER NAME — gaming font */
-.player-name{
+/* NAME */
+.card-name{
 font-family:'Exo 2',sans-serif;
-font-size:17px;font-weight:900;
-letter-spacing:1.5px;
-line-height:1.1;
-background:linear-gradient(90deg,#ffffff 0%,#a0d4ff 60%,#bf00ff 100%);
--webkit-background-clip:text;-webkit-text-fill-color:transparent;
+font-size:13px;font-weight:900;
+letter-spacing:0.5px;
+line-height:1.2;
+color:var(--text);
 white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-display:flex;align-items:center;gap:7px;
+margin-bottom:7px;
 }
 
-.online-dot-inline{
-display:inline-block;flex-shrink:0;
-width:8px;height:8px;border-radius:50%;
-background:var(--neon-green);
-box-shadow:0 0 9px var(--neon-green);
-animation:pulse 1.5s ease-in-out infinite;
-}
-
-/* CLUB ID — pro pill */
-.club-id-pill{
-display:inline-flex;align-items:center;gap:6px;
-margin-top:5px;
-font-family:'Exo 2',sans-serif;
-font-size:10px;font-weight:800;
-letter-spacing:2px;
-color:var(--neon-cyan);
-text-shadow:0 0 10px rgba(0,240,255,0.7);
+/* ID PILL */
+.card-id{
+display:inline-flex;align-items:center;gap:5px;
+padding:4px 10px;
+border-radius:3px;
 border:1px solid rgba(0,240,255,0.3);
-padding:3px 10px;
 background:rgba(0,240,255,0.07);
-border-radius:3px;
-text-transform:uppercase;
-}
-
-.club-id-pill i{font-size:9px;opacity:0.8;}
-
-/* ── RANK STRIP ── */
-.rank-strip{display:grid;grid-template-columns:1fr 1fr;}
-
-.rank-cell{
-padding:11px 14px;
-display:flex;align-items:center;gap:10px;
-}
-
-.rank-cell:first-child{border-right:1px solid var(--border);}
-
-.rank-icon-box{
-width:34px;height:34px;
-display:flex;align-items:center;justify-content:center;
-border-radius:4px;font-size:13px;flex-shrink:0;
-}
-
-.rank-icon-box.trophy{
-background:rgba(255,180,0,0.1);
-border:1px solid rgba(255,180,0,0.25);
-color:#ffcc00;
-box-shadow:0 0 10px rgba(255,180,0,0.2);
-}
-
-.rank-icon-box.coin{
-background:rgba(0,240,255,0.1);
-border:1px solid rgba(0,240,255,0.25);
-color:var(--neon-cyan);
-box-shadow:0 0 10px rgba(0,240,255,0.2);
-}
-
-/* label bold + light color */
-.rank-label{
-font-family:'Exo 2',sans-serif;
-font-size:8px;font-weight:800;
-letter-spacing:2px;
-color:#7dd3fc;
-text-transform:uppercase;
-}
-
-.rank-value{
-font-family:'Orbitron',sans-serif;
-font-size:20px;font-weight:900;letter-spacing:1px;line-height:1.1;
-}
-
-.rank-value.gold{color:#ffcc00;text-shadow:0 0 14px rgba(255,200,0,0.55);}
-.rank-value.cyan{color:var(--neon-cyan);text-shadow:0 0 14px rgba(0,240,255,0.55);}
-
-/* ── DIVIDER ── */
-.sdiv{
-height:1px;
-background:linear-gradient(90deg,transparent,var(--border2),transparent);
-margin:0 14px;
-}
-
-/* ── STATS ── */
-.stats-section{padding:12px 14px;}
-
-.sec-label{
-font-family:'Exo 2',sans-serif;
-font-size:8px;font-weight:800;
-letter-spacing:3px;
-color:#7dd3fc;
-text-transform:uppercase;
-margin-bottom:8px;
-}
-
-/* WLD — bold labels, lighter color */
-.wld-row{
-display:grid;grid-template-columns:1fr 1fr 1fr;
-gap:6px;margin-bottom:7px;
-}
-
-.wld-cell{
-border-radius:4px;padding:10px 8px;
-display:flex;align-items:center;gap:8px;
-background:var(--surface2);border:1px solid var(--border2);
-transition:transform .2s;
-}
-.wld-cell:hover{transform:translateY(-1px);}
-
-.wld-cell.win-cell{border-color:rgba(0,255,136,0.2);background:rgba(0,255,136,0.04);box-shadow:0 0 14px rgba(0,255,136,0.07);}
-.wld-cell.loss-cell{border-color:rgba(255,0,122,0.2);background:rgba(255,0,122,0.04);box-shadow:0 0 14px rgba(255,0,122,0.07);}
-.wld-cell.draw-cell{border-color:rgba(245,255,0,0.2);background:rgba(245,255,0,0.04);box-shadow:0 0 14px rgba(245,255,0,0.07);}
-
-.wld-bar{width:3px;height:32px;border-radius:99px;flex-shrink:0;}
-.wld-bar.w{background:var(--neon-green);box-shadow:0 0 8px var(--neon-green);}
-.wld-bar.l{background:var(--neon-pink);box-shadow:0 0 8px var(--neon-pink);}
-.wld-bar.d{background:var(--neon-yellow);box-shadow:0 0 8px var(--neon-yellow);}
-
-.wld-num{font-family:'Orbitron',sans-serif;font-size:22px;font-weight:900;line-height:1;}
-.wld-num.w{color:var(--neon-green);text-shadow:0 0 10px var(--neon-green);}
-.wld-num.l{color:var(--neon-pink);text-shadow:0 0 10px var(--neon-pink);}
-.wld-num.d{color:var(--neon-yellow);text-shadow:0 0 10px var(--neon-yellow);}
-
-/* bold + lighter label */
-.wld-lbl{
-font-family:'Exo 2',sans-serif;
-font-size:8px;font-weight:800;
-letter-spacing:1.5px;
-color:#93c5fd;
-margin-top:2px;text-transform:uppercase;
-}
-
-/* STAT GRID — common accent color for all numbers */
-.stat-grid{
-display:grid;grid-template-columns:repeat(3,1fr);gap:5px;
-}
-
-.stat-cell{
-background:var(--surface2);
-border:1px solid var(--border);border-radius:4px;
-padding:10px 6px;
-display:flex;flex-direction:column;align-items:center;gap:3px;
-text-align:center;transition:all .2s;
-}
-.stat-cell:hover{background:var(--surface3);transform:translateY(-1px);}
-
-/* all stat numbers same light accent color */
-.stat-num{
-font-family:'Orbitron',sans-serif;
-font-size:17px;font-weight:900;line-height:1;
-color:#02fae9;
-text-shadow:0 0 10px rgba(255,0,122,0.6);
-}
-
-/* bold + lighter label for stat */
-.stat-lbl{
-font-family:'Exo 2',sans-serif;
-font-size:7px;font-weight:800;
-letter-spacing:1px;
-color:#64748b;
-text-transform:uppercase;
-}
-
-/* ── MATCHES ── */
-.matches-section{padding:12px 14px 14px;}
-
-.matches-head{
-display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;
-}
-
-.matches-title{
-font-family:'Orbitron',sans-serif;
-font-size:10px;font-weight:900;letter-spacing:3px;
-background:linear-gradient(90deg,var(--neon-cyan),var(--neon-purple));
--webkit-background-clip:text;-webkit-text-fill-color:transparent;
-}
-
-.last5-badge{
-font-family:'Exo 2',sans-serif;
-font-size:8px;font-weight:800;letter-spacing:2px;padding:3px 9px;
-color:var(--neon-purple);
-border:1px solid rgba(191,0,255,0.3);
-background:rgba(191,0,255,0.08);
-text-shadow:0 0 6px var(--neon-purple);
-border-radius:3px;
-}
-
-/* MATCH ROW */
-.match-row{
-display:grid;
-grid-template-columns:1fr 52px 1fr;
-align-items:center;gap:4px;
-padding:9px 10px 9px 12px;
-border-radius:5px;
-background:var(--surface2);
-border:1px solid var(--border);
-margin-bottom:5px;
-transition:all .18s;
-position:relative;overflow:hidden;
-}
-
-.match-row::before{
-content:"";position:absolute;left:0;top:0;bottom:0;
-width:2.5px;border-radius:1px;
-}
-
-.match-row.win-row{border-color:rgba(0,255,136,0.15);background:rgba(0,255,136,0.025);}
-.match-row.win-row::before{background:var(--neon-green);box-shadow:0 0 8px var(--neon-green);}
-
-.match-row.loss-row{border-color:rgba(255,0,122,0.15);background:rgba(255,0,122,0.025);}
-.match-row.loss-row::before{background:var(--neon-pink);box-shadow:0 0 8px var(--neon-pink);}
-
-.match-row.draw-row{border-color:rgba(245,255,0,0.12);background:rgba(245,255,0,0.02);}
-.match-row.draw-row::before{background:var(--neon-yellow);box-shadow:0 0 8px var(--neon-yellow);}
-
-.match-row:hover{transform:translateX(2px);border-color:var(--border2);}
-
-.match-player{display:flex;flex-direction:column;}
-.match-player.right{align-items:flex-end;padding-right:4px;}
-.match-player.left{padding-left:2px;}
-
-.mp-name{
-font-family:'Exo 2',sans-serif;
-font-size:11px;font-weight:800;
-color:var(--text);line-height:1.15;
-white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-max-width:100%;letter-spacing:0.3px;
-}
-
-/* Club ID — bigger, bold, single common glow color (cyan) */
-.mp-id{
 font-family:'Exo 2',sans-serif;
 font-size:9px;font-weight:800;
-letter-spacing:1.2px;
-margin-top:2px;
+letter-spacing:1.5px;
 color:var(--neon-cyan);
-text-shadow:0 0 8px rgba(0,240,255,0.65);
-white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;
+text-shadow:0 0 8px rgba(0,240,255,0.6);
+text-transform:uppercase;
 }
 
-/* SCORE BOX */
-.score-box{display:flex;flex-direction:column;align-items:center;gap:2px;}
+.card-id i{font-size:8px;opacity:0.8;}
 
-.score-badge{
-display:inline-block;
-font-family:'Orbitron',sans-serif;
-font-size:11px;font-weight:900;letter-spacing:1px;
-padding:4px 3px;border-radius:3px;
-width:100%;text-align:center;
-}
-
-.score-badge.win{
-background:rgba(0,255,136,0.1);color:var(--neon-green);
-border:1px solid rgba(0,255,136,0.3);
-text-shadow:0 0 8px var(--neon-green);
-box-shadow:0 0 10px rgba(0,255,136,0.12);
-}
-.score-badge.loss{
-background:rgba(255,0,122,0.1);color:var(--neon-pink);
-border:1px solid rgba(255,0,122,0.3);
-text-shadow:0 0 8px var(--neon-pink);
-box-shadow:0 0 10px rgba(255,0,122,0.12);
-}
-.score-badge.draw{
-background:rgba(245,255,0,0.08);color:var(--neon-yellow);
-border:1px solid rgba(245,255,0,0.25);
-text-shadow:0 0 8px var(--neon-yellow);
-box-shadow:0 0 10px rgba(245,255,0,0.08);
-}
-
-/* MATCH TYPE — bigger, bold, light color */
-.match-type-lbl{
+/* VIEW BUTTON — appears on hover */
+.card-view{
+margin-top:9px;
+display:flex;align-items:center;justify-content:center;gap:5px;
+padding:5px 0;
+border-radius:3px;
+border:1px solid rgba(191,0,255,0.25);
+background:rgba(191,0,255,0.07);
 font-family:'Exo 2',sans-serif;
-font-size:7.5px;font-weight:800;
-letter-spacing:0.8px;
-color:#93c5fd;
-text-transform:uppercase;text-align:center;
-margin-top:2px;
+font-size:8px;font-weight:800;
+letter-spacing:2px;
+color:#bf00ff;
+text-shadow:0 0 8px rgba(191,0,255,0.6);
+text-transform:uppercase;
+opacity:0;
+transform:translateY(4px);
+transition:all .2s;
 }
 
-/* ── FOOTER ── */
-.card-footer{
-padding:10px 14px;border-top:1px solid var(--border);
-display:flex;align-items:center;justify-content:space-between;
-background:rgba(0,240,255,0.015);
+.card:hover .card-view{
+opacity:1;transform:translateY(0);
 }
 
-.footer-brand{
+/* ── EMPTY ── */
+.empty{
+grid-column:1/-1;
+padding:60px 20px;
+text-align:center;
 font-family:'Orbitron',sans-serif;
-font-size:8px;letter-spacing:3px;
-background:linear-gradient(90deg,var(--neon-cyan),var(--neon-purple));
--webkit-background-clip:text;-webkit-text-fill-color:transparent;
+font-size:10px;letter-spacing:4px;color:var(--muted);
 }
-
-.footer-right{
-font-family:'Exo 2',sans-serif;
-font-size:8px;font-weight:700;
-letter-spacing:2px;color:var(--muted2);
+.empty i{
+display:block;font-size:22px;margin-bottom:14px;
+color:var(--neon-pink);
+text-shadow:0 0 12px var(--neon-pink);
 }
 
 /* ── LOADER ── */
 .loader{
+grid-column:1/-1;
 padding:60px 20px;text-align:center;
 font-family:'Orbitron',sans-serif;
 font-size:10px;letter-spacing:4px;color:var(--muted);
@@ -517,31 +334,24 @@ display:block;font-size:22px;margin-bottom:14px;
 }
 
 /* ── RESPONSIVE ── */
-@media(max-width:400px){
-.hero-title{font-size:18px;letter-spacing:4px;}
-.player-name{font-size:13px;}
-.rank-value{font-size:17px;}
-.wld-num{font-size:17px;}
-.stat-num{font-size:14px;}
-.match-row{grid-template-columns:1fr 46px 1fr;}
-.score-badge{font-size:10px;padding:3px 2px;}
-.mp-name{font-size:10px;}
-.mp-id{font-size:8px;}
-.avatar-frame{width:52px;height:52px;}
+@media(max-width:480px){
+.hero-title{font-size:19px;letter-spacing:4px;}
+.grid{grid-template-columns:repeat(2,1fr);gap:8px;}
+.card{padding:13px 8px 12px;}
+.card-avatar{width:56px;height:56px;}
+.card-name{font-size:11px;}
+.card-id{font-size:8px;padding:3px 8px;}
+.card-view{font-size:7px;}
 }
 
-@media(min-width:768px){
-#app{padding:10px 20px 60px;}
-.cover{height:120px;}
-.player-name{font-size:20px;}
-.rank-value{font-size:24px;}
-.wld-num{font-size:26px;}
-.stat-num{font-size:20px;}
-.score-badge{font-size:13px;}
-.match-row{grid-template-columns:1fr 60px 1fr;}
-.avatar-frame{width:70px;height:70px;}
-.mp-name{font-size:12px;}
-.mp-id{font-size:10px;}
+@media(min-width:600px){
+.grid{grid-template-columns:repeat(3,1fr);}
+.card-avatar{width:72px;height:72px;}
+}
+
+@media(min-width:900px){
+.grid{grid-template-columns:repeat(4,1fr);}
+.wrap{padding:0 20px;}
 }
 </style>
 </head>
@@ -556,246 +366,109 @@ display:block;font-size:22px;margin-bottom:14px;
 <div class="home-btn"><i class="fa-solid fa-house"></i></div>
 </a>
 
-<!-- HERO: no "Player Profile" box, just title + slogan -->
+<!-- HERO -->
 <div class="hero">
-<div class="hero-title">ELITE ATHLETE</div>
-<div class="hero-slogan">BE THE GAME CHANGER</div>
+<div class="hero-title">PLAYERS HUB</div>
+<div class="hero-slogan">SEARCH YOUR FAVORITE PLAYER</div>
 </div>
 
-<div id="app">
+<!-- WRAP -->
+<div class="wrap">
+
+<div class="search-wrap">
+<i class="fa-solid fa-magnifying-glass search-icon"></i>
+<input type="text" id="search" class="search-box" placeholder="Search Player Name / ID...">
+</div>
+
+<div class="stats-bar">
+<div class="stats-bar-left">Total Players: <span id="count">—</span></div>
+<div class="stats-bar-right">GOAT FC ROSTER</div>
+</div>
+
+<div id="grid" class="grid">
 <div class="loader">
 <i class="fa-solid fa-spinner fa-spin"></i>
-LOADING PROFILE...
+LOADING PLAYERS...
 </div>
+</div>
+
 </div>
 
 <script>
-const MATCH_CSV='https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv';
 const MEMBER_CSV='https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv';
-const CP_CSV='https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1252347749&single=true&output=csv';
 
-const COVER_IMG='https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=900&q=90';
+let playersData=[];
 
-const params=new URLSearchParams(location.search);
-function normalize(x){return(x||'').toLowerCase().replace(/[^a-z0-9]/g,'');}
-const playerId=normalize(params.get('id')||'GFC-001');
-
-function csvToArray(str){
-const rows=[];let quote=false,row=[],col='';
-for(let i=0;i<str.length;i++){
-const c=str[i];
-if(c==='"'){quote=!quote;}
-else if(c===','&&!quote){row.push(col);col='';}
-else if((c==='\n'||c==='\r')&&!quote){
-if(col||row.length){row.push(col);rows.push(row);row=[];col='';}
-}else{col+=c;}
-}
-if(col||row.length){row.push(col);rows.push(row);}
-return rows;
+function parseCSV(text){
+return text.split('\n').map(r=>r.split(','));
 }
 
-async function load(){
+function normalize(x){
+return(x||'').toLowerCase();
+}
+
+async function loadPlayers(){
 try{
-const[mR,mbR,cR]=await Promise.all([
-fetch(MATCH_CSV+'&t='+Date.now()),
-fetch(MEMBER_CSV+'&t='+Date.now()),
-fetch(CP_CSV+'&t='+Date.now())
-]);
-const mT=await mR.text(),mbT=await mbR.text(),cT=await cR.text();
-const mRows=csvToArray(mT),mbRows=csvToArray(mbT),cRows=csvToArray(cT);
-
-const members={};
-mbRows.slice(1).forEach(r=>{
-if(!r.length)return;
-const id=normalize(r[1]);
-members[id]={name:r[0]||'Unknown',pic:r[4]||'https://i.imgur.com/LY3Bb9m.png',club:r[1]||'N/A'};
+const res=await fetch(MEMBER_CSV+'&t='+Date.now());
+const text=await res.text();
+const rows=parseCSV(text);
+playersData=[];
+rows.slice(1).forEach(r=>{
+if(!r[0])return;
+playersData.push({
+name:(r[0]||'Unknown').trim(),
+id:(r[1]||'N/A').trim(),
+pic:(r[4]||'https://i.imgur.com/LY3Bb9m.png').trim()
 });
-
-const cpMap={};
-cRows.slice(1).forEach(r=>{if(!r.length)return;cpMap[normalize(r[0])]=r[7]||'0';});
-
-const board={};const matches=[];
-mRows.slice(1).forEach(r=>{
-if(!r.length)return;
-if((r[9]||'').toLowerCase()!=='yes')return;
-const p1=normalize(r[0]),p2=normalize(r[1]);
-if(!board[p1])board[p1]={points:0,win:0,gs:0,gc:0,match:0};
-if(!board[p2])board[p2]={points:0,win:0,gs:0,gc:0,match:0};
-board[p1].points+=(+r[5]||0);board[p2].points+=(+r[6]||0);
-if(+r[3]>+r[4])board[p1].win++;
-if(+r[4]>+r[3])board[p2].win++;
-board[p1].gs+=(+r[3]||0);board[p1].gc+=(+r[4]||0);
-board[p2].gs+=(+r[4]||0);board[p2].gc+=(+r[3]||0);
-board[p1].match++;board[p2].match++;
-if(p1===playerId||p2===playerId){
-matches.push({p1:r[0],p2:r[1],type:r[2],s1:+r[3],s2:+r[4]});
-}
 });
-
-const ranking=Object.entries(board)
-.map(([id,v])=>({id,points:v.points,winPercent:v.match?(v.win/v.match)*100:0,gd:v.gs-v.gc}))
-.sort((a,b)=>b.points-a.points||b.winPercent-a.winPercent||b.gd-a.gd);
-const rank=ranking.findIndex(x=>x.id===playerId)+1;
-
-let win=0,loss=0,draw=0,gs=0,gcc=0,seven=0;
-matches.forEach(m=>{
-let me,op;
-if(normalize(m.p1)===playerId){me=m.s1;op=m.s2;}else{me=m.s2;op=m.s1;}
-gs+=me;gcc+=op;
-if(me>=7)seven++;
-if(me>op)win++;else if(me<op)loss++;else draw++;
-});
-
-const total=matches.length;
-const wr=((win/(total||1))*100).toFixed(1);
-const gr=(gs/(total||1)).toFixed(2);
-const info=members[playerId]||{name:'Unknown Player',pic:'https://i.imgur.com/LY3Bb9m.png',club:'N/A'};
-const netCP=cpMap[playerId]||'0';
-const recent=matches.slice().reverse().slice(0,5);
-
-document.getElementById('app').innerHTML=`
-<div class="profile">
-
-  <!-- COVER: clear HD image, shorter, no blur -->
-  <div class="cover">
-    <img class="cover-img" src="${COVER_IMG}" alt="Stadium" crossorigin="anonymous" onerror="this.style.display='none'">
-    <div class="cover-overlay"></div>
-    <div class="cover-grid"></div>
-  </div>
-
-  <!-- NAME ROW: avatar bigger, online dot inline after name, LIVE text removed -->
-  <div class="name-row">
-    <div class="avatar-frame">
-      <img crossorigin="anonymous" src="${info.pic}" alt="${info.name}" onerror="this.src='https://i.imgur.com/LY3Bb9m.png'">
-    </div>
-    <div class="name-stack">
-      <div class="player-name">
-        ${info.name}<span class="online-dot-inline" style="margin-left:6px;"></span>
-      </div>
-      <div class="club-id-pill">
-        <i class="fa-solid fa-shield-halved"></i>${info.club}
-      </div>
-    </div>
-  </div>
-
-  <!-- RANK + CP: bold labels with light blue color -->
-  <div class="rank-strip">
-    <div class="rank-cell">
-      <div class="rank-icon-box trophy"><i class="fa-solid fa-trophy"></i></div>
-      <div>
-        <div class="rank-label">Overall Rank</div>
-        <div class="rank-value gold">#${rank||'—'}</div>
-      </div>
-    </div>
-    <div class="rank-cell">
-      <div class="rank-icon-box coin"><i class="fa-solid fa-coins"></i></div>
-      <div>
-        <div class="rank-label">Net CP</div>
-        <div class="rank-value cyan">${netCP}</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="sdiv"></div>
-
-  <!-- STATS: WLD bolds labels, stat grid same color -->
-  <div class="stats-section">
-    <div class="sec-label">Performance Overview</div>
-
-    <div class="wld-row">
-      <div class="wld-cell win-cell">
-        <div class="wld-bar w"></div>
-        <div><div class="wld-num w">${win}</div><div class="wld-lbl">WINS</div></div>
-      </div>
-      <div class="wld-cell loss-cell">
-        <div class="wld-bar l"></div>
-        <div><div class="wld-num l">${loss}</div><div class="wld-lbl">LOSS</div></div>
-      </div>
-      <div class="wld-cell draw-cell">
-        <div class="wld-bar d"></div>
-        <div><div class="wld-num d">${draw}</div><div class="wld-lbl">DRAW</div></div>
-      </div>
-    </div>
-
-    <div class="stat-grid">
-      <div class="stat-cell">
-        <div class="stat-num">${total}</div>
-        <div class="stat-lbl">Matches</div>
-      </div>
-      <div class="stat-cell">
-        <div class="stat-num">${wr}%</div>
-        <div class="stat-lbl">Win Rate</div>
-      </div>
-      <div class="stat-cell">
-        <div class="stat-num">${gr}</div>
-        <div class="stat-lbl">Goal Ratio</div>
-      </div>
-      <div class="stat-cell">
-        <div class="stat-num">${gs}</div>
-        <div class="stat-lbl">Scored</div>
-      </div>
-      <div class="stat-cell">
-        <div class="stat-num">${gcc}</div>
-        <div class="stat-lbl">Conceded</div>
-      </div>
-      <div class="stat-cell">
-        <div class="stat-num">${seven}</div>
-        <div class="stat-lbl">7+ Goals</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="sdiv"></div>
-
-  <!-- MATCHES: club IDs bigger/bold/same cyan, match type bigger/bold/light -->
-  <div class="matches-section">
-    <div class="matches-head">
-      <div class="matches-title">RECENT MATCHES</div>
-      <div class="last5-badge">LAST 5</div>
-    </div>
-
-    ${recent.map((m,i)=>{
-      let me,op,cls,row;
-      if(normalize(m.p1)===playerId){me=m.s1;op=m.s2;}else{me=m.s2;op=m.s1;}
-      if(me>op){cls='win';row='win-row';}
-      else if(me<op){cls='loss';row='loss-row';}
-      else{cls='draw';row='draw-row';}
-      return `
-      <div class="match-row ${row}">
-        <div class="match-player left">
-          <div class="mp-name">${members[normalize(m.p1)]?.name||m.p1}</div>
-          <div class="mp-id">${m.p1}</div>
-        </div>
-        <div class="score-box">
-          <div class="score-badge ${cls}">${m.s1}–${m.s2}</div>
-          <div class="match-type-lbl">${m.type}</div>
-        </div>
-        <div class="match-player right">
-          <div class="mp-name">${members[normalize(m.p2)]?.name||m.p2}</div>
-          <div class="mp-id">${m.p2}</div>
-        </div>
-      </div>`;
-    }).join('')}
-  </div>
-
-  <div class="card-footer">
-    <div class="footer-brand">GOAT FC</div>
-    <div class="footer-right">ELITE ATHLETE © 2026</div>
-  </div>
-
-</div>
-`;
-
+document.getElementById('count').textContent=playersData.length;
+render(playersData);
 }catch(err){
-console.error(err);
-document.getElementById('app').innerHTML=`
+document.getElementById('grid').innerHTML=`
 <div class="loader">
 <i class="fa-solid fa-triangle-exclamation" style="color:#ff007a;text-shadow:0 0 12px #ff007a;"></i>
-PROFILE FAILED TO LOAD
+FAILED TO LOAD
 </div>`;
 }
 }
-load();
+
+function render(data){
+if(!data.length){
+document.getElementById('grid').innerHTML=`
+<div class="empty">
+<i class="fa-solid fa-user-slash"></i>
+NO PLAYER FOUND
+</div>`;
+return;
+}
+let html='';
+data.forEach((p,i)=>{
+html+=`
+<div class="card" style="animation-delay:${Math.min(i*0.04,0.5)}s" onclick="openProfile('${p.id}')">
+<div class="card-avatar">
+<img src="${p.pic}" alt="${p.name}" crossorigin="anonymous" onerror="this.src='https://i.imgur.com/LY3Bb9m.png'">
+</div>
+<div class="card-name">${p.name}</div>
+<div class="card-id"><i class="fa-solid fa-shield-halved"></i>${p.id}</div>
+<div class="card-view"><i class="fa-solid fa-arrow-up-right-from-square"></i> VIEW PROFILE</div>
+</div>`;
+});
+document.getElementById('grid').innerHTML=html;
+}
+
+document.getElementById('search').addEventListener('input',function(){
+const v=normalize(this.value);
+const filtered=playersData.filter(p=>
+normalize(p.name).includes(v)||normalize(p.id).includes(v)
+);
+render(filtered);
+});
+
+function openProfile(id){
+window.location.href='profile/?id='+id;
+}
+
+loadPlayers();
 </script>
 </body>
 </html>

@@ -1,367 +1,587 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>Goat FC Leaderboard</title>
-<link rel="icon" type="image/png" href="https://i.imgur.com/LY3Bb9m.png">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="UTF-8">
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CP CENTRE</title>
+<link rel="icon" type="image/png" href="https://i.imgur.com/LY3Bb9m.png">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
 <style>
-
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-
-body{
-  font-family:'Oswald',sans-serif;
-  background:linear-gradient(135deg,#020617,#0a0f1e);
-  color:#e2e8f0;
-  min-height:100vh;
-  overflow-x:hidden;
+:root {
+  --bg:     #06040e;
+  --bg2:    #0d0a1a;
+  --bg3:    #120e22;
+  --gold:   #ffd700;
+  --gold2:  #ffb300;
+  --gold3:  #ffe066;
+  --cyan:   #00f5ff;
+  --green:  #39ff14;
+  --red:    #ff3b3b;
+  --purple: #c084fc;
+  --border: rgba(255,215,0,0.18);
+  --text:   #f0e6c8;
+  --muted:  #7a6a4a;
 }
 
-/* subtle grid */
-body::before{
+*{ margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family:'Exo 2',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+  padding-bottom:30px;
+}
+
+/* ── SCANLINES ── */
+body::before {
   content:'';
-  position:fixed;inset:0;
+  position:fixed; inset:0;
+  background:repeating-linear-gradient(
+    0deg, transparent, transparent 2px,
+    rgba(255,215,0,0.012) 2px, rgba(255,215,0,0.012) 4px
+  );
+  pointer-events:none; z-index:1000;
+}
+
+/* ── ANIMATED GRID ── */
+body::after {
+  content:'';
+  position:fixed; inset:0;
   background-image:
-    linear-gradient(rgba(0,245,255,.022) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(0,245,255,.022) 1px,transparent 1px);
-  background-size:48px 48px;
-  pointer-events:none;z-index:0;
+    linear-gradient(rgba(255,215,0,0.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,215,0,0.035) 1px,transparent 1px);
+  background-size:40px 40px;
+  animation:gridMove 22s linear infinite;
+  pointer-events:none; z-index:0;
+}
+@keyframes gridMove {
+  0%{background-position:0 0;}
+  100%{background-position:40px 40px;}
+}
+
+/* ── AMBIENT ORBS ── */
+.orb {
+  position:fixed; border-radius:50%;
+  pointer-events:none; z-index:1; filter:blur(80px);
+}
+.orb1 {
+  width:380px; height:380px; top:-100px; left:-80px;
+  background:radial-gradient(circle,rgba(255,215,0,0.07) 0%,transparent 70%);
+  animation:orbFloat 9s ease-in-out infinite;
+}
+.orb2 {
+  width:300px; height:300px; top:35%; right:-80px;
+  background:radial-gradient(circle,rgba(255,140,0,0.06) 0%,transparent 70%);
+  animation:orbFloat 12s ease-in-out infinite; animation-delay:-4s;
+}
+.orb3 {
+  width:260px; height:260px; bottom:-60px; left:30%;
+  background:radial-gradient(circle,rgba(192,132,252,0.055) 0%,transparent 70%);
+  animation:orbFloat 14s ease-in-out infinite; animation-delay:-7s;
+}
+@keyframes orbFloat {
+  0%,100%{transform:translateY(0) scale(1);}
+  50%{transform:translateY(-26px) scale(1.06);}
+}
+@keyframes blink {
+  0%,100%{opacity:0.35;} 50%{opacity:1;}
 }
 
 /* ── TOPBAR ── */
-.topbar{
-  position:sticky;top:0;z-index:999;
-  height:46px;padding:0 14px;
-  display:flex;align-items:center;justify-content:space-between;
-  text-decoration:none;
-  background:rgba(2,6,23,.93);
-  backdrop-filter:blur(14px);
-  border-bottom:1px solid rgba(0,245,255,.1);
-  box-shadow:0 2px 24px rgba(0,0,0,.5);
+.topbar {
+  position:sticky; top:0; z-index:999;
+  height:50px;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 16px;
+  background:rgba(6,4,14,0.93);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(255,215,0,0.13);
+  box-shadow:0 2px 20px rgba(0,0,0,0.6);
+  text-decoration:none; color:inherit;
 }
-.topbar-left{display:flex;align-items:center;gap:8px;}
-.topbar-logo{width:26px;filter:drop-shadow(0 0 6px #00f5ff);}
-.topbar-text{
-  font-size:13px;font-weight:800;letter-spacing:2px;
-  background:linear-gradient(90deg,#00f5ff,#00ff88);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+.topbar-glow {
+  position:absolute; bottom:0; left:0; right:0; height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  opacity:0.35;
 }
-.topbar-right{
-  width:28px;height:28px;
-  display:flex;align-items:center;justify-content:center;
-  border-radius:50%;
-  background:rgba(0,245,255,.07);
-  border:1px solid rgba(0,245,255,.2);
-  color:#00f5ff;font-size:12px;
-  transition:.2s;
+.top-left { display:flex; align-items:center; gap:9px; }
+.top-logo {
+  width:26px;
+  filter:drop-shadow(0 0 7px var(--gold));
 }
-.topbar-right:hover{background:rgba(0,245,255,.16);box-shadow:0 0 14px rgba(0,245,255,.3);}
-
-/* ── WRAPPER ── */
-.wrapper{
-  position:relative;z-index:1;
-  max-width:900px;margin:0 auto;
-  padding:0 10px 40px;
+.top-title {
+  font-family:'Orbitron',sans-serif;
+  font-size:12px; font-weight:700; letter-spacing:1.5px;
+  background:linear-gradient(90deg,var(--gold),var(--gold3));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+}
+.home-btn {
+  width:32px; height:32px;
+  display:flex; align-items:center; justify-content:center;
+  border-radius:8px;
+  background:rgba(255,215,0,0.07);
+  border:1px solid rgba(255,215,0,0.2);
+  color:var(--gold); font-size:12px;
+  transition:all 0.2s;
+}
+.home-btn:hover {
+  background:rgba(255,215,0,0.15);
+  box-shadow:0 0 12px rgba(255,215,0,0.3);
 }
 
 /* ── HEADER ── */
-.header{
-  display:flex;align-items:center;justify-content:center;
-  gap:10px;padding:18px 10px 6px;
+.header {
+  position:relative; z-index:10;
+  text-align:center;
+  padding:26px 16px 18px;
+  border-bottom:1px solid rgba(255,215,0,0.1);
+  background:linear-gradient(180deg,rgba(255,215,0,0.04) 0%,transparent 100%);
 }
-.logo{width:42px;filter:drop-shadow(0 0 10px #00ffcc);}
-h1{
-  font-size:20px;font-weight:700;letter-spacing:2px;
-  color:#00ffcc;margin:0;
-  animation:glowTitle 2.5s ease-in-out infinite alternate;
+.header-badge {
+  display:inline-flex; align-items:center; gap:7px;
+  background:rgba(255,215,0,0.07);
+  border:1px solid rgba(255,215,0,0.28);
+  border-radius:4px; padding:3px 12px;
+  font-size:10px; letter-spacing:3px;
+  color:var(--gold); text-transform:uppercase;
+  margin-bottom:14px;
+  animation:pulseBadge 3s ease-in-out infinite;
 }
-@keyframes glowTitle{
-  from{text-shadow:0 0 5px #00ffcc;}
-  to  {text-shadow:0 0 18px #00ffff,0 0 35px #00ffff44;}
+@keyframes pulseBadge {
+  0%,100%{box-shadow:0 0 6px rgba(255,215,0,0.2);}
+  50%{box-shadow:0 0 18px rgba(255,215,0,0.5);}
 }
-
-.desc{
-  font-size:12px;opacity:.5;
-  margin-bottom:12px;text-align:center;letter-spacing:.5px;
+.header h1 {
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(17px,4.5vw,30px);
+  font-weight:900; letter-spacing:2px;
+  background:linear-gradient(90deg,var(--gold2),var(--gold3),var(--gold2));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  text-shadow:none; line-height:1.1;
+  filter:drop-shadow(0 0 14px rgba(255,215,0,0.4));
 }
-
-/* ── TABS ── */
-.tabs{margin:0 0 10px;display:flex;justify-content:center;gap:8px;}
-.tabs button{
-  padding:6px 18px;
-  border:1px solid rgba(255,255,255,.1);
-  border-radius:20px;
-  background:rgba(255,255,255,.04);
-  color:rgba(255,255,255,.45);
-  font-family:'Oswald',sans-serif;
-  font-size:12px;font-weight:600;letter-spacing:1px;
-  cursor:pointer;transition:.2s;
-}
-.tabs button:hover{
-  background:rgba(0,245,255,.07);
-  color:#e2e8f0;
-  border-color:rgba(0,245,255,.25);
-}
-.tabs button.active{
-  background:linear-gradient(90deg,rgba(0,255,204,.15),rgba(0,195,255,.12));
-  color:#fff;
-  border-color:rgba(0,245,255,.45);
-  box-shadow:0 0 14px rgba(0,245,255,.15);
+.header-desc {
+  margin-top:10px; font-size:11px;
+  color:var(--muted); letter-spacing:1.5px; text-transform:uppercase;
 }
 
-/* ── STATS ROW ── */
-.stats{
-  display:flex;justify-content:center;
-  gap:6px;flex-wrap:wrap;
-  margin-bottom:12px;
-}
-.stat{
-  padding:5px 13px;
-  border-radius:20px;
-  background:rgba(0,255,200,.05);
-  border:1px solid rgba(0,255,200,.11);
-  font-size:12px;color:rgba(255,255,255,.65);
-  animation:statGlow 2.5s ease-in-out infinite alternate;
-}
-.stat span{color:#00ffcc;font-weight:700;}
-@keyframes statGlow{
-  from{box-shadow:0 0 4px rgba(0,255,200,.08);}
-  to  {box-shadow:0 0 12px rgba(0,255,200,.22);}
+/* ── WRAPPER ── */
+.wrap {
+  position:relative; z-index:10;
+  max-width:960px; margin:auto;
+  padding:14px 12px 0;
 }
 
-/* ── CARD ── */
-.card{
-  background:rgba(255,255,255,.03);
-  backdrop-filter:blur(10px);
-  border:1px solid rgba(255,255,255,.07);
-  border-radius:12px;
-  padding:10px;
-  margin-top:4px;
-  overflow-x:auto;
+/* ── TABLE CARD ── */
+.table-card {
+  background:linear-gradient(145deg,var(--bg2),var(--bg3));
+  border:1px solid var(--border);
+  border-radius:14px;
+  overflow:hidden;
+  box-shadow:0 0 30px rgba(255,215,0,0.07), 0 0 60px rgba(0,0,0,0.5);
 }
 
 /* ── TABLE ── */
-table{width:100%;border-collapse:collapse;}
-
-th{
-  color:#00ffcc;
-  font-size:12px;font-weight:600;letter-spacing:1px;
-  padding:8px 6px;
-  border-bottom:1px solid rgba(0,255,200,.1);
-}
-th:nth-child(1){width:5%;text-align:center;}
-th:nth-child(2){width:30%;text-align:left;}
-th:nth-child(n+3){text-align:center;}
-
-td{padding:8px 6px;font-size:13px;}
-td:nth-child(1){text-align:center;}
-td:nth-child(n+3){text-align:center;}
-
-.player{text-align:left;}
-.pid{font-size:10px;opacity:.45;letter-spacing:.5px;margin-top:1px;}
-
-tbody tr{
-  border-bottom:1px solid rgba(255,255,255,.05);
-  transition:background .15s;
-}
-tbody tr:last-child{border-bottom:none;}
-tbody tr:hover{background:rgba(255,255,255,.025);}
-
-/* ── RANK 1 GOLD ── */
-.rank1{
-  background:linear-gradient(90deg,rgba(255,215,0,.17) 0%,transparent 65%);
-  animation:goldGlow 2.5s ease-in-out infinite alternate;
-}
-@keyframes goldGlow{
-  from{box-shadow:inset 0 0 8px rgba(255,215,0,.12),inset 3px 0 0 rgba(255,215,0,.35);}
-  to  {box-shadow:inset 0 0 24px rgba(255,215,0,.3), inset 3px 0 0 rgba(255,215,0,.8);}
+table {
+  width:100%;
+  border-collapse:collapse;
 }
 
-/* ── RANK 2 SILVER ── */
-.rank2{
-  background:linear-gradient(90deg,rgba(192,192,192,.14) 0%,transparent 65%);
-  animation:silverGlow 2.5s ease-in-out infinite alternate;
-}
-@keyframes silverGlow{
-  from{box-shadow:inset 0 0 8px rgba(192,192,192,.1), inset 3px 0 0 rgba(192,192,192,.3);}
-  to  {box-shadow:inset 0 0 22px rgba(192,192,192,.28),inset 3px 0 0 rgba(192,192,192,.7);}
+thead tr {
+  background:rgba(255,215,0,0.06);
+  border-bottom:1px solid rgba(255,215,0,0.15);
 }
 
-/* ── RANK 3 BRONZE ── */
-.rank3{
-  background:linear-gradient(90deg,rgba(205,127,50,.15) 0%,transparent 65%);
-  animation:bronzeGlow 2.5s ease-in-out infinite alternate;
+th {
+  padding:12px 10px;
+  font-family:'Orbitron',sans-serif;
+  font-size:10px; font-weight:700;
+  letter-spacing:1.5px; text-transform:uppercase;
+  color:var(--gold);
+  text-align:center;
+  white-space:nowrap;
 }
-@keyframes bronzeGlow{
-  from{box-shadow:inset 0 0 8px rgba(205,127,50,.1), inset 3px 0 0 rgba(205,127,50,.3);}
-  to  {box-shadow:inset 0 0 22px rgba(205,127,50,.28),inset 3px 0 0 rgba(205,127,50,.7);}
+th:nth-child(2){ text-align:left; }
+
+td {
+  padding:11px 10px;
+  font-size:12px; font-weight:600;
+  text-align:center;
+  border-bottom:1px solid rgba(255,215,0,0.06);
+  white-space:nowrap;
+  transition:background 0.2s;
+}
+td:nth-child(2){ text-align:left; }
+
+tbody tr {
+  animation:fadeRow 0.4s ease both;
+}
+@keyframes fadeRow {
+  from{opacity:0; transform:translateY(8px);}
+  to{opacity:1; transform:translateY(0);}
+}
+tbody tr:hover td {
+  background:rgba(255,215,0,0.05);
+}
+tbody tr:last-child td { border-bottom:none; }
+
+/* ── RANK CELL ── */
+.rank-cell {
+  font-family:'Orbitron',sans-serif;
+  font-size:11px; font-weight:700;
+  display:inline-flex; align-items:center; justify-content:center;
+  width:32px; height:32px;
+  border-radius:8px;
+}
+.rk1 { background:rgba(255,215,0,0.18); color:var(--gold);   border:1px solid rgba(255,215,0,0.45);  box-shadow:0 0 10px rgba(255,215,0,0.35); }
+.rk2 { background:rgba(192,192,192,0.15); color:#c0c0c0;     border:1px solid rgba(192,192,192,0.4);  box-shadow:0 0 8px rgba(192,192,192,0.2); }
+.rk3 { background:rgba(205,127,50,0.15);  color:#cd7f32;     border:1px solid rgba(205,127,50,0.4);  box-shadow:0 0 8px rgba(205,127,50,0.25); }
+.rk-top { background:rgba(0,245,255,0.1); color:var(--cyan); border:1px solid rgba(0,245,255,0.3);  }
+.rk-n   { background:rgba(255,255,255,0.04); color:var(--muted); border:1px solid rgba(255,255,255,0.08); }
+
+/* ── PLAYER CELL ── */
+.player-name {
+  font-size:13px; font-weight:700; color:var(--text);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  max-width:160px;
+}
+.player-id {
+  font-size:10px; color:rgba(255,215,0,0.45); margin-top:2px; letter-spacing:0.5px;
 }
 
-/* ── TOP 4-10 ── */
-.top10{
-  background:linear-gradient(90deg,rgba(0,255,150,.07) 0%,transparent 65%);
-  border-left:2px solid rgba(0,255,150,.25);
-  animation:topGlow 3s ease-in-out infinite alternate;
+/* ── CP VALUES ── */
+.val-base    { color:#a0d4ff; }
+.val-tour    { color:#c084fc; }
+.val-bonus   { color:var(--gold3); }
+.val-earn    { color:var(--green); }
+.val-sell    { color:#38bdf8; }
+.val-deduct  { color:var(--red); }
+
+.val-net-pos {
+  color:var(--gold);
+  font-family:'Orbitron',sans-serif;
+  font-size:13px; font-weight:700;
+  text-shadow:0 0 8px rgba(255,215,0,0.5);
 }
-@keyframes topGlow{
-  from{border-left-color:rgba(0,255,150,.18);}
-  to  {border-left-color:rgba(0,255,150,.55);}
+.val-net-neg {
+  color:var(--red);
+  font-family:'Orbitron',sans-serif;
+  font-size:13px; font-weight:700;
+}
+
+/* ── COIN ICON ── */
+.coin-icon {
+  color:var(--gold); margin-right:3px; font-size:10px;
+}
+
+/* ── ACTION BUTTON ── */
+.btn-claim {
+  display:inline-flex; align-items:center; gap:5px;
+  padding:6px 12px;
+  background:linear-gradient(135deg,var(--gold2),var(--gold));
+  color:#000; border:none;
+  border-radius:6px; font-family:'Exo 2',sans-serif;
+  font-size:11px; font-weight:700; letter-spacing:0.5px;
+  cursor:pointer; transition:all 0.2s;
+  box-shadow:0 0 10px rgba(255,215,0,0.4);
+}
+.btn-claim:hover {
+  transform:scale(1.06);
+  box-shadow:0 0 18px rgba(255,215,0,0.65);
+}
+
+.btn-locked {
+  display:inline-flex; align-items:center; gap:5px;
+  padding:6px 12px;
+  background:rgba(255,255,255,0.05);
+  color:var(--muted); border:1px solid rgba(255,255,255,0.08);
+  border-radius:6px; font-family:'Exo 2',sans-serif;
+  font-size:11px; font-weight:600; letter-spacing:0.5px;
+  cursor:not-allowed;
+}
+
+/* ── ROW GLOWS ── */
+.row-rank1 td { background:linear-gradient(90deg,rgba(255,215,0,0.07),transparent); }
+.row-rank2 td { background:linear-gradient(90deg,rgba(192,192,192,0.06),transparent); }
+.row-rank3 td { background:linear-gradient(90deg,rgba(205,127,50,0.06),transparent); }
+.row-top   td { border-left:2px solid rgba(0,245,255,0.3); }
+
+/* ── LOADING ── */
+#loading {
+  position:fixed; inset:0; background:var(--bg);
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  z-index:9999; gap:20px;
+}
+.loader-ring {
+  width:60px; height:60px;
+  border:3px solid rgba(255,215,0,0.12);
+  border-top-color:var(--gold);
+  border-radius:50%;
+  animation:spin 0.9s linear infinite;
+}
+@keyframes spin{ to{transform:rotate(360deg);} }
+.loader-text {
+  font-family:'Orbitron',sans-serif;
+  font-size:11px; letter-spacing:3px; color:var(--gold);
+  animation:blink 1.5s ease-in-out infinite;
+}
+
+/* ── POPUP ── */
+.popup {
+  position:fixed; inset:0;
+  background:rgba(0,0,0,0.8);
+  display:flex; align-items:center; justify-content:center;
+  visibility:hidden; z-index:9998;
+  backdrop-filter:blur(6px);
+}
+.popup-content {
+  background:linear-gradient(145deg,var(--bg2),var(--bg3));
+  border:1px solid rgba(255,215,0,0.3);
+  border-radius:16px; padding:28px 24px;
+  text-align:center;
+  box-shadow:0 0 40px rgba(255,215,0,0.2);
+  width:90%; max-width:320px;
+  animation:popIn 0.25s ease;
+}
+@keyframes popIn {
+  from{transform:scale(0.85); opacity:0;}
+  to{transform:scale(1); opacity:1;}
+}
+.popup-icon { font-size:36px; margin-bottom:10px; }
+.popup-content h2 {
+  font-family:'Orbitron',sans-serif;
+  font-size:16px; color:var(--gold); margin-bottom:12px;
+}
+.popup-content p {
+  font-size:12px; color:var(--muted); margin:4px 0; letter-spacing:0.5px;
+}
+.popup-contact {
+  margin-top:14px; padding:12px;
+  background:rgba(255,215,0,0.06);
+  border:1px solid rgba(255,215,0,0.15);
+  border-radius:8px; font-size:12px; color:var(--text);
+  line-height:1.8;
+}
+.popup-close {
+  margin-top:16px;
+  padding:8px 20px;
+  background:linear-gradient(135deg,var(--gold2),var(--gold));
+  color:#000; border:none; border-radius:8px;
+  font-family:'Exo 2',sans-serif;
+  font-size:13px; font-weight:700; cursor:pointer;
+  transition:all 0.2s;
+}
+.popup-close:hover { transform:scale(1.05); box-shadow:0 0 16px rgba(255,215,0,0.5); }
+
+/* ── FOOTER ── */
+.powered-by {
+  position:relative; z-index:10;
+  text-align:center; padding:16px 0 20px;
+  font-family:'Orbitron',sans-serif;
+  font-size:9px; letter-spacing:3px;
+  color:var(--muted); text-transform:uppercase; opacity:0.45;
+}
+
+/* ── EMPTY ── */
+.empty-row td {
+  text-align:center; padding:40px;
+  color:var(--muted); font-size:13px; letter-spacing:1px;
 }
 
 /* ── MOBILE ── */
-@media(max-width:600px){
-  .wrapper{padding:0 6px 30px;}
-  h1{font-size:17px;}
-  .player{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:110px;}
-  td,th{font-size:11px;padding:7px 4px;}
+@media(max-width:600px) {
+  .wrap { padding:10px 8px 0; }
+  th { font-size:9px; padding:10px 7px; letter-spacing:0.8px; }
+  td { font-size:11px; padding:10px 7px; }
+  .player-name { max-width:100px; font-size:12px; }
+  .player-id { font-size:9px; }
+  .val-net-pos, .val-net-neg { font-size:12px; }
+  .btn-claim, .btn-locked { padding:5px 9px; font-size:10px; }
+  .rank-cell { width:28px; height:28px; font-size:10px; }
 }
-
 </style>
 </head>
+
 <body>
 
+<!-- ORBS -->
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+
+<!-- LOADING -->
+<div id="loading">
+  <div class="loader-ring"></div>
+  <div class="loader-text">LOADING CP DATA...</div>
+</div>
+
+<!-- TOPBAR -->
 <a href="https://goatfcbd.com" class="topbar">
-  <div class="topbar-left">
-    <img src="https://i.imgur.com/LY3Bb9m.png" class="topbar-logo" alt="logo">
-    <div class="topbar-text">GOAT FC</div>
+  <div class="top-left">
+    <img src="https://i.imgur.com/LY3Bb9m.png" class="top-logo" alt="GOAT FC">
+    <div class="top-title">GOAT FC</div>
   </div>
-  <div class="topbar-right"><i class="fa-solid fa-house"></i></div>
+  <div class="home-btn">
+    <i class="fa-solid fa-house"></i>
+  </div>
+  <div class="topbar-glow"></div>
 </a>
 
-<div class="wrapper">
-
-  <div class="header">
-    <img src="https://i.imgur.com/LY3Bb9m.png" class="logo" alt="logo">
-    <h1>GOAT FC LEADERBOARD</h1>
+<!-- HEADER -->
+<div class="header">
+  <div class="header-badge">
+    <i class="fa-solid fa-coins" style="font-size:9px;"></i>
+    COIN SYSTEM
   </div>
-
-  <div class="desc">Live competitive ranking based on performance, goals &amp; consistency.</div>
-
-  <div class="tabs">
-    <button onclick="loadData('monthly')" id="monthlyBtn" class="active">Monthly</button>
-    <button onclick="loadData('overall')" id="overallBtn">Overall</button>
+  <h1>GOAT FC CP CENTRE</h1>
+  <div class="header-desc">
+    <i class="fa-solid fa-fire" style="color:var(--gold); margin-right:5px;"></i>
+    Earn CP &bull; Manage Bids &bull; Claim Rewards &bull; Only the strongest rise
   </div>
+</div>
 
-  <div class="stats">
-    <div class="stat">Match: <span id="m">0</span></div>
-    <div class="stat">Goal: <span id="g">0</span></div>
-    <div class="stat">Points: <span id="p">0</span></div>
-    <div class="stat">Per Match: <span id="pm">0</span></div>
-  </div>
-
-  <div class="card">
+<!-- TABLE -->
+<div class="wrap">
+  <div class="table-card">
     <table>
       <thead>
         <tr>
-          <th>#</th>
+          <th><i class="fa-solid fa-hashtag"></i></th>
           <th style="text-align:left">Player</th>
-          <th>Pts</th>
-          <th>M</th>
-          <th>Win%</th>
-          <th>GF</th>
-          <th>GA</th>
-          <th>GD</th>
+          <th><i class="fa-solid fa-star" style="color:#a0d4ff;"></i> Base</th>
+          <th><i class="fa-solid fa-trophy" style="color:#c084fc;"></i> Tour</th>
+          <th><i class="fa-solid fa-gift" style="color:var(--gold3);"></i> Bonus</th>
+          <th><i class="fa-solid fa-arrow-up" style="color:var(--green);"></i> Bid+</th>
+          <th><i class="fa-solid fa-tags" style="color:#38bdf8;"></i> Sell</th>
+          <th><i class="fa-solid fa-arrow-down" style="color:var(--red);"></i> Bid-</th>
+          <th><i class="fa-solid fa-coins" style="color:var(--gold);"></i> Net CP</th>
+          <th><i class="fa-solid fa-bolt" style="color:var(--gold);"></i> Action</th>
         </tr>
       </thead>
-      <tbody id="table"></tbody>
+      <tbody id="table-body"></tbody>
     </table>
   </div>
+</div>
 
+<div class="powered-by"><i class="fa-solid fa-bolt" style="margin-right:5px;"></i>POWERED BY GOAT FC</div>
+
+<!-- POPUP -->
+<div class="popup" id="popup">
+  <div class="popup-content">
+    <div class="popup-icon">✅</div>
+    <h2>Withdraw Request Sent!</h2>
+    <p>Your request has been submitted.</p>
+    <div class="popup-contact">
+      <div><i class="fa-solid fa-envelope" style="color:var(--gold); margin-right:6px;"></i>goatfcbd@gmail.com</div>
+      <div><i class="fa-brands fa-whatsapp" style="color:var(--green); margin-right:6px;"></i>+8801521253995</div>
+    </div>
+    <button class="popup-close" onclick="closePopup()">Close</button>
+  </div>
 </div>
 
 <script>
+const DATA_URL = "https://opensheet.elk.sh/1DSPKPaU1ZQYbFM4iYbE1VXgDAXU-FCT7--QhYJsNf1M/CP_System";
 
-const L="https://opensheet.elk.sh/1DSPKPaU1ZQYbFM4iYbE1VXgDAXU-FCT7--QhYJsNf1M/Leaderboard%20Goat%20FC";
-const M="https://opensheet.elk.sh/1DSPKPaU1ZQYbFM4iYbE1VXgDAXU-FCT7--QhYJsNf1M/CLUB%20MEMBERS";
-
-let type="overall";
-
-async function loadData(t){
-  type=t;
-  document.getElementById("overallBtn").classList.remove("active");
-  document.getElementById("monthlyBtn").classList.remove("active");
-  document.getElementById(t+"Btn").classList.add("active");
-
-  let[ld,md]=await Promise.all([
-    fetch(L).then(r=>r.json()),
-    fetch(M).then(r=>r.json())
-  ]);
-
-  let map={};
-  md.forEach(x=>{
-    if(x["Club ID Number"]) map[x["Club ID Number"].trim()]=x["Full Name"];
-  });
-
-  ld=ld.filter(r=>map[r["Club_ID"]?.trim()]);
-
-  ld.sort((a,b)=>{
-    let Am=+(type==="overall"?a["Overall_PL"]:a["Monthly_PL"])||0;
-    let Bm=+(type==="overall"?b["Overall_PL"]:b["Monthly_PL"])||0;
-    if(Am===0&&Bm>0)return 1;
-    if(Bm===0&&Am>0)return -1;
-
-    let Ap=+(type==="overall"?a["Overall_Point"]:a["Monthly_Point"])||0;
-    let Bp=+(type==="overall"?b["Overall_Point"]:b["Monthly_Point"])||0;
-    if(Bp!==Ap)return Bp-Ap;
-
-    let Aw=+(type==="overall"?a["Overall_Win%"]:a["Monthly_Win%"])||0;
-    let Bw=+(type==="overall"?b["Overall_Win%"]:b["Monthly_Win%"])||0;
-    if(Bw!==Aw)return Bw-Aw;
-
-    let Agd=+(type==="overall"?a["Total GD"]:a["Montly GD"])||0;
-    let Bgd=+(type==="overall"?b["Total GD"]:b["Montly GD"])||0;
-    return Bgd-Agd;
-  });
-
-  let tbody=document.getElementById("table");
-  tbody.innerHTML="";
-
-  let totalM=0,totalG=0,totalP=0;
-
-  ld.forEach((r,i)=>{
-    let cls=i==0?"rank1":i==1?"rank2":i==2?"rank3":i<10?"top10":"";
-
-    let m  =+(t==="overall"?r["Overall_PL"]:r["Monthly_PL"])||0;
-    let gf =+(t==="overall"?r["Total GF"]:r["Montly GF"])||0;
-    let pt =+(t==="overall"?r["Overall_Point"]:r["Monthly_Point"])||0;
-    let win=((+(t==="overall"?r["Overall_Win%"]:r["Monthly_Win%"])||0)*100).toFixed(1);
-    let ga =t==="overall"?r["Total GA"]:r["Montly GA"];
-    let gd =t==="overall"?r["Total GD"]:r["Montly GD"];
-
-    totalM+=m; totalG+=gf; totalP+=pt;
-
-    let medal=i==0?"🥇":i==1?"🥈":i==2?"🥉":i+1;
-
-    tbody.innerHTML+=`
-      <tr class="${cls}">
-        <td>${medal}</td>
-        <td class="player">
-          ${map[r["Club_ID"]]}
-          <div class="pid">${r["Club_ID"]}</div>
-        </td>
-        <td>${pt}</td>
-        <td>${m}</td>
-        <td>${win}%</td>
-        <td>${gf}</td>
-        <td>${ga}</td>
-        <td>${gd}</td>
-      </tr>`;
-  });
-
-  let match=Math.round(totalM/2);
-  let per=match?(totalG/match).toFixed(2):0;
-  document.getElementById("m").innerText=match;
-  document.getElementById("g").innerText=totalG;
-  document.getElementById("p").innerText=totalP;
-  document.getElementById("pm").innerText=per;
+function rankClass(i){
+  if(i===0) return 'rk1';
+  if(i===1) return 'rk2';
+  if(i===2) return 'rk3';
+  if(i<10)  return 'rk-top';
+  return 'rk-n';
+}
+function rankIcon(i){
+  if(i===0) return '<i class="fa-solid fa-crown"></i>';
+  if(i===1) return '<i class="fa-solid fa-medal"></i>';
+  if(i===2) return '<i class="fa-solid fa-award"></i>';
+  return `#${i+1}`;
+}
+function rowClass(i){
+  if(i===0) return 'row-rank1';
+  if(i===1) return 'row-rank2';
+  if(i===2) return 'row-rank3';
+  if(i<10)  return 'row-top';
+  return '';
 }
 
-loadData("monthly");
-setInterval(()=>loadData(type),30000);
+async function loadData(){
+  try {
+    const data = await fetch(DATA_URL).then(r=>r.json());
 
+    // Sort by Net CP descending
+    data.sort((a,b)=>(parseInt(b["Net CP"])||0)-(parseInt(a["Net CP"])||0));
+
+    const tbody = document.getElementById("table-body");
+    tbody.innerHTML = "";
+
+    if(!data.length){
+      tbody.innerHTML=`<tr class="empty-row"><td colspan="10"><i class="fa-solid fa-coins" style="opacity:0.3; margin-right:8px;"></i>No data available</td></tr>`;
+      return;
+    }
+
+    data.forEach((club, i)=>{
+      const net     = parseInt(club["Net CP"])||0;
+      const base    = club["Base CP"]||0;
+      const tour    = club["Tournamnet CP"]||0;
+      const bonus   = club["Bonus CP"]||0;
+      const earn    = club["Earn By Bid"]||0;
+      const sell    = club["Sell CP"]||0;
+      const deduct  = club["Deduct By Bid"]||0;
+      const clubId  = club["Player Club ID"]||"—";
+
+      const netCls  = net>=0 ? 'val-net-pos' : 'val-net-neg';
+      const netSign = net>0 ? '+' : '';
+
+      const actionBtn = (net>=1000)
+        ? `<button class="btn-claim" onclick="withdraw('${clubId}')"><i class="fa-solid fa-coins"></i> Claim</button>`
+        : `<button class="btn-locked" disabled><i class="fa-solid fa-lock"></i> Locked</button>`;
+
+      const tr = document.createElement("tr");
+      tr.className = rowClass(i);
+      tr.style.animationDelay = `${i*0.04}s`;
+      tr.innerHTML = `
+        <td><span class="rank-cell ${rankClass(i)}">${rankIcon(i)}</span></td>
+        <td>
+          <div class="player-name">${clubId}</div>
+        </td>
+        <td><span class="val-base">${base}</span></td>
+        <td><span class="val-tour">${tour}</span></td>
+        <td><span class="val-bonus">${bonus}</span></td>
+        <td><span class="val-earn">${earn}</span></td>
+        <td><span class="val-sell">${sell}</span></td>
+        <td><span class="val-deduct">${deduct}</span></td>
+        <td><span class="${netCls}">${netSign}${net}</span></td>
+        <td>${actionBtn}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+  } catch(e){
+    document.getElementById("table-body").innerHTML=
+      `<tr class="empty-row"><td colspan="10">Failed to load data. Please refresh.</td></tr>`;
+  } finally {
+    document.getElementById("loading").style.display="none";
+  }
+}
+
+function withdraw(id){
+  const email   = "goatfcbd@gmail.com";
+  const subject = "GOAT FC CP Withdraw Request";
+  const body    = `Club ID: ${id} requesting 1000 CP withdraw`;
+  window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  document.getElementById("popup").style.visibility="visible";
+}
+
+function closePopup(){
+  document.getElementById("popup").style.visibility="hidden";
+}
+
+loadData();
 </script>
+
 </body>
 </html>

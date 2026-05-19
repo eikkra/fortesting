@@ -22,7 +22,6 @@
   --win:   #39ff14;
   --loss:  #ff3b3b;
   --draw:  #ffd700;
-  --border:rgba(0,255,65,0.18);
   --text:  #c8ffd4;
   --muted: #2e5c38;
 }
@@ -37,31 +36,29 @@ body{
   overflow-x:hidden;
 }
 
-/* ── SCANLINES ── */
+/* SCANLINES */
 body::before{
-  content:'';
-  position:fixed;inset:0;
+  content:'';position:fixed;inset:0;
   background:repeating-linear-gradient(
     0deg,transparent,transparent 2px,
-    rgba(0,255,65,0.018) 2px,rgba(0,255,65,0.018) 4px
+    rgba(0,255,65,0.015) 2px,rgba(0,255,65,0.015) 4px
   );
   pointer-events:none;z-index:1000;
 }
 
-/* ── GRID ── */
+/* GRID */
 body::after{
-  content:'';
-  position:fixed;inset:0;
+  content:'';position:fixed;inset:0;
   background-image:
-    linear-gradient(rgba(0,255,65,0.04) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(0,255,65,0.04) 1px,transparent 1px);
+    linear-gradient(rgba(0,255,65,0.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,255,65,0.035) 1px,transparent 1px);
   background-size:36px 36px;
   animation:gridMove 25s linear infinite;
   pointer-events:none;z-index:0;
 }
 @keyframes gridMove{0%{background-position:0 0;}100%{background-position:36px 36px;}}
 
-/* ── ORBS ── */
+/* ORBS */
 .orb{position:fixed;border-radius:50%;pointer-events:none;z-index:1;filter:blur(80px);}
 .orb1{width:320px;height:320px;top:-80px;left:-60px;
   background:radial-gradient(circle,rgba(0,255,65,0.07) 0%,transparent 70%);
@@ -78,7 +75,7 @@ body::after{
   height:50px;
   display:flex;align-items:center;justify-content:space-between;
   padding:0 16px;
-  background:rgba(2,10,6,0.94);
+  background:rgba(2,10,6,0.95);
   backdrop-filter:blur(16px);
   border-bottom:1px solid rgba(0,255,65,0.14);
   box-shadow:0 2px 20px rgba(0,0,0,0.7);
@@ -112,63 +109,68 @@ body::after{
 .header{
   position:relative;z-index:10;
   text-align:center;
-  padding:22px 16px 16px;
+  padding:20px 16px 14px;
   border-bottom:1px solid rgba(0,255,65,0.1);
   background:linear-gradient(180deg,rgba(0,255,65,0.04) 0%,transparent 100%);
 }
-.header-badge{
-  display:inline-flex;align-items:center;gap:7px;
-  background:rgba(0,255,65,0.07);
-  border:1px solid rgba(0,255,65,0.28);
-  border-radius:4px;padding:3px 12px;
-  font-size:9px;letter-spacing:3px;
-  color:var(--green);text-transform:uppercase;
-  margin-bottom:12px;
+
+/* Big title badge — replaces old badge + h1 */
+.title-badge{
+  display:inline-flex;align-items:center;gap:10px;
+  background:rgba(0,255,65,0.06);
+  border:1px solid rgba(0,255,65,0.3);
+  border-radius:8px;
+  padding:10px 24px;
   animation:badgePulse 3s ease-in-out infinite;
+  margin-bottom:10px;
 }
-@keyframes badgePulse{0%,100%{box-shadow:0 0 6px rgba(0,255,65,0.2);}50%{box-shadow:0 0 18px rgba(0,255,65,0.5);}}
-.header h1{
+@keyframes badgePulse{
+  0%,100%{box-shadow:0 0 10px rgba(0,255,65,0.2);}
+  50%{box-shadow:0 0 24px rgba(0,255,65,0.5);}
+}
+.title-badge .dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 8px var(--green);
+  animation:blink 1.2s infinite;
+  flex-shrink:0;
+}
+.title-badge .title-text{
   font-family:'Orbitron',sans-serif;
-  font-size:clamp(16px,4vw,28px);font-weight:900;letter-spacing:2px;
+  font-size:clamp(16px,4vw,26px);
+  font-weight:900;letter-spacing:3px;
   color:var(--green);
-  text-shadow:0 0 8px var(--green),0 0 20px var(--green),0 0 40px rgba(0,255,65,0.4);
-  line-height:1.1;
+  text-shadow:0 0 10px var(--green),0 0 22px rgba(0,255,65,0.5);
+  text-transform:uppercase;
 }
 .header-desc{
-  margin-top:8px;font-size:10px;
-  color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;
+  font-size:10px;color:var(--muted);
+  letter-spacing:1.5px;text-transform:uppercase;
 }
 
 /* ── FILTER ROW ── */
 .filter-wrap{
   position:relative;z-index:10;
-  padding:12px 10px;
-  display:flex;
-  align-items:center;
-  gap:6px;
-  flex-wrap:nowrap;
-  overflow-x:auto;
+  padding:8px 10px;
+  display:flex;align-items:center;gap:5px;
+  flex-wrap:nowrap;overflow-x:auto;
   border-bottom:1px solid rgba(0,255,65,0.08);
-  background:rgba(0,255,65,0.02);
+  background:rgba(0,255,65,0.018);
   scrollbar-width:none;
 }
 .filter-wrap::-webkit-scrollbar{display:none;}
 
 .filter-wrap select,
 .filter-wrap input[type="date"]{
-  height:34px;
-  padding:0 8px;
+  height:30px;padding:0 7px;
   background:var(--bg3);
-  border:1px solid rgba(0,255,65,0.25);
-  border-radius:6px;
+  border:1px solid rgba(0,255,65,0.22);
+  border-radius:5px;
   color:var(--green);
-  font-family:'Exo 2',sans-serif;
-  font-size:11px;
-  outline:none;
-  flex-shrink:0;
-  transition:border-color 0.2s;
-  -webkit-appearance:none;
-  appearance:none;
+  font-family:'Share Tech Mono',monospace;
+  font-size:10px;outline:none;
+  flex-shrink:0;transition:border-color 0.2s;
+  -webkit-appearance:none;appearance:none;
 }
 .filter-wrap select:focus,
 .filter-wrap input[type="date"]:focus{
@@ -176,55 +178,41 @@ body::after{
   box-shadow:0 0 0 2px rgba(0,255,65,0.1);
 }
 .filter-wrap select option{background:#0a1a0c;color:var(--green);}
-
-.sel-type{width:90px;}
-.inp-date{width:120px;}
+.sel-type{width:88px;}
+.inp-date{width:116px;}
 
 .filter-btn{
-  height:34px;
-  padding:0 14px;
+  height:30px;padding:0 12px;
   background:linear-gradient(135deg,var(--green2),var(--green3));
-  color:#000;border:none;border-radius:6px;
+  color:#000;border:none;border-radius:5px;
   font-family:'Orbitron',sans-serif;
-  font-size:10px;font-weight:700;letter-spacing:1px;
-  cursor:pointer;flex-shrink:0;
-  transition:all 0.2s;
+  font-size:9px;font-weight:700;letter-spacing:0.5px;
+  cursor:pointer;flex-shrink:0;transition:all 0.2s;
   white-space:nowrap;
 }
-.filter-btn:hover{box-shadow:0 0 14px rgba(0,255,65,0.5);transform:scale(1.03);}
+.filter-btn:hover{box-shadow:0 0 14px rgba(0,255,65,0.5);}
 
 .reset-btn{
-  height:34px;
-  padding:0 12px;
-  background:transparent;
-  color:var(--muted);
+  height:30px;padding:0 10px;
+  background:transparent;color:var(--muted);
   border:1px solid rgba(0,255,65,0.15);
-  border-radius:6px;
+  border-radius:5px;
   font-family:'Exo 2',sans-serif;
-  font-size:11px;font-weight:600;
-  cursor:pointer;flex-shrink:0;
-  transition:all 0.2s;
+  font-size:10px;font-weight:600;
+  cursor:pointer;flex-shrink:0;transition:all 0.2s;
 }
 .reset-btn:hover{color:var(--green);border-color:rgba(0,255,65,0.35);}
-
-.row-count{
-  margin-left:auto;
-  font-family:'Share Tech Mono',monospace;
-  font-size:10px;color:var(--muted);
-  white-space:nowrap;flex-shrink:0;
-}
-.row-count span{color:var(--green);}
 
 /* ── TABLE WRAP ── */
 .table-wrap{
   position:relative;z-index:10;
-  max-height:calc(100vh - 260px);
+  max-height:calc(100vh - 220px);
   overflow:auto;
   scrollbar-width:thin;
-  scrollbar-color:rgba(0,255,65,0.2) transparent;
+  scrollbar-color:rgba(0,255,65,0.18) transparent;
 }
 .table-wrap::-webkit-scrollbar{width:4px;height:4px;}
-.table-wrap::-webkit-scrollbar-thumb{background:rgba(0,255,65,0.2);border-radius:2px;}
+.table-wrap::-webkit-scrollbar-thumb{background:rgba(0,255,65,0.18);border-radius:2px;}
 
 /* ── TABLE ── */
 table{
@@ -234,95 +222,80 @@ table{
 }
 
 thead{position:sticky;top:0;z-index:20;}
-
 thead tr{
-  background:rgba(2,10,6,0.97);
-  border-bottom:1px solid rgba(0,255,65,0.25);
+  background:rgba(2,10,6,0.98);
+  border-bottom:1px solid rgba(0,255,65,0.22);
 }
 
 th{
   font-family:'Orbitron',sans-serif;
   font-size:9px;font-weight:700;
-  letter-spacing:1px;text-transform:uppercase;
+  letter-spacing:0.8px;text-transform:uppercase;
   color:var(--green);
-  padding:10px 4px;
+  padding:9px 6px;
   text-align:center;
   white-space:nowrap;
+  overflow:hidden;
 }
 
-/* Column widths */
-col.c-date  {width:13%;}
-col.c-type  {width:9%;}
-col.c-p1    {width:22%;}
-col.c-p2    {width:22%;}
-col.c-score {width:12%;}
-col.c-point {width:11%;}
-col.c-res   {width:11%;}
+/* ── COLUMN WIDTHS — balanced for both mobile & PC ── */
+/* 6 columns: Date | Type | P1 | P2 | Score | Pts */
+col.c-date  {width:14%;}
+col.c-type  {width:12%;}
+col.c-p1    {width:24%;}
+col.c-p2    {width:24%;}
+col.c-score {width:14%;}
+col.c-point {width:12%;}
 
 td{
-  padding:7px 4px;
-  font-size:10px;
+  padding:7px 6px;
+  font-size:11px;
   text-align:center;
   white-space:nowrap;
   border-bottom:1px solid rgba(0,255,65,0.05);
-  overflow:hidden;
-  text-overflow:ellipsis;
-  transition:background 0.15s;
+  overflow:hidden;text-overflow:ellipsis;
+  transition:background 0.12s;
 }
 
-tbody tr:hover td{background:rgba(0,255,65,0.04);}
+tbody tr:hover td{background:rgba(0,255,65,0.045)!important;}
 tbody tr:last-child td{border-bottom:none;}
+tbody tr:nth-child(even) td{background:rgba(0,255,65,0.012);}
 
-/* Alternate rows */
-tbody tr:nth-child(even) td{background:rgba(0,255,65,0.015);}
-tbody tr:nth-child(even):hover td{background:rgba(0,255,65,0.04);}
-
+/* CELLS */
 .td-date{
   font-family:'Share Tech Mono',monospace;
-  font-size:10px;color:var(--cyan);font-weight:600;
+  font-size:11px;color:var(--cyan);font-weight:600;
 }
-.td-type{
-  font-size:9px;letter-spacing:0.5px;
-  color:rgba(0,255,65,0.6);
-}
-
-/* type badges */
+/* type badge */
 .badge{
   display:inline-block;
-  padding:2px 6px;border-radius:4px;
-  font-size:8px;font-weight:700;letter-spacing:0.5px;
-  text-transform:uppercase;
+  padding:2px 5px;border-radius:4px;
+  font-size:9px;font-weight:700;letter-spacing:0.3px;
+  text-transform:uppercase;white-space:nowrap;
 }
-.badge-f   {background:rgba(0,245,255,0.1); color:var(--cyan);  border:1px solid rgba(0,245,255,0.25);}
-.badge-s   {background:rgba(191,0,255,0.1); color:#d466ff;       border:1px solid rgba(191,0,255,0.25);}
-.badge-b   {background:rgba(255,180,0,0.1); color:#ffb300;        border:1px solid rgba(255,180,0,0.25);}
-.badge-l   {background:rgba(255,60,60,0.1); color:#ff6b6b;        border:1px solid rgba(255,60,60,0.25);}
-.badge-c   {background:rgba(57,255,20,0.1); color:var(--green);   border:1px solid rgba(57,255,20,0.25);}
-.badge-o   {background:rgba(255,255,255,0.06); color:#888;        border:1px solid rgba(255,255,255,0.1);}
+.badge-f{background:rgba(0,245,255,0.1);color:var(--cyan);border:1px solid rgba(0,245,255,0.25);}
+.badge-s{background:rgba(191,0,255,0.1);color:#d466ff;border:1px solid rgba(191,0,255,0.25);}
+.badge-b{background:rgba(255,180,0,0.1);color:#ffb300;border:1px solid rgba(255,180,0,0.25);}
+.badge-l{background:rgba(255,60,60,0.1);color:#ff6b6b;border:1px solid rgba(255,60,60,0.25);}
+.badge-c{background:rgba(57,255,20,0.1);color:var(--green);border:1px solid rgba(57,255,20,0.25);}
+.badge-o{background:rgba(255,255,255,0.06);color:#888;border:1px solid rgba(255,255,255,0.1);}
 
-.td-player{
-  font-size:10px;font-weight:600;color:var(--text);
-  overflow:hidden;text-overflow:ellipsis;
-}
-.p-win  {color:var(--win)!important; text-shadow:0 0 6px rgba(57,255,20,0.5);}
-.p-loss {color:var(--loss)!important;}
-.p-draw {color:var(--draw)!important;}
+.td-player{font-size:11px;font-weight:600;color:var(--text);}
+.p-win {color:var(--win)!important;text-shadow:0 0 6px rgba(57,255,20,0.45);}
+.p-loss{color:var(--loss)!important;}
+.p-draw{color:var(--draw)!important;}
 
 .td-score{
-  font-family:'Orbitron',sans-serif;
-  font-size:11px;font-weight:700;color:var(--text);
+  font-family:'Share Tech Mono',monospace;
+  font-size:13px;font-weight:700;color:var(--text);
+  letter-spacing:1px;
 }
 .score-gold{color:var(--yellow)!important;text-shadow:0 0 8px rgba(255,215,0,0.6);}
 
 .td-point{
   font-family:'Share Tech Mono',monospace;
-  font-size:10px;color:rgba(0,255,65,0.6);
+  font-size:11px;color:rgba(0,255,65,0.55);
 }
-
-.td-res{font-size:9px;}
-.res-w{color:var(--win);font-weight:700;}
-.res-l{color:var(--loss);}
-.res-d{color:var(--draw);}
 
 /* ── LOADING ── */
 #loading{
@@ -335,8 +308,7 @@ tbody tr:nth-child(even):hover td{background:rgba(0,255,65,0.04);}
   width:60px;height:60px;
   border:3px solid rgba(0,255,65,0.12);
   border-top-color:var(--green);
-  border-radius:50%;
-  animation:spin 0.9s linear infinite;
+  border-radius:50%;animation:spin 0.9s linear infinite;
 }
 @keyframes spin{to{transform:rotate(360deg);}}
 .loader-text{
@@ -354,33 +326,61 @@ tbody tr:nth-child(even):hover td{background:rgba(0,255,65,0.04);}
 /* ── FOOTER ── */
 .powered-by{
   position:relative;z-index:10;
-  text-align:center;padding:12px 0 18px;
+  text-align:center;padding:10px 0 16px;
   font-family:'Orbitron',sans-serif;
   font-size:9px;letter-spacing:3px;
-  color:var(--muted);text-transform:uppercase;opacity:0.4;
+  color:var(--muted);text-transform:uppercase;opacity:0.38;
 }
 
 /* ── MOBILE ── */
 @media(max-width:600px){
-  .header{padding:16px 12px 12px;}
-  .header h1{font-size:15px;}
-  .filter-wrap{padding:8px 8px;gap:5px;}
-  .sel-type{width:76px;font-size:10px;}
-  .inp-date{width:106px;font-size:10px;}
-  .filter-btn,.reset-btn{height:30px;font-size:9px;padding:0 10px;}
-  .row-count{font-size:9px;}
-  .table-wrap{max-height:calc(100vh - 240px);}
-  th{font-size:8px;padding:8px 3px;letter-spacing:0.5px;}
-  td{font-size:9px;padding:6px 3px;}
-  .td-score{font-size:10px;}
-  .badge{font-size:7px;padding:1px 4px;}
+  .header{padding:14px 10px 12px;}
+  .title-badge{padding:8px 16px;gap:8px;}
+  .title-badge .title-text{font-size:15px;letter-spacing:2px;}
+  .header-desc{font-size:9px;}
+
+  .filter-wrap{padding:6px 8px;gap:4px;}
+  .sel-type{width:80px;font-size:9px;}
+  .inp-date{width:104px;font-size:9px;}
+  .filter-btn{height:28px;font-size:8px;padding:0 10px;}
+  .reset-btn{height:28px;font-size:9px;padding:0 8px;}
+
+  .table-wrap{max-height:calc(100vh - 205px);}
+
+  /* Tighter on mobile */
+  col.c-date  {width:16%;}
+  col.c-type  {width:14%;}
+  col.c-p1    {width:22%;}
+  col.c-p2    {width:22%;}
+  col.c-score {width:14%;}
+  col.c-point {width:12%;}
+
+  th{font-size:8px;padding:7px 3px;letter-spacing:0.3px;}
+  td{font-size:10px;padding:6px 3px;}
+  .td-date{font-size:10px;}
+  .td-score{font-size:12px;}
+  .td-point{font-size:10px;}
+  .td-player{font-size:10px;}
+  .badge{font-size:8px;padding:1px 4px;}
+}
+
+@media(max-width:380px){
+  .sel-type{width:70px;}
+  .inp-date{width:96px;}
+  col.c-date {width:17%;}
+  col.c-type {width:14%;}
+  col.c-p1   {width:21%;}
+  col.c-p2   {width:21%;}
+  col.c-score{width:15%;}
+  col.c-point{width:12%;}
+  th,td{font-size:9px;padding:6px 2px;}
+  .td-score{font-size:11px;}
 }
 </style>
 </head>
 
 <body>
 
-<!-- ORBS -->
 <div class="orb orb1"></div>
 <div class="orb orb2"></div>
 
@@ -396,19 +396,17 @@ tbody tr:nth-child(even):hover td{background:rgba(0,255,65,0.04);}
     <img src="https://i.imgur.com/LY3Bb9m.png" class="top-logo" alt="GOAT FC">
     <div class="top-title">GOAT FC</div>
   </div>
-  <div class="home-btn">
-    <i class="fa-solid fa-house"></i>
-  </div>
+  <div class="home-btn"><i class="fa-solid fa-house"></i></div>
   <div class="topbar-glow"></div>
 </a>
 
 <!-- HEADER -->
 <div class="header">
-  <div class="header-badge">
-    <i class="fa-solid fa-circle" style="font-size:6px;animation:blink 1.2s infinite;"></i>
-    LIVE LOG SYSTEM
+  <div class="title-badge">
+    <div class="dot"></div>
+    <div class="title-text"><i class="fa-solid fa-terminal" style="margin-right:8px;opacity:0.75;"></i>LIVE MATCH LOG</div>
+    <div class="dot"></div>
   </div>
-  <h1><i class="fa-solid fa-terminal" style="margin-right:8px;opacity:0.7;"></i>MATCH LOG</h1>
   <div class="header-desc">
     <i class="fa-solid fa-shield-halved" style="color:var(--green);margin-right:5px;"></i>
     Approved matches only &bull; Real-time data feed
@@ -425,18 +423,14 @@ tbody tr:nth-child(even):hover td{background:rgba(0,255,65,0.04);}
     <option value="League">League</option>
     <option value="Co-op">Co-op</option>
   </select>
-
   <input type="date" id="startDate" class="inp-date">
   <input type="date" id="endDate"   class="inp-date">
-
   <button class="filter-btn" onclick="applyFilter()">
-    <i class="fa-solid fa-filter" style="margin-right:4px;"></i>Filter
+    <i class="fa-solid fa-filter" style="margin-right:3px;"></i>Filter
   </button>
   <button class="reset-btn" onclick="resetFilter()">
-    <i class="fa-solid fa-rotate-left" style="margin-right:4px;"></i>Reset
+    <i class="fa-solid fa-rotate-left" style="margin-right:3px;"></i>Reset
   </button>
-
-  <div class="row-count">Rows: <span id="rowCount">0</span></div>
 </div>
 
 <!-- TABLE -->
@@ -445,7 +439,7 @@ tbody tr:nth-child(even):hover td{background:rgba(0,255,65,0.04);}
     <colgroup>
       <col class="c-date"><col class="c-type">
       <col class="c-p1"><col class="c-p2">
-      <col class="c-score"><col class="c-point"><col class="c-res">
+      <col class="c-score"><col class="c-point">
     </colgroup>
     <thead>
       <tr>
@@ -455,7 +449,6 @@ tbody tr:nth-child(even):hover td{background:rgba(0,255,65,0.04);}
         <th>Player 2</th>
         <th>Score</th>
         <th>Pts</th>
-        <th>Result</th>
       </tr>
     </thead>
     <tbody id="tableBody"></tbody>
@@ -478,18 +471,17 @@ function parseDate(str){
 }
 
 function formatDate(d){
-  const y=d.getFullYear();
-  const m=String(d.getMonth()+1).padStart(2,'0');
-  const day=String(d.getDate()).padStart(2,'0');
-  return `${y}-${m}-${day}`;
+  return d.getFullYear()+"-"+
+    String(d.getMonth()+1).padStart(2,'0')+"-"+
+    String(d.getDate()).padStart(2,'0');
 }
 
 function typeBadge(t){
-  if(t==="Friendly")         return `<span class="badge badge-f">Friendly</span>`;
-  if(t==="Solo Tournament")  return `<span class="badge badge-s">Solo</span>`;
-  if(t==="Bid Tournament")   return `<span class="badge badge-b">Bid</span>`;
-  if(t==="League")           return `<span class="badge badge-l">League</span>`;
-  if(t==="Co-op")            return `<span class="badge badge-c">Co-op</span>`;
+  if(t==="Friendly")        return `<span class="badge badge-f">Friendly</span>`;
+  if(t==="Solo Tournament") return `<span class="badge badge-s">Solo</span>`;
+  if(t==="Bid Tournament")  return `<span class="badge badge-b">Bid</span>`;
+  if(t==="League")          return `<span class="badge badge-l">League</span>`;
+  if(t==="Co-op")           return `<span class="badge badge-c">Co-op</span>`;
   return `<span class="badge badge-o">${t||'—'}</span>`;
 }
 
@@ -522,10 +514,10 @@ async function loadData(){
       .filter(r=>r.approved==="yes")
       .sort((a,b)=>b.date-a.date||b.index-a.index);
     render(allData);
-  } catch(e){
+  }catch(e){
     document.getElementById("tableBody").innerHTML=
-      `<tr class="empty-row"><td colspan="7">Failed to load data. Please refresh.</td></tr>`;
-  } finally{
+      `<tr class="empty-row"><td colspan="6">Failed to load data. Please refresh.</td></tr>`;
+  }finally{
     document.getElementById("loading").style.display="none";
   }
 }
@@ -537,7 +529,7 @@ function applyFilter(){
   const ev=document.getElementById("endDate").value;
   const start=sv?new Date(sv):null;
   const end=ev?new Date(ev+' 23:59:59'):null;
-  if(type) data=data.filter(r=>r.type===type);
+  if(type)  data=data.filter(r=>r.type===type);
   if(start) data=data.filter(r=>r.date>=start);
   if(end)   data=data.filter(r=>r.date<=end);
   render(data);
@@ -553,21 +545,19 @@ function resetFilter(){
 function render(data){
   const tbody=document.getElementById("tableBody");
   const limit=Math.min(data.length,500);
-  document.getElementById("rowCount").textContent=limit+(data.length>500?'+':'');
 
   if(!limit){
-    tbody.innerHTML=`<tr class="empty-row"><td colspan="7"><i class="fa-solid fa-circle-xmark" style="margin-right:6px;opacity:0.4;"></i>No matches found</td></tr>`;
+    tbody.innerHTML=`<tr class="empty-row"><td colspan="6"><i class="fa-solid fa-circle-xmark" style="margin-right:6px;opacity:0.4;"></i>No matches found</td></tr>`;
     return;
   }
 
-  // Build HTML in one pass — fastest possible
   const parts=new Array(limit);
   for(let i=0;i<limit;i++){
     const r=data[i];
-    let p1c="td-player",p2c="td-player",res="";
-    if(r.s1>r.s2){p1c+=" p-win";p2c+=" p-loss";res=`<span class="res-w">W/L</span>`;}
-    else if(r.s1<r.s2){p1c+=" p-loss";p2c+=" p-win";res=`<span class="res-l">L/W</span>`;}
-    else{p1c+=" p-draw";p2c+=" p-draw";res=`<span class="res-d">DRAW</span>`;}
+    let p1c="td-player",p2c="td-player";
+    if(r.s1>r.s2){p1c+=" p-win";p2c+=" p-loss";}
+    else if(r.s1<r.s2){p1c+=" p-loss";p2c+=" p-win";}
+    else{p1c+=" p-draw";p2c+=" p-draw";}
     const gold=(r.s1>=7||r.s2>=7)?" score-gold":"";
     parts[i]=`<tr>
 <td class="td-date">${formatDate(r.date)}</td>
@@ -576,7 +566,6 @@ function render(data){
 <td class="${p2c}">${r.p2}</td>
 <td class="td-score${gold}">${r.s1}-${r.s2}</td>
 <td class="td-point">${r.pt1}-${r.pt2}</td>
-<td class="td-res">${res}</td>
 </tr>`;
   }
   tbody.innerHTML=parts.join("");

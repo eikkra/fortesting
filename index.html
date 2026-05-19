@@ -6,7 +6,7 @@
 <title>ELITE ATHLETE — GOAT FC</title>
 <link rel="icon" type="image/png" href="https://i.imgur.com/LY3Bb9m.png"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@500;600;700&family=Orbitron:wght@700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@500;600;700&family=Space+Mono:wght@400;700&family=Exo+2:wght@700;800;900&display=swap" rel="stylesheet">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -17,39 +17,32 @@
 --surface2:#111122;
 --surface3:#161628;
 --border:#1e1e3a;
---border2:#252545;
+--border2:#252548;
 --neon-cyan:#00f0ff;
 --neon-purple:#bf00ff;
 --neon-green:#00ff88;
 --neon-pink:#ff007a;
 --neon-yellow:#f5ff00;
---neon-orange:#ff6a00;
 --text:#eef0ff;
---muted:#555577;
+--muted:#5a5a80;
 --muted2:#383860;
+--stat-accent:#7dd3fc;
 }
 
 @keyframes rgbBorder{
-0%{border-color:#00f0ff;box-shadow:0 0 14px #00f0ff55,inset 0 0 8px #00f0ff15;}
-33%{border-color:#bf00ff;box-shadow:0 0 14px #bf00ff55,inset 0 0 8px #bf00ff15;}
-66%{border-color:#ff007a;box-shadow:0 0 14px #ff007a55,inset 0 0 8px #ff007a15;}
-100%{border-color:#00f0ff;box-shadow:0 0 14px #00f0ff55,inset 0 0 8px #00f0ff15;}
+0%{border-color:#00f0ff;box-shadow:0 0 16px #00f0ff60,inset 0 0 8px #00f0ff18;}
+33%{border-color:#bf00ff;box-shadow:0 0 16px #bf00ff60,inset 0 0 8px #bf00ff18;}
+66%{border-color:#ff007a;box-shadow:0 0 16px #ff007a60,inset 0 0 8px #ff007a18;}
+100%{border-color:#00f0ff;box-shadow:0 0 16px #00f0ff60,inset 0 0 8px #00f0ff18;}
 }
 
-@keyframes pulseGlow{
-0%,100%{opacity:1;}50%{opacity:0.4;}
+@keyframes pulse{
+0%,100%{opacity:1;}50%{opacity:0.35;}
 }
 
 @keyframes shimmer{
 0%{background-position:200% center;}
 100%{background-position:-200% center;}
-}
-
-@keyframes rgbGlow{
-0%{text-shadow:0 0 10px #00f0ff,0 0 20px #00f0ff44;}
-33%{text-shadow:0 0 10px #bf00ff,0 0 20px #bf00ff44;}
-66%{text-shadow:0 0 10px #ff007a,0 0 20px #ff007a44;}
-100%{text-shadow:0 0 10px #00f0ff,0 0 20px #00f0ff44;}
 }
 
 body{
@@ -65,12 +58,11 @@ content:"";
 position:fixed;inset:0;
 background:
 radial-gradient(ellipse at 15% 15%,rgba(0,240,255,0.05) 0%,transparent 45%),
-radial-gradient(ellipse at 85% 85%,rgba(191,0,255,0.05) 0%,transparent 45%),
-radial-gradient(ellipse at 50% 50%,rgba(255,0,122,0.02) 0%,transparent 55%);
+radial-gradient(ellipse at 85% 85%,rgba(191,0,255,0.05) 0%,transparent 45%);
 pointer-events:none;z-index:-1;
 }
 
-/* TOPBAR */
+/* ── TOPBAR ── */
 .topbar{
 height:46px;
 display:flex;align-items:center;justify-content:space-between;
@@ -107,92 +99,93 @@ transition:all .2s;
 }
 .home-btn:hover{background:rgba(0,240,255,0.08);box-shadow:0 0 10px rgba(0,240,255,0.2);}
 
-/* HERO */
-.hero{text-align:center;padding:14px 16px 8px;}
-
-.hero-tag{
-display:inline-flex;align-items:center;gap:7px;
-font-family:'Space Mono',monospace;
-font-size:8px;letter-spacing:4px;
-color:var(--neon-green);
-text-shadow:0 0 8px var(--neon-green);
-border:1px solid rgba(0,255,136,0.2);
-padding:4px 12px;margin-bottom:7px;
-text-transform:uppercase;
-}
-
-.live-dot{
-width:7px;height:7px;border-radius:50%;
-background:var(--neon-green);
-box-shadow:0 0 8px var(--neon-green);
-animation:pulseGlow 1.5s ease-in-out infinite;
+/* ── HERO ── */
+.hero{
+text-align:center;
+padding:18px 16px 10px;
 }
 
 .hero-title{
 font-family:'Orbitron',sans-serif;
-font-size:20px;font-weight:900;letter-spacing:6px;
+font-size:26px;font-weight:900;letter-spacing:7px;
 background:linear-gradient(90deg,#00f0ff,#bf00ff,#ff007a,#f5ff00,#00f0ff);
 background-size:300% auto;
 -webkit-background-clip:text;-webkit-text-fill-color:transparent;
 animation:shimmer 4s linear infinite;
+line-height:1;
 }
 
-/* APP */
+.hero-slogan{
+margin-top:6px;
+font-family:'Exo 2',sans-serif;
+font-size:10px;font-weight:700;
+letter-spacing:5px;
+color:var(--muted);
+text-transform:uppercase;
+}
+
+/* ── APP ── */
 #app{
 width:100%;max-width:680px;
 margin:0 auto;
-padding:0 10px 40px;
+padding:8px 10px 40px;
 }
 
-/* CARD */
+/* ── CARD ── */
 .profile{
 background:var(--surface);
 border:1px solid rgba(0,240,255,0.1);
 border-radius:6px;overflow:hidden;
-box-shadow:0 0 50px rgba(0,240,255,0.03),0 0 100px rgba(191,0,255,0.03);
+box-shadow:0 0 60px rgba(0,240,255,0.03),0 0 120px rgba(191,0,255,0.03);
 }
 
-/* COVER */
+/* ── COVER — clear, no blur, shorter ── */
 .cover{
-height:130px;
+height:100px;
 position:relative;overflow:hidden;
 background:#05050f;
 }
 
 .cover-img{
 width:100%;height:100%;
-object-fit:cover;object-position:center 30%;
-opacity:0.65;
+object-fit:cover;
+object-position:center 35%;
+opacity:0.88;
+/* NO filter/blur */
 }
 
 .cover-overlay{
 position:absolute;inset:0;
-background:linear-gradient(0deg,rgba(6,6,16,1) 0%,rgba(6,6,16,0.55) 45%,rgba(6,6,16,0.05) 100%);
+background:linear-gradient(
+0deg,
+rgba(6,6,16,0.95) 0%,
+rgba(6,6,16,0.3) 50%,
+rgba(6,6,16,0.0) 100%
+);
 }
 
 .cover-grid{
 position:absolute;inset:0;
 background:
-repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(0,240,255,0.04) 39px,rgba(0,240,255,0.04) 40px),
-repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(0,240,255,0.02) 39px,rgba(0,240,255,0.02) 40px);
+repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(0,240,255,0.03) 39px,rgba(0,240,255,0.03) 40px),
+repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(0,240,255,0.015) 39px,rgba(0,240,255,0.015) 40px);
 }
 
-/* NAME ROW */
+/* ── NAME ROW ── */
 .name-row{
-display:flex;align-items:center;justify-content:space-between;
-padding:8px 14px 10px;
+display:flex;align-items:center;
+padding:10px 14px 12px;
 border-bottom:1px solid var(--border);
-background:linear-gradient(90deg,rgba(0,240,255,0.03),rgba(191,0,255,0.03));
-gap:8px;
+background:linear-gradient(90deg,rgba(0,240,255,0.025),rgba(191,0,255,0.025));
+gap:12px;
 }
 
-.name-left{display:flex;align-items:center;gap:10px;min-width:0;flex:1;}
-
+/* AVATAR — bigger */
 .avatar-frame{
 flex-shrink:0;
-width:50px;height:50px;
+width:62px;height:62px;
 border-radius:5px;
-border:2px solid var(--neon-cyan);
+border:2.5px solid var(--neon-cyan);
 overflow:hidden;
 background:var(--surface2);
 animation:rgbBorder 4s linear infinite;
@@ -202,43 +195,45 @@ animation:rgbBorder 4s linear infinite;
 
 .name-stack{min-width:0;flex:1;}
 
+/* PLAYER NAME — gaming font */
 .player-name{
-font-family:'Orbitron',sans-serif;
-font-size:13px;font-weight:900;letter-spacing:1px;
+font-family:'Exo 2',sans-serif;
+font-size:17px;font-weight:900;
+letter-spacing:1.5px;
 line-height:1.1;
-background:linear-gradient(90deg,#ffffff,#b0ccff);
+background:linear-gradient(90deg,#ffffff 0%,#a0d4ff 60%,#bf00ff 100%);
 -webkit-background-clip:text;-webkit-text-fill-color:transparent;
 white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+display:flex;align-items:center;gap:7px;
 }
 
-.club-id-pill{
-display:inline-flex;align-items:center;gap:5px;
-margin-top:4px;
-font-family:'Space Mono',monospace;
-font-size:8px;letter-spacing:1.5px;
-color:var(--neon-cyan);
-text-shadow:0 0 8px var(--neon-cyan);
-border:1px solid rgba(0,240,255,0.25);
-padding:2px 7px;
-background:rgba(0,240,255,0.06);
-}
-
-.online-badge{
-display:flex;align-items:center;gap:5px;flex-shrink:0;
-font-family:'Space Mono',monospace;
-font-size:7px;letter-spacing:2px;
-color:var(--neon-green);
-text-shadow:0 0 6px var(--neon-green);
-}
-
-.online-dot{
-width:7px;height:7px;border-radius:50%;
+.online-dot-inline{
+display:inline-block;flex-shrink:0;
+width:8px;height:8px;border-radius:50%;
 background:var(--neon-green);
 box-shadow:0 0 9px var(--neon-green);
-animation:pulseGlow 1.5s ease-in-out infinite;
+animation:pulse 1.5s ease-in-out infinite;
 }
 
-/* RANK STRIP */
+/* CLUB ID — pro pill */
+.club-id-pill{
+display:inline-flex;align-items:center;gap:6px;
+margin-top:5px;
+font-family:'Exo 2',sans-serif;
+font-size:10px;font-weight:800;
+letter-spacing:2px;
+color:var(--neon-cyan);
+text-shadow:0 0 10px rgba(0,240,255,0.7);
+border:1px solid rgba(0,240,255,0.3);
+padding:3px 10px;
+background:rgba(0,240,255,0.07);
+border-radius:3px;
+text-transform:uppercase;
+}
+
+.club-id-pill i{font-size:9px;opacity:0.8;}
+
+/* ── RANK STRIP ── */
 .rank-strip{display:grid;grid-template-columns:1fr 1fr;}
 
 .rank-cell{
@@ -268,10 +263,13 @@ color:var(--neon-cyan);
 box-shadow:0 0 10px rgba(0,240,255,0.2);
 }
 
+/* label bold + light color */
 .rank-label{
-font-family:'Space Mono',monospace;
-font-size:7px;letter-spacing:2px;
-color:var(--muted);text-transform:uppercase;
+font-family:'Exo 2',sans-serif;
+font-size:8px;font-weight:800;
+letter-spacing:2px;
+color:#7dd3fc;
+text-transform:uppercase;
 }
 
 .rank-value{
@@ -282,50 +280,63 @@ font-size:20px;font-weight:900;letter-spacing:1px;line-height:1.1;
 .rank-value.gold{color:#ffcc00;text-shadow:0 0 14px rgba(255,200,0,0.55);}
 .rank-value.cyan{color:var(--neon-cyan);text-shadow:0 0 14px rgba(0,240,255,0.55);}
 
-/* DIVIDER */
+/* ── DIVIDER ── */
 .sdiv{
 height:1px;
 background:linear-gradient(90deg,transparent,var(--border2),transparent);
 margin:0 14px;
 }
 
-/* STATS */
+/* ── STATS ── */
 .stats-section{padding:12px 14px;}
 
 .sec-label{
-font-family:'Space Mono',monospace;
-font-size:7px;letter-spacing:3px;
-color:var(--muted);text-transform:uppercase;
+font-family:'Exo 2',sans-serif;
+font-size:8px;font-weight:800;
+letter-spacing:3px;
+color:#7dd3fc;
+text-transform:uppercase;
 margin-bottom:8px;
 }
 
+/* WLD — bold labels, lighter color */
 .wld-row{
 display:grid;grid-template-columns:1fr 1fr 1fr;
 gap:6px;margin-bottom:7px;
 }
 
 .wld-cell{
-border-radius:4px;padding:9px 8px;
-display:flex;align-items:center;gap:7px;
+border-radius:4px;padding:10px 8px;
+display:flex;align-items:center;gap:8px;
 background:var(--surface2);border:1px solid var(--border2);
 transition:transform .2s;
 }
 .wld-cell:hover{transform:translateY(-1px);}
+
 .wld-cell.win-cell{border-color:rgba(0,255,136,0.2);background:rgba(0,255,136,0.04);box-shadow:0 0 14px rgba(0,255,136,0.07);}
 .wld-cell.loss-cell{border-color:rgba(255,0,122,0.2);background:rgba(255,0,122,0.04);box-shadow:0 0 14px rgba(255,0,122,0.07);}
 .wld-cell.draw-cell{border-color:rgba(245,255,0,0.2);background:rgba(245,255,0,0.04);box-shadow:0 0 14px rgba(245,255,0,0.07);}
 
-.wld-bar{width:3px;height:30px;border-radius:99px;flex-shrink:0;}
+.wld-bar{width:3px;height:32px;border-radius:99px;flex-shrink:0;}
 .wld-bar.w{background:var(--neon-green);box-shadow:0 0 8px var(--neon-green);}
 .wld-bar.l{background:var(--neon-pink);box-shadow:0 0 8px var(--neon-pink);}
 .wld-bar.d{background:var(--neon-yellow);box-shadow:0 0 8px var(--neon-yellow);}
 
-.wld-num{font-family:'Orbitron',sans-serif;font-size:20px;font-weight:900;line-height:1;}
+.wld-num{font-family:'Orbitron',sans-serif;font-size:22px;font-weight:900;line-height:1;}
 .wld-num.w{color:var(--neon-green);text-shadow:0 0 10px var(--neon-green);}
 .wld-num.l{color:var(--neon-pink);text-shadow:0 0 10px var(--neon-pink);}
 .wld-num.d{color:var(--neon-yellow);text-shadow:0 0 10px var(--neon-yellow);}
-.wld-lbl{font-family:'Space Mono',monospace;font-size:7px;letter-spacing:1.5px;color:var(--muted);margin-top:2px;}
 
+/* bold + lighter label */
+.wld-lbl{
+font-family:'Exo 2',sans-serif;
+font-size:8px;font-weight:800;
+letter-spacing:1.5px;
+color:#93c5fd;
+margin-top:2px;text-transform:uppercase;
+}
+
+/* STAT GRID — common accent color for all numbers */
 .stat-grid{
 display:grid;grid-template-columns:repeat(3,1fr);gap:5px;
 }
@@ -339,17 +350,24 @@ text-align:center;transition:all .2s;
 }
 .stat-cell:hover{background:var(--surface3);transform:translateY(-1px);}
 
-.stat-num{font-family:'Orbitron',sans-serif;font-size:17px;font-weight:900;line-height:1;}
-.stat-num.c1{color:#00f0ff;text-shadow:0 0 8px rgba(0,240,255,0.6);}
-.stat-num.c2{color:#bf00ff;text-shadow:0 0 8px rgba(191,0,255,0.6);}
-.stat-num.c3{color:#ff6a00;text-shadow:0 0 8px rgba(255,106,0,0.6);}
-.stat-num.c4{color:#00ff88;text-shadow:0 0 8px rgba(0,255,136,0.6);}
-.stat-num.c5{color:#ff007a;text-shadow:0 0 8px rgba(255,0,122,0.6);}
-.stat-num.c6{color:#f5ff00;text-shadow:0 0 8px rgba(245,255,0,0.6);}
+/* all stat numbers same light accent color */
+.stat-num{
+font-family:'Orbitron',sans-serif;
+font-size:17px;font-weight:900;line-height:1;
+color:#7dd3fc;
+text-shadow:0 0 10px rgba(125,211,252,0.5);
+}
 
-.stat-lbl{font-family:'Space Mono',monospace;font-size:6.5px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;}
+/* bold + lighter label for stat */
+.stat-lbl{
+font-family:'Exo 2',sans-serif;
+font-size:7px;font-weight:800;
+letter-spacing:1px;
+color:#64748b;
+text-transform:uppercase;
+}
 
-/* MATCHES */
+/* ── MATCHES ── */
 .matches-section{padding:12px 14px 14px;}
 
 .matches-head{
@@ -364,12 +382,13 @@ background:linear-gradient(90deg,var(--neon-cyan),var(--neon-purple));
 }
 
 .last5-badge{
-font-family:'Space Mono',monospace;
-font-size:7px;letter-spacing:2px;padding:3px 8px;
+font-family:'Exo 2',sans-serif;
+font-size:8px;font-weight:800;letter-spacing:2px;padding:3px 9px;
 color:var(--neon-purple);
 border:1px solid rgba(191,0,255,0.3);
 background:rgba(191,0,255,0.08);
 text-shadow:0 0 6px var(--neon-purple);
+border-radius:3px;
 }
 
 /* MATCH ROW */
@@ -377,12 +396,12 @@ text-shadow:0 0 6px var(--neon-purple);
 display:grid;
 grid-template-columns:1fr 52px 1fr;
 align-items:center;gap:4px;
-padding:8px 8px 8px 12px;
+padding:9px 10px 9px 12px;
 border-radius:5px;
 background:var(--surface2);
 border:1px solid var(--border);
 margin-bottom:5px;
-transition:all .2s;
+transition:all .18s;
 position:relative;overflow:hidden;
 }
 
@@ -407,32 +426,32 @@ width:2.5px;border-radius:1px;
 .match-player.left{padding-left:2px;}
 
 .mp-name{
-font-family:'Rajdhani',sans-serif;
-font-size:11px;font-weight:700;
+font-family:'Exo 2',sans-serif;
+font-size:11px;font-weight:800;
 color:var(--text);line-height:1.15;
 white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 max-width:100%;letter-spacing:0.3px;
 }
 
+/* Club ID — bigger, bold, single common glow color (cyan) */
 .mp-id{
-font-family:'Space Mono',monospace;
-font-size:7.5px;letter-spacing:0.8px;margin-top:2px;
+font-family:'Exo 2',sans-serif;
+font-size:9px;font-weight:800;
+letter-spacing:1.2px;
+margin-top:2px;
+color:var(--neon-cyan);
+text-shadow:0 0 8px rgba(0,240,255,0.65);
 white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;
 }
 
-.glow-cyan{color:var(--neon-cyan);text-shadow:0 0 6px var(--neon-cyan);}
-.glow-purple{color:var(--neon-purple);text-shadow:0 0 6px var(--neon-purple);}
-.glow-pink{color:var(--neon-pink);text-shadow:0 0 6px var(--neon-pink);}
-.glow-green{color:var(--neon-green);text-shadow:0 0 6px var(--neon-green);}
-.glow-orange{color:var(--neon-orange);text-shadow:0 0 6px var(--neon-orange);}
-
+/* SCORE BOX */
 .score-box{display:flex;flex-direction:column;align-items:center;gap:2px;}
 
 .score-badge{
 display:inline-block;
 font-family:'Orbitron',sans-serif;
 font-size:11px;font-weight:900;letter-spacing:1px;
-padding:4px 4px;border-radius:3px;
+padding:4px 3px;border-radius:3px;
 width:100%;text-align:center;
 }
 
@@ -455,14 +474,17 @@ text-shadow:0 0 8px var(--neon-yellow);
 box-shadow:0 0 10px rgba(245,255,0,0.08);
 }
 
+/* MATCH TYPE — bigger, bold, light color */
 .match-type-lbl{
-font-family:'Space Mono',monospace;
-font-size:5.5px;letter-spacing:0.5px;
-color:var(--muted2);text-transform:uppercase;text-align:center;
-margin-top:1px;
+font-family:'Exo 2',sans-serif;
+font-size:7.5px;font-weight:800;
+letter-spacing:0.8px;
+color:#93c5fd;
+text-transform:uppercase;text-align:center;
+margin-top:2px;
 }
 
-/* FOOTER */
+/* ── FOOTER ── */
 .card-footer{
 padding:10px 14px;border-top:1px solid var(--border);
 display:flex;align-items:center;justify-content:space-between;
@@ -477,11 +499,12 @@ background:linear-gradient(90deg,var(--neon-cyan),var(--neon-purple));
 }
 
 .footer-right{
-font-family:'Space Mono',monospace;
-font-size:7px;letter-spacing:2px;color:var(--muted2);
+font-family:'Exo 2',sans-serif;
+font-size:8px;font-weight:700;
+letter-spacing:2px;color:var(--muted2);
 }
 
-/* LOADER */
+/* ── LOADER ── */
 .loader{
 padding:60px 20px;text-align:center;
 font-family:'Orbitron',sans-serif;
@@ -493,37 +516,38 @@ text-shadow:0 0 12px var(--neon-cyan);
 display:block;font-size:22px;margin-bottom:14px;
 }
 
-/* RESPONSIVE */
+/* ── RESPONSIVE ── */
 @media(max-width:400px){
-.hero-title{font-size:15px;letter-spacing:3px;}
-.player-name{font-size:11px;}
-.rank-value{font-size:16px;}
-.wld-num{font-size:16px;}
+.hero-title{font-size:18px;letter-spacing:4px;}
+.player-name{font-size:13px;}
+.rank-value{font-size:17px;}
+.wld-num{font-size:17px;}
 .stat-num{font-size:14px;}
 .match-row{grid-template-columns:1fr 46px 1fr;}
 .score-badge{font-size:10px;padding:3px 2px;}
-.mp-name{font-size:9.5px;}
-.mp-id{font-size:6px;}
-.avatar-frame{width:42px;height:42px;}
+.mp-name{font-size:10px;}
+.mp-id{font-size:8px;}
+.avatar-frame{width:52px;height:52px;}
 }
 
 @media(min-width:768px){
-#app{padding:12px 20px 60px;}
-.cover{height:160px;}
-.player-name{font-size:17px;}
+#app{padding:10px 20px 60px;}
+.cover{height:120px;}
+.player-name{font-size:20px;}
 .rank-value{font-size:24px;}
-.wld-num{font-size:24px;}
+.wld-num{font-size:26px;}
 .stat-num{font-size:20px;}
 .score-badge{font-size:13px;}
 .match-row{grid-template-columns:1fr 60px 1fr;}
-.avatar-frame{width:58px;height:58px;}
+.avatar-frame{width:70px;height:70px;}
 .mp-name{font-size:12px;}
-.mp-id{font-size:8px;}
+.mp-id{font-size:10px;}
 }
 </style>
 </head>
 <body>
 
+<!-- TOPBAR -->
 <a href="https://goatfcbd.com" class="topbar" style="text-decoration:none;">
 <div class="top-left">
 <img src="https://i.imgur.com/LY3Bb9m.png" class="top-logo">
@@ -532,9 +556,10 @@ display:block;font-size:22px;margin-bottom:14px;
 <div class="home-btn"><i class="fa-solid fa-house"></i></div>
 </a>
 
+<!-- HERO: no "Player Profile" box, just title + slogan -->
 <div class="hero">
-<div class="hero-tag"><div class="live-dot"></div>PLAYER PROFILE</div>
 <div class="hero-title">ELITE ATHLETE</div>
+<div class="hero-slogan">BE THE GAME CHANGER</div>
 </div>
 
 <div id="app">
@@ -549,14 +574,11 @@ const MATCH_CSV='https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0X
 const MEMBER_CSV='https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv';
 const CP_CSV='https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1252347749&single=true&output=csv';
 
-const COVER_IMG='https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=900&q=85';
+const COVER_IMG='https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=900&q=90';
 
 const params=new URLSearchParams(location.search);
 function normalize(x){return(x||'').toLowerCase().replace(/[^a-z0-9]/g,'');}
 const playerId=normalize(params.get('id')||'GFC-001');
-
-const GLOW=['glow-cyan','glow-purple','glow-pink','glow-green','glow-orange'];
-function gc(i){return GLOW[i%GLOW.length];}
 
 function csvToArray(str){
 const rows=[];let quote=false,row=[],col='';
@@ -633,25 +655,30 @@ const recent=matches.slice().reverse().slice(0,5);
 
 document.getElementById('app').innerHTML=`
 <div class="profile">
+
+  <!-- COVER: clear HD image, shorter, no blur -->
   <div class="cover">
-    <img class="cover-img" src="${COVER_IMG}" alt="eFootball Stadium" crossorigin="anonymous" onerror="this.style.display='none'">
+    <img class="cover-img" src="${COVER_IMG}" alt="Stadium" crossorigin="anonymous" onerror="this.style.display='none'">
     <div class="cover-overlay"></div>
     <div class="cover-grid"></div>
   </div>
 
+  <!-- NAME ROW: avatar bigger, online dot inline after name, LIVE text removed -->
   <div class="name-row">
-    <div class="name-left">
-      <div class="avatar-frame">
-        <img crossorigin="anonymous" src="${info.pic}" alt="${info.name}" onerror="this.src='https://i.imgur.com/LY3Bb9m.png'">
+    <div class="avatar-frame">
+      <img crossorigin="anonymous" src="${info.pic}" alt="${info.name}" onerror="this.src='https://i.imgur.com/LY3Bb9m.png'">
+    </div>
+    <div class="name-stack">
+      <div class="player-name">
+        ${info.name}<span class="online-dot-inline" style="margin-left:6px;"></span>
       </div>
-      <div class="name-stack">
-        <div class="player-name">${info.name}</div>
-        <div class="club-id-pill"><i class="fa-solid fa-shield-halved"></i>${info.club}</div>
+      <div class="club-id-pill">
+        <i class="fa-solid fa-shield-halved"></i>${info.club}
       </div>
     </div>
-    <div class="online-badge"><div class="online-dot"></div>LIVE</div>
   </div>
 
+  <!-- RANK + CP: bold labels with light blue color -->
   <div class="rank-strip">
     <div class="rank-cell">
       <div class="rank-icon-box trophy"><i class="fa-solid fa-trophy"></i></div>
@@ -671,8 +698,10 @@ document.getElementById('app').innerHTML=`
 
   <div class="sdiv"></div>
 
+  <!-- STATS: WLD bolds labels, stat grid same color -->
   <div class="stats-section">
     <div class="sec-label">Performance Overview</div>
+
     <div class="wld-row">
       <div class="wld-cell win-cell">
         <div class="wld-bar w"></div>
@@ -687,32 +716,55 @@ document.getElementById('app').innerHTML=`
         <div><div class="wld-num d">${draw}</div><div class="wld-lbl">DRAW</div></div>
       </div>
     </div>
+
     <div class="stat-grid">
-      <div class="stat-cell"><div class="stat-num c1">${total}</div><div class="stat-lbl">Matches</div></div>
-      <div class="stat-cell"><div class="stat-num c2">${wr}%</div><div class="stat-lbl">Win Rate</div></div>
-      <div class="stat-cell"><div class="stat-num c3">${gr}</div><div class="stat-lbl">Goal Ratio</div></div>
-      <div class="stat-cell"><div class="stat-num c4">${gs}</div><div class="stat-lbl">Scored</div></div>
-      <div class="stat-cell"><div class="stat-num c5">${gcc}</div><div class="stat-lbl">Conceded</div></div>
-      <div class="stat-cell"><div class="stat-num c6">${seven}</div><div class="stat-lbl">7+ Goals</div></div>
+      <div class="stat-cell">
+        <div class="stat-num">${total}</div>
+        <div class="stat-lbl">Matches</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num">${wr}%</div>
+        <div class="stat-lbl">Win Rate</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num">${gr}</div>
+        <div class="stat-lbl">Goal Ratio</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num">${gs}</div>
+        <div class="stat-lbl">Scored</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num">${gcc}</div>
+        <div class="stat-lbl">Conceded</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num">${seven}</div>
+        <div class="stat-lbl">7+ Goals</div>
+      </div>
     </div>
   </div>
 
   <div class="sdiv"></div>
 
+  <!-- MATCHES: club IDs bigger/bold/same cyan, match type bigger/bold/light -->
   <div class="matches-section">
     <div class="matches-head">
       <div class="matches-title">RECENT MATCHES</div>
       <div class="last5-badge">LAST 5</div>
     </div>
+
     ${recent.map((m,i)=>{
       let me,op,cls,row;
       if(normalize(m.p1)===playerId){me=m.s1;op=m.s2;}else{me=m.s2;op=m.s1;}
-      if(me>op){cls='win';row='win-row';}else if(me<op){cls='loss';row='loss-row';}else{cls='draw';row='draw-row';}
+      if(me>op){cls='win';row='win-row';}
+      else if(me<op){cls='loss';row='loss-row';}
+      else{cls='draw';row='draw-row';}
       return `
       <div class="match-row ${row}">
         <div class="match-player left">
           <div class="mp-name">${members[normalize(m.p1)]?.name||m.p1}</div>
-          <div class="mp-id ${gc(i*2)}">${m.p1}</div>
+          <div class="mp-id">${m.p1}</div>
         </div>
         <div class="score-box">
           <div class="score-badge ${cls}">${m.s1}–${m.s2}</div>
@@ -720,7 +772,7 @@ document.getElementById('app').innerHTML=`
         </div>
         <div class="match-player right">
           <div class="mp-name">${members[normalize(m.p2)]?.name||m.p2}</div>
-          <div class="mp-id ${gc(i*2+1)}">${m.p2}</div>
+          <div class="mp-id">${m.p2}</div>
         </div>
       </div>`;
     }).join('')}
@@ -730,6 +782,7 @@ document.getElementById('app').innerHTML=`
     <div class="footer-brand">GOAT FC</div>
     <div class="footer-right">ELITE ATHLETE © 2025</div>
   </div>
+
 </div>
 `;
 

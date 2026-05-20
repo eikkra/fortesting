@@ -28,6 +28,7 @@
 --muted2:#383860;
 }
 
+/* ── ANIMATIONS ── */
 @keyframes shimmer{
 0%{background-position:200% center;}
 100%{background-position:-200% center;}
@@ -41,12 +42,6 @@
 66%{border-color:#ff007a;box-shadow:0 0 16px #ff007a50;}
 100%{border-color:#00f0ff;box-shadow:0 0 16px #00f0ff50;}
 }
-@keyframes rgbGlow{
-0%{box-shadow:0 0 20px #00f0ff30,inset 0 0 10px #00f0ff08;}
-33%{box-shadow:0 0 20px #bf00ff30,inset 0 0 10px #bf00ff08;}
-66%{box-shadow:0 0 20px #ff007a30,inset 0 0 10px #ff007a08;}
-100%{box-shadow:0 0 20px #00f0ff30,inset 0 0 10px #00f0ff08;}
-}
 @keyframes glowPulse{
 0%,100%{text-shadow:0 0 10px rgba(0,240,255,0.6);}
 50%{text-shadow:0 0 22px rgba(0,240,255,1),0 0 40px rgba(0,240,255,0.4);}
@@ -56,15 +51,117 @@
 50%{transform:scale(1.6);opacity:.4;}
 100%{transform:scale(1);opacity:1;}
 }
-@keyframes slideIn{
-from{opacity:0;transform:translateY(14px);}
-to{opacity:1;transform:translateY(0);}
-}
 @keyframes borderScan{
 0%{background-position:0% 50%;}
 100%{background-position:300% 50%;}
 }
+@keyframes cardFloat{
+0%,100%{transform:translateY(0px);}
+50%{transform:translateY(-5px);}
+}
+@keyframes fadeUp{
+from{opacity:0;transform:translateY(18px);}
+to{opacity:1;transform:translateY(0);}
+}
 
+/* ── FOOTBALL LOADING SCREEN ── */
+#loadScreen{
+position:fixed;inset:0;
+background:var(--bg);
+z-index:9999;
+display:flex;flex-direction:column;
+align-items:center;justify-content:center;
+gap:20px;
+transition:opacity .6s ease;
+}
+#loadScreen.hide{
+opacity:0;pointer-events:none;
+}
+
+.load-ball-wrap{
+position:relative;
+width:80px;height:80px;
+}
+
+.load-ball{
+width:80px;height:80px;
+border-radius:50%;
+background:
+radial-gradient(circle at 35% 35%, #fff 0%, #ccc 40%, #555 100%);
+position:relative;
+animation:ballSpin 1s linear infinite, ballBounce 0.5s ease-in-out infinite alternate;
+box-shadow:0 0 30px rgba(0,240,255,0.4), 0 0 60px rgba(0,240,255,0.15);
+overflow:hidden;
+}
+
+.load-ball::before{
+content:"";
+position:absolute;inset:0;border-radius:50%;
+background:
+repeating-conic-gradient(
+#222 0deg 40deg,
+transparent 40deg 72deg,
+#222 72deg 112deg,
+transparent 112deg 144deg,
+#222 144deg 184deg,
+transparent 184deg 216deg,
+#222 216deg 256deg,
+transparent 256deg 288deg,
+#222 288deg 328deg,
+transparent 328deg 360deg
+);
+opacity:0.45;
+}
+
+.load-ball::after{
+content:"";
+position:absolute;
+top:8%;left:15%;
+width:30%;height:25%;
+background:rgba(255,255,255,0.35);
+border-radius:50%;
+transform:rotate(-30deg);
+}
+
+.load-shadow{
+width:70px;height:12px;
+background:radial-gradient(ellipse,rgba(0,240,255,0.25) 0%,transparent 70%);
+border-radius:50%;
+margin-top:6px;
+animation:shadowPulse 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes ballSpin{
+from{transform:rotate(0deg);}
+to{transform:rotate(360deg);}
+}
+@keyframes ballBounce{
+from{transform:translateY(0) rotate(0deg) scale(1);}
+to{transform:translateY(-22px) rotate(180deg) scale(0.95);}
+}
+@keyframes shadowPulse{
+from{transform:scaleX(1);opacity:0.6;}
+to{transform:scaleX(0.65);opacity:0.2;}
+}
+
+.load-logo{
+font-family:'Orbitron',sans-serif;
+font-size:22px;font-weight:900;letter-spacing:6px;
+background:linear-gradient(90deg,#00f0ff,#bf00ff,#ff007a,#00f0ff);
+background-size:300% auto;
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+animation:shimmer 2s linear infinite;
+}
+
+.load-sub{
+font-family:'Exo 2',sans-serif;
+font-size:9px;font-weight:800;
+letter-spacing:4px;color:var(--muted);
+text-transform:uppercase;
+animation:pulse 1.2s ease-in-out infinite;
+}
+
+/* ── BODY ── */
 body{
 background:var(--bg);
 font-family:'Rajdhani',sans-serif;
@@ -73,12 +170,36 @@ overflow-x:hidden;
 padding-bottom:40px;
 }
 
+/* Football field subtle background */
 body::before{
 content:"";
 position:fixed;inset:0;
 background:
 radial-gradient(ellipse at 15% 15%,rgba(0,240,255,0.05) 0%,transparent 45%),
-radial-gradient(ellipse at 85% 85%,rgba(191,0,255,0.05) 0%,transparent 45%);
+radial-gradient(ellipse at 85% 85%,rgba(191,0,255,0.05) 0%,transparent 45%),
+radial-gradient(ellipse at 50% 50%,rgba(0,255,136,0.015) 0%,transparent 60%);
+pointer-events:none;z-index:-1;
+}
+
+/* Subtle field lines */
+body::after{
+content:"";
+position:fixed;inset:0;
+background:
+repeating-linear-gradient(
+0deg,
+transparent,
+transparent 79px,
+rgba(0,255,136,0.018) 79px,
+rgba(0,255,136,0.018) 80px
+),
+repeating-linear-gradient(
+90deg,
+transparent,
+transparent 79px,
+rgba(0,240,255,0.01) 79px,
+rgba(0,240,255,0.01) 80px
+);
 pointer-events:none;z-index:-1;
 }
 
@@ -91,7 +212,7 @@ justify-content:space-between;
 padding:0 14px;
 background:rgba(6,6,16,0.97);
 border-bottom:1px solid rgba(0,240,255,0.12);
-position:sticky;top:0;z-index:999;
+position:sticky;top:0;z-index:998;
 backdrop-filter:blur(14px);
 box-shadow:0 2px 20px rgba(0,240,255,0.05);
 gap:10px;
@@ -115,7 +236,6 @@ background:linear-gradient(90deg,var(--neon-cyan),var(--neon-purple));
 -webkit-background-clip:text;-webkit-text-fill-color:transparent;
 }
 
-/* Nav links — horizontal scroll on mobile */
 .nav-links{
 display:flex;
 align-items:center;
@@ -167,12 +287,12 @@ transition:opacity .9s ease;
 width:100%;height:100%;
 object-fit:cover;
 object-position:center 35%;
-opacity:0.75;
+opacity:0.7;
 }
 
 .slide-overlay{
 position:absolute;inset:0;
-background:linear-gradient(0deg,rgba(6,6,16,0.92) 0%,rgba(6,6,16,0.3) 55%,rgba(6,6,16,0.05) 100%);
+background:linear-gradient(0deg,rgba(6,6,16,0.92) 0%,rgba(6,6,16,0.25) 55%,rgba(6,6,16,0.05) 100%);
 }
 
 .slide-grid{
@@ -194,62 +314,81 @@ z-index:5;
 font-family:'Orbitron',sans-serif;
 font-size:16px;font-weight:900;
 letter-spacing:3px;
-background:linear-gradient(90deg,#fff,var(--neon-cyan));
+/* Better title color - bright white to cyan gradient */
+background:linear-gradient(90deg,#ffffff 0%,#00f0ff 50%,#f5ff00 100%);
+background-size:200% auto;
 -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-margin-bottom:5px;
+animation:shimmer 3s linear infinite;
+margin-bottom:6px;
+text-shadow:none;
 }
 
 .slide-content p{
 font-family:'Exo 2',sans-serif;
 font-size:10px;font-weight:700;
 letter-spacing:2px;
-color:rgba(238,240,255,0.6);
-margin-bottom:10px;
+color:rgba(238,240,255,0.65);
+margin-bottom:12px;
 text-transform:uppercase;
 }
 
+/* Better button - bright, visible */
 .slide-btn{
-display:inline-flex;align-items:center;gap:6px;
-padding:7px 18px;
+display:inline-flex;align-items:center;gap:7px;
+padding:8px 22px;
 font-family:'Exo 2',sans-serif;
-font-size:9px;font-weight:800;
+font-size:10px;font-weight:900;
 letter-spacing:2px;
 text-transform:uppercase;
 text-decoration:none;
-color:var(--bg);
-background:linear-gradient(90deg,var(--neon-cyan),var(--neon-purple));
-border-radius:3px;
-transition:all .2s;
+color:#ffffff;
+background:linear-gradient(90deg,#00f0ff,#bf00ff);
+border-radius:4px;
+box-shadow:0 0 20px rgba(0,240,255,0.5), 0 0 40px rgba(191,0,255,0.3);
+transition:all .25s;
+border:1px solid rgba(255,255,255,0.2);
 }
-.slide-btn:hover{opacity:0.85;transform:scale(1.03);}
+.slide-btn:hover{
+box-shadow:0 0 30px rgba(0,240,255,0.7), 0 0 60px rgba(191,0,255,0.4);
+transform:scale(1.04);
+}
 
 .arrow{
 position:absolute;top:50%;transform:translateY(-50%);
-background:rgba(6,6,16,0.7);
-border:1px solid rgba(0,240,255,0.15);
+background:rgba(6,6,16,0.75);
+border:1px solid rgba(0,240,255,0.2);
 color:var(--neon-cyan);
 font-size:14px;
-width:30px;height:30px;
+width:32px;height:32px;
 display:flex;align-items:center;justify-content:center;
 cursor:pointer;z-index:10;
 border-radius:4px;
 transition:all .2s;
 }
-.arrow:hover{background:rgba(0,240,255,0.1);box-shadow:0 0 10px rgba(0,240,255,0.2);}
+.arrow:hover{background:rgba(0,240,255,0.12);box-shadow:0 0 12px rgba(0,240,255,0.25);}
 .arrow.left{left:10px;}
 .arrow.right{right:10px;}
 
 /* ── SECTION WRAPPER ── */
 .section{
-max-width:900px;
+max-width:960px;
 margin:0 auto;
-padding:20px 10px 0;
+padding:22px 12px 0;
 }
 
-/* ── SECTION HEADER ── */
+/* ── SECTION HEADER — CENTERED ── */
 .sec-head{
-display:flex;align-items:center;gap:10px;
-margin-bottom:12px;
+display:flex;align-items:center;justify-content:center;gap:12px;
+margin-bottom:14px;
+}
+
+.sec-line{
+flex:1;height:1px;
+background:linear-gradient(90deg,transparent,rgba(0,240,255,0.3));
+max-width:120px;
+}
+.sec-line.right{
+background:linear-gradient(270deg,transparent,rgba(0,240,255,0.3));
 }
 
 .sec-title{
@@ -260,17 +399,13 @@ background:linear-gradient(90deg,var(--neon-cyan),var(--neon-purple));
 -webkit-background-clip:text;-webkit-text-fill-color:transparent;
 animation:glowPulse 3s ease-in-out infinite;
 text-transform:uppercase;
-}
-
-.sec-line{
-flex:1;height:1px;
-background:linear-gradient(90deg,rgba(0,240,255,0.3),transparent);
+white-space:nowrap;
 }
 
 /* ── LIVE SCORE ── */
 .live-head{
-display:flex;align-items:center;gap:8px;
-margin-bottom:12px;
+display:flex;align-items:center;justify-content:center;gap:10px;
+margin-bottom:14px;
 }
 
 .live-dot{
@@ -281,29 +416,44 @@ box-shadow:0 0 8px #ef4444;
 flex-shrink:0;
 }
 
+/* 3 cards exactly on desktop, scroll on mobile */
+.live-track{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
+}
+
+@media(max-width:700px){
 .live-track{
 display:flex;
-gap:10px;
 overflow-x:auto;
 scrollbar-width:none;
 scroll-behavior:smooth;
 scroll-snap-type:x mandatory;
+gap:10px;
 }
 .live-track::-webkit-scrollbar{display:none;}
+.live-card{
+min-width:85vw !important;
+scroll-snap-align:start;
+}
+}
 
 /* LIVE CARD */
 .live-card{
-flex-shrink:0;
-min-width:100%;
-scroll-snap-align:start;
 background:var(--surface);
 border:1px solid var(--border);
 border-radius:6px;
 padding:12px 10px;
 position:relative;
 overflow:hidden;
-animation:rgbGlow 4s linear infinite;
+animation:cardFloat 3s ease-in-out infinite;
 }
+
+/* Stagger float animation */
+.live-card:nth-child(2){animation-delay:0.3s;}
+.live-card:nth-child(3){animation-delay:0.6s;}
+.live-card:nth-child(4){animation-delay:0.9s;}
 
 /* RGB scan border */
 .live-card::before{
@@ -311,25 +461,22 @@ content:"";
 position:absolute;inset:0;
 border-radius:6px;padding:1px;
 background:linear-gradient(90deg,
-transparent 0%,transparent 35%,
-#00f0ff 45%,#bf00ff 50%,#00f0ff 55%,
-transparent 65%,transparent 100%);
+transparent 0%,transparent 30%,
+#00f0ff 42%,#bf00ff 50%,#ff007a 58%,
+transparent 70%,transparent 100%);
 background-size:300% 300%;
 -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
 -webkit-mask-composite:xor;
 mask-composite:exclude;
-animation:borderScan 3s linear infinite;
+animation:borderScan 2.5s linear infinite;
 pointer-events:none;
 }
 
-@media(min-width:600px){.live-card{min-width:calc(50% - 5px);}}
-@media(min-width:900px){.live-card{min-width:calc(33.333% - 7px);}}
-
 .live-mid{
 display:grid;
-grid-template-columns:1fr 80px 1fr;
+grid-template-columns:1fr 76px 1fr;
 align-items:center;
-gap:6px;
+gap:4px;
 }
 
 .lm-player{
@@ -343,7 +490,7 @@ gap:2px;
 font-family:'Orbitron',sans-serif;
 font-size:9px;font-weight:900;
 color:#ffcc00;
-text-shadow:0 0 8px rgba(255,200,0,0.6);
+text-shadow:0 0 8px rgba(255,200,0,0.7);
 }
 
 .lm-name{
@@ -357,7 +504,6 @@ max-width:100%;
 .lm-id{
 font-family:'Exo 2',sans-serif;
 font-size:8px;font-weight:800;
-letter-spacing:0.8px;
 color:var(--neon-cyan);
 text-shadow:0 0 6px rgba(0,240,255,0.6);
 }
@@ -373,7 +519,7 @@ font-size:7px;font-weight:800;
 letter-spacing:1px;
 padding:2px 7px;border-radius:2px;
 background:rgba(0,240,255,0.08);
-border:1px solid rgba(0,240,255,0.2);
+border:1px solid rgba(0,240,255,0.25);
 color:var(--neon-cyan);
 text-transform:uppercase;
 white-space:nowrap;
@@ -386,20 +532,19 @@ letter-spacing:1px;
 line-height:1;
 }
 
-.s-win{color:var(--neon-green);text-shadow:0 0 8px var(--neon-green);}
-.s-loss{color:var(--neon-pink);text-shadow:0 0 8px var(--neon-pink);}
-.s-draw{color:var(--neon-yellow);text-shadow:0 0 8px var(--neon-yellow);}
-.s-sep{color:var(--muted2);font-size:14px;}
+.s-win{color:var(--neon-green);text-shadow:0 0 10px var(--neon-green);}
+.s-loss{color:var(--neon-pink);text-shadow:0 0 10px var(--neon-pink);}
+.s-draw{color:var(--neon-yellow);text-shadow:0 0 10px var(--neon-yellow);}
+.s-sep{color:var(--muted2);font-size:13px;}
 
 .match-date{
 font-family:'Exo 2',sans-serif;
 font-size:8px;font-weight:700;
 color:#7dd3fc;
-text-shadow:0 0 5px rgba(125,211,252,0.4);
 white-space:nowrap;
 }
 
-/* ── CLUB HUB (quick links) ── */
+/* ── CLUB HUB ── */
 .hub-grid{
 display:grid;
 grid-template-columns:repeat(auto-fill,minmax(130px,1fr));
@@ -410,38 +555,46 @@ gap:8px;
 background:var(--surface);
 border:1px solid var(--border);
 border-radius:6px;
-padding:14px 10px;
+padding:16px 10px;
 cursor:pointer;
 text-align:center;
-transition:all .22s;
 position:relative;
 overflow:hidden;
+transition:all .25s;
+animation:cardFloat 3.5s ease-in-out infinite;
 }
+
+.hub-card:nth-child(2){animation-delay:0.4s;}
+.hub-card:nth-child(3){animation-delay:0.8s;}
+.hub-card:nth-child(4){animation-delay:1.2s;}
 
 .hub-card::before{
 content:"";
 position:absolute;inset:0;border-radius:6px;padding:1px;
-background:linear-gradient(45deg,#ffcc00,#ff8800);
+background:linear-gradient(45deg,#ffcc00,#ff8800,#ffcc00);
+background-size:200% auto;
 -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
 -webkit-mask-composite:xor;mask-composite:exclude;
+animation:shimmer 3s linear infinite;
 }
 
 .hub-card:hover{
-transform:translateY(-3px);
-box-shadow:0 0 20px rgba(255,200,0,0.15);
+transform:translateY(-5px) scale(1.02);
+box-shadow:0 0 24px rgba(255,200,0,0.2);
 background:var(--surface2);
 }
 
 .hub-icon{
-font-size:22px;
-margin-bottom:7px;
+font-size:24px;
+margin-bottom:8px;
 display:block;
+filter:drop-shadow(0 0 6px rgba(255,200,0,0.5));
 }
 
 .hub-title{
 font-family:'Exo 2',sans-serif;
-font-size:10px;font-weight:800;
-letter-spacing:1px;
+font-size:9px;font-weight:800;
+letter-spacing:1.5px;
 color:var(--text);
 text-transform:uppercase;
 }
@@ -458,13 +611,18 @@ background:var(--surface);
 border:1px solid var(--border);
 border-radius:6px;
 overflow:hidden;
-transition:all .22s;
+transition:all .25s;
+animation:cardFloat 4s ease-in-out infinite;
 }
 
+.store-card:nth-child(2){animation-delay:0.5s;}
+.store-card:nth-child(3){animation-delay:1s;}
+.store-card:nth-child(4){animation-delay:1.5s;}
+
 .store-card:hover{
-transform:translateY(-3px);
+transform:translateY(-5px);
 border-color:rgba(0,240,255,0.3);
-box-shadow:0 0 20px rgba(0,240,255,0.08);
+box-shadow:0 0 22px rgba(0,240,255,0.1);
 }
 
 .store-card img{
@@ -484,10 +642,11 @@ letter-spacing:1.5px;
 text-align:center;
 text-transform:uppercase;
 text-decoration:none;
-color:var(--bg);
+color:#fff;
 background:linear-gradient(90deg,var(--neon-cyan),var(--neon-purple));
 border-radius:3px;
 transition:opacity .2s;
+box-shadow:0 0 12px rgba(0,240,255,0.3);
 }
 .store-btn:hover{opacity:0.85;}
 
@@ -506,21 +665,28 @@ border-radius:6px;
 overflow:hidden;
 cursor:pointer;
 text-align:center;
-transition:all .22s;
+transition:all .25s;
 position:relative;
+animation:cardFloat 3.8s ease-in-out infinite;
 }
+
+.champ-card:nth-child(2){animation-delay:0.35s;}
+.champ-card:nth-child(3){animation-delay:0.7s;}
+.champ-card:nth-child(4){animation-delay:1.05s;}
 
 .champ-card::before{
 content:"";
 position:absolute;inset:0;border-radius:6px;padding:1px;
-background:linear-gradient(45deg,#38bdf8,#6366f1);
+background:linear-gradient(45deg,#38bdf8,#6366f1,#38bdf8);
+background-size:200% auto;
 -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
 -webkit-mask-composite:xor;mask-composite:exclude;
+animation:shimmer 3s linear infinite;
 }
 
 .champ-card:hover{
-transform:translateY(-3px);
-box-shadow:0 0 20px rgba(99,102,241,0.2);
+transform:translateY(-5px) scale(1.02);
+box-shadow:0 0 22px rgba(99,102,241,0.25);
 }
 
 .champ-card img{
@@ -535,7 +701,6 @@ display:block;
 .champ-title{
 font-family:'Exo 2',sans-serif;
 font-size:10px;font-weight:900;
-letter-spacing:0.5px;
 color:var(--text);
 margin-bottom:3px;
 }
@@ -544,7 +709,6 @@ margin-bottom:3px;
 font-family:'Exo 2',sans-serif;
 font-size:8px;font-weight:700;
 color:var(--muted);
-letter-spacing:0.5px;
 }
 
 .champ-desc{
@@ -553,18 +717,17 @@ font-family:'Exo 2',sans-serif;
 font-size:10px;font-weight:700;
 color:var(--muted);
 padding:10px 0 0;
-letter-spacing:0.5px;
 }
 
 /* ── SOCIAL ── */
 .social-wrap{
-display:flex;flex-wrap:wrap;justify-content:center;gap:8px;
+display:flex;flex-wrap:wrap;justify-content:center;gap:10px;
 padding-top:4px;
 }
 
 .social-btn{
-display:inline-flex;align-items:center;gap:7px;
-padding:9px 18px;
+display:inline-flex;align-items:center;gap:8px;
+padding:10px 20px;
 font-family:'Exo 2',sans-serif;
 font-size:10px;font-weight:800;
 letter-spacing:1.5px;
@@ -573,30 +736,50 @@ text-decoration:none;
 color:var(--text);
 background:var(--surface);
 border:1px solid var(--border2);
-border-radius:4px;
-transition:all .2s;
+border-radius:5px;
+transition:all .25s;
+position:relative;
+overflow:hidden;
+animation:cardFloat 4s ease-in-out infinite;
 }
+
+.social-btn:nth-child(2){animation-delay:0.5s;}
+.social-btn:nth-child(3){animation-delay:1s;}
+
+.social-btn::before{
+content:"";
+position:absolute;inset:0;
+background:linear-gradient(90deg,transparent,rgba(0,240,255,0.06),transparent);
+transform:translateX(-100%);
+transition:transform .4s;
+}
+.social-btn:hover::before{transform:translateX(100%);}
+
 .social-btn:hover{
-border-color:rgba(0,240,255,0.3);
+border-color:rgba(0,240,255,0.35);
 background:var(--surface2);
-box-shadow:0 0 16px rgba(0,240,255,0.08);
+box-shadow:0 0 18px rgba(0,240,255,0.1);
 color:var(--neon-cyan);
+transform:translateY(-2px);
 }
-.social-btn i{font-size:13px;}
+
+.social-btn i{
+font-size:14px;
+}
 
 /* ── DIVIDER ── */
 .sdiv{
 height:1px;
 background:linear-gradient(90deg,transparent,var(--border2),transparent);
-margin:20px 10px 0;
-max-width:900px;
-margin-left:auto;margin-right:auto;
+margin:22px auto 0;
+max-width:960px;
+padding:0 12px;
 }
 
 /* ── FOOTER ── */
 .footer{
 text-align:center;
-padding:18px 14px 10px;
+padding:20px 14px 10px;
 font-family:'Exo 2',sans-serif;
 font-size:9px;font-weight:700;
 letter-spacing:2px;
@@ -609,13 +792,13 @@ text-decoration:none;
 text-shadow:0 0 6px rgba(0,240,255,0.4);
 }
 
-/* ── LOADER ── */
+/* ── LOADER ROW ── */
 .loader-row{
-grid-column:1/-1;
 padding:30px 10px;
 text-align:center;
 font-family:'Orbitron',sans-serif;
 font-size:9px;letter-spacing:4px;color:var(--muted);
+grid-column:1/-1;
 }
 .loader-row i{
 display:block;font-size:16px;margin-bottom:10px;
@@ -634,9 +817,6 @@ text-shadow:0 0 10px var(--neon-cyan);
 .hub-grid{grid-template-columns:repeat(2,1fr);}
 .store-grid{grid-template-columns:repeat(2,1fr);}
 .champ-grid{grid-template-columns:repeat(2,1fr);}
-.live-mid{grid-template-columns:1fr 72px 1fr;}
-.score-box{font-size:15px;}
-.lm-name{font-size:10px;}
 }
 
 @media(min-width:600px){
@@ -646,8 +826,8 @@ text-shadow:0 0 10px var(--neon-cyan);
 .champ-grid{grid-template-columns:repeat(3,1fr);}
 }
 
-@media(min-width:900px){
-.section{padding:22px 20px 0;}
+@media(min-width:960px){
+.section{padding:24px 20px 0;}
 .hero{height:280px;}
 .hub-grid{grid-template-columns:repeat(4,1fr);}
 .champ-grid{grid-template-columns:repeat(4,1fr);}
@@ -657,6 +837,16 @@ text-shadow:0 0 10px var(--neon-cyan);
 </head>
 <body>
 
+<!-- ── LOADING SCREEN ── -->
+<div id="loadScreen">
+  <div class="load-ball-wrap">
+    <div class="load-ball"></div>
+  </div>
+  <div class="load-shadow"></div>
+  <div class="load-logo">GOAT FC</div>
+  <div class="load-sub">Loading Arena...</div>
+</div>
+
 <!-- NAVBAR -->
 <nav class="navbar">
   <a href="https://goatfcbd.com" class="logo">
@@ -664,7 +854,6 @@ text-shadow:0 0 10px var(--neon-cyan);
     <span class="logo-text">GOAT FC</span>
   </a>
   <div class="nav-links">
-    <a href="https://docs.google.com/document/d/1T7p7AjuFfk-DtVbJgdGFcwsH0ipDfG3wg05qv8Y0fJ4/edit?usp=sharing" target="_blank">Club Rules</a>
     <a href="https://www.facebook.com/groups/goatfc.official" target="_blank">About</a>
     <a href="https://www.facebook.com/goatfc.official" target="_blank">Contact</a>
     <a href="https://forms.gle/HnRQHSFgwpQXc81F9" target="_blank">Registration</a>
@@ -682,10 +871,10 @@ text-shadow:0 0 10px var(--neon-cyan);
   <div class="live-head">
     <div class="live-dot"></div>
     <div class="sec-title">LIVE SCORE</div>
-    <div class="sec-line"></div>
+    <div class="sec-line right" style="background:linear-gradient(270deg,transparent,rgba(0,240,255,0.3));"></div>
   </div>
   <div class="live-track" id="liveTrack">
-    <div class="loader-row" style="min-width:100%">
+    <div class="loader-row" style="grid-column:1/-1">
       <i class="fa-solid fa-spinner fa-spin"></i>LOADING...
     </div>
   </div>
@@ -696,8 +885,9 @@ text-shadow:0 0 10px var(--neon-cyan);
 <!-- CLUB HUB -->
 <div class="section">
   <div class="sec-head">
-    <div class="sec-title">CLUB HUB</div>
     <div class="sec-line"></div>
+    <div class="sec-title">CLUB HUB</div>
+    <div class="sec-line right"></div>
   </div>
   <div class="hub-grid" id="hubGrid">
     <div class="loader-row"><i class="fa-solid fa-spinner fa-spin"></i>LOADING...</div>
@@ -709,8 +899,9 @@ text-shadow:0 0 10px var(--neon-cyan);
 <!-- COMING SOON -->
 <div class="section">
   <div class="sec-head">
-    <div class="sec-title">COMING SOON</div>
     <div class="sec-line"></div>
+    <div class="sec-title">COMING SOON</div>
+    <div class="sec-line right"></div>
   </div>
   <div class="store-grid" id="storeGrid">
     <div class="loader-row"><i class="fa-solid fa-spinner fa-spin"></i>LOADING...</div>
@@ -722,8 +913,9 @@ text-shadow:0 0 10px var(--neon-cyan);
 <!-- HALL OF CHAMPIONS -->
 <div class="section">
   <div class="sec-head">
-    <div class="sec-title">HALL OF CHAMPIONS</div>
     <div class="sec-line"></div>
+    <div class="sec-title">HALL OF CHAMPIONS</div>
+    <div class="sec-line right"></div>
   </div>
   <div class="champ-grid" id="champGrid">
     <div class="loader-row"><i class="fa-solid fa-spinner fa-spin"></i>LOADING...</div>
@@ -733,11 +925,12 @@ text-shadow:0 0 10px var(--neon-cyan);
 
 <div class="sdiv"></div>
 
-<!-- SOCIAL / JOIN -->
+<!-- JOIN WITH US -->
 <div class="section">
   <div class="sec-head">
-    <div class="sec-title">JOIN WITH US</div>
     <div class="sec-line"></div>
+    <div class="sec-title">JOIN WITH US</div>
+    <div class="sec-line right"></div>
   </div>
   <div class="social-wrap" id="socialWrap">
     <div class="loader-row"><i class="fa-solid fa-spinner fa-spin"></i>LOADING...</div>
@@ -755,16 +948,22 @@ text-shadow:0 0 10px var(--neon-cyan);
 <script>
 const sheetID = "1ZoXNHa5sYiP_HaPRyL5RDML7l3kC2IaGuQCAmYkERf8";
 
+/* ── LOADING SCREEN ── */
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    const ls = document.getElementById('loadScreen');
+    ls.classList.add('hide');
+    setTimeout(() => ls.remove(), 700);
+  }, 1800);
+});
+
 /* ── SLIDES ── */
 let slides = [], current = 0, autoTimer;
 
 fetch(`https://opensheet.elk.sh/${sheetID}/SLIDES`)
   .then(r => r.json())
-  .then(data => {
-    slides = data;
-    renderSlides();
-    startAuto();
-  }).catch(() => {});
+  .then(data => { slides = data; renderSlides(); startAuto(); })
+  .catch(() => {});
 
 function renderSlides() {
   const hero = document.getElementById('heroSlider');
@@ -781,7 +980,7 @@ function renderSlides() {
         <h1>${s.title}</h1>
         <p>${s.desc}</p>
         <a class="slide-btn" href="${s.link}" target="_blank">
-          <i class="fa-solid fa-arrow-right"></i>${s.button}
+          <i class="fa-solid fa-bolt"></i>${s.button}
         </a>
       </div>
     </div>
@@ -801,49 +1000,6 @@ function changeSlide(dir) {
   current = (current + dir + boxes.length) % boxes.length;
   boxes[current].classList.add('active');
 }
-
-/* ── CLUB HUB LINKS ── */
-fetch(`https://opensheet.elk.sh/${sheetID}/LINKS`)
-  .then(r => r.json())
-  .then(data => {
-    document.getElementById('hubGrid').innerHTML = data.map(l => `
-      <div class="hub-card" onclick="window.open('${l.link}','_blank')">
-        <span class="hub-icon">${l.icon}</span>
-        <div class="hub-title">${l.title}</div>
-      </div>
-    `).join('');
-  }).catch(() => {
-    document.getElementById('hubGrid').innerHTML = '<div class="loader-row">Failed to load</div>';
-  });
-
-/* ── CHAMPIONS ── */
-fetch(`https://opensheet.elk.sh/${sheetID}/CHAMPIONS`)
-  .then(r => r.json())
-  .then(data => {
-    document.getElementById('champGrid').innerHTML = data.map(c => `
-      <div class="champ-card">
-        <img src="${c.image}" alt="${c.title}">
-        <div class="champ-info">
-          <div class="champ-title">${c.title}</div>
-          <div class="champ-sub">${c.subtitle}</div>
-        </div>
-      </div>
-    `).join('');
-    document.getElementById('champDesc').innerHTML =
-      '<i class="fa-solid fa-trophy" style="color:#ffcc00;margin-right:6px;"></i>This zone represents champions, top scorers, and elite performers of Goat FC.';
-  }).catch(() => {});
-
-/* ── SOCIAL ── */
-fetch(`https://opensheet.elk.sh/${sheetID}/SOCIAL`)
-  .then(r => r.json())
-  .then(data => {
-    document.getElementById('socialWrap').innerHTML = data.map(s => `
-      <a class="social-btn" href="${s.link}" target="_blank">
-        <i class="fa-brands fa-${s.name.toLowerCase().includes('facebook') ? 'facebook' : s.name.toLowerCase().includes('whatsapp') ? 'whatsapp' : s.name.toLowerCase().includes('discord') ? 'discord' : 'link'}"></i>
-        ${s.name}
-      </a>
-    `).join('');
-  }).catch(() => {});
 
 /* ── CSV PARSER ── */
 function parseCSV(text) {
@@ -886,24 +1042,25 @@ Promise.all([
     .filter(m => m.Approved?.toLowerCase() === 'yes' && !isNaN(parseFloat(m.P1_Score)) && !isNaN(parseFloat(m.P2_Score)))
     .slice(-10).reverse();
 
-  const members = parseCSV(memberCSV);
   const nameMap = {};
-  members.forEach(m => nameMap[m["Club ID Number"]] = m["Full Name"]);
+  parseCSV(memberCSV).forEach(m => nameMap[m["Club ID Number"]] = m["Full Name"]);
 
   const rankMap = {};
   parseCSV(leaderCSV).forEach(r => { rankMap[r["Club_ID"]] = r["Overall Rank"]; });
 
   if (!matches.length) {
-    document.getElementById('liveTrack').innerHTML = `<div class="loader-row" style="min-width:100%">No recent matches</div>`;
+    document.getElementById('liveTrack').innerHTML = `<div class="loader-row" style="grid-column:1/-1">No recent matches</div>`;
     return;
   }
 
-  document.getElementById('liveTrack').innerHTML = matches.map(m => {
+  /* Show only latest 3 on desktop (grid shows all, but we limit to 3) */
+  const show = matches.slice(0, 3);
+
+  document.getElementById('liveTrack').innerHTML = show.map((m, idx) => {
     const p1 = nameMap[m.P1_ID] || m.P1_ID;
     const p2 = nameMap[m.P2_ID] || m.P2_ID;
     const p1Rank = rankMap[m.P1_ID] ? `#${rankMap[m.P1_ID]}` : '';
     const p2Rank = rankMap[m.P2_ID] ? `#${rankMap[m.P2_ID]}` : '';
-
     let s1cls = 's-draw', s2cls = 's-draw';
     if (+m.P1_Score > +m.P2_Score) { s1cls = 's-win'; s2cls = 's-loss'; }
     else if (+m.P1_Score < +m.P2_Score) { s1cls = 's-loss'; s2cls = 's-win'; }
@@ -931,26 +1088,68 @@ Promise.all([
             <div class="lm-id">${m.P2_ID}</div>
           </div>
         </div>
-      </div>
-    `;
+      </div>`;
   }).join('');
 
-}).catch(err => {
-  document.getElementById('liveTrack').innerHTML = `<div class="loader-row" style="min-width:100%">Failed to load scores</div>`;
+}).catch(() => {
+  document.getElementById('liveTrack').innerHTML = `<div class="loader-row" style="grid-column:1/-1">Failed to load</div>`;
 });
 
-/* Auto-scroll live cards */
-setInterval(() => {
-  const track = document.getElementById('liveTrack');
-  const card = track.querySelector('.live-card');
-  if (!card) return;
-  track.scrollBy({ left: card.offsetWidth + 10, behavior: 'smooth' });
-  if (track.scrollLeft + track.clientWidth >= track.scrollWidth - 20) {
-    setTimeout(() => track.scrollTo({ left: 0, behavior: 'smooth' }), 600);
-  }
-}, 4000);
+/* ── CLUB HUB ── */
+fetch(`https://opensheet.elk.sh/${sheetID}/LINKS`)
+  .then(r => r.json())
+  .then(data => {
+    document.getElementById('hubGrid').innerHTML = data.map(l => `
+      <div class="hub-card" onclick="window.open('${l.link}','_blank')">
+        <span class="hub-icon">${l.icon}</span>
+        <div class="hub-title">${l.title}</div>
+      </div>
+    `).join('');
+  }).catch(() => {
+    document.getElementById('hubGrid').innerHTML = '<div class="loader-row">Failed to load</div>';
+  });
 
-/* ── GOAT STORE / COMING SOON ── */
+/* ── CHAMPIONS ── */
+fetch(`https://opensheet.elk.sh/${sheetID}/CHAMPIONS`)
+  .then(r => r.json())
+  .then(data => {
+    document.getElementById('champGrid').innerHTML = data.map(c => `
+      <div class="champ-card">
+        <img src="${c.image}" alt="${c.title}">
+        <div class="champ-info">
+          <div class="champ-title">${c.title}</div>
+          <div class="champ-sub">${c.subtitle}</div>
+        </div>
+      </div>
+    `).join('');
+    document.getElementById('champDesc').innerHTML =
+      '<i class="fa-solid fa-trophy" style="color:#ffcc00;margin-right:6px;"></i>This zone represents champions, top scorers, and elite performers of Goat FC.';
+  }).catch(() => {});
+
+/* ── SOCIAL — Telegram icon fix ── */
+function getSocialIcon(name) {
+  const n = (name || '').toLowerCase();
+  if (n.includes('facebook')) return 'fa-brands fa-facebook';
+  if (n.includes('telegram')) return 'fa-brands fa-telegram';
+  if (n.includes('whatsapp')) return 'fa-brands fa-whatsapp';
+  if (n.includes('discord')) return 'fa-brands fa-discord';
+  if (n.includes('youtube')) return 'fa-brands fa-youtube';
+  if (n.includes('instagram')) return 'fa-brands fa-instagram';
+  if (n.includes('twitter') || n.includes('x.com')) return 'fa-brands fa-x-twitter';
+  return 'fa-solid fa-link';
+}
+
+fetch(`https://opensheet.elk.sh/${sheetID}/SOCIAL`)
+  .then(r => r.json())
+  .then(data => {
+    document.getElementById('socialWrap').innerHTML = data.map(s => `
+      <a class="social-btn" href="${s.link}" target="_blank">
+        <i class="${getSocialIcon(s.name)}"></i>${s.name}
+      </a>
+    `).join('');
+  }).catch(() => {});
+
+/* ── COMING SOON STORE ── */
 fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vS3VQ-e6O8uHjlq8Lsdp5j0vxxOMZH1O17Nbo1ISGXDU_EFsuBEXNWydPbuhJ46lnxqJmevXaN2xPiL/pub?gid=1152972554&single=true&output=csv")
   .then(r => r.text())
   .then(csv => {

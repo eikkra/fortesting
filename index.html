@@ -368,13 +368,17 @@ color:#7dd3fc;text-shadow:0 0 5px rgba(125,211,252,0.4);white-space:nowrap;
 
 /* ── CLUB HUB ── */
 .hub-grid{
-display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:8px;
+justify-items:center;
 }
 .hub-card{
 background:var(--surface);border:1px solid var(--border);
-border-radius:6px;padding:14px 10px;
+border-radius:6px;padding:18px 10px;
 cursor:pointer;text-align:center;transition:all .22s;
 position:relative;overflow:hidden;
+width:100%;
 }
 .hub-card::before{
 content:"";position:absolute;inset:0;border-radius:6px;padding:1px;
@@ -383,20 +387,24 @@ background:linear-gradient(45deg,#ffcc00,#ff8800);
 -webkit-mask-composite:xor;mask-composite:exclude;
 }
 .hub-card:hover{transform:translateY(-3px);box-shadow:0 0 20px rgba(255,200,0,0.15);background:var(--surface2);}
-.hub-icon{font-size:22px;margin-bottom:7px;display:block;}
+.hub-icon{font-size:26px;margin-bottom:8px;display:block;}
 .hub-title{
 font-family:'Exo 2',sans-serif;
-font-size:10px;font-weight:800;letter-spacing:1px;
+font-size:11px;font-weight:800;letter-spacing:1px;
 color:var(--text);text-transform:uppercase;
 }
 
 /* ── COMING SOON ── */
 .store-grid{
-display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:10px;
+justify-items:center;
 }
 .store-card{
 background:var(--surface);border:1px solid var(--border);
 border-radius:6px;overflow:hidden;transition:all .22s;
+width:100%;
 }
 .store-card:hover{transform:translateY(-3px);border-color:rgba(0,240,255,0.3);box-shadow:0 0 20px rgba(0,240,255,0.08);}
 .store-card img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;}
@@ -415,7 +423,10 @@ transition:opacity .2s;
 
 /* ── HALL OF CHAMPIONS ── */
 .champ-grid{
-display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-bottom:10px;
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:8px;margin-bottom:10px;
+justify-items:center;
 }
 .champ-card{
 background:var(--surface);border:1px solid var(--border);
@@ -499,6 +510,11 @@ font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:4px;color:var(--m
 .score-box{font-size:15px;}
 .lm-name{font-size:10px;}
 }
+@media(min-width:481px) and (max-width:899px){
+.hub-grid{grid-template-columns:repeat(3,1fr);}
+.store-grid{grid-template-columns:repeat(3,1fr);}
+.champ-grid{grid-template-columns:repeat(3,1fr);}
+}
 @media(min-width:600px){
 .hero{height:250px;}
 .slide-content h1{font-size:20px;}
@@ -506,7 +522,9 @@ font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:4px;color:var(--m
 @media(min-width:900px){
 .section{padding:22px 20px 0;}
 .hero{height:280px;}
+.hub-grid{grid-template-columns:repeat(6,1fr);}
 .store-grid{grid-template-columns:repeat(4,1fr);}
+.champ-grid{grid-template-columns:repeat(4,1fr);}
 }
 </style>
 </head>
@@ -540,7 +558,7 @@ font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:4px;color:var(--m
     <span class="logo-text">GOAT FC</span>
   </a>
   <div class="nav-links">
-    <a href="https://www.facebook.com/groups/goatfc.official" target="_blank">About US</a>
+    <a href="https://www.facebook.com/groups/goatfc.official" target="_blank">About</a>
     <a href="https://www.facebook.com/goatfc.official" target="_blank">Contact</a>
     <a href="https://forms.gle/HnRQHSFgwpQXc81F9" target="_blank">Registration</a>
   </div>
@@ -871,6 +889,36 @@ fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vS3VQ-e6O8uHjlq8Lsdp5j0vx
     document.getElementById('storeGrid').innerHTML = '<div class="loader-row">Failed to load</div>';
   });
 </script>
+
+<!-- FACEBOOK MESSENGER BUBBLE -->
+<a href="https://m.me/goatfc.official" target="_blank" id="fbBubble" title="Message us on Facebook">
+  <i class="fa-brands fa-facebook-messenger"></i>
+</a>
+
+<style>
+#fbBubble{
+position:fixed;
+bottom:20px;right:16px;
+z-index:9000;
+width:46px;height:46px;
+border-radius:50%;
+background:linear-gradient(135deg,#00f0ff,#0084ff,#bf00ff);
+display:flex;align-items:center;justify-content:center;
+color:#fff;font-size:20px;
+text-decoration:none;
+box-shadow:0 0 18px rgba(0,240,255,0.5),0 4px 16px rgba(0,0,0,0.4);
+transition:all .25s;
+animation:fbPulseRing 2.5s ease-in-out infinite;
+}
+#fbBubble:hover{
+transform:scale(1.12);
+box-shadow:0 0 28px rgba(0,240,255,0.7),0 6px 20px rgba(0,0,0,0.5);
+}
+@keyframes fbPulseRing{
+0%,100%{box-shadow:0 0 18px rgba(0,240,255,0.5),0 4px 16px rgba(0,0,0,0.4),0 0 0 0 rgba(0,240,255,0.35);}
+50%{box-shadow:0 0 18px rgba(0,240,255,0.5),0 4px 16px rgba(0,0,0,0.4),0 0 0 10px rgba(0,240,255,0);}
+}
+</style>
 
 </body>
 </html>

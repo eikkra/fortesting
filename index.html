@@ -280,32 +280,12 @@ margin-bottom:5px;line-height:1.2;
 
 <!-- LOADING SCREEN -->
 <div id="loadingScreen">
-  <div class="load-ball">
-    <div class="load-ball-ring2"></div>
-    <div class="load-ball-ring"></div>
-    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <radialGradient id="ballGrad" cx="38%" cy="35%" r="60%">
-          <stop offset="0%" stop-color="#1a1a35"/>
-          <stop offset="100%" stop-color="#05050e"/>
-        </radialGradient>
-        <radialGradient id="sheen" cx="35%" cy="30%" r="45%">
-          <stop offset="0%" stop-color="white" stop-opacity="0.12"/>
-          <stop offset="100%" stop-color="white" stop-opacity="0"/>
-        </radialGradient>
-      </defs>
-      <circle cx="50" cy="50" r="46" fill="url(#ballGrad)"/>
-      <circle cx="50" cy="50" r="46" fill="url(#sheen)"/>
-      <circle cx="50" cy="50" r="45.5" fill="none" stroke="#00f0ff" stroke-width="1.2" opacity="0.55"/>
-      <polygon points="50,33 62,42 57.5,56 42.5,56 38,42" fill="#030310" stroke="#00f0ff" stroke-width="1" stroke-linejoin="round" opacity="0.95"/>
-      <polygon points="50,12 61.5,21 62,33 50,33 38,33 38.5,21" fill="#07071a" stroke="#bf00ff" stroke-width="0.9" stroke-linejoin="round" opacity="0.9" style="animation:panelFlash 2s ease-in-out infinite 0s"/>
-      <polygon points="73,24 79,38 71,47 62,43 62,33 61.5,21" fill="#07071a" stroke="#00ff88" stroke-width="0.9" stroke-linejoin="round" opacity="0.9" style="animation:panelFlash 2s ease-in-out infinite 0.3s"/>
-      <polygon points="77,58 69,71 57,74 57,56 62,43 71,47" fill="#07071a" stroke="#ff007a" stroke-width="0.9" stroke-linejoin="round" opacity="0.9" style="animation:panelFlash 2s ease-in-out infinite 0.6s"/>
-      <polygon points="57,74 50,82 43,74 42.5,56 57.5,56 57,74" fill="#07071a" stroke="#f5ff00" stroke-width="0.9" stroke-linejoin="round" opacity="0.9" style="animation:panelFlash 2s ease-in-out infinite 0.9s"/>
-      <polygon points="23,58 31,47 38,43 42.5,56 43,74 31,71" fill="#07071a" stroke="#00f0ff" stroke-width="0.9" stroke-linejoin="round" opacity="0.9" style="animation:panelFlash 2s ease-in-out infinite 1.2s"/>
-      <polygon points="21,24 38.5,21 38,33 31,47 23,38 27,32" fill="#07071a" stroke="#bf00ff" stroke-width="0.9" stroke-linejoin="round" opacity="0.9" style="animation:panelFlash 2s ease-in-out infinite 1.5s"/>
-      <circle cx="50" cy="50" r="45" fill="none" stroke="#00f0ff" stroke-width="0.6" opacity="0.2" stroke-dasharray="3 4"/>
-    </svg>
+ <div class="load-ball">
+  <div class="load-ball-ring2"></div>
+  <div class="load-ball-ring"></div>
+
+  <i class="fa-solid fa-futbol football-loader"></i>
+</div>
   </div>
   <div class="load-text">GOAT FC LOADING</div>
   <div class="load-bar-wrap"><div class="load-bar" id="loadBar"></div></div>

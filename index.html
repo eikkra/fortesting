@@ -17,115 +17,57 @@
 --text:#eef0ff;--muted:#5a5a80;--muted2:#383860;
 }
 
-/* ── KEYFRAMES ── */
-@keyframes shimmer{0%{background-position:200% center;}100%{background-position:-200% center;}}
+@keyframes pulseLive{0%{transform:scale(1);opacity:1;}50%{transform:scale(1.6);opacity:.4;}100%{transform:scale(1);opacity:1;}}
+@keyframes borderScan{0%{background-position:0% 50%;}100%{background-position:300% 50%;}}
 @keyframes rgbGlow{
 0%{box-shadow:0 0 20px #00f0ff20,inset 0 0 10px #00f0ff06;}
 33%{box-shadow:0 0 20px #bf00ff20,inset 0 0 10px #bf00ff06;}
 66%{box-shadow:0 0 20px #ff007a20,inset 0 0 10px #ff007a06;}
 100%{box-shadow:0 0 20px #00f0ff20,inset 0 0 10px #00f0ff06;}
 }
-@keyframes pulseLive{0%{transform:scale(1);opacity:1;}50%{transform:scale(1.6);opacity:.4;}100%{transform:scale(1);opacity:1;}}
-@keyframes borderScan{0%{background-position:0% 50%;}100%{background-position:300% 50%;}}
-@keyframes champRgb{
-0%{border-color:rgba(0,240,255,0.4);}25%{border-color:rgba(191,0,255,0.4);}
-50%{border-color:rgba(255,0,122,0.4);}75%{border-color:rgba(0,255,136,0.4);}
-100%{border-color:rgba(0,240,255,0.4);}
+/* Hub border — very slow 18s cycle */
+@keyframes hubRgb{
+0%  {border-color:rgba(0,240,255,0.65);}
+25% {border-color:rgba(191,0,255,0.65);}
+50% {border-color:rgba(255,0,122,0.65);}
+75% {border-color:rgba(0,255,136,0.65);}
+100%{border-color:rgba(0,240,255,0.65);}
 }
-@keyframes hubBorderRgb{
-0%  {border-color:rgba(0,240,255,0.6);}
-25% {border-color:rgba(191,0,255,0.6);}
-50% {border-color:rgba(255,0,122,0.6);}
-75% {border-color:rgba(0,255,136,0.6);}
-100%{border-color:rgba(0,240,255,0.6);}
-}
-@keyframes hubRipple{
-0%{transform:scale(0);opacity:0.5;}
-100%{transform:scale(3.5);opacity:0;}
-}
-@keyframes navShimmer{
-0%{background-position:200% center;}
-100%{background-position:-200% center;}
-}
+/* Champ title — slow 8s */
 @keyframes champTitleShimmer{
 0%{background-position:200% center;}
 100%{background-position:-200% center;}
 }
-
-/* ── GOAL POST ANIMATION KEYFRAMES ── */
-/* Ball arc trajectory: starts from bottom-left, curves into the goal */
-@keyframes ballShoot{
-0%{
-  transform:translate(-110px, 70px) scale(1) rotate(0deg);
-  opacity:1;
+/* Ripple */
+@keyframes hubRipple{0%{transform:scale(0);opacity:0.45;}100%{transform:scale(3.8);opacity:0;}}
+/* Loading spinner */
+@keyframes spinBall{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+@keyframes ballPulse{
+0%,100%{filter:drop-shadow(0 0 10px #00f0ff) drop-shadow(0 0 20px #bf00ff80);}
+50%{filter:drop-shadow(0 0 18px #bf00ff) drop-shadow(0 0 30px #00f0ff80);}
 }
-35%{
-  transform:translate(-50px, 20px) scale(0.95) rotate(180deg);
-  opacity:1;
+/* Player kick animation */
+@keyframes playerKick{
+0%  {transform:translateX(0px) scaleX(1);}
+30% {transform:translateX(-4px) scaleX(1);}
+55% {transform:translateX(2px) scaleX(1);}
+70% {transform:translateX(0px) scaleX(1);}
+100%{transform:translateX(0px) scaleX(1);}
 }
-65%{
-  transform:translate(10px, -10px) scale(0.85) rotate(360deg);
-  opacity:1;
+@keyframes ballKick{
+0%  {transform:translate(0,0) rotate(0deg);}
+55% {transform:translate(0,0) rotate(0deg);}
+65% {transform:translate(10px,-12px) rotate(90deg);}
+80% {transform:translate(22px,-5px) rotate(200deg);}
+95% {transform:translate(30px,4px) rotate(280deg);}
+100%{transform:translate(0,0) rotate(360deg);}
 }
-80%{
-  transform:translate(38px, 8px) scale(0.75) rotate(480deg);
-  opacity:1;
-}
-100%{
-  transform:translate(38px, 8px) scale(0.75) rotate(540deg);
-  opacity:1;
-}
-}
-/* Net ripple after ball enters */
-@keyframes netRipple{
-0%{opacity:0;transform:scaleY(1);}
-70%{opacity:0;transform:scaleY(1);}
-75%{opacity:1;transform:scaleY(1.04);}
-82%{transform:scaleY(0.97);}
-89%{transform:scaleY(1.02);}
-96%{transform:scaleY(0.99);}
-100%{transform:scaleY(1);opacity:1;}
-}
-/* Goal flash glow */
-@keyframes goalFlash{
-0%,69%{opacity:0;}
-70%{opacity:1;}
-80%{opacity:0.3;}
-88%{opacity:0.8;}
-100%{opacity:0;}
-}
-/* Post neon glow pulse */
-@keyframes postGlow{
-0%,100%{filter:drop-shadow(0 0 4px #00f0ff80);}
-50%{filter:drop-shadow(0 0 10px #00f0ffcc) drop-shadow(0 0 20px #bf00ff80);}
-}
-/* Ball spin + roll before shoot */
-@keyframes ballIdle{
-0%{transform:translate(-110px,70px) rotate(0deg);}
-100%{transform:translate(-110px,70px) rotate(360deg);}
-}
-/* Grass line slide in */
-@keyframes grassSlide{
-0%{transform:scaleX(0);}
-100%{transform:scaleX(1);}
-}
-/* GOAT FC label shimmer */
-@keyframes loadTextShimmer{
+@keyframes loadBarShimmer{
 0%{background-position:200% center;}
 100%{background-position:-200% center;}
 }
-/* Ball trail fade */
-@keyframes trailFade{
-0%{opacity:0.5;}
-100%{opacity:0;}
-}
-/* Loading bar */
-@keyframes loadBarGlow{
-0%,100%{box-shadow:0 0 6px var(--neon-cyan);}
-50%{box-shadow:0 0 14px var(--neon-cyan),0 0 28px var(--neon-purple);}
-}
 
-/* ── LOADING SCREEN ── */
+/* ── LOADING ── */
 #loadingScreen{
 position:fixed;inset:0;background:var(--bg);z-index:9999;
 display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;
@@ -133,128 +75,48 @@ transition:opacity .6s ease;
 }
 #loadingScreen.hide{opacity:0;pointer-events:none;}
 
-/* Goal post scene container */
-.goal-scene{
+/* Kick scene container */
+.load-kick-scene{
+width:110px;height:70px;
 position:relative;
-width:240px;height:140px;
 display:flex;align-items:flex-end;justify-content:center;
 }
-
-/* Goal post SVG */
-.goal-svg{
-position:absolute;bottom:0;right:20px;
-width:140px;height:120px;
-animation:postGlow 2s ease-in-out infinite;
+/* Player SVG */
+.load-player{
+position:absolute;bottom:0;left:10px;
+animation:playerKick 1.4s ease-in-out infinite;
+filter:drop-shadow(0 0 6px rgba(0,240,255,0.5));
+}
+/* Ball */
+.load-ball-kick{
+position:absolute;bottom:2px;left:50px;
+animation:ballKick 1.4s ease-in-out infinite;
+filter:drop-shadow(0 0 5px rgba(191,0,255,0.6));
+}
+/* ground line */
+.load-ground{
+position:absolute;bottom:0;left:0;right:0;
+height:1px;background:linear-gradient(90deg,transparent,rgba(0,240,255,0.3),rgba(191,0,255,0.3),transparent);
 }
 
-/* Ball element */
-.load-ball-goal{
-position:absolute;
-bottom:18px;left:20px;
-width:34px;height:34px;
-z-index:10;
-}
-.load-ball-goal svg{
-width:100%;height:100%;
-}
-/* Idle state before shoot */
-.load-ball-goal.idle{
-animation:ballIdle 1s linear infinite;
-bottom:18px;left:20px;
-}
-/* Shoot state */
-.load-ball-goal.shoot{
-animation:ballShoot 0.9s cubic-bezier(0.25,0.46,0.45,0.94) forwards;
-bottom:18px;left:20px;
-}
-
-/* Ball motion trail dots */
-.ball-trail{
-position:absolute;
-bottom:35px;left:35px;
-width:6px;height:6px;border-radius:50%;
-background:rgba(0,240,255,0.5);
-animation:none;
-opacity:0;
-pointer-events:none;
-}
-.ball-trail.active{
-animation:trailFade 0.5s ease-out forwards;
-}
-
-/* Goal flash overlay */
-.goal-flash{
-position:absolute;
-bottom:0;right:20px;
-width:140px;height:120px;
-background:radial-gradient(ellipse at 70% 40%,rgba(0,255,136,0.35) 0%,rgba(0,240,255,0.15) 40%,transparent 70%);
-border-radius:2px;
-animation:goalFlash 0.9s ease-out forwards;
-animation-play-state:paused;
-pointer-events:none;
-z-index:5;
-}
-.goal-flash.active{
-animation-play-state:running;
-}
-
-/* Net ripple container */
-.net-ripple{
-position:absolute;
-bottom:0;right:20px;
-width:114px;height:95px;
-pointer-events:none;
-animation:netRipple 0.9s ease-out forwards;
-animation-play-state:paused;
-z-index:4;
-}
-.net-ripple.active{
-animation-play-state:running;
-}
-
-/* Grass ground line */
-.grass-line{
-position:absolute;
-bottom:0;left:0;right:0;
-height:2px;
-background:linear-gradient(90deg,transparent,#00ff8860,#00f0ff60,#00ff8860,transparent);
-transform-origin:left center;
-animation:grassSlide 1s ease-out forwards;
-}
-
-/* GOAL! text popup */
-.goal-text{
-position:absolute;
-top:-10px;right:-10px;
-font-family:'Orbitron',sans-serif;
-font-size:14px;font-weight:900;
-letter-spacing:3px;
-background:linear-gradient(90deg,#00ff88,#00f0ff,#f5ff00);
--webkit-background-clip:text;-webkit-text-fill-color:transparent;
-opacity:0;
-transform:scale(0.5) rotate(-8deg);
-transition:opacity 0.3s ease,transform 0.3s ease;
-pointer-events:none;
-text-shadow:none;
-filter:drop-shadow(0 0 8px #00ff8880);
-}
-.goal-text.show{
-opacity:1;
-transform:scale(1) rotate(-8deg);
-}
-
-/* Load text */
 .load-text{
 font-family:'Orbitron',sans-serif;font-size:10px;font-weight:900;letter-spacing:5px;
 background:linear-gradient(90deg,#00f0ff,#bf00ff,#ff007a,#00f0ff);
 background-size:300% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;
-animation:loadTextShimmer 2s linear infinite;
+animation:loadBarShimmer 2s linear infinite;
 }
 .load-bar-wrap{width:160px;height:3px;background:var(--border);border-radius:99px;overflow:hidden;}
-.load-bar{height:100%;width:0%;background:linear-gradient(90deg,var(--neon-cyan),var(--neon-purple));border-radius:99px;transition:width .1s linear;animation:loadBarGlow 1.5s ease-in-out infinite;}
+.load-bar{
+height:100%;width:0%;
+background:linear-gradient(90deg,var(--neon-cyan),var(--neon-purple),var(--neon-cyan));
+background-size:200% auto;
+border-radius:99px;transition:width .1s linear;
+box-shadow:0 0 8px var(--neon-cyan);
+animation:loadBarShimmer 1.5s linear infinite;
+}
 
 /* ── BODY ── */
-body{background:var(--bg);font-family:'Rajdhani',sans-serif;color:var(--text);overflow-x:hidden;}
+body{background:var(--bg);font-family:'Rajdhani',sans-serif;color:var(--text);overflow-x:hidden;padding-bottom:0;}
 body::before{content:"";position:fixed;inset:0;background:radial-gradient(ellipse at 15% 15%,rgba(0,240,255,0.05) 0%,transparent 45%),radial-gradient(ellipse at 85% 85%,rgba(191,0,255,0.05) 0%,transparent 45%);pointer-events:none;z-index:-1;}
 body::after{content:"";position:fixed;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(0,240,255,0.012) 59px,rgba(0,240,255,0.012) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(0,240,255,0.008) 59px,rgba(0,240,255,0.008) 60px);pointer-events:none;z-index:-1;}
 
@@ -265,23 +127,21 @@ body::after{content:"";position:fixed;inset:0;background-image:repeating-linear-
 .logo-text{font-family:'Orbitron',sans-serif;font-size:14px;font-weight:900;letter-spacing:3px;background:linear-gradient(90deg,var(--neon-cyan),var(--neon-purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .nav-links{display:flex;align-items:center;gap:2px;overflow-x:auto;scrollbar-width:none;flex-shrink:1;min-width:0;}
 .nav-links::-webkit-scrollbar{display:none;}
+/* Nav links — static RGB gradient color, no animation */
 .nav-links a{
 font-family:'Exo 2',sans-serif;font-size:9px;font-weight:800;letter-spacing:1.5px;
-background:linear-gradient(90deg,#00f0ff,#bf00ff,#ff007a,#00f0ff);
-background-size:300% auto;
--webkit-background-clip:text;-webkit-text-fill-color:transparent;
-animation:navShimmer 4s linear infinite;
+color:#7ec8e3;
 text-decoration:none;white-space:nowrap;padding:5px 9px;border-radius:4px;
-border:1px solid rgba(0,240,255,0.15);
-text-transform:uppercase;transition:border-color .2s,box-shadow .2s,background-position .2s;flex-shrink:0;
+border:1px solid rgba(126,200,227,0.2);
+text-transform:uppercase;transition:all .25s;flex-shrink:0;
 }
 .nav-links a:hover{
-border-color:rgba(0,240,255,0.45);
-box-shadow:0 0 10px rgba(0,240,255,0.2),inset 0 0 8px rgba(0,240,255,0.06);
-animation-duration:1.2s;
+color:#00f0ff;border-color:rgba(0,240,255,0.4);
+background:rgba(0,240,255,0.06);
+text-shadow:0 0 10px rgba(0,240,255,0.7),0 0 22px rgba(0,240,255,0.3);
 }
 
-/* ── HERO SLIDER ── */
+/* ── HERO ── */
 .hero{position:relative;height:220px;overflow:hidden;background:#05050f;}
 .slide-box{position:absolute;inset:0;opacity:0;transition:opacity .9s ease;}
 .slide-box.active{opacity:1;}
@@ -289,7 +149,13 @@ animation-duration:1.2s;
 .slide-overlay{position:absolute;inset:0;background:linear-gradient(0deg,rgba(6,6,16,0.92) 0%,rgba(6,6,16,0.3) 55%,rgba(6,6,16,0.05) 100%);}
 .slide-grid{position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(0,240,255,0.025) 39px,rgba(0,240,255,0.025) 40px),repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(0,240,255,0.012) 39px,rgba(0,240,255,0.012) 40px);}
 .slide-content{position:absolute;bottom:22px;left:0;right:0;text-align:center;padding:0 20px;z-index:5;}
-.slide-content h1{font-family:'Orbitron',sans-serif;font-size:16px;font-weight:900;letter-spacing:3px;background:linear-gradient(90deg,#00f0ff,#f5ff00,#ff007a,#00ff88);background-size:300% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shimmer 3s linear infinite;margin-bottom:6px;}
+/* Slide title — static colorful gradient, NO animation */
+.slide-content h1{
+font-family:'Orbitron',sans-serif;font-size:16px;font-weight:900;letter-spacing:3px;
+background:linear-gradient(90deg,#00f0ff 0%,#f5ff00 35%,#ff007a 65%,#00ff88 100%);
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+margin-bottom:6px;
+}
 .slide-content p{font-family:'Exo 2',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;color:rgba(238,240,255,0.65);margin-bottom:10px;text-transform:uppercase;}
 .slide-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 20px;font-family:'Exo 2',sans-serif;font-size:10px;font-weight:900;letter-spacing:2.5px;text-transform:uppercase;text-decoration:none;color:#fff;background:linear-gradient(90deg,#00f0ff,#bf00ff);border-radius:4px;box-shadow:0 0 20px rgba(0,240,255,0.4),0 0 40px rgba(191,0,255,0.2);transition:all .25s;position:relative;overflow:hidden;}
 .slide-btn::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(255,255,255,0.15),transparent);}
@@ -331,45 +197,28 @@ animation-duration:1.2s;
 .hub-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;justify-items:center;}
 .hub-card{
 background:var(--surface);
-border:1px solid rgba(0,240,255,0.6);
+border:1px solid rgba(0,240,255,0.65);
 border-radius:6px;padding:18px 10px;
 cursor:pointer;text-align:center;
 position:relative;overflow:hidden;width:100%;
-animation:hubBorderRgb 5s linear infinite;
+/* Slow 18s RGB border */
+animation:hubRgb 18s linear infinite;
 transition:transform .22s,background .22s,box-shadow .22s;
 }
-.hub-card:hover{
-transform:translateY(-3px);
-background:var(--surface2);
-box-shadow:0 0 18px rgba(0,240,255,0.12),0 0 4px rgba(0,240,255,0.08);
-}
-.hub-card .hub-ripple{
-position:absolute;
-border-radius:50%;
-width:60px;height:60px;
-margin-top:-30px;margin-left:-30px;
-background:radial-gradient(circle,rgba(0,240,255,0.35) 0%,rgba(191,0,255,0.2) 50%,transparent 70%);
-transform:scale(0);opacity:0;
-pointer-events:none;
-}
-.hub-card:active .hub-ripple{
-animation:hubRipple 0.55s ease-out forwards;
-}
+.hub-card:hover{transform:translateY(-3px);background:var(--surface2);box-shadow:0 0 18px rgba(0,240,255,0.12);}
+.hub-card .hub-ripple{position:absolute;border-radius:50%;width:60px;height:60px;margin-top:-30px;margin-left:-30px;background:radial-gradient(circle,rgba(0,240,255,0.3) 0%,rgba(191,0,255,0.15) 50%,transparent 70%);transform:scale(0);opacity:0;pointer-events:none;}
+.hub-card:active .hub-ripple{animation:hubRipple 0.55s ease-out forwards;}
 .hub-icon{font-size:26px;margin-bottom:8px;display:block;}
 .hub-title{font-family:'Exo 2',sans-serif;font-size:11px;font-weight:800;letter-spacing:1px;color:var(--text);text-transform:uppercase;}
 
-/* ── COMING SOON ── */
+/* ── COMING SOON — centered grid fix ── */
 .store-grid{
 display:grid;
 grid-template-columns:repeat(2,minmax(0,280px));
 gap:10px;
 justify-content:center;
 }
-.store-card{
-background:var(--surface);border:1px solid var(--border);
-border-radius:6px;overflow:hidden;transition:all .22s;
-width:100%;
-}
+.store-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;overflow:hidden;transition:all .22s;width:100%;}
 .store-card:hover{transform:translateY(-3px);border-color:rgba(0,240,255,0.3);box-shadow:0 0 20px rgba(0,240,255,0.08);}
 .store-card img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;}
 .store-btn{display:block;margin:8px;padding:8px;font-family:'Exo 2',sans-serif;font-size:9px;font-weight:800;letter-spacing:1.5px;text-align:center;text-transform:uppercase;text-decoration:none;color:#fff;background:linear-gradient(90deg,#00f0ff,#bf00ff);border-radius:3px;box-shadow:0 0 12px rgba(0,240,255,0.25);transition:opacity .2s;}
@@ -377,17 +226,18 @@ width:100%;
 
 /* ── HALL OF CHAMPIONS ── */
 .champ-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:10px;justify-items:center;}
-.champ-card{background:var(--surface);border:1px solid rgba(0,240,255,0.35);border-radius:6px;overflow:hidden;cursor:pointer;text-align:center;transition:all .22s;position:relative;width:100%;animation:champRgb 5s linear infinite;}
+.champ-card{background:var(--surface);border:1px solid rgba(0,240,255,0.35);border-radius:6px;overflow:hidden;cursor:pointer;text-align:center;transition:all .22s;position:relative;width:100%;}
 .champ-card:hover{transform:translateY(-3px);box-shadow:0 0 24px rgba(0,240,255,0.2),0 0 48px rgba(191,0,255,0.1);}
 .champ-card img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;}
 .champ-info{padding:10px 8px 12px;}
+/* Champion title — slow 8s shimmer, gold→white→cyan */
 .champ-title{
 font-family:'Exo 2',sans-serif;
 font-size:12px;font-weight:900;letter-spacing:0.5px;
 background:linear-gradient(90deg,#ffe066,#fff7b0,#00f0ff,#bf00ff,#ffe066);
 background-size:300% auto;
 -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-animation:champTitleShimmer 3s linear infinite;
+animation:champTitleShimmer 8s linear infinite;
 margin-bottom:5px;line-height:1.2;
 }
 .champ-sub{font-family:'Exo 2',sans-serif;font-size:10px;font-weight:800;letter-spacing:1px;color:#ffcc00;text-shadow:0 0 8px rgba(255,200,0,0.5);text-transform:uppercase;}
@@ -419,21 +269,21 @@ margin-bottom:5px;line-height:1.2;
 .nav-links a{font-size:8px;padding:4px 7px;letter-spacing:1px;}
 .hero{height:185px;}.slide-content h1{font-size:13px;letter-spacing:2px;}
 .hub-grid{grid-template-columns:repeat(2,1fr);}
-.store-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+.store-grid{grid-template-columns:repeat(2,minmax(0,1fr));justify-content:unset;}
 .champ-grid{grid-template-columns:repeat(2,1fr);}
 .live-mid{grid-template-columns:1fr 68px 1fr;}.score-box{font-size:15px;}.lm-name{font-size:10px;}
 .footer{height:auto;flex-direction:column;gap:4px;padding:10px 14px;text-align:center;}
 }
 @media(min-width:481px) and (max-width:899px){
 .hub-grid{grid-template-columns:repeat(3,1fr);}
-.store-grid{grid-template-columns:repeat(3,minmax(0,240px));}
+.store-grid{grid-template-columns:repeat(3,minmax(0,240px));justify-content:center;}
 .champ-grid{grid-template-columns:repeat(3,1fr);}
 }
 @media(min-width:600px){.hero{height:250px;}.slide-content h1{font-size:20px;}}
 @media(min-width:900px){
 .section{padding:22px 20px 0;}.hero{height:280px;}
 .hub-grid{grid-template-columns:repeat(6,1fr);}
-.store-grid{grid-template-columns:repeat(4,minmax(0,240px));justify-content:center;}
+.store-grid{grid-template-columns:repeat(4,minmax(0,220px));justify-content:center;}
 .champ-grid{grid-template-columns:repeat(4,1fr);}
 }
 </style>
@@ -442,81 +292,19 @@ margin-bottom:5px;line-height:1.2;
 
 <!-- LOADING SCREEN -->
 <div id="loadingScreen">
-
-  <!-- GOAL SCENE -->
-  <div class="goal-scene">
-
-    <!-- Ground grass line -->
-    <div class="grass-line"></div>
-
-    <!-- GOAL POST SVG -->
-    <svg class="goal-svg" viewBox="0 0 140 120" xmlns="http://www.w3.org/2000/svg">
-      <!-- Net background fill -->
-      <rect x="13" y="8" width="114" height="95" fill="rgba(0,240,255,0.03)" rx="1"/>
-
-      <!-- NET lines (vertical) -->
-      <g class="net-ripple" id="netRippleEl" stroke="rgba(0,240,255,0.18)" stroke-width="0.7">
-        <line x1="27" y1="8" x2="27" y2="103"/>
-        <line x1="41" y1="8" x2="41" y2="103"/>
-        <line x1="55" y1="8" x2="55" y2="103"/>
-        <line x1="69" y1="8" x2="69" y2="103"/>
-        <line x1="83" y1="8" x2="83" y2="103"/>
-        <line x1="97" y1="8" x2="97" y2="103"/>
-        <line x1="111" y1="8" x2="111" y2="103"/>
-        <!-- Net horizontal lines -->
-        <line x1="13" y1="22" x2="127" y2="22"/>
-        <line x1="13" y1="36" x2="127" y2="36"/>
-        <line x1="13" y1="50" x2="127" y2="50"/>
-        <line x1="13" y1="64" x2="127" y2="64"/>
-        <line x1="13" y1="78" x2="127" y2="78"/>
-        <line x1="13" y1="92" x2="127" y2="92"/>
-      </g>
-
-      <!-- Goal POST frame — neon cyan -->
-      <!-- Left post -->
-      <rect x="10" y="5" width="6" height="100" fill="none" stroke="#00f0ff" stroke-width="2.5" rx="1"/>
-      <!-- Right post -->
-      <rect x="124" y="5" width="6" height="100" fill="none" stroke="#00f0ff" stroke-width="2.5" rx="1"/>
-      <!-- Crossbar -->
-      <rect x="10" y="5" width="120" height="6" fill="none" stroke="#00f0ff" stroke-width="2.5" rx="1"/>
-      <!-- Ground bar -->
-      <rect x="10" y="103" width="120" height="4" fill="rgba(0,240,255,0.4)" rx="1"/>
-
-      <!-- Post end caps / corner joints neon highlight -->
-      <circle cx="13" cy="8" r="3" fill="#00f0ff" opacity="0.8"/>
-      <circle cx="127" cy="8" r="3" fill="#00f0ff" opacity="0.8"/>
-      <circle cx="13" cy="103" r="3" fill="#00f0ff" opacity="0.6"/>
-      <circle cx="127" cy="103" r="3" fill="#00f0ff" opacity="0.6"/>
-
-      <!-- Inner post depth lines (3D look) -->
-      <line x1="16" y1="8" x2="16" y2="103" stroke="rgba(191,0,255,0.4)" stroke-width="1"/>
-      <line x1="124" y1="8" x2="124" y2="103" stroke="rgba(191,0,255,0.4)" stroke-width="1"/>
-      <line x1="13" y1="11" x2="127" y2="11" stroke="rgba(191,0,255,0.4)" stroke-width="1"/>
+  <div class="load-ball">
+    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="32" cy="32" r="30" fill="none" stroke="#1e1e3a" stroke-width="2"/>
+      <polygon points="32,8 40,14 37,24 27,24 24,14" fill="#00f0ff" opacity="0.9"/>
+      <polygon points="50,22 56,32 50,42 42,38 42,26" fill="#bf00ff" opacity="0.9"/>
+      <polygon points="44,52 32,56 20,52 20,42 44,42" fill="#ff007a" opacity="0.9"/>
+      <polygon points="14,22 22,26 22,38 14,42 8,32" fill="#00ff88" opacity="0.9"/>
+      <polygon points="32,8 24,14 20,22 27,24 37,24 40,14" fill="none" stroke="#00f0ff" stroke-width="1"/>
+      <circle cx="32" cy="32" r="30" fill="none" stroke="#00f0ff" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.4"/>
+      <circle cx="32" cy="32" r="30" fill="none" stroke="#bf00ff" stroke-width="1" opacity="0.2"/>
     </svg>
-
-    <!-- Goal flash glow -->
-    <div class="goal-flash" id="goalFlash"></div>
-
-    <!-- BALL -->
-    <div class="load-ball-goal idle" id="loadBall">
-      <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="32" cy="32" r="30" fill="none" stroke="#1e1e3a" stroke-width="2"/>
-        <polygon points="32,8 40,14 37,24 27,24 24,14" fill="#00f0ff" opacity="0.9"/>
-        <polygon points="50,22 56,32 50,42 42,38 42,26" fill="#bf00ff" opacity="0.9"/>
-        <polygon points="44,52 32,56 20,52 20,42 44,42" fill="#ff007a" opacity="0.9"/>
-        <polygon points="14,22 22,26 22,38 14,42 8,32" fill="#00ff88" opacity="0.9"/>
-        <polygon points="32,8 24,14 20,22 27,24 37,24 40,14" fill="none" stroke="#00f0ff" stroke-width="1"/>
-        <circle cx="32" cy="32" r="30" fill="none" stroke="#00f0ff" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.4"/>
-        <circle cx="32" cy="32" r="30" fill="none" stroke="#bf00ff" stroke-width="1" opacity="0.2"/>
-      </svg>
-    </div>
-
-    <!-- GOAL! text -->
-    <div class="goal-text" id="goalText">GOAL!</div>
-
   </div>
-
-  <div class="load-text">GOAT FC</div>
+  <div class="load-text">GOAT FC LOADING</div>
   <div class="load-bar-wrap"><div class="load-bar" id="loadBar"></div></div>
 </div>
 
@@ -549,12 +337,10 @@ margin-bottom:5px;line-height:1.2;
   </div>
   <div class="live-track" id="liveTrack">
     <div style="min-width:100%;text-align:center;padding:30px;font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:4px;color:var(--muted);">
-      <i class="fa-solid fa-spinner fa-spin" style="display:block;font-size:16px;margin-bottom:10px;color:var(--neon-cyan);text-shadow:0 0 10px var(--neon-cyan);"></i>
-      LOADING...
+      <i class="fa-solid fa-spinner fa-spin" style="display:block;font-size:16px;margin-bottom:10px;color:var(--neon-cyan);text-shadow:0 0 10px var(--neon-cyan);"></i>LOADING...
     </div>
   </div>
 </div>
-
 <div class="sdiv"></div>
 
 <!-- CLUB HUB -->
@@ -568,7 +354,6 @@ margin-bottom:5px;line-height:1.2;
     <div class="loader-row"><i class="fa-solid fa-spinner fa-spin"></i>LOADING...</div>
   </div>
 </div>
-
 <div class="sdiv"></div>
 
 <!-- COMING SOON -->
@@ -582,7 +367,6 @@ margin-bottom:5px;line-height:1.2;
     <div class="loader-row"><i class="fa-solid fa-spinner fa-spin"></i>LOADING...</div>
   </div>
 </div>
-
 <div class="sdiv"></div>
 
 <!-- HALL OF CHAMPIONS -->
@@ -597,7 +381,6 @@ margin-bottom:5px;line-height:1.2;
   </div>
   <div class="champ-desc" id="champDesc"></div>
 </div>
-
 <div class="sdiv"></div>
 
 <!-- JOIN WITH US -->
@@ -620,248 +403,111 @@ margin-bottom:5px;line-height:1.2;
 </footer>
 
 <script>
-const sheetID = "1ZoXNHa5sYiP_HaPRyL5RDML7l3kC2IaGuQCAmYkERf8";
+const sheetID="1ZoXNHa5sYiP_HaPRyL5RDML7l3kC2IaGuQCAmYkERf8";
 
-/* ── GOAL ANIMATION CONTROLLER ── */
-(function(){
-  const ball = document.getElementById('loadBall');
-  const flash = document.getElementById('goalFlash');
-  const goalText = document.getElementById('goalText');
-
-  function shootBall(){
-    /* Switch from idle spin to shoot trajectory */
-    ball.classList.remove('idle');
-    ball.classList.add('shoot');
-
-    /* After ball enters goal (~720ms), trigger flash + net ripple + GOAL text */
-    setTimeout(()=>{
-      flash.classList.add('active');
-      goalText.classList.add('show');
-    }, 720);
-
-    /* Reset after full cycle (2.8s) and replay */
-    setTimeout(()=>{
-      ball.classList.remove('shoot');
-      flash.classList.remove('active');
-      goalText.classList.remove('show');
-      /* Small delay then go idle again */
-      setTimeout(()=>{
-        ball.classList.add('idle');
-        /* Shoot again after 1.2s idle */
-        setTimeout(shootBall, 1200);
-      }, 150);
-    }, 2800);
-  }
-
-  /* Start: idle for 1s then first shoot */
-  setTimeout(shootBall, 1000);
-})();
-
-/* ── LOADING BAR ── */
-let loadPct = 0;
-const loadBar = document.getElementById('loadBar');
-const loadTimer = setInterval(() => {
-  loadPct = Math.min(loadPct + Math.random() * 8, 88);
-  loadBar.style.width = loadPct + '%';
-}, 120);
-function finishLoading() {
-  clearInterval(loadTimer);
-  loadBar.style.width = '100%';
-  setTimeout(() => {
+/* Loading bar */
+let loadPct=0;
+const loadBar=document.getElementById('loadBar');
+const loadTimer=setInterval(()=>{loadPct=Math.min(loadPct+Math.random()*8,88);loadBar.style.width=loadPct+'%';},120);
+function finishLoading(){
+  clearInterval(loadTimer);loadBar.style.width='100%';
+  setTimeout(()=>{
     document.getElementById('loadingScreen').classList.add('hide');
-    setTimeout(() => document.getElementById('loadingScreen').remove(), 700);
-  }, 350);
+    setTimeout(()=>document.getElementById('loadingScreen').remove(),700);
+  },350);
 }
 
-/* ── SLIDES ── */
-let slides = [], current = 0, autoTimer;
-fetch(`https://opensheet.elk.sh/${sheetID}/SLIDES`)
-  .then(r => r.json())
-  .then(data => { slides = data; renderSlides(); startAuto(); })
-  .catch(() => {});
-function renderSlides() {
-  const hero = document.getElementById('heroSlider');
-  let html = `<button class="arrow left" onclick="changeSlide(-1)">&#8249;</button><button class="arrow right" onclick="changeSlide(1)">&#8250;</button>`;
-  html += slides.map((s, i) => `
-    <div class="slide-box ${i === 0 ? 'active' : ''}">
-      <img src="${s.image}" alt="">
-      <div class="slide-overlay"></div><div class="slide-grid"></div>
-      <div class="slide-content">
-        <h1>${s.title}</h1><p>${s.desc}</p>
-        <a class="slide-btn" href="${s.link}" target="_blank"><i class="fa-solid fa-arrow-right"></i>${s.button}</a>
-      </div>
-    </div>`).join('');
-  hero.innerHTML = html;
+/* Slides */
+let slides=[],current=0,autoTimer;
+fetch(`https://opensheet.elk.sh/${sheetID}/SLIDES`).then(r=>r.json()).then(data=>{slides=data;renderSlides();startAuto();}).catch(()=>{});
+function renderSlides(){
+  const hero=document.getElementById('heroSlider');
+  let html=`<button class="arrow left" onclick="changeSlide(-1)">&#8249;</button><button class="arrow right" onclick="changeSlide(1)">&#8250;</button>`;
+  html+=slides.map((s,i)=>`<div class="slide-box ${i===0?'active':''}"><img src="${s.image}" alt=""><div class="slide-overlay"></div><div class="slide-grid"></div><div class="slide-content"><h1>${s.title}</h1><p>${s.desc}</p><a class="slide-btn" href="${s.link}" target="_blank"><i class="fa-solid fa-arrow-right"></i>${s.button}</a></div></div>`).join('');
+  hero.innerHTML=html;
 }
-function startAuto() { clearInterval(autoTimer); autoTimer = setInterval(() => changeSlide(1), 7000); }
-function changeSlide(dir) {
-  const boxes = document.querySelectorAll('.slide-box');
-  if (!boxes.length) return;
-  boxes[current].classList.remove('active');
-  current = (current + dir + boxes.length) % boxes.length;
-  boxes[current].classList.add('active');
-}
+function startAuto(){clearInterval(autoTimer);autoTimer=setInterval(()=>changeSlide(1),7000);}
+function changeSlide(dir){const boxes=document.querySelectorAll('.slide-box');if(!boxes.length)return;boxes[current].classList.remove('active');current=(current+dir+boxes.length)%boxes.length;boxes[current].classList.add('active');}
 
-/* ── CLUB HUB ── */
-fetch(`https://opensheet.elk.sh/${sheetID}/LINKS`)
-  .then(r => r.json())
-  .then(data => {
-    document.getElementById('hubGrid').innerHTML = data.map(l => `
-      <div class="hub-card" onclick="window.open('${l.link}','_blank')">
-        <span class="hub-ripple"></span>
-        <span class="hub-icon">${l.icon}</span>
-        <div class="hub-title">${l.title}</div>
-      </div>`).join('');
-    document.querySelectorAll('.hub-card').forEach(card => {
-      function triggerRipple(e) {
-        const ripple = card.querySelector('.hub-ripple');
-        const rect = card.getBoundingClientRect();
-        const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
-        const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
-        ripple.style.left = x + 'px';
-        ripple.style.top = y + 'px';
-        ripple.style.animation = 'none';
-        void ripple.offsetWidth;
-        ripple.style.animation = '';
-      }
-      card.addEventListener('mousedown', triggerRipple);
-      card.addEventListener('touchstart', triggerRipple, {passive:true});
-    });
-  }).catch(() => { document.getElementById('hubGrid').innerHTML = '<div class="loader-row">Failed to load</div>'; });
-
-/* ── CHAMPIONS ── */
-fetch(`https://opensheet.elk.sh/${sheetID}/CHAMPIONS`)
-  .then(r => r.json())
-  .then(data => {
-    document.getElementById('champGrid').innerHTML = data.map(c => `
-      <div class="champ-card">
-        <img src="${c.image}" alt="${c.title}">
-        <div class="champ-info">
-          <div class="champ-title">${c.title}</div>
-          <div class="champ-sub">${c.subtitle}</div>
-        </div>
-      </div>`).join('');
-    document.getElementById('champDesc').innerHTML =
-      '<i class="fa-solid fa-trophy" style="color:#ffcc00;margin-right:6px;"></i>This zone represents champions, top scorers, and elite performers of Goat FC.';
-  }).catch(() => {});
-
-/* ── SOCIAL ── */
-fetch(`https://opensheet.elk.sh/${sheetID}/SOCIAL`)
-  .then(r => r.json())
-  .then(data => {
-    function getIcon(name) {
-      const n = (name || '').toLowerCase();
-      if (n.includes('telegram')) return 'fa-brands fa-telegram';
-      if (n.includes('facebook')) return 'fa-brands fa-facebook';
-      if (n.includes('whatsapp')) return 'fa-brands fa-whatsapp';
-      if (n.includes('discord')) return 'fa-brands fa-discord';
-      if (n.includes('instagram')) return 'fa-brands fa-instagram';
-      if (n.includes('twitter') || n.includes('x.com')) return 'fa-brands fa-x-twitter';
-      if (n.includes('youtube')) return 'fa-brands fa-youtube';
-      return 'fa-solid fa-link';
+/* Club Hub */
+fetch(`https://opensheet.elk.sh/${sheetID}/LINKS`).then(r=>r.json()).then(data=>{
+  document.getElementById('hubGrid').innerHTML=data.map(l=>`<div class="hub-card" onclick="window.open('${l.link}','_blank')"><span class="hub-ripple"></span><span class="hub-icon">${l.icon}</span><div class="hub-title">${l.title}</div></div>`).join('');
+  document.querySelectorAll('.hub-card').forEach(card=>{
+    function fire(e){
+      const r=card.querySelector('.hub-ripple'),rect=card.getBoundingClientRect();
+      const x=(e.touches?e.touches[0].clientX:e.clientX)-rect.left;
+      const y=(e.touches?e.touches[0].clientY:e.clientY)-rect.top;
+      r.style.left=x+'px';r.style.top=y+'px';r.style.animation='none';void r.offsetWidth;r.style.animation='';
     }
-    document.getElementById('socialWrap').innerHTML = data.map(s => `
-      <a class="social-btn" href="${s.link}" target="_blank">
-        <i class="${getIcon(s.name)}"></i>${s.name}
-      </a>`).join('');
-  }).catch(() => {});
+    card.addEventListener('mousedown',fire);
+    card.addEventListener('touchstart',fire,{passive:true});
+  });
+}).catch(()=>{document.getElementById('hubGrid').innerHTML='<div class="loader-row">Failed to load</div>';});
 
-/* ── CSV PARSER ── */
-function parseCSV(text) {
-  const rows = [];
-  let row = [], cell = '', inside = false;
-  for (let i = 0; i < text.length; i++) {
-    const c = text[i], n = text[i + 1];
-    if (c === '"' && inside && n === '"') { cell += '"'; i++; }
-    else if (c === '"') { inside = !inside; }
-    else if (c === ',' && !inside) { row.push(cell); cell = ''; }
-    else if ((c === '\n' || c === '\r') && !inside) {
-      if (cell || row.length) { row.push(cell); rows.push(row); row = []; cell = ''; }
-      if (c === '\r' && n === '\n') i++;
-    } else cell += c;
+/* Champions */
+fetch(`https://opensheet.elk.sh/${sheetID}/CHAMPIONS`).then(r=>r.json()).then(data=>{
+  document.getElementById('champGrid').innerHTML=data.map(c=>`<div class="champ-card"><img src="${c.image}" alt="${c.title}"><div class="champ-info"><div class="champ-title">${c.title}</div><div class="champ-sub">${c.subtitle}</div></div></div>`).join('');
+  document.getElementById('champDesc').innerHTML='<i class="fa-solid fa-trophy" style="color:#ffcc00;margin-right:6px;"></i>This zone represents champions, top scorers, and elite performers of Goat FC.';
+}).catch(()=>{});
+
+/* Social */
+fetch(`https://opensheet.elk.sh/${sheetID}/SOCIAL`).then(r=>r.json()).then(data=>{
+  function getIcon(n){n=(n||'').toLowerCase();if(n.includes('telegram'))return'fa-brands fa-telegram';if(n.includes('facebook'))return'fa-brands fa-facebook';if(n.includes('whatsapp'))return'fa-brands fa-whatsapp';if(n.includes('discord'))return'fa-brands fa-discord';if(n.includes('instagram'))return'fa-brands fa-instagram';if(n.includes('twitter')||n.includes('x.com'))return'fa-brands fa-x-twitter';if(n.includes('youtube'))return'fa-brands fa-youtube';return'fa-solid fa-link';}
+  document.getElementById('socialWrap').innerHTML=data.map(s=>`<a class="social-btn" href="${s.link}" target="_blank"><i class="${getIcon(s.name)}"></i>${s.name}</a>`).join('');
+}).catch(()=>{});
+
+/* CSV */
+function parseCSV(text){
+  const rows=[];let row=[],cell='',inside=false;
+  for(let i=0;i<text.length;i++){
+    const c=text[i],n=text[i+1];
+    if(c==='"'&&inside&&n==='"'){cell+='"';i++;}
+    else if(c==='"'){inside=!inside;}
+    else if(c===','&&!inside){row.push(cell);cell='';}
+    else if((c==='\n'||c==='\r')&&!inside){if(cell||row.length){row.push(cell);rows.push(row);row=[];cell='';}if(c==='\r'&&n==='\n')i++;}
+    else cell+=c;
   }
-  if (cell || row.length) { row.push(cell); rows.push(row); }
-  const headers = rows.shift();
-  return rows.map(r => Object.fromEntries(headers.map((h, i) => [h.trim(), (r[i] || '').trim()])));
+  if(cell||row.length){row.push(cell);rows.push(row);}
+  const headers=rows.shift();
+  return rows.map(r=>Object.fromEntries(headers.map((h,i)=>[h.trim(),(r[i]||'').trim()])));
 }
-function formatBDTime(dateStr) {
-  if (!dateStr) return '';
-  const d = new Date(dateStr);
-  if (isNaN(d)) return '';
-  return d.toLocaleString('en-BD', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit', hour12:true, timeZone:'Asia/Dhaka' });
-}
+function formatBDTime(ds){if(!ds)return'';const d=new Date(ds);if(isNaN(d))return'';return d.toLocaleString('en-BD',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit',hour12:true,timeZone:'Asia/Dhaka'});}
 
-/* ── LIVE SCORE ── */
+/* Live Score */
 Promise.all([
-  fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv&t=" + Date.now()).then(r => r.text()),
-  fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv&t=" + Date.now()).then(r => r.text()),
-  fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1033046915&single=true&output=csv&t=" + Date.now()).then(r => r.text())
-]).then(([matchCSV, memberCSV, leaderCSV]) => {
-  const matches = parseCSV(matchCSV)
-    .filter(m => m.Approved?.toLowerCase() === 'yes' && !isNaN(parseFloat(m.P1_Score)) && !isNaN(parseFloat(m.P2_Score)))
-    .slice(-10).reverse();
-  const nameMap = {};
-  parseCSV(memberCSV).forEach(m => nameMap[m["Club ID Number"]] = m["Full Name"]);
-  const rankMap = {};
-  parseCSV(leaderCSV).forEach(r => { rankMap[r["Club_ID"]] = r["Overall Rank"]; });
-  if (!matches.length) {
-    document.getElementById('liveTrack').innerHTML = `<div style="min-width:100%;text-align:center;padding:20px;font-family:'Exo 2',sans-serif;font-size:10px;color:var(--muted);">No recent matches</div>`;
-    finishLoading(); return;
-  }
-  document.getElementById('liveTrack').innerHTML = matches.map(m => {
-    const p1 = nameMap[m.P1_ID] || m.P1_ID;
-    const p2 = nameMap[m.P2_ID] || m.P2_ID;
-    const p1Rank = rankMap[m.P1_ID] ? `#${rankMap[m.P1_ID]}` : '';
-    const p2Rank = rankMap[m.P2_ID] ? `#${rankMap[m.P2_ID]}` : '';
-    let s1cls = 's-draw', s2cls = 's-draw';
-    if (+m.P1_Score > +m.P2_Score) { s1cls = 's-win'; s2cls = 's-loss'; }
-    else if (+m.P1_Score < +m.P2_Score) { s1cls = 's-loss'; s2cls = 's-win'; }
-    return `<div class="live-card">
-      <div class="live-mid">
-        <div class="lm-player">
-          <div class="lm-rank">${p1Rank}</div>
-          <div class="lm-name">${p1}</div>
-          <div class="lm-id">${m.P1_ID}</div>
-        </div>
-        <div class="lm-center">
-          <div class="match-type-pill">${m.Match_Type}</div>
-          <div class="score-box"><span class="${s1cls}">${m.P1_Score}</span><span class="s-sep">—</span><span class="${s2cls}">${m.P2_Score}</span></div>
-          <div class="match-date">${formatBDTime(m.Match_Date)}</div>
-        </div>
-        <div class="lm-player">
-          <div class="lm-rank">${p2Rank}</div>
-          <div class="lm-name">${p2}</div>
-          <div class="lm-id">${m.P2_ID}</div>
-        </div>
-      </div>
-    </div>`;
+  fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv&t="+Date.now()).then(r=>r.text()),
+  fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv&t="+Date.now()).then(r=>r.text()),
+  fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1033046915&single=true&output=csv&t="+Date.now()).then(r=>r.text())
+]).then(([mCSV,mbCSV,lCSV])=>{
+  const matches=parseCSV(mCSV).filter(m=>m.Approved?.toLowerCase()==='yes'&&!isNaN(parseFloat(m.P1_Score))&&!isNaN(parseFloat(m.P2_Score))).slice(-10).reverse();
+  const nameMap={};parseCSV(mbCSV).forEach(m=>nameMap[m["Club ID Number"]]=m["Full Name"]);
+  const rankMap={};parseCSV(lCSV).forEach(r=>{rankMap[r["Club_ID"]]=r["Overall Rank"];});
+  if(!matches.length){document.getElementById('liveTrack').innerHTML=`<div style="min-width:100%;text-align:center;padding:20px;font-family:'Exo 2',sans-serif;font-size:10px;color:var(--muted);">No recent matches</div>`;finishLoading();return;}
+  document.getElementById('liveTrack').innerHTML=matches.map(m=>{
+    const p1=nameMap[m.P1_ID]||m.P1_ID,p2=nameMap[m.P2_ID]||m.P2_ID;
+    const p1r=rankMap[m.P1_ID]?`#${rankMap[m.P1_ID]}`:'',p2r=rankMap[m.P2_ID]?`#${rankMap[m.P2_ID]}`:'';
+    let s1='s-draw',s2='s-draw';
+    if(+m.P1_Score>+m.P2_Score){s1='s-win';s2='s-loss';}else if(+m.P1_Score<+m.P2_Score){s1='s-loss';s2='s-win';}
+    return`<div class="live-card"><div class="live-mid"><div class="lm-player"><div class="lm-rank">${p1r}</div><div class="lm-name">${p1}</div><div class="lm-id">${m.P1_ID}</div></div><div class="lm-center"><div class="match-type-pill">${m.Match_Type}</div><div class="score-box"><span class="${s1}">${m.P1_Score}</span><span class="s-sep">—</span><span class="${s2}">${m.P2_Score}</span></div><div class="match-date">${formatBDTime(m.Match_Date)}</div></div><div class="lm-player"><div class="lm-rank">${p2r}</div><div class="lm-name">${p2}</div><div class="lm-id">${m.P2_ID}</div></div></div></div>`;
   }).join('');
   finishLoading();
-}).catch(() => { finishLoading(); });
+}).catch(()=>finishLoading());
 
-/* ── AUTO SCROLL LIVE ── */
-setInterval(() => {
-  const track = document.getElementById('liveTrack');
-  const card = track.querySelector('.live-card');
-  if (!card) return;
-  const cardW = card.offsetWidth + 10;
-  const maxScroll = track.scrollWidth - track.clientWidth;
-  if (track.scrollLeft + cardW >= maxScroll - 10) {
-    setTimeout(() => track.scrollTo({ left: 0, behavior: 'smooth' }), 400);
-  } else { track.scrollBy({ left: cardW, behavior: 'smooth' }); }
-}, 4000);
+/* Auto-scroll */
+setInterval(()=>{
+  const track=document.getElementById('liveTrack');
+  const card=track.querySelector('.live-card');if(!card)return;
+  const cardW=card.offsetWidth+10,maxScroll=track.scrollWidth-track.clientWidth;
+  if(track.scrollLeft+cardW>=maxScroll-10){setTimeout(()=>track.scrollTo({left:0,behavior:'smooth'}),400);}
+  else{track.scrollBy({left:cardW,behavior:'smooth'});}
+},4000);
 
-/* ── COMING SOON ── */
+/* Coming Soon */
 fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vS3VQ-e6O8uHjlq8Lsdp5j0vxxOMZH1O17Nbo1ISGXDU_EFsuBEXNWydPbuhJ46lnxqJmevXaN2xPiL/pub?gid=1152972554&single=true&output=csv")
-  .then(r => r.text())
-  .then(csv => {
-    const items = parseCSV(csv);
-    document.getElementById('storeGrid').innerHTML = items.map(item => `
-      <div class="store-card">
-        <img src="${item['Image Url']}" alt="Item">
-        <a class="store-btn" href="${item['Link Url']}" target="_blank">${item['Botton Name']}</a>
-      </div>`).join('');
-  }).catch(() => { document.getElementById('storeGrid').innerHTML = '<div class="loader-row">Failed to load</div>'; });
+  .then(r=>r.text()).then(csv=>{
+    const items=parseCSV(csv);
+    document.getElementById('storeGrid').innerHTML=items.map(item=>`<div class="store-card"><img src="${item['Image Url']}" alt="Item"><a class="store-btn" href="${item['Link Url']}" target="_blank">${item['Botton Name']}</a></div>`).join('');
+  }).catch(()=>{document.getElementById('storeGrid').innerHTML='<div class="loader-row">Failed to load</div>';});
 </script>
 </body>
 </html>

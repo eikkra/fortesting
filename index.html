@@ -1,900 +1,1241 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GOAT FC — About</title>
-<link rel="icon" type="image/png" href="https://i.imgur.com/LY3Bb9m.png">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=Hind+Siliguri:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us — GOAT FC</title>
+  <meta name="description" content="GOAT FC is a competitive eFootball club built on respect, skill, and community. Established December 28, 2023." />
 
-<style>
-:root {
-  --bg:      #08090d;
-  --bg2:     #0d0f16;
-  --bg3:     #12141e;
-  --surface: rgba(255,255,255,0.04);
-  --border:  rgba(255,255,255,0.07);
-  --cyan:    #00e5ff;
-  --green:   #00ff87;
-  --gold:    #ffc947;
-  --white:   #f0f2f8;
-  --muted:   #5a6080;
-  --accent:  #00e5ff;
-  --r: 8px;
-  --font-en: 'DM Sans', sans-serif;
-  --font-bn: 'Hind Siliguri', sans-serif;
-  --font-head: 'Syne', sans-serif;
-}
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
 
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  <style>
+    /* ──────────────────────────────────────────────
+       CSS CUSTOM PROPERTIES
+    ────────────────────────────────────────────── */
+    :root {
+      --black:    #0a0a0a;
+      --surface:  #111111;
+      --surface2: #181818;
+      --border:   rgba(255,255,255,0.07);
+      --gold:     #C9A84C;
+      --gold-lt:  #E8C96A;
+      --gold-dk:  #7A5E1C;
+      --white:    #F5F2EC;
+      --muted:    rgba(245,242,236,0.45);
+      --ff-display: 'Bebas Neue', sans-serif;
+      --ff-head:    'Syne', sans-serif;
+      --ff-body:    'DM Sans', sans-serif;
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    }
 
-html { scroll-behavior: smooth; }
+    /* ──────────────────────────────────────────────
+       RESET & BASE
+    ────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: var(--ff-body);
+      font-size: 16px;
+      line-height: 1.7;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+    ul { list-style: none; }
 
-body {
-  background: var(--bg);
-  color: var(--white);
-  font-family: var(--font-en);
-  font-weight: 400;
-  line-height: 1.7;
-  overflow-x: hidden;
-}
+    /* ──────────────────────────────────────────────
+       NOISE OVERLAY
+    ────────────────────────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.025;
+      pointer-events: none;
+      z-index: 9999;
+    }
 
-body.bn { font-family: var(--font-bn); }
+    /* ──────────────────────────────────────────────
+       LANGUAGE SWITCHER
+    ────────────────────────────────────────────── */
+    #lang-bar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: rgba(10,10,10,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 clamp(1.25rem, 5vw, 3rem);
+      height: 52px;
+    }
+    #lang-bar .logo-sm {
+      font-family: var(--ff-display);
+      font-size: 1.3rem;
+      letter-spacing: 0.06em;
+      color: var(--gold);
+    }
+    #lang-bar .logo-sm span { color: var(--white); }
+    .lang-group {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+    .lang-btn {
+      font-family: var(--ff-head);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 3px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .lang-btn:hover, .lang-btn.active {
+      background: var(--gold);
+      color: var(--black);
+      border-color: var(--gold);
+    }
 
-/* ── NOISE TEXTURE ── */
-body::before {
-  content:'';
-  position:fixed; inset:0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-  pointer-events:none; z-index:0; opacity:0.4;
-}
+    /* ──────────────────────────────────────────────
+       HERO
+    ────────────────────────────────────────────── */
+    #hero {
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: clamp(5rem, 12vw, 9rem) clamp(1.25rem, 6vw, 5rem) clamp(3rem, 6vw, 5rem);
+      position: relative;
+      overflow: hidden;
+    }
+    /* radial glow */
+    #hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 55% at 70% 40%, rgba(201,168,76,0.13) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 60% at 10% 80%, rgba(201,168,76,0.07) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    /* diagonal decorative lines */
+    .hero-lines {
+      position: absolute;
+      top: 0; right: 0;
+      width: min(600px, 60vw);
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .hero-lines svg {
+      width: 100%; height: 100%;
+    }
+    /* big badge */
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--gold);
+      color: var(--black);
+      font-family: var(--ff-head);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 2px;
+      margin-bottom: 1.5rem;
+      position: relative;
+      z-index: 1;
+      opacity: 0;
+      animation: fadeUp 0.6s var(--ease-out-expo) 0.2s forwards;
+    }
+    .hero-badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--black);
+      opacity: 0.5;
+    }
+    .hero-title {
+      font-family: var(--ff-display);
+      font-size: clamp(4.5rem, 14vw, 13rem);
+      line-height: 0.88;
+      letter-spacing: 0.01em;
+      position: relative;
+      z-index: 1;
+      opacity: 0;
+      animation: fadeUp 0.8s var(--ease-out-expo) 0.35s forwards;
+    }
+    .hero-title em {
+      font-style: normal;
+      color: var(--gold);
+      display: block;
+    }
+    .hero-sub {
+      margin-top: 2rem;
+      max-width: 540px;
+      font-size: clamp(0.95rem, 2vw, 1.1rem);
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.8;
+      position: relative;
+      z-index: 1;
+      opacity: 0;
+      animation: fadeUp 0.8s var(--ease-out-expo) 0.5s forwards;
+    }
+    .hero-meta {
+      margin-top: 2.5rem;
+      display: flex;
+      gap: clamp(1.5rem, 4vw, 3rem);
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 1;
+      opacity: 0;
+      animation: fadeUp 0.8s var(--ease-out-expo) 0.65s forwards;
+    }
+    .hero-stat { display: flex; flex-direction: column; gap: 2px; }
+    .hero-stat .num {
+      font-family: var(--ff-display);
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      line-height: 1;
+      color: var(--gold);
+    }
+    .hero-stat .label {
+      font-family: var(--ff-head);
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .hero-scroll {
+      position: absolute;
+      bottom: 2rem;
+      right: clamp(1.25rem, 5vw, 4rem);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--ff-head);
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      z-index: 2;
+      opacity: 0;
+      animation: fadeIn 1s ease 1.2s forwards;
+    }
+    .hero-scroll .line {
+      width: 40px; height: 1px;
+      background: var(--gold);
+      flex-shrink: 0;
+    }
 
-/* ── SCROLLBAR ── */
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: rgba(0,229,255,0.3); border-radius:2px; }
+    /* ──────────────────────────────────────────────
+       SECTION WRAPPER
+    ────────────────────────────────────────────── */
+    .section {
+      padding: clamp(4rem, 10vw, 8rem) clamp(1.25rem, 6vw, 5rem);
+    }
+    .section-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .section-label {
+      font-family: var(--ff-head);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-label::before {
+      content: '';
+      width: 24px; height: 2px;
+      background: var(--gold);
+      flex-shrink: 0;
+    }
+    .section-title {
+      font-family: var(--ff-display);
+      font-size: clamp(2.8rem, 7vw, 6rem);
+      line-height: 0.92;
+      letter-spacing: 0.01em;
+      margin-bottom: 1.5rem;
+    }
 
-/* ── TOPBAR ── */
-.topbar {
-  position: sticky; top:0; z-index:999;
-  height: 52px;
-  display: flex; align-items:center; justify-content:space-between;
-  padding: 0 24px;
-  background: rgba(8,9,13,0.92);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
-}
-.topbar::after {
-  content:'';
-  position:absolute; bottom:0; left:0; right:0; height:1px;
-  background: linear-gradient(90deg,transparent,var(--cyan),transparent);
-  opacity:0.35;
-}
-.top-left {
-  display:flex; align-items:center; gap:10px;
-  text-decoration:none; color:inherit;
-}
-.top-logo {
-  width:28px;
-  filter: drop-shadow(0 0 8px var(--cyan));
-}
-.top-title {
-  font-family: var(--font-head);
-  font-size:13px; font-weight:700; letter-spacing:2px;
-  background: linear-gradient(90deg,var(--cyan),var(--green));
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-}
-.top-right { display:flex; align-items:center; gap:10px; }
+    /* ──────────────────────────────────────────────
+       DIVIDER
+    ────────────────────────────────────────────── */
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 0 clamp(1.25rem, 6vw, 5rem);
+    }
 
-/* LANG TOGGLE */
-.lang-toggle {
-  display: flex; align-items:center;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 3px;
-  gap:2px;
-}
-.lang-btn {
-  padding: 4px 12px;
-  border-radius: 16px;
-  font-size: 11px; font-weight:600; letter-spacing:0.5px;
-  cursor: pointer; border:none;
-  background: transparent;
-  color: var(--muted);
-  transition: all 0.2s;
-  font-family: inherit;
-}
-.lang-btn.active {
-  background: var(--cyan);
-  color: #000;
-  box-shadow: 0 0 10px rgba(0,229,255,0.4);
-}
+    /* ──────────────────────────────────────────────
+       STORY SECTION
+    ────────────────────────────────────────────── */
+    #story .story-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(2rem, 5vw, 5rem);
+      align-items: start;
+    }
+    #story .story-body {
+      font-size: clamp(0.95rem, 1.8vw, 1.05rem);
+      color: var(--muted);
+      font-weight: 300;
+      max-width: 480px;
+    }
+    #story .story-body p + p { margin-top: 1.2rem; }
+    #story .story-body strong { color: var(--white); font-weight: 500; }
+    .founded-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--gold);
+      padding: clamp(1.5rem, 3vw, 2.5rem);
+      border-radius: 4px;
+    }
+    .founded-block .date-label {
+      font-family: var(--ff-head);
+      font-size: 0.68rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.75rem;
+    }
+    .founded-block .date-big {
+      font-family: var(--ff-display);
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      color: var(--white);
+      line-height: 1;
+      margin-bottom: 1rem;
+    }
+    .founded-block p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      font-weight: 300;
+      line-height: 1.75;
+    }
+    .quote-block {
+      margin-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      padding-top: 1.5rem;
+    }
+    .quote-block blockquote {
+      font-family: var(--ff-head);
+      font-size: clamp(1rem, 2.2vw, 1.25rem);
+      font-weight: 600;
+      font-style: italic;
+      line-height: 1.5;
+      color: var(--gold-lt);
+    }
 
-.home-btn {
-  width:34px; height:34px;
-  display:flex; align-items:center; justify-content:center;
-  border-radius:8px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  color: var(--cyan);
-  font-size:13px;
-  text-decoration:none;
-  transition:all 0.2s;
-}
-.home-btn:hover { background:rgba(0,229,255,0.1); box-shadow:0 0 12px rgba(0,229,255,0.25); }
+    /* ──────────────────────────────────────────────
+       VISION / MISSION
+    ────────────────────────────────────────────── */
+    #vision { background: var(--surface); }
+    .vm-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(2rem, 4vw, 4rem);
+    }
+    .vm-card {
+      padding: clamp(1.5rem, 3vw, 2.5rem);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: var(--surface2);
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s, transform 0.3s var(--ease-out-expo);
+    }
+    .vm-card:hover {
+      border-color: var(--gold-dk);
+      transform: translateY(-4px);
+    }
+    .vm-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), transparent);
+    }
+    .vm-icon {
+      font-size: 2rem;
+      margin-bottom: 1.25rem;
+    }
+    .vm-card h3 {
+      font-family: var(--ff-display);
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      letter-spacing: 0.02em;
+      margin-bottom: 1rem;
+      color: var(--gold);
+    }
+    .vm-card ul li {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      font-size: 0.9rem;
+      color: var(--muted);
+      font-weight: 300;
+      padding: 0.55rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .vm-card ul li:last-child { border-bottom: none; }
+    .vm-card ul li::before {
+      content: '—';
+      color: var(--gold);
+      flex-shrink: 0;
+      font-weight: 700;
+      margin-top: 2px;
+    }
 
-/* ── LAYOUT ── */
-.page { position:relative; z-index:1; }
+    /* ──────────────────────────────────────────────
+       VALUES (RULES)
+    ────────────────────────────────────────────── */
+    #values .values-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: clamp(1rem, 2vw, 1.5rem);
+      margin-top: 2.5rem;
+    }
+    .value-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: clamp(1.25rem, 2.5vw, 2rem);
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      transition: border-color 0.25s, background 0.25s;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    .value-card.visible {
+      animation: fadeUp 0.5s var(--ease-out-expo) forwards;
+    }
+    .value-card:hover {
+      border-color: rgba(201,168,76,0.3);
+      background: var(--surface2);
+    }
+    .value-icon {
+      width: 36px; height: 36px;
+      border-radius: 3px;
+      background: rgba(201,168,76,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .value-text h4 {
+      font-family: var(--ff-head);
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 0.35rem;
+    }
+    .value-text p {
+      font-size: 0.83rem;
+      color: var(--muted);
+      font-weight: 300;
+      line-height: 1.65;
+    }
 
-.section {
-  padding: 80px 24px;
-  max-width: 820px;
-  margin: 0 auto;
-}
+    /* ──────────────────────────────────────────────
+       RECRUITMENT
+    ────────────────────────────────────────────── */
+    #recruit { background: var(--surface); }
+    .recruit-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: clamp(2rem, 5vw, 5rem);
+      align-items: start;
+    }
+    .recruit-list { display: flex; flex-direction: column; gap: 0.75rem; }
+    .recruit-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1rem 1.25rem;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-size: 0.88rem;
+      color: var(--muted);
+      font-weight: 300;
+      transition: border-color 0.2s;
+    }
+    .recruit-item:hover { border-color: rgba(201,168,76,0.3); }
+    .recruit-item .ri-num {
+      font-family: var(--ff-display);
+      font-size: 1.6rem;
+      color: var(--gold-dk);
+      line-height: 1;
+      flex-shrink: 0;
+      margin-top: -2px;
+    }
+    .recruit-cta {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: clamp(1.5rem, 3vw, 2.5rem);
+      position: sticky;
+      top: 80px;
+    }
+    .recruit-cta h3 {
+      font-family: var(--ff-display);
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      margin-bottom: 1rem;
+      color: var(--white);
+    }
+    .recruit-cta p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      font-weight: 300;
+      line-height: 1.75;
+      margin-bottom: 1.5rem;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--gold);
+      color: var(--black);
+      font-family: var(--ff-head);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 14px 28px;
+      border-radius: 3px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+      text-decoration: none;
+    }
+    .btn-primary:hover {
+      background: var(--gold-lt);
+      transform: translateY(-2px);
+    }
+    .btn-primary svg { flex-shrink: 0; }
 
-.section-sm { padding: 60px 24px; }
+    /* ──────────────────────────────────────────────
+       CONNECT
+    ────────────────────────────────────────────── */
+    #connect .connect-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-top: 2.5rem;
+    }
+    .social-card {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.1rem 1.4rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      transition: border-color 0.2s, transform 0.2s var(--ease-out-expo);
+      text-decoration: none;
+      color: var(--white);
+    }
+    .social-card:hover {
+      border-color: var(--gold-dk);
+      transform: translateY(-3px);
+    }
+    .social-icon {
+      width: 40px; height: 40px;
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .social-icon.fb  { background: rgba(24,119,242,0.15); }
+    .social-icon.dc  { background: rgba(88,101,242,0.15); }
+    .social-icon.tg  { background: rgba(0,136,204,0.15); }
+    .social-icon.web { background: rgba(201,168,76,0.12); }
+    .social-info { display: flex; flex-direction: column; gap: 2px; }
+    .social-info .sn {
+      font-family: var(--ff-head);
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+    .social-info .sh {
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
 
-/* ── REVEAL ANIMATION ── */
-.reveal {
-  opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.65s ease, transform 0.65s ease;
-}
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-.reveal-delay-1 { transition-delay: 0.1s; }
-.reveal-delay-2 { transition-delay: 0.2s; }
-.reveal-delay-3 { transition-delay: 0.3s; }
-.reveal-delay-4 { transition-delay: 0.4s; }
+    /* ──────────────────────────────────────────────
+       FOOTER
+    ────────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: clamp(2rem, 5vw, 4rem) clamp(1.25rem, 6vw, 5rem);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      text-align: center;
+    }
+    footer .wordmark {
+      font-family: var(--ff-display);
+      font-size: 2rem;
+      letter-spacing: 0.06em;
+      color: var(--gold);
+    }
+    footer .wordmark span { color: var(--muted); }
+    footer p {
+      font-size: 0.78rem;
+      color: var(--muted);
+      font-weight: 300;
+    }
+    footer .cobeg {
+      font-family: var(--ff-head);
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      color: var(--muted);
+    }
 
-/* ── HERO ── */
-.hero {
-  min-height: calc(100vh - 52px);
-  display: flex; align-items:center; justify-content:center;
-  text-align:center;
-  padding: 60px 24px;
-  position:relative;
-  overflow:hidden;
-}
+    /* ──────────────────────────────────────────────
+       ANIMATIONS
+    ────────────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
 
-/* Hero radial glow */
-.hero::before {
-  content:'';
-  position:absolute;
-  width:600px; height:600px;
-  top:50%; left:50%;
-  transform:translate(-50%,-50%);
-  background: radial-gradient(circle, rgba(0,229,255,0.06) 0%, transparent 65%);
-  pointer-events:none;
-}
-
-.hero-inner { max-width:680px; position:relative; z-index:1; }
-
-.hero-eyebrow {
-  display:inline-flex; align-items:center; gap:8px;
-  background: rgba(0,229,255,0.06);
-  border: 1px solid rgba(0,229,255,0.2);
-  border-radius:20px;
-  padding: 5px 16px;
-  font-size:11px; letter-spacing:3px; text-transform:uppercase;
-  color: var(--cyan);
-  margin-bottom: 28px;
-}
-.hero-eyebrow .pulse {
-  width:7px; height:7px; border-radius:50%;
-  background:var(--cyan);
-  box-shadow: 0 0 8px var(--cyan);
-  animation: pulse 2s ease-in-out infinite;
-}
-@keyframes pulse {
-  0%,100%{opacity:1;transform:scale(1);}
-  50%{opacity:0.4;transform:scale(0.8);}
-}
-
-.hero-logo {
-  width:80px; height:80px;
-  margin-bottom:24px;
-  filter: drop-shadow(0 0 24px rgba(0,229,255,0.45));
-  animation: logoBob 6s ease-in-out infinite;
-}
-@keyframes logoBob {
-  0%,100%{transform:translateY(0);}
-  50%{transform:translateY(-8px);}
-}
-
-.hero-title {
-  font-family: var(--font-head);
-  font-size: clamp(48px,10vw,88px);
-  font-weight: 800;
-  letter-spacing: -2px;
-  line-height:1;
-  margin-bottom:20px;
-  background: linear-gradient(135deg, #fff 0%, var(--cyan) 50%, var(--green) 100%);
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-  filter: drop-shadow(0 0 30px rgba(0,229,255,0.3));
-}
-
-.hero-tag {
-  font-size: clamp(14px,3vw,18px);
-  color: var(--muted);
-  font-weight: 300;
-  letter-spacing: 1px;
-  margin-bottom:10px;
-}
-
-.hero-tagline {
-  font-size: clamp(13px,2.5vw,15px);
-  color:rgba(255,255,255,0.35);
-  letter-spacing:0.5px;
-  margin-bottom:40px;
-}
-
-.hero-founded {
-  display:inline-flex; align-items:center; gap:8px;
-  font-size:12px; letter-spacing:1px; color:var(--muted);
-  text-transform:uppercase;
-}
-.hero-founded span { color:var(--gold); font-weight:600; }
-
-/* ── DIVIDER ── */
-.divider {
-  width:100%; height:1px;
-  background:linear-gradient(90deg,transparent,var(--border),transparent);
-  margin:0 auto;
-  max-width:820px;
-}
-
-/* ── SECTION LABEL ── */
-.label {
-  display:inline-flex; align-items:center; gap:6px;
-  font-size:10px; font-weight:700; letter-spacing:3px; text-transform:uppercase;
-  color:var(--cyan); margin-bottom:16px;
-}
-.label::before {
-  content:'';
-  display:block; width:20px; height:1px;
-  background:var(--cyan);
-}
-
-/* ── SECTION TITLE ── */
-.sec-title {
-  font-family:var(--font-head);
-  font-size:clamp(26px,5vw,38px);
-  font-weight:800;
-  letter-spacing:-0.5px;
-  line-height:1.15;
-  margin-bottom:20px;
-  color:var(--white);
-}
-
-.sec-body {
-  font-size:15px;
-  color:rgba(240,242,248,0.65);
-  line-height:1.8;
-  max-width:640px;
-}
-
-.highlight {
-  color:var(--white);
-  font-weight:500;
-}
-
-.quote {
-  border-left:2px solid var(--cyan);
-  padding:12px 0 12px 20px;
-  margin:28px 0;
-  font-size:16px;
-  font-style:italic;
-  color:rgba(0,229,255,0.85);
-  font-weight:300;
-}
-
-/* ── CARDS GRID ── */
-.cards {
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
-  gap:14px;
-  margin-top:32px;
-}
-
-.card {
-  background:var(--bg2);
-  border:1px solid var(--border);
-  border-radius:var(--r);
-  padding:24px;
-  transition:border-color 0.25s, transform 0.25s, box-shadow 0.25s;
-  position:relative;
-  overflow:hidden;
-}
-.card::before {
-  content:'';
-  position:absolute; top:0; left:0; right:0; height:1px;
-  background:linear-gradient(90deg,transparent,var(--cyan),transparent);
-  opacity:0;
-  transition:opacity 0.25s;
-}
-.card:hover {
-  border-color:rgba(0,229,255,0.2);
-  transform:translateY(-3px);
-  box-shadow:0 8px 32px rgba(0,0,0,0.4);
-}
-.card:hover::before { opacity:1; }
-
-.card-icon {
-  font-size:22px;
-  margin-bottom:12px;
-  display:block;
-}
-.card-title {
-  font-family:var(--font-head);
-  font-size:14px; font-weight:700; letter-spacing:0.5px;
-  color:var(--white);
-  margin-bottom:8px;
-}
-.card-body {
-  font-size:13px;
-  color:rgba(240,242,248,0.5);
-  line-height:1.6;
-}
-
-/* ── STATS ── */
-.stats-row {
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
-  gap:14px;
-  margin-top:32px;
-}
-.stat-box {
-  background:var(--bg2);
-  border:1px solid var(--border);
-  border-radius:var(--r);
-  padding:28px 20px;
-  text-align:center;
-  transition:all 0.25s;
-}
-.stat-box:hover {
-  border-color:rgba(0,229,255,0.2);
-  box-shadow:0 4px 24px rgba(0,229,255,0.08);
-}
-.stat-num {
-  font-family:var(--font-head);
-  font-size:42px; font-weight:800;
-  line-height:1;
-  background:linear-gradient(135deg,var(--cyan),var(--green));
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-  margin-bottom:8px;
-  display:block;
-}
-.stat-label {
-  font-size:12px; letter-spacing:1.5px; text-transform:uppercase;
-  color:var(--muted);
-}
-
-/* ── RULES LIST ── */
-.rules-list {
-  list-style:none;
-  margin-top:28px;
-  display:flex; flex-direction:column; gap:10px;
-}
-.rules-list li {
-  display:flex; align-items:flex-start; gap:14px;
-  padding:14px 18px;
-  background:var(--bg2);
-  border:1px solid var(--border);
-  border-radius:var(--r);
-  font-size:14px;
-  color:rgba(240,242,248,0.7);
-  line-height:1.5;
-  transition:border-color 0.2s, background 0.2s;
-}
-.rules-list li:hover {
-  border-color:rgba(0,229,255,0.15);
-  background:rgba(0,229,255,0.03);
-}
-.rules-list li .rule-icon { font-size:16px; flex-shrink:0; margin-top:1px; }
-.rules-list li .rule-warning { color:var(--gold); }
-
-.rules-footer {
-  margin-top:20px;
-  font-size:13px;
-  color:var(--muted);
-  font-style:italic;
-}
-
-/* ── CTA BUTTON ── */
-.cta-wrap {
-  margin-top:36px;
-  display:flex; flex-wrap:wrap; gap:12px;
-  align-items:center;
-}
-.btn-primary {
-  display:inline-flex; align-items:center; gap:9px;
-  padding:13px 28px;
-  background:linear-gradient(135deg,var(--cyan),#00b8cc);
-  color:#000;
-  font-family:var(--font-head);
-  font-size:13px; font-weight:700; letter-spacing:1px; text-transform:uppercase;
-  border:none; border-radius:6px;
-  text-decoration:none; cursor:pointer;
-  transition:all 0.25s;
-  box-shadow:0 0 20px rgba(0,229,255,0.25);
-}
-.btn-primary:hover {
-  transform:translateY(-2px);
-  box-shadow:0 4px 30px rgba(0,229,255,0.45);
-}
-.btn-primary i { font-size:12px; }
-
-/* ── SOCIAL ── */
-.social-grid {
-  display:flex; flex-wrap:wrap; gap:12px;
-  margin-top:28px;
-}
-.social-link {
-  display:inline-flex; align-items:center; gap:10px;
-  padding:12px 20px;
-  background:var(--bg2);
-  border:1px solid var(--border);
-  border-radius:var(--r);
-  text-decoration:none;
-  color:rgba(240,242,248,0.65);
-  font-size:13px; font-weight:500;
-  transition:all 0.25s;
-  flex:1; min-width:160px;
-}
-.social-link:hover {
-  color:var(--white);
-  border-color:rgba(255,255,255,0.15);
-  background:var(--bg3);
-  transform:translateY(-2px);
-}
-.social-link .si { width:32px; height:32px; border-radius:6px;
-  display:flex; align-items:center; justify-content:center;
-  font-size:14px; flex-shrink:0;
-}
-.si-fb  { background:rgba(24,119,242,0.15); color:#1877f2; }
-.si-fbg { background:rgba(24,119,242,0.12); color:#42a5f5; }
-.si-yt  { background:rgba(255,0,0,0.12);    color:#ff4444; }
-.si-dc  { background:rgba(88,101,242,0.15);  color:#7289da; }
-
-/* ── FINAL MSG ── */
-.final-section {
-  padding:80px 24px;
-  text-align:center;
-  position:relative;
-  overflow:hidden;
-}
-.final-section::before {
-  content:'';
-  position:absolute; inset:0;
-  background:radial-gradient(ellipse at center,rgba(0,229,255,0.04) 0%,transparent 65%);
-  pointer-events:none;
-}
-.final-inner { max-width:580px; margin:0 auto; position:relative; z-index:1; }
-
-.final-icon {
-  font-size:36px; margin-bottom:20px;
-  filter:drop-shadow(0 0 12px rgba(255,201,71,0.6));
-}
-.final-title {
-  font-family:var(--font-head);
-  font-size:clamp(22px,5vw,34px);
-  font-weight:800; letter-spacing:-0.5px;
-  color:var(--white); margin-bottom:16px;
-  line-height:1.2;
-}
-.final-body {
-  font-size:15px;
-  color:rgba(240,242,248,0.5);
-  line-height:1.8;
-  margin-bottom:10px;
-}
-.final-sign {
-  margin-top:28px;
-  font-size:12px;
-  letter-spacing:2px;
-  text-transform:uppercase;
-  color:var(--muted);
-}
-.final-sign span { color:var(--cyan); }
-
-/* ── FOOTER ── */
-footer {
-  border-top:1px solid var(--border);
-  padding:20px 24px;
-  text-align:center;
-  font-size:11px;
-  color:var(--muted);
-  letter-spacing:1px;
-  text-transform:uppercase;
-  position:relative; z-index:1;
-}
-
-/* ── RESPONSIVE ── */
-@media(max-width:600px){
-  .section { padding:60px 18px; }
-  .section-sm { padding:44px 18px; }
-  .topbar { padding:0 14px; }
-  .hero { padding:50px 18px; }
-  .cards { grid-template-columns:1fr; }
-  .stats-row { grid-template-columns:repeat(2,1fr); }
-  .social-grid { flex-direction:column; }
-  .social-link { min-width:unset; }
-  .hero-title { letter-spacing:-1px; }
-}
-</style>
+    /* ──────────────────────────────────────────────
+       RESPONSIVE
+    ────────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      #story .story-grid,
+      .vm-grid,
+      .recruit-grid {
+        grid-template-columns: 1fr;
+      }
+      .recruit-cta { position: static; }
+      #hero { justify-content: flex-end; padding-top: 7rem; }
+      .hero-scroll { display: none; }
+    }
+    @media (max-width: 480px) {
+      .lang-group { gap: 4px; }
+      .lang-btn { padding: 4px 7px; font-size: 0.65rem; }
+    }
+  </style>
 </head>
 <body>
 
-<!-- TOPBAR -->
-<nav class="topbar">
-  <a href="https://goatfcbd.com" class="top-left">
-    <img src="https://i.imgur.com/LY3Bb9m.png" class="top-logo" alt="GOAT FC">
-    <span class="top-title">GOAT FC</span>
-  </a>
-  <div class="top-right">
-    <div class="lang-toggle">
-      <button class="lang-btn active" onclick="setLang('en')">EN</button>
-      <button class="lang-btn" onclick="setLang('bn')">বাং</button>
+  <!-- ── LANG BAR ── -->
+  <nav id="lang-bar" role="navigation" aria-label="Language selector">
+    <div class="logo-sm">GOAT <span>FC</span></div>
+    <div class="lang-group" id="langGroup">
+      <button class="lang-btn active" data-lang="en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" data-lang="bn" onclick="setLang('bn')">বাং</button>
+      <button class="lang-btn" data-lang="ar" onclick="setLang('ar')">عر</button>
+      <button class="lang-btn" data-lang="hi" onclick="setLang('hi')">हि</button>
+      <button class="lang-btn" data-lang="fr" onclick="setLang('fr')">FR</button>
     </div>
-    <a href="https://goatfcbd.com" class="home-btn">
-      <i class="fa-solid fa-house"></i>
-    </a>
-  </div>
-</nav>
+  </nav>
 
-<div class="page">
+  <!-- ── HERO ── -->
+  <section id="hero" aria-label="Hero">
+    <div class="hero-lines" aria-hidden="true">
+      <svg viewBox="0 0 600 900" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+        <line x1="580" y1="0"   x2="200" y2="900" stroke="rgba(201,168,76,0.08)" stroke-width="1"/>
+        <line x1="540" y1="0"   x2="160" y2="900" stroke="rgba(201,168,76,0.05)" stroke-width="1"/>
+        <line x1="500" y1="0"   x2="120" y2="900" stroke="rgba(201,168,76,0.04)" stroke-width="1"/>
+        <circle cx="500" cy="200" r="180" stroke="rgba(201,168,76,0.06)" stroke-width="1" fill="none"/>
+        <circle cx="500" cy="200" r="120" stroke="rgba(201,168,76,0.04)" stroke-width="1" fill="none"/>
+      </svg>
+    </div>
 
-<!-- ───── HERO ───── -->
-<section class="hero">
-  <div class="hero-inner">
-    <div class="reveal hero-eyebrow">
-      <span class="pulse"></span>
-      <span data-en="eFootball Community" data-bn="ইফুটবল কমিউনিটি">eFootball Community</span>
-    </div>
-    <div class="reveal reveal-delay-1">
-      <img src="https://i.imgur.com/LY3Bb9m.png" class="hero-logo" alt="GOAT FC Logo">
-    </div>
-    <h1 class="hero-title reveal reveal-delay-2">GOAT FC</h1>
-    <p class="hero-tag reveal reveal-delay-3"
-       data-en="Greatest Of All Time Football Club"
-       data-bn="গ্রেটেস্ট অব অল টাইম ফুটবল ক্লাব">
-      Greatest Of All Time Football Club
+    <div class="hero-badge" data-i18n="hero_badge">COBEG Registered · eFootball Club</div>
+    <h1 class="hero-title">
+      GOAT<br/>
+      <em>FC</em>
+    </h1>
+    <p class="hero-sub" data-i18n="hero_sub">
+      We are more than a club — a growing ecosystem of players, managers, and creators united by one vision: to build the most respected eFootball family in Bangladesh.
     </p>
-    <p class="hero-tagline reveal reveal-delay-4"
-       data-en="Skill. Respect. Growth."
-       data-bn="দক্ষতা। সম্মান। উন্নতি।">
-      Skill. Respect. Growth.
-    </p>
-    <div class="hero-founded reveal reveal-delay-4">
-      <i class="fa-solid fa-flag" style="color:var(--gold);"></i>
-      <span data-en="Founded" data-bn="প্রতিষ্ঠিত">Founded</span>
-      <span>28 December 2023</span>
+    <div class="hero-meta">
+      <div class="hero-stat">
+        <span class="num">100+</span>
+        <span class="label" data-i18n="stat_members">Active Members</span>
+      </div>
+      <div class="hero-stat">
+        <span class="num">12+</span>
+        <span class="label" data-i18n="stat_mgmt">Management Team</span>
+      </div>
+      <div class="hero-stat">
+        <span class="num">2023</span>
+        <span class="label" data-i18n="stat_founded">Est. December</span>
+      </div>
     </div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- ───── ABOUT ───── -->
-<section class="section">
-  <div class="reveal">
-    <div class="label" data-en="Who We Are" data-bn="আমরা কারা">Who We Are</div>
-    <h2 class="sec-title"
-        data-en="More Than Just a Club"
-        data-bn="শুধু একটি ক্লাবের চেয়ে বেশি">
-      More Than Just a Club
-    </h2>
-    <p class="sec-body">
-      <span data-en="GOAT FC is a competitive yet community-driven eFootball club founded on <span class='highlight'>28 December 2023</span>. Built with passion, discipline, and respect, we started as a free-to-play gaming community and have grown into a structured digital football family."
-            data-bn="GOAT FC একটি প্রতিযোগিতামূলক এবং কমিউনিটি-চালিত ইফুটবল ক্লাব, যা <span class='highlight'>২৮ ডিসেম্বর ২০২৩</span>-এ প্রতিষ্ঠিত। আবেগ, শৃঙ্খলা এবং সম্মানের ভিত্তিতে গড়া, আমরা একটি ফ্রি-টু-প্লে গেমিং কমিউনিটি হিসেবে শুরু করেছিলাম এবং এখন একটি সুসংগঠিত ডিজিটাল ফুটবল পরিবারে পরিণত হয়েছি।">
-        GOAT FC is a competitive yet community-driven eFootball club founded on <span class="highlight">28 December 2023</span>. Built with passion, discipline, and respect, we started as a free-to-play gaming community and have grown into a structured digital football family.
-      </span>
-    </p>
-    <div class="quote reveal reveal-delay-1"
-         data-en='"To build a respectful, competitive, and skill-based eFootball family."'
-         data-bn='"একটি সম্মানজনক, প্রতিযোগিতামূলক এবং দক্ষতা-ভিত্তিক ইফুটবল পরিবার গড়ে তোলা।"'>
-      "To build a respectful, competitive, and skill-based eFootball family."
+    <div class="hero-scroll" aria-hidden="true">
+      <div class="line"></div>
+      <span data-i18n="scroll">Scroll to explore</span>
     </div>
-    <p class="sec-body reveal reveal-delay-2"
-       data-en="Today, we are more than just a club — we are a growing ecosystem of players, managers, and creators united by one vision."
-       data-bn="আজ, আমরা শুধু একটি ক্লাবের চেয়ে বেশি — আমরা একটি ক্রমবর্ধমান ইকোসিস্টেম, যেখানে খেলোয়াড়, ম্যানেজার এবং ক্রিয়েটররা একটি ভিশন দ্বারা একত্রিত।">
-      Today, we are more than just a club — we are a growing ecosystem of players, managers, and creators united by one vision.
-    </p>
-  </div>
-</section>
+  </section>
 
-<div class="divider"></div>
+  <div class="divider"></div>
 
-<!-- ───── VISION ───── -->
-<section class="section section-sm">
-  <div class="reveal">
-    <div class="label" data-en="Our Vision" data-bn="আমাদের ভিশন">Our Vision</div>
-    <h2 class="sec-title"
-        data-en="Where Skill Defines You"
-        data-bn="যেখানে দক্ষতাই তোমার পরিচয়">
-      Where Skill Defines You
-    </h2>
-    <p class="sec-body"
-       data-en="To create one of the most organized and respected eFootball communities — where every player finds their path to growth."
-       data-bn="সবচেয়ে সংগঠিত এবং সম্মানিত ইফুটবল কমিউনিটি তৈরি করতে — যেখানে প্রতিটি খেলোয়াড় তাদের উন্নতির পথ খুঁজে পায়।">
-      To create one of the most organized and respected eFootball communities — where every player finds their path to growth.
-    </p>
-  </div>
-
-  <div class="cards">
-    <div class="card reveal reveal-delay-1">
-      <span class="card-icon">🏆</span>
-      <div class="card-title" data-en="Skill Over Status" data-bn="মর্যাদার চেয়ে দক্ষতা">Skill Over Status</div>
-      <div class="card-body" data-en="Your ability on the pitch matters more than your rank or recognition." data-bn="মাঠে আপনার দক্ষতা র‌্যাংক বা স্বীকৃতির চেয়ে বেশি গুরুত্বপূর্ণ।">Your ability on the pitch matters more than your rank or recognition.</div>
+  <!-- ── STORY ── -->
+  <section id="story" class="section" aria-label="Our Story">
+    <div class="section-inner">
+      <div class="section-label" data-i18n="story_label">Our Story</div>
+      <div class="story-grid">
+        <div>
+          <h2 class="section-title" data-i18n="story_title">How It All Began</h2>
+          <div class="story-body">
+            <p data-i18n="story_p1">GOAT FC was born from a simple belief: <strong>competitive gaming should be built on respect, not ego.</strong> What began as a free-to-play eFootball community on 28 December 2023 has since grown into a structured digital football family with over a hundred members across Bangladesh.</p>
+            <p data-i18n="story_p2">We are a <strong>COBEG registered club</strong> that competes regularly in tournaments while maintaining a community where every player — regardless of device or division — is valued and supported.</p>
+            <p data-i18n="story_p3">Today, GOAT FC is not just about matches. It is about <strong>building character, sharing knowledge, and growing together</strong> as a generation of competitive eFootball athletes.</p>
+          </div>
+        </div>
+        <div>
+          <div class="founded-block">
+            <div class="date-label" data-i18n="founded_label">Founded</div>
+            <div class="date-big">December 28, 2023</div>
+            <p data-i18n="founded_desc">Started as a passion project by a group of competitive eFootball players in Bangladesh. Now a full ecosystem with dedicated leadership for tournaments, discipline, and player development.</p>
+            <div class="quote-block">
+              <blockquote data-i18n="quote">"To build a respectful, competitive, and skill-based eFootball family."</blockquote>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="card reveal reveal-delay-2">
-      <span class="card-icon">🤝</span>
-      <div class="card-title" data-en="Respect First" data-bn="আগে সম্মান">Respect First</div>
-      <div class="card-body" data-en="Respect comes before rivalry. Every player deserves dignity, win or lose." data-bn="প্রতিদ্বন্দ্বিতার আগে সম্মান। প্রতিটি খেলোয়াড় জিতুক বা হারুক, মর্যাদা পাওয়ার যোগ্য।">Respect comes before rivalry. Every player deserves dignity, win or lose.</div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ── VISION & MISSION ── -->
+  <section id="vision" class="section" aria-label="Vision and Mission">
+    <div class="section-inner">
+      <div class="section-label" data-i18n="vm_label">Purpose</div>
+      <h2 class="section-title" data-i18n="vm_title">Vision & Mission</h2>
+      <div class="vm-grid">
+        <div class="vm-card">
+          <div class="vm-icon">🎯</div>
+          <h3 data-i18n="vision_h">Vision</h3>
+          <ul>
+            <li data-i18n="v1">Skill matters more than status</li>
+            <li data-i18n="v2">Respect comes before rivalry</li>
+            <li data-i18n="v3">Growth is shared, not individual</li>
+            <li data-i18n="v4">Every player's potential is worth developing</li>
+          </ul>
+        </div>
+        <div class="vm-card">
+          <div class="vm-icon">⚽</div>
+          <h3 data-i18n="mission_h">Mission</h3>
+          <ul>
+            <li data-i18n="m1">Build a fair and structured competitive environment</li>
+            <li data-i18n="m2">Support players with guidance and improvement opportunities</li>
+            <li data-i18n="m3">Maintain discipline through clear and transparent management</li>
+            <li data-i18n="m4">Promote healthy gaming culture in Bangladesh and beyond</li>
+          </ul>
+        </div>
+      </div>
     </div>
-    <div class="card reveal reveal-delay-3">
-      <span class="card-icon">📈</span>
-      <div class="card-title" data-en="Shared Growth" data-bn="সম্মিলিত উন্নতি">Shared Growth</div>
-      <div class="card-body" data-en="We grow together. Your progress elevates the entire community." data-bn="আমরা একসাথে বড় হই। আপনার অগ্রগতি পুরো কমিউনিটিকে উন্নত করে।">We grow together. Your progress elevates the entire community.</div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ── VALUES ── -->
+  <section id="values" class="section" aria-label="Core Values">
+    <div class="section-inner">
+      <div class="section-label" data-i18n="val_label">Code of Conduct</div>
+      <h2 class="section-title" data-i18n="val_title">Core Values</h2>
+      <div class="values-grid" id="valGrid">
+        <div class="value-card">
+          <div class="value-icon">🤝</div>
+          <div class="value-text">
+            <h4 data-i18n="val1h">Respect for All</h4>
+            <p data-i18n="val1p">Senior or junior, every member deserves equal respect. Toxic language or disrespectful behavior is strictly prohibited.</p>
+          </div>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">🎮</div>
+          <div class="value-text">
+            <h4 data-i18n="val2h">Skill Over Device</h4>
+            <p data-i18n="val2p">Gameplay varies by device and network. We never judge a player's ability based on their hardware.</p>
+          </div>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">🧠</div>
+          <div class="value-text">
+            <h4 data-i18n="val3h">Friendly Matches = Learning</h4>
+            <p data-i18n="val3p">Winning is not everything. Friendly matches are spaces to learn, improve, and enjoy the game together.</p>
+          </div>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">💬</div>
+          <div class="value-text">
+            <h4 data-i18n="val4h">Constructive Feedback</h4>
+            <p data-i18n="val4p">Advice belongs in private. Public criticism is not welcome. Approach teammates with empathy, always.</p>
+          </div>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">⚖️</div>
+          <div class="value-text">
+            <h4 data-i18n="val5h">Admin is Final</h4>
+            <p data-i18n="val5p">All disputes are resolved by the management team. The admin's decision is final and must be respected by all members.</p>
+          </div>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">🚫</div>
+          <div class="value-text">
+            <h4 data-i18n="val6h">Zero Tolerance</h4>
+            <p data-i18n="val6p">No political, offensive, or inappropriate content. A discipline system (warnings, suspension, removal) is in place for violations.</p>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<div class="divider"></div>
+  <div class="divider"></div>
 
-<!-- ───── MISSION ───── -->
-<section class="section section-sm">
-  <div class="reveal">
-    <div class="label" data-en="Our Mission" data-bn="আমাদের মিশন">Our Mission</div>
-    <h2 class="sec-title"
-        data-en="What We Do Every Day"
-        data-bn="আমরা প্রতিদিন যা করি">
-      What We Do Every Day
-    </h2>
-  </div>
-
-  <div class="cards" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr));">
-    <div class="card reveal reveal-delay-1">
-      <span class="card-icon">⚽</span>
-      <div class="card-title" data-en="Fair Competition" data-bn="ন্যায্য প্রতিযোগিতা">Fair Competition</div>
-      <div class="card-body" data-en="Build a structured competitive environment where merit drives outcomes." data-bn="একটি কাঠামোগত প্রতিযোগিতামূলক পরিবেশ তৈরি করুন যেখানে যোগ্যতাই ফলাফল নির্ধারণ করে।">Build a structured competitive environment where merit drives outcomes.</div>
+  <!-- ── RECRUITMENT ── -->
+  <section id="recruit" class="section" aria-label="Join Us">
+    <div class="section-inner">
+      <div class="section-label" data-i18n="rec_label">Recruitment</div>
+      <h2 class="section-title" data-i18n="rec_title">Join GOAT FC</h2>
+      <div class="recruit-grid">
+        <div>
+          <div class="recruit-list">
+            <div class="recruit-item">
+              <span class="ri-num">01</span>
+              <span data-i18n="req1">Ranked in Division 1–3 in eFootball</span>
+            </div>
+            <div class="recruit-item">
+              <span class="ri-num">02</span>
+              <span data-i18n="req2">Good quality Game ID, device & stable internet connection</span>
+            </div>
+            <div class="recruit-item">
+              <span class="ri-num">03</span>
+              <span data-i18n="req3">Consistent and regularly active player</span>
+            </div>
+            <div class="recruit-item">
+              <span class="ri-num">04</span>
+              <span data-i18n="req4">Must be a Free Agent or willing to transfer from another club</span>
+            </div>
+            <div class="recruit-item">
+              <span class="ri-num">05</span>
+              <span data-i18n="req5">Friendly attitude and respectful mindset — mandatory</span>
+            </div>
+            <div class="recruit-item">
+              <span class="ri-num">06</span>
+              <span data-i18n="req6">Must complete a Trial Match (exceptions considered for exceptional players)</span>
+            </div>
+          </div>
+        </div>
+        <div class="recruit-cta">
+          <h3 data-i18n="cta_h">Ready to Play?</h3>
+          <p data-i18n="cta_p">No entry fee. No hidden requirements. Just passion, discipline, and a desire to grow with a team that supports you. Slide into our inbox — we'd love to see what you've got.</p>
+          <a href="https://www.facebook.com/goatfc.official" class="btn-primary" target="_blank" rel="noopener noreferrer">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M13 7L1 7M7 1L1 7L7 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span data-i18n="cta_btn">Send Us a Message</span>
+          </a>
+        </div>
+      </div>
     </div>
-    <div class="card reveal reveal-delay-2">
-      <span class="card-icon">🎮</span>
-      <div class="card-title" data-en="Player Development" data-bn="খেলোয়াড় উন্নয়ন">Player Development</div>
-      <div class="card-body" data-en="Support players with guidance, match opportunities, and improvement resources." data-bn="গাইডেন্স, ম্যাচের সুযোগ এবং উন্নতির সম্পদ দিয়ে খেলোয়াড়দের সহায়তা করুন।">Support players with guidance, match opportunities, and improvement resources.</div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ── CONNECT ── -->
+  <section id="connect" class="section" aria-label="Connect">
+    <div class="section-inner">
+      <div class="section-label" data-i18n="con_label">Connect</div>
+      <h2 class="section-title" data-i18n="con_title">Find Us Online</h2>
+      <div class="connect-grid">
+        <a href="https://www.facebook.com/goatfc.official" class="social-card" target="_blank" rel="noopener noreferrer">
+          <div class="social-icon fb">📘</div>
+          <div class="social-info">
+            <span class="sn">Facebook Page</span>
+            <span class="sh">goatfc.official</span>
+          </div>
+        </a>
+        <a href="https://www.facebook.com/groups/goatfc.official" class="social-card" target="_blank" rel="noopener noreferrer">
+          <div class="social-icon fb">👥</div>
+          <div class="social-info">
+            <span class="sn">Facebook Group</span>
+            <span class="sh">groups/goatfc.official</span>
+          </div>
+        </a>
+        <a href="https://discord.gg/vfvtFK8A" class="social-card" target="_blank" rel="noopener noreferrer">
+          <div class="social-icon dc">🎮</div>
+          <div class="social-info">
+            <span class="sn">Discord Server</span>
+            <span class="sh">discord.gg/vfvtFK8A</span>
+          </div>
+        </a>
+        <a href="https://t.me/+24t3hcLTQSQ3NTY1" class="social-card" target="_blank" rel="noopener noreferrer">
+          <div class="social-icon tg">✈️</div>
+          <div class="social-info">
+            <span class="sn">Telegram Channel</span>
+            <span class="sh">GOAT FC Official</span>
+          </div>
+        </a>
+        <a href="https://goatfcbd.com/eliteboard/" class="social-card" target="_blank" rel="noopener noreferrer">
+          <div class="social-icon web">🐐</div>
+          <div class="social-info">
+            <span class="sn">Elite Board</span>
+            <span class="sh">goatfcbd.com/eliteboard</span>
+          </div>
+        </a>
+        <a href="https://goatfcbd.com" class="social-card" target="_blank" rel="noopener noreferrer">
+          <div class="social-icon web">🌐</div>
+          <div class="social-info">
+            <span class="sn">Official Website</span>
+            <span class="sh">goatfcbd.com</span>
+          </div>
+        </a>
+      </div>
     </div>
-    <div class="card reveal reveal-delay-3">
-      <span class="card-icon">🌍</span>
-      <div class="card-title" data-en="Healthy Culture" data-bn="সুস্থ সংস্কৃতি">Healthy Culture</div>
-      <div class="card-body" data-en="Promote positive gaming culture in Bangladesh and beyond." data-bn="বাংলাদেশে এবং তার বাইরে ইতিবাচক গেমিং সংস্কৃতি প্রচার করুন।">Promote positive gaming culture in Bangladesh and beyond.</div>
-    </div>
-    <div class="card reveal reveal-delay-4">
-      <span class="card-icon">⚖️</span>
-      <div class="card-title" data-en="Transparent Management" data-bn="স্বচ্ছ ব্যবস্থাপনা">Transparent Management</div>
-      <div class="card-body" data-en="Maintain discipline through clear rules and fair, open leadership." data-bn="স্পষ্ট নিয়ম এবং ন্যায্য, উন্মুক্ত নেতৃত্বের মাধ্যমে শৃঙ্খলা বজায় রাখুন।">Maintain discipline through clear rules and fair, open leadership.</div>
-    </div>
-  </div>
-</section>
+  </section>
 
-<div class="divider"></div>
+  <!-- ── FOOTER ── -->
+  <footer>
+    <div class="wordmark">GOAT <span>FC</span></div>
+    <span class="cobeg">COBEG Registered Club</span>
+    <p data-i18n="footer_copy">© 2025 GOAT FC · Est. December 28, 2023 · Bangladesh</p>
+    <p data-i18n="footer_love">Built with passion by the GOAT FC family ❤️</p>
+  </footer>
 
-<!-- ───── STATS ───── -->
-<section class="section section-sm">
-  <div class="reveal">
-    <div class="label" data-en="Community" data-bn="কমিউনিটি">Community</div>
-    <h2 class="sec-title"
-        data-en="Our Growing Family"
-        data-bn="আমাদের ক্রমবর্ধমান পরিবার">
-      Our Growing Family
-    </h2>
-    <p class="sec-body"
-       data-en="A dedicated leadership structure ensures every member is heard, supported, and developed."
-       data-bn="একটি নিবেদিত নেতৃত্ব কাঠামো নিশ্চিত করে যে প্রতিটি সদস্যের কথা শোনা হয়, সমর্থিত হয় এবং উন্নত হয়।">
-      A dedicated leadership structure ensures every member is heard, supported, and developed.
-    </p>
-  </div>
+  <!-- ──────────────────────────────────────────────
+       SCRIPTS
+  ────────────────────────────────────────────── -->
+  <script>
+    /* ── TRANSLATIONS ── */
+    const T = {
+      en: {
+        hero_badge:    "COBEG Registered · eFootball Club",
+        hero_sub:      "We are more than a club — a growing ecosystem of players, managers, and creators united by one vision: to build the most respected eFootball family in Bangladesh.",
+        stat_members:  "Active Members",
+        stat_mgmt:     "Management Team",
+        stat_founded:  "Est. December",
+        scroll:        "Scroll to explore",
+        story_label:   "Our Story",
+        story_title:   "How It All Began",
+        story_p1:      "GOAT FC was born from a simple belief: <strong>competitive gaming should be built on respect, not ego.</strong> What began as a free-to-play eFootball community on 28 December 2023 has since grown into a structured digital football family with over a hundred members across Bangladesh.",
+        story_p2:      "We are a <strong>COBEG registered club</strong> that competes regularly in tournaments while maintaining a community where every player — regardless of device or division — is valued and supported.",
+        story_p3:      "Today, GOAT FC is not just about matches. It is about <strong>building character, sharing knowledge, and growing together</strong> as a generation of competitive eFootball athletes.",
+        founded_label: "Founded",
+        founded_desc:  "Started as a passion project by a group of competitive eFootball players in Bangladesh. Now a full ecosystem with dedicated leadership for tournaments, discipline, and player development.",
+        quote:         ""To build a respectful, competitive, and skill-based eFootball family."",
+        vm_label:      "Purpose",
+        vm_title:      "Vision & Mission",
+        vision_h:      "Vision",
+        v1: "Skill matters more than status",
+        v2: "Respect comes before rivalry",
+        v3: "Growth is shared, not individual",
+        v4: "Every player's potential is worth developing",
+        mission_h:     "Mission",
+        m1: "Build a fair and structured competitive environment",
+        m2: "Support players with guidance and improvement opportunities",
+        m3: "Maintain discipline through clear and transparent management",
+        m4: "Promote healthy gaming culture in Bangladesh and beyond",
+        val_label:     "Code of Conduct",
+        val_title:     "Core Values",
+        val1h: "Respect for All",      val1p: "Senior or junior, every member deserves equal respect. Toxic language or disrespectful behavior is strictly prohibited.",
+        val2h: "Skill Over Device",    val2p: "Gameplay varies by device and network. We never judge a player's ability based on their hardware.",
+        val3h: "Friendly = Learning",  val3p: "Winning is not everything. Friendly matches are spaces to learn, improve, and enjoy the game together.",
+        val4h: "Constructive Feedback",val4p: "Advice belongs in private. Public criticism is not welcome. Approach teammates with empathy, always.",
+        val5h: "Admin is Final",       val5p: "All disputes are resolved by the management team. The admin's decision is final and must be respected by all members.",
+        val6h: "Zero Tolerance",       val6p: "No political, offensive, or inappropriate content. A discipline system (warnings, suspension, removal) is in place for violations.",
+        rec_label:  "Recruitment",
+        rec_title:  "Join GOAT FC",
+        req1: "Ranked in Division 1–3 in eFootball",
+        req2: "Good quality Game ID, device & stable internet connection",
+        req3: "Consistent and regularly active player",
+        req4: "Must be a Free Agent or willing to transfer from another club",
+        req5: "Friendly attitude and respectful mindset — mandatory",
+        req6: "Must complete a Trial Match (exceptions considered for exceptional players)",
+        cta_h:   "Ready to Play?",
+        cta_p:   "No entry fee. No hidden requirements. Just passion, discipline, and a desire to grow with a team that supports you. Slide into our inbox — we'd love to see what you've got.",
+        cta_btn: "Send Us a Message",
+        con_label:    "Connect",
+        con_title:    "Find Us Online",
+        footer_copy:  "© 2025 GOAT FC · Est. December 28, 2023 · Bangladesh",
+        footer_love:  "Built with passion by the GOAT FC family ❤️",
+      },
 
-  <div class="stats-row">
-    <div class="stat-box reveal reveal-delay-1">
-      <span class="stat-num">100+</span>
-      <span class="stat-label" data-en="Active Members" data-bn="সক্রিয় সদস্য">Active Members</span>
-    </div>
-    <div class="stat-box reveal reveal-delay-2">
-      <span class="stat-num">12+</span>
-      <span class="stat-label" data-en="Management Team" data-bn="ম্যানেজমেন্ট টিম">Management Team</span>
-    </div>
-    <div class="stat-box reveal reveal-delay-3">
-      <span class="stat-num">2023</span>
-      <span class="stat-label" data-en="Year Founded" data-bn="প্রতিষ্ঠার বছর">Year Founded</span>
-    </div>
-  </div>
+      bn: {
+        hero_badge:    "COBEG নিবন্ধিত · eFootball ক্লাব",
+        hero_sub:      "আমরা শুধু একটি ক্লাব নই — একটি ক্রমবর্ধমান ইকোসিস্টেম যেখানে খেলোয়াড়, ম্যানেজার ও ক্রিয়েটররা একটি লক্ষ্যে একত্রিত: বাংলাদেশে সবচেয়ে সম্মানজনক eFootball পরিবার গড়ে তোলা।",
+        stat_members:  "সক্রিয় সদস্য",
+        stat_mgmt:     "ম্যানেজমেন্ট টিম",
+        stat_founded:  "প্রতিষ্ঠা, ডিসেম্বর",
+        scroll:        "নিচে স্ক্রোল করুন",
+        story_label:   "আমাদের গল্প",
+        story_title:   "যেভাবে শুরু হয়েছিল",
+        story_p1:      "GOAT FC একটি সহজ বিশ্বাস থেকে জন্ম নিয়েছে: <strong>প্রতিযোগিতামূলক গেমিং সম্মানের ভিত্তিতে হওয়া উচিত, অহংকারের নয়।</strong> ২৮ ডিসেম্বর ২০২৩-এ একটি ফ্রি-টু-প্লে eFootball কমিউনিটি হিসেবে শুরু করে এখন এটি বাংলাদেশজুড়ে ১০০+ সদস্যের একটি পরিকল্পিত ডিজিটাল ফুটবল পরিবার।",
+        story_p2:      "আমরা একটি <strong>COBEG নিবন্ধিত ক্লাব</strong> যা নিয়মিত টুর্নামেন্টে অংশ নেয় এবং এমন একটি কমিউনিটি বজায় রাখে যেখানে প্রতিটি খেলোয়াড় — ডিভাইস বা ডিভিশন নির্বিশেষে — মূল্যায়িত ও সহযোগিতাপ্রাপ্ত।",
+        story_p3:      "আজ GOAT FC শুধু ম্যাচের জায়গা নয়। এটি <strong>চরিত্র গঠন, জ্ঞান ভাগ করে নেওয়া এবং একসাথে বিকশিত হওয়ার</strong> জায়গা।",
+        founded_label: "প্রতিষ্ঠিত",
+        founded_desc:  "বাংলাদেশের প্রতিযোগিতামূলক eFootball খেলোয়াড়দের একটি দলের আবেগ প্রকল্প হিসেবে শুরু। এখন টুর্নামেন্ট, শৃঙ্খলা ও খেলোয়াড় উন্নয়নের জন্য নিবেদিত নেতৃত্বসহ একটি পূর্ণ ইকোসিস্টেম।",
+        quote:         "\"একটি সম্মানজনক, প্রতিযোগিতামূলক ও দক্ষতা-ভিত্তিক eFootball পরিবার গড়ে তোলা।\"",
+        vm_label:      "উদ্দেশ্য",
+        vm_title:      "দৃষ্টিভঙ্গি ও লক্ষ্য",
+        vision_h:      "দৃষ্টিভঙ্গি",
+        v1: "মর্যাদার চেয়ে দক্ষতা বেশি গুরুত্বপূর্ণ",
+        v2: "প্রতিদ্বন্দ্বিতার আগে সম্মান",
+        v3: "বিকাশ ভাগ করে নেওয়া, একা নয়",
+        v4: "প্রতিটি খেলোয়াড়ের সম্ভাবনা বিকশিত করা",
+        mission_h:     "লক্ষ্য",
+        m1: "ন্যায্য ও পরিকল্পিত প্রতিযোগিতামূলক পরিবেশ তৈরি",
+        m2: "গাইডেন্স ও উন্নতির সুযোগ দিয়ে খেলোয়াড়দের সহায়তা",
+        m3: "স্বচ্ছ ব্যবস্থাপনার মাধ্যমে শৃঙ্খলা বজায় রাখা",
+        m4: "বাংলাদেশ ও তার বাইরে স্বাস্থ্যকর গেমিং সংস্কৃতি প্রচার",
+        val_label:     "আচরণবিধি",
+        val_title:     "মূল মূল্যবোধ",
+        val1h: "সকলের প্রতি সম্মান",    val1p: "সিনিয়র বা জুনিয়র, প্রতিটি সদস্য সমান সম্মান পাওয়ার যোগ্য। বিষাক্ত ভাষা বা অসম্মানজনক আচরণ সম্পূর্ণ নিষিদ্ধ।",
+        val2h: "দক্ষতা, ডিভাইস নয়",    val2p: "ডিভাইস ও নেটওয়ার্কভেদে গেমপ্লে ভিন্ন হয়। আমরা কখনো হার্ডওয়্যারের উপর ভিত্তি করে কাউকে বিচার করি না।",
+        val3h: "ফ্রেন্ডলি = শেখা",     val3p: "জেতাই সব নয়। ফ্রেন্ডলি ম্যাচ শেখার, উন্নতির ও একসাথে গেম উপভোগের জায়গা।",
+        val4h: "গঠনমূলক প্রতিক্রিয়া",  val4p: "পরামর্শ ব্যক্তিগতভাবে দিন। প্রকাশ্য সমালোচনা স্বাগত নয়। সর্বদা সহানুভূতির সাথে সতীর্থদের কাছে যান।",
+        val5h: "অ্যাডমিনের সিদ্ধান্ত চূড়ান্ত", val5p: "সমস্ত বিবাদ ম্যানেজমেন্ট টিম সমাধান করে। সকল সদস্যকে অ্যাডমিনের সিদ্ধান্ত মানতে হবে।",
+        val6h: "শূন্য সহনশীলতা",        val6p: "রাজনৈতিক, আপত্তিকর বা অনুপযুক্ত কন্টেন্ট নিষিদ্ধ। লঙ্ঘনের জন্য শৃঙ্খলা ব্যবস্থা (সতর্কতা, সাসপেনশন, অপসারণ) প্রযোজ্য।",
+        rec_label:  "নিয়োগ",
+        rec_title:  "GOAT FC-তে যোগ দিন",
+        req1: "eFootball-এ Division 1–3-এ র‍্যাঙ্ক করা",
+        req2: "ভালো মানের গেম ID, ডিভাইস ও স্থিতিশীল ইন্টারনেট",
+        req3: "নিয়মিত ও সক্রিয় খেলোয়াড়",
+        req4: "ফ্রি এজেন্ট অথবা ক্লাব পরিবর্তনে আগ্রহী হতে হবে",
+        req5: "বন্ধুত্বপূর্ণ মনোভাব ও সম্মানজনক দৃষ্টিভঙ্গি — বাধ্যতামূলক",
+        req6: "ট্রায়াল ম্যাচ দিতে হবে (বিশেষ ক্ষেত্রে শিথিলতা প্রযোজ্য)",
+        cta_h:   "খেলার জন্য প্রস্তুত?",
+        cta_p:   "কোনো এন্ট্রি ফি নেই। কোনো লুকানো শর্ত নেই। শুধু আবেগ, শৃঙ্খলা ও বিকশিত হওয়ার ইচ্ছা নিয়ে আসুন।",
+        cta_btn: "আমাদের মেসেজ করুন",
+        con_label:    "যোগাযোগ",
+        con_title:    "আমাদের অনলাইনে খুঁজুন",
+        footer_copy:  "© ২০২৫ GOAT FC · প্রতিষ্ঠা ২৮ ডিসেম্বর ২০২৩ · বাংলাদেশ",
+        footer_love:  "GOAT FC পরিবারের ভালোবাসা দিয়ে তৈরি ❤️",
+      },
 
-  <div class="cta-wrap reveal reveal-delay-2">
-    <a href="https://goatfcbd.com/eliteboard/" class="btn-primary" target="_blank">
-      <i class="fa-solid fa-crown"></i>
-      <span data-en="View Elite Board" data-bn="এলিট বোর্ড দেখুন">View Elite Board</span>
-    </a>
-  </div>
-</section>
+      ar: {
+        hero_badge:    "نادٍ مسجل في COBEG · eFootball",
+        hero_sub:      "نحن أكثر من مجرد نادٍ — منظومة متنامية من اللاعبين والمديرين والمبدعين، متحدة برؤية واحدة: بناء أكثر عائلة eFootball احترامًا في بنغلاديش.",
+        stat_members:  "عضو نشط",
+        stat_mgmt:     "فريق الإدارة",
+        stat_founded:  "تأسست في ديسمبر",
+        scroll:        "اسحب للاستكشاف",
+        story_label:   "قصتنا",
+        story_title:   "كيف بدأ كل شيء",
+        story_p1:      "وُلد GOAT FC من اعتقاد بسيط: <strong>يجب أن يُبنى الألعاب التنافسية على الاحترام، لا الغرور.</strong> بدأ كمجتمع eFootball مجاني في 28 ديسمبر 2023، ونما ليصبح عائلة كرة قدم رقمية منظمة تضم أكثر من مئة عضو.",
+        story_p2:      "نحن <strong>نادٍ مسجل في COBEG</strong> ينافس بانتظام في البطولات، مع الحفاظ على مجتمع يُقدَّر فيه كل لاعب.",
+        story_p3:      "اليوم، GOAT FC ليس فقط عن المباريات. إنه عن <strong>بناء الشخصية ومشاركة المعرفة والنمو معًا</strong>.",
+        founded_label: "تأسس",
+        founded_desc:  "بدأ كمشروع شغف من مجموعة من لاعبي eFootball التنافسيين في بنغلاديش.",
+        quote:         "\"لبناء عائلة eFootball محترمة وتنافسية وقائمة على المهارة.\"",
+        vm_label:      "الغرض",
+        vm_title:      "الرؤية والمهمة",
+        vision_h:      "الرؤية",
+        v1: "المهارة أهم من المكانة",
+        v2: "الاحترام قبل التنافس",
+        v3: "النمو مشترك وليس فرديًا",
+        v4: "إمكانات كل لاعب تستحق التطوير",
+        mission_h:     "المهمة",
+        m1: "بناء بيئة تنافسية عادلة ومنظمة",
+        m2: "دعم اللاعبين بالتوجيه وفرص التطوير",
+        m3: "الحفاظ على الانضباط من خلال إدارة شفافة",
+        m4: "تعزيز ثقافة الألعاب الصحية في بنغلاديش وخارجها",
+        val_label: "قواعد السلوك",
+        val_title: "القيم الأساسية",
+        val1h: "الاحترام للجميع",      val1p: "كل عضو يستحق احترامًا متساويًا. اللغة السامة والسلوك غير المحترم محظوران تمامًا.",
+        val2h: "المهارة فوق الجهاز",   val2p: "يختلف اللعب حسب الجهاز والشبكة. لا نحكم على قدرة اللاعب بناءً على أجهزته.",
+        val3h: "الودية = التعلم",      val3p: "الفوز ليس كل شيء. المباريات الودية هي مساحات للتعلم والتحسن والاستمتاع بالعبة معًا.",
+        val4h: "ملاحظات بنّاءة",       val4p: "النصيحة تكون خاصة. لا يُرحب بالنقد العلني. تعامل مع زملاء الفريق بتعاطف دائمًا.",
+        val5h: "قرار الإدارة نهائي",   val5p: "يتم حل جميع النزاعات من قبل فريق الإدارة. قرار المشرف نهائي ويجب احترامه.",
+        val6h: "تسامح صفري",           val6p: "لا محتوى سياسيًا أو مسيئًا أو غير لائق. يوجد نظام انضباط للمخالفات.",
+        rec_label: "التجنيد",
+        rec_title: "انضم إلى GOAT FC",
+        req1: "مصنف في القسم 1–3 في eFootball",
+        req2: "معرف لعبة جيد وجهاز واتصال إنترنت مستقر",
+        req3: "لاعب نشط ومنتظم",
+        req4: "يجب أن تكون عميلًا حرًا أو مستعدًا للانتقال",
+        req5: "موقف ودي وعقلية محترمة — إلزامية",
+        req6: "يجب إكمال مباراة تجريبية (استثناءات تُنظر في حالات خاصة)",
+        cta_h: "مستعد للعب؟",
+        cta_p: "لا رسوم دخول. لا متطلبات مخفية. فقط الشغف والانضباط والرغبة في النمو.",
+        cta_btn: "أرسل لنا رسالة",
+        con_label: "تواصل",
+        con_title: "ابحث عنا على الإنترنت",
+        footer_copy: "© 2025 GOAT FC · تأسست 28 ديسمبر 2023 · بنغلاديش",
+        footer_love: "صُنع بشغف من عائلة GOAT FC ❤️",
+      },
 
-<div class="divider"></div>
+      hi: {
+        hero_badge:    "COBEG पंजीकृत · eFootball क्लब",
+        hero_sub:      "हम सिर्फ एक क्लब नहीं हैं — एक बढ़ता हुआ समुदाय जो एक लक्ष्य से जुड़ा है: बांग्लादेश में सबसे सम्मानित eFootball परिवार बनाना।",
+        stat_members:  "सक्रिय सदस्य",
+        stat_mgmt:     "प्रबंधन टीम",
+        stat_founded:  "स्थापना, दिसंबर",
+        scroll:        "नीचे स्क्रोल करें",
+        story_label:   "हमारी कहानी",
+        story_title:   "यह सब कैसे शुरू हुआ",
+        story_p1:      "GOAT FC एक साधारण विश्वास से जन्मा: <strong>प्रतिस्पर्धी गेमिंग सम्मान पर बनी होनी चाहिए।</strong> 28 दिसंबर 2023 को एक फ्री-टू-प्ले eFootball समुदाय के रूप में शुरू होकर अब यह 100+ सदस्यों के डिजिटल फुटबॉल परिवार में बदल गया है।",
+        story_p2:      "हम एक <strong>COBEG पंजीकृत क्लब</strong> हैं जो नियमित रूप से टूर्नामेंट में भाग लेता है।",
+        story_p3:      "आज GOAT FC सिर्फ मैचों के बारे में नहीं है। यह <strong>चरित्र निर्माण, ज्ञान साझा करने और एक साथ बढ़ने</strong> के बारे में है।",
+        founded_label: "स्थापना",
+        founded_desc:  "बांग्लादेश के प्रतिस्पर्धी eFootball खिलाड़ियों के एक समूह द्वारा शुरू किया गया।",
+        quote:         "\"एक सम्मानजनक, प्रतिस्पर्धी और कौशल-आधारित eFootball परिवार बनाना।\"",
+        vm_label:      "उद्देश्य",
+        vm_title:      "दृष्टि और मिशन",
+        vision_h:      "दृष्टि",
+        v1: "कौशल हैसियत से ज़्यादा मायने रखता है",
+        v2: "प्रतिद्वंद्विता से पहले सम्मान",
+        v3: "विकास साझा है, व्यक्तिगत नहीं",
+        v4: "हर खिलाड़ी की क्षमता विकसित करना",
+        mission_h:     "मिशन",
+        m1: "निष्पक्ष और व्यवस्थित प्रतिस्पर्धी माहौल बनाना",
+        m2: "मार्गदर्शन और सुधार के अवसरों से खिलाड़ियों का समर्थन",
+        m3: "पारदर्शी प्रबंधन के माध्यम से अनुशासन बनाए रखना",
+        m4: "बांग्लादेश और उससे परे स्वस्थ गेमिंग संस्कृति को बढ़ावा देना",
+        val_label: "आचार संहिता",
+        val_title: "मुख्य मूल्य",
+        val1h: "सभी का सम्मान",         val1p: "सीनियर हो या जूनियर, हर सदस्य समान सम्मान का हकदार है। विषाक्त भाषा पूरी तरह प्रतिबंधित है।",
+        val2h: "कौशल, डिवाइस नहीं",    val2p: "डिवाइस और नेटवर्क के अनुसार गेमप्ले अलग होता है। हम हार्डवेयर के आधार पर किसी को जज नहीं करते।",
+        val3h: "फ्रेंडली = सीखना",      val3p: "जीतना सब कुछ नहीं है। फ्रेंडली मैच सीखने और साथ में खेलने का मौका है।",
+        val4h: "रचनात्मक प्रतिक्रिया",  val4p: "सलाह निजी तौर पर दें। सार्वजनिक आलोचना स्वागत नहीं है।",
+        val5h: "एडमिन का निर्णय अंतिम", val5p: "सभी विवाद प्रबंधन टीम द्वारा हल किए जाते हैं। एडमिन का निर्णय अंतिम है।",
+        val6h: "शून्य सहिष्णुता",        val6p: "राजनीतिक, आपत्तिजनक या अनुचित सामग्री पर प्रतिबंध है।",
+        rec_label: "भर्ती",
+        rec_title: "GOAT FC में शामिल हों",
+        req1: "eFootball में Division 1–3 में रैंक",
+        req2: "अच्छा Game ID, डिवाइस और स्थिर इंटरनेट",
+        req3: "नियमित और सक्रिय खिलाड़ी",
+        req4: "फ्री एजेंट या क्लब बदलने के इच्छुक",
+        req5: "मित्रवत रवैया और सम्मानजनक मानसिकता — अनिवार्य",
+        req6: "Trial Match देना होगा (विशेष मामलों में छूट)",
+        cta_h:   "खेलने के लिए तैयार?",
+        cta_p:   "कोई एंट्री फी नहीं। सिर्फ जुनून, अनुशासन और साथ बढ़ने की इच्छा लाएं।",
+        cta_btn: "हमें मैसेज करें",
+        con_label: "संपर्क",
+        con_title: "हमें ऑनलाइन खोजें",
+        footer_copy: "© 2025 GOAT FC · स्थापना 28 दिसंबर 2023 · बांग्लादेश",
+        footer_love: "GOAT FC परिवार द्वारा प्यार से बनाया ❤️",
+      },
 
-<!-- ───── RULES ───── -->
-<section class="section section-sm">
-  <div class="reveal">
-    <div class="label" data-en="Code of Conduct" data-bn="আচরণবিধি">Code of Conduct</div>
-    <h2 class="sec-title"
-        data-en="Rules We Live By"
-        data-bn="যে নিয়মে আমরা চলি">
-      Rules We Live By
-    </h2>
-    <p class="sec-body"
-       data-en="We follow a strict but fair code of conduct. These aren't just rules — they're the values that define us."
-       data-bn="আমরা একটি কঠোর কিন্তু ন্যায্য আচরণবিধি অনুসরণ করি। এগুলো শুধু নিয়ম নয় — এগুলো সেই মূল্যবোধ যা আমাদের সংজ্ঞায়িত করে।">
-      We follow a strict but fair code of conduct. These aren't just rules — they're the values that define us.
-    </p>
-  </div>
+      fr: {
+        hero_badge:    "Club eFootball · Enregistré COBEG",
+        hero_sub:      "Nous sommes plus qu'un club — un écosystème croissant de joueurs, managers et créateurs unis par une vision : construire la famille eFootball la plus respectée du Bangladesh.",
+        stat_members:  "Membres actifs",
+        stat_mgmt:     "Équipe de direction",
+        stat_founded:  "Fondé en décembre",
+        scroll:        "Défiler pour explorer",
+        story_label:   "Notre Histoire",
+        story_title:   "Comment tout a commencé",
+        story_p1:      "GOAT FC est né d'une conviction simple : <strong>le gaming compétitif doit reposer sur le respect, pas l'ego.</strong> Lancé le 28 décembre 2023 comme communauté eFootball gratuite, il est devenu une famille de football numérique structurée avec plus de 100 membres.",
+        story_p2:      "Nous sommes un <strong>club enregistré COBEG</strong> qui participe régulièrement à des tournois tout en maintenant une communauté où chaque joueur est valorisé.",
+        story_p3:      "Aujourd'hui, GOAT FC ne se limite pas aux matchs. C'est <strong>construire le caractère, partager les connaissances et grandir ensemble</strong>.",
+        founded_label: "Fondé",
+        founded_desc:  "Commencé comme projet passion par un groupe de joueurs eFootball compétitifs au Bangladesh.",
+        quote:         "« Construire une famille eFootball respectueuse, compétitive et basée sur la compétence. »",
+        vm_label:      "Objectif",
+        vm_title:      "Vision & Mission",
+        vision_h:      "Vision",
+        v1: "La compétence importe plus que le statut",
+        v2: "Le respect avant la rivalité",
+        v3: "La croissance est partagée, pas individuelle",
+        v4: "Le potentiel de chaque joueur mérite d'être développé",
+        mission_h:     "Mission",
+        m1: "Créer un environnement compétitif juste et structuré",
+        m2: "Soutenir les joueurs avec des conseils et des opportunités d'amélioration",
+        m3: "Maintenir la discipline grâce à une gestion transparente",
+        m4: "Promouvoir une culture saine du jeu au Bangladesh et au-delà",
+        val_label: "Code de conduite",
+        val_title: "Valeurs fondamentales",
+        val1h: "Respect pour tous",       val1p: "Senior ou junior, chaque membre mérite un respect égal. Le langage toxique est strictement interdit.",
+        val2h: "Compétence > Appareil",   val2p: "Le gameplay varie selon l'appareil et le réseau. Nous ne jugeons jamais un joueur selon son matériel.",
+        val3h: "Amical = Apprentissage",  val3p: "Gagner n'est pas tout. Les matchs amicaux sont des espaces d'apprentissage et de plaisir.",
+        val4h: "Retours constructifs",    val4p: "Les conseils restent privés. Les critiques publiques ne sont pas les bienvenues.",
+        val5h: "L'admin a le dernier mot",val5p: "Tous les litiges sont résolus par l'équipe de direction. La décision de l'admin est finale.",
+        val6h: "Tolérance zéro",          val6p: "Aucun contenu politique, offensant ou inapproprié. Un système disciplinaire est en place.",
+        rec_label: "Recrutement",
+        rec_title: "Rejoindre GOAT FC",
+        req1: "Classé en Division 1–3 dans eFootball",
+        req2: "Bon ID de jeu, appareil et connexion Internet stable",
+        req3: "Joueur actif et régulier",
+        req4: "Agent libre ou prêt à transférer",
+        req5: "Attitude amicale et mentalité respectueuse — obligatoire",
+        req6: "Match d'essai obligatoire (exceptions possibles)",
+        cta_h:   "Prêt à jouer ?",
+        cta_p:   "Aucun frais d'inscription. Juste de la passion, de la discipline et le désir de progresser.",
+        cta_btn: "Envoyez-nous un message",
+        con_label: "Connexion",
+        con_title: "Retrouvez-nous en ligne",
+        footer_copy: "© 2025 GOAT FC · Fondé le 28 décembre 2023 · Bangladesh",
+        footer_love: "Créé avec passion par la famille GOAT FC ❤️",
+      }
+    };
 
-  <ul class="rules-list reveal reveal-delay-1">
-    <li>
-      <span class="rule-icon">🤝</span>
-      <span data-en="Respect everyone equally — senior or junior, winner or loser." data-bn="সবাইকে সমানভাবে সম্মান করুন — সিনিয়র বা জুনিয়র, বিজয়ী বা পরাজিত।">Respect everyone equally — senior or junior, winner or loser.</span>
-    </li>
-    <li>
-      <span class="rule-icon">🚫</span>
-      <span data-en="Zero tolerance for toxic language, harassment, or disrespectful behavior." data-bn="টক্সিক ভাষা, হয়রানি বা অসম্মানজনক আচরণের প্রতি শূন্য সহনশীলতা।">Zero tolerance for toxic language, harassment, or disrespectful behavior.</span>
-    </li>
-    <li>
-      <span class="rule-icon">🎮</span>
-      <span data-en="Device differences do not define skill. All platforms are equal." data-bn="ডিভাইসের পার্থক্য দক্ষতা নির্ধারণ করে না। সব প্ল্যাটফর্ম সমান।">Device differences do not define skill. All platforms are equal.</span>
-    </li>
-    <li>
-      <span class="rule-icon">🧠</span>
-      <span data-en="Friendly matches are for learning and growth, not ego or bragging." data-bn="ফ্রেন্ডলি ম্যাচ শেখার এবং বৃদ্ধির জন্য, অহংকার বা বড়াই করার জন্য নয়।">Friendly matches are for learning and growth, not ego or bragging.</span>
-    </li>
-    <li>
-      <span class="rule-icon">💬</span>
-      <span data-en="Feedback must be constructive and private — not public criticism." data-bn="ফিডব্যাক গঠনমূলক এবং ব্যক্তিগত হতে হবে — প্রকাশ্য সমালোচনা নয়।">Feedback must be constructive and private — not public criticism.</span>
-    </li>
-    <li>
-      <span class="rule-icon">⚖️</span>
-      <span data-en="Admin decision is final in all disputes. Trust the process." data-bn="সমস্ত বিরোধে অ্যাডমিনের সিদ্ধান্ত চূড়ান্ত। প্রক্রিয়াকে বিশ্বাস করুন।">Admin decision is final in all disputes. Trust the process.</span>
-    </li>
-    <li>
-      <span class="rule-icon rule-warning">🟨</span>
-      <span data-en="Discipline system in effect: verbal warning → suspension → removal." data-bn="শৃঙ্খলা ব্যবস্থা কার্যকর: মৌখিক সতর্কতা → স্থগিতাদেশ → অপসারণ।">Discipline system in effect: verbal warning → suspension → removal.</span>
-    </li>
-    <li>
-      <span class="rule-icon">🚫</span>
-      <span data-en="No political, offensive, or inappropriate content in any GOAT FC space." data-bn="GOAT FC-এর কোনো স্থানে রাজনৈতিক, আপত্তিকর বা অনুপযুক্ত বিষয়বস্তু নেই।">No political, offensive, or inappropriate content in any GOAT FC space.</span>
-    </li>
-  </ul>
+    let currentLang = 'en';
 
-  <p class="rules-footer reveal reveal-delay-2"
-     data-en="We are not just playing matches — we are building character."
-     data-bn="আমরা শুধু ম্যাচ খেলছি না — আমরা চরিত্র গড়ছি।">
-    We are not just playing matches — we are building character.
-  </p>
-</section>
+    function setLang(lang) {
+      currentLang = lang;
+      const dict = T[lang];
+      if (!dict) return;
 
-<div class="divider"></div>
+      // Update all elements with data-i18n
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key] !== undefined) {
+          el.innerHTML = dict[key];
+        }
+      });
 
-<!-- ───── SOCIAL ───── -->
-<section class="section section-sm">
-  <div class="reveal">
-    <div class="label" data-en="Connect With Us" data-bn="আমাদের সাথে যোগাযোগ করুন">Connect With Us</div>
-    <h2 class="sec-title"
-        data-en="Find Your Community"
-        data-bn="আপনার কমিউনিটি খুঁজুন">
-      Find Your Community
-    </h2>
-  </div>
+      // Update lang buttons
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+      });
 
-  <div class="social-grid reveal reveal-delay-1">
-    <a href="#" class="social-link">
-      <div class="si si-fb"><i class="fa-brands fa-facebook-f"></i></div>
-      <span data-en="Facebook Page" data-bn="ফেসবুক পেজ">Facebook Page</span>
-    </a>
-    <a href="#" class="social-link">
-      <div class="si si-fbg"><i class="fa-brands fa-facebook-f"></i></div>
-      <span data-en="Facebook Group" data-bn="ফেসবুক গ্রুপ">Facebook Group</span>
-    </a>
-    <a href="#" class="social-link">
-      <div class="si si-yt"><i class="fa-brands fa-youtube"></i></div>
-      <span data-en="YouTube Channel" data-bn="ইউটিউব চ্যানেল">YouTube Channel</span>
-    </a>
-    <a href="#" class="social-link">
-      <div class="si si-dc"><i class="fa-brands fa-discord"></i></div>
-      <span data-en="Discord Server" data-bn="ডিসকর্ড সার্ভার">Discord Server</span>
-    </a>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- ───── FINAL MSG ───── -->
-<section class="final-section">
-  <div class="final-inner">
-    <div class="final-icon reveal">❤️</div>
-    <h2 class="final-title reveal reveal-delay-1"
-        data-en="Every Match. Every Player. One Family."
-        data-bn="প্রতিটি ম্যাচ। প্রতিটি খেলোয়াড়। এক পরিবার।">
-      Every Match. Every Player. One Family.
-    </h2>
-    <p class="final-body reveal reveal-delay-2"
-       data-en="We are here to improve, compete, and enjoy the game together. Every match is a lesson. Every player is part of the journey."
-       data-bn="আমরা এখানে একসাথে উন্নতি করতে, প্রতিযোগিতা করতে এবং খেলা উপভোগ করতে এসেছি। প্রতিটি ম্যাচ একটি শিক্ষা। প্রতিটি খেলোয়াড় এই যাত্রার অংশ।">
-      We are here to improve, compete, and enjoy the game together. Every match is a lesson. Every player is part of the journey.
-    </p>
-    <div class="final-sign reveal reveal-delay-3">
-      <span data-en="With respect —" data-bn="সম্মানের সাথে —">With respect —</span>
-      <span> </span>
-      <span>GOAT FC</span>
-    </div>
-  </div>
-</section>
-
-<!-- ───── FOOTER ───── -->
-<footer>
-  <span>© 2023–2025 GOAT FC</span>
-  &nbsp;·&nbsp;
-  <span data-en="Built with passion for eFootball" data-bn="ইফুটবলের প্রতি ভালোবাসায় তৈরি">Built with passion for eFootball</span>
-</footer>
-
-</div><!-- .page -->
-
-<script>
-// ── LANGUAGE TOGGLE ──
-let currentLang = 'en';
-
-function setLang(lang) {
-  currentLang = lang;
-  document.body.classList.toggle('bn', lang === 'bn');
-
-  document.querySelectorAll('[data-en]').forEach(el => {
-    const text = el.getAttribute('data-' + lang);
-    if (text) el.innerHTML = text;
-  });
-
-  document.querySelectorAll('.lang-btn').forEach(btn => {
-    btn.classList.remove('active');
-    if ((btn.textContent.trim() === 'EN' && lang === 'en') ||
-        (btn.textContent.trim() === 'বাং' && lang === 'bn')) {
-      btn.classList.add('active');
+      // RTL for Arabic
+      document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
     }
-  });
 
-  // Update html lang
-  document.documentElement.lang = lang === 'bn' ? 'bn' : 'en';
-}
+    /* ── INTERSECTION OBSERVER for value cards ── */
+    const cards = document.querySelectorAll('.value-card');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          entry.target.style.animationDelay = (i * 0.08) + 's';
+          entry.target.classList.add('visible');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    cards.forEach(c => obs.observe(c));
+  </script>
 
-// ── SCROLL REVEAL ──
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-      observer.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-// Auto-reveal visible on load (above fold)
-window.addEventListener('load', () => {
-  document.querySelectorAll('.reveal').forEach(el => {
-    const rect = el.getBoundingClientRect();
-    if (rect.top < window.innerHeight) {
-      el.classList.add('visible');
-    }
-  });
-});
-</script>
 </body>
 </html>

@@ -10,9 +10,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 <style>
-/* ═══════════════════════════════════════════════
-   CSS CUSTOM PROPERTIES — RGB GAMING THEME
-═══════════════════════════════════════════════ */
 :root{
   --bg:#04060f;
   --bg2:#080c18;
@@ -57,12 +54,15 @@ body{
 a{color:inherit;text-decoration:none}
 ul{list-style:none}
 
-/* ── SCROLLBAR ── */
+/* text justify globally */
+p, .oc-desc, .rule-body p, .info-card p, .story-body p, .req-item, .join-box p {
+  text-align:justify;
+}
+
 ::-webkit-scrollbar{width:3px}
 ::-webkit-scrollbar-track{background:var(--bg)}
 ::-webkit-scrollbar-thumb{background:linear-gradient(var(--neon),var(--neon2));border-radius:2px}
 
-/* ── GRID OVERLAY ── */
 body::before{
   content:'';position:fixed;inset:0;
   background-image:
@@ -72,36 +72,17 @@ body::before{
   pointer-events:none;z-index:0;
 }
 
-/* ── AMBIENT GLOW ORBS ── */
 .orb{
   position:fixed;border-radius:50%;
   pointer-events:none;z-index:0;filter:blur(80px);
   animation:orbFloat 8s ease-in-out infinite;
 }
-.orb1{
-  width:400px;height:400px;
-  background:radial-gradient(circle,rgba(0,255,180,0.06) 0%,transparent 70%);
-  top:-100px;right:-100px;animation-delay:0s;
-}
-.orb2{
-  width:300px;height:300px;
-  background:radial-gradient(circle,rgba(0,212,255,0.05) 0%,transparent 70%);
-  bottom:10%;left:-80px;animation-delay:-3s;
-}
-.orb3{
-  width:250px;height:250px;
-  background:radial-gradient(circle,rgba(123,47,255,0.04) 0%,transparent 70%);
-  top:40%;right:5%;animation-delay:-5s;
-}
-@keyframes orbFloat{
-  0%,100%{transform:translate(0,0)}
-  33%{transform:translate(20px,-30px)}
-  66%{transform:translate(-15px,20px)}
-}
+.orb1{width:400px;height:400px;background:radial-gradient(circle,rgba(0,255,180,0.06) 0%,transparent 70%);top:-100px;right:-100px;animation-delay:0s;}
+.orb2{width:300px;height:300px;background:radial-gradient(circle,rgba(0,212,255,0.05) 0%,transparent 70%);bottom:10%;left:-80px;animation-delay:-3s;}
+.orb3{width:250px;height:250px;background:radial-gradient(circle,rgba(123,47,255,0.04) 0%,transparent 70%);top:40%;right:5%;animation-delay:-5s;}
+@keyframes orbFloat{0%,100%{transform:translate(0,0)}33%{transform:translate(20px,-30px)}66%{transform:translate(-15px,20px)}}
 
-/* ═══════════════════════════════════════════════
-   HEADER / NAV
-═══════════════════════════════════════════════ */
+/* ═══ HEADER ═══ */
 #header{
   position:fixed;top:0;left:0;right:0;z-index:900;
   height:58px;
@@ -111,12 +92,15 @@ body::before{
   backdrop-filter:blur(20px);
   border-bottom:1px solid var(--border);
 }
-/* LEFT: logo + home icon */
+
+/* LEFT: logo only */
 .nav-left{display:flex;align-items:center;gap:16px}
 .nav-logo{
   display:flex;align-items:center;gap:10px;
   font-family:var(--ff-hud);font-size:1rem;font-weight:900;
-  letter-spacing:0.1em;color:var(--neon);
+  letter-spacing:0.1em;
+  /* single neon color for GOAT FC */
+  color:var(--neon);
   text-shadow:0 0 14px rgba(0,255,180,0.6);
 }
 .logo-icon{
@@ -125,15 +109,17 @@ body::before{
   border:1px solid var(--border2);
   border-radius:6px;
   display:flex;align-items:center;justify-content:center;
-  font-size:1.1rem;
-  position:relative;overflow:hidden;
+  overflow:hidden;
   box-shadow:0 0 10px rgba(0,255,180,0.15);
+  flex-shrink:0;
 }
-.logo-icon::after{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(135deg,rgba(0,255,180,0.1),transparent);
+.logo-icon img{
+  width:100%;height:100%;
+  object-fit:cover;border-radius:5px;
 }
-.nav-logo .fc{color:var(--muted2)}
+
+/* RIGHT: home btn + lang + mobile toggle — home always visible */
+.nav-right{display:flex;align-items:center;gap:12px}
 .nav-home-btn{
   display:flex;align-items:center;gap:6px;
   font-family:var(--ff-mono);font-size:0.62rem;
@@ -148,9 +134,9 @@ body::before{
 }
 .nav-home-btn:hover{color:var(--neon);border-color:var(--border2);background:var(--neon-dim)}
 .nav-home-btn i{font-size:0.7rem}
+/* Always show home button on both pc and mobile */
+.nav-home-btn .btn-label{display:inline}
 
-/* RIGHT: lang + mobile toggle */
-.nav-right{display:flex;align-items:center;gap:12px}
 .lang-wrap{display:flex;gap:4px;align-items:center}
 .lang-btn{
   font-family:var(--ff-mono);font-size:0.6rem;
@@ -175,12 +161,11 @@ body::before{
 @media(max-width:680px){
   .nav-toggle{display:block}
   .lang-wrap{display:none}
-  .nav-home-btn span{display:none}
+  /* keep home btn visible, just hide text label on very small */
+  .nav-home-btn .btn-label{display:none}
 }
 
-/* ═══════════════════════════════════════════════
-   MOBILE DRAWER
-═══════════════════════════════════════════════ */
+/* ═══ MOBILE DRAWER ═══ */
 .mobile-drawer{
   position:fixed;top:58px;left:0;right:0;z-index:800;
   background:rgba(4,6,15,0.97);
@@ -202,9 +187,7 @@ body::before{
 .mobile-drawer .nav-link:hover{color:var(--neon)}
 .mobile-drawer .lang-wrap{display:flex;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
 
-/* ═══════════════════════════════════════════════
-   HERO
-═══════════════════════════════════════════════ */
+/* ═══ HERO ═══ */
 #hero{
   min-height:100svh;
   display:flex;flex-direction:column;justify-content:center;
@@ -233,7 +216,6 @@ body::before{
   letter-spacing:0.02em;
   margin-bottom:0.4rem;
   opacity:0;animation:fadeUp 0.7s var(--ease) 0.2s forwards;
-  position:relative;
 }
 .hero-title .accent{
   color:var(--neon);
@@ -257,21 +239,25 @@ body::before{
   color:var(--muted);
   line-height:1.85;margin-top:1.5rem;margin-bottom:2rem;
   opacity:0;animation:fadeUp 0.7s var(--ease) 0.35s forwards;
+  text-align:justify;
 }
 
-/* STATS */
+/* STATS — always 6 columns on PC, wrap on mobile */
 .hero-stats{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(130px,1fr));
-  gap:clamp(0.5rem,2vw,1rem);
-  max-width:720px;
+  grid-template-columns:repeat(6,1fr);
+  gap:clamp(0.5rem,1.5vw,0.85rem);
+  max-width:900px;
   opacity:0;animation:fadeUp 0.7s var(--ease) 0.5s forwards;
+}
+@media(max-width:700px){
+  .hero-stats{grid-template-columns:repeat(2,1fr)}
 }
 .hstat{
   background:var(--bg2);
   border:1px solid var(--border);
   border-radius:6px;
-  padding:clamp(0.75rem,2vw,1rem) clamp(0.75rem,2vw,1.1rem);
+  padding:clamp(0.65rem,1.5vw,0.9rem) clamp(0.65rem,1.5vw,1rem);
   display:flex;flex-direction:column;gap:4px;
   position:relative;overflow:hidden;
   transition:border-color 0.2s,transform 0.2s var(--ease);
@@ -284,7 +270,7 @@ body::before{
 .hstat:hover{border-color:var(--border2);transform:translateY(-2px)}
 .hstat:hover::before{opacity:1}
 .hstat-num{
-  font-family:var(--ff-hud);font-size:clamp(1.4rem,3.5vw,2rem);
+  font-family:var(--ff-hud);font-size:clamp(1.1rem,2.5vw,1.6rem);
   font-weight:700;color:var(--neon);line-height:1;
 }
 .hstat-num.blue{color:var(--neon2)}
@@ -295,42 +281,47 @@ body::before{
   font-family:var(--ff-mono);font-weight:400;
 }
 .hstat-lbl{
-  font-family:var(--ff-mono);font-size:0.58rem;
-  letter-spacing:0.12em;text-transform:uppercase;
-  color:var(--muted2);
+  font-family:var(--ff-mono);font-size:0.52rem;
+  letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--muted2);line-height:1.3;
 }
 
+/* CTA — single row on mobile, small buttons */
 .hero-cta{
   margin-top:2rem;
   opacity:0;animation:fadeUp 0.7s var(--ease) 0.65s forwards;
-  display:flex;gap:12px;flex-wrap:wrap;align-items:center;
+  display:flex;gap:10px;flex-wrap:nowrap;align-items:center;
 }
 .btn-neon{
-  display:inline-flex;align-items:center;gap:8px;
+  display:inline-flex;align-items:center;gap:7px;
   background:linear-gradient(135deg,var(--neon),#00e0a0);
   color:var(--bg);
-  font-family:var(--ff-hud);font-size:0.7rem;
-  font-weight:700;letter-spacing:0.1em;text-transform:uppercase;
-  padding:12px 26px;border-radius:4px;border:none;cursor:pointer;
+  font-family:var(--ff-hud);font-size:0.65rem;
+  font-weight:700;letter-spacing:0.08em;text-transform:uppercase;
+  padding:10px 20px;border-radius:4px;border:none;cursor:pointer;
   box-shadow:0 0 24px rgba(0,255,180,0.35);
   transition:all 0.2s;text-decoration:none;
+  white-space:nowrap;
 }
 .btn-neon:hover{transform:translateY(-2px);box-shadow:0 4px 30px rgba(0,255,180,0.5)}
 .btn-ghost{
-  display:inline-flex;align-items:center;gap:8px;
+  display:inline-flex;align-items:center;gap:7px;
   background:transparent;color:var(--neon);
-  font-family:var(--ff-hud);font-size:0.7rem;
-  font-weight:700;letter-spacing:0.1em;text-transform:uppercase;
-  padding:11px 26px;border-radius:4px;
+  font-family:var(--ff-hud);font-size:0.65rem;
+  font-weight:700;letter-spacing:0.08em;text-transform:uppercase;
+  padding:9px 20px;border-radius:4px;
   border:1px solid var(--border2);
   cursor:pointer;text-decoration:none;
-  transition:all 0.2s;
+  transition:all 0.2s;white-space:nowrap;
 }
 .btn-ghost:hover{border-color:var(--neon);background:var(--neon-dim);transform:translateY(-2px)}
 
-/* ═══════════════════════════════════════════════
-   SECTIONS
-═══════════════════════════════════════════════ */
+@media(max-width:480px){
+  .btn-neon,.btn-ghost{padding:9px 14px;font-size:0.6rem}
+  .hero-cta{gap:8px}
+}
+
+/* ═══ SECTIONS ═══ */
 .section{
   padding:clamp(3rem,8vw,5.5rem) clamp(1rem,5vw,3rem);
   position:relative;z-index:1;
@@ -352,15 +343,12 @@ body::before{
 }
 .s-title span{color:var(--neon)}
 hr.divider{
-  border:none;
-  height:1px;
+  border:none;height:1px;
   background:linear-gradient(90deg,transparent,var(--border),var(--border2),var(--border),transparent);
   margin:0;
 }
 
-/* ═══════════════════════════════════════════════
-   STORY
-═══════════════════════════════════════════════ */
+/* ═══ STORY ═══ */
 #story{background:var(--bg)}
 .story-layout{
   display:grid;
@@ -372,6 +360,7 @@ hr.divider{
   font-size:clamp(0.87rem,1.7vw,0.95rem);
   color:var(--muted);font-weight:400;
   line-height:1.9;margin-bottom:0.9rem;
+  text-align:justify;
 }
 .story-body p:last-child{margin-bottom:0}
 .story-body strong{color:var(--white);font-weight:600}
@@ -390,33 +379,12 @@ hr.divider{
   background:radial-gradient(circle,rgba(0,255,180,0.05) 0%,transparent 70%);
   pointer-events:none;
 }
-.ic-tag{
-  font-family:var(--ff-mono);font-size:0.58rem;
-  letter-spacing:0.15em;text-transform:uppercase;
-  color:var(--neon);margin-bottom:0.4rem;
-}
-.ic-val{
-  font-family:var(--ff-hud);
-  font-size:clamp(1rem,2.5vw,1.4rem);
-  font-weight:700;color:var(--white);
-  margin-bottom:0.8rem;line-height:1.2;
-}
-.info-card p{
-  font-size:0.83rem;color:var(--muted);
-  font-weight:400;line-height:1.75;
-}
-.quote-wrap{
-  margin-top:1.1rem;padding-top:1.1rem;
-  border-top:1px solid var(--border);
-}
-.quote-wrap blockquote{
-  font-size:clamp(0.88rem,1.8vw,1rem);
-  font-weight:600;font-style:italic;
-  color:var(--neon);line-height:1.6;
-}
-.tag-row{
-  display:flex;flex-wrap:wrap;gap:7px;margin-top:1rem;
-}
+.ic-tag{font-family:var(--ff-mono);font-size:0.58rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--neon);margin-bottom:0.4rem;}
+.ic-val{font-family:var(--ff-hud);font-size:clamp(1rem,2.5vw,1.4rem);font-weight:700;color:var(--white);margin-bottom:0.8rem;line-height:1.2;}
+.info-card p{font-size:0.83rem;color:var(--muted);font-weight:400;line-height:1.75;text-align:justify;}
+.quote-wrap{margin-top:1.1rem;padding-top:1.1rem;border-top:1px solid var(--border);}
+.quote-wrap blockquote{font-size:clamp(0.88rem,1.8vw,1rem);font-weight:600;font-style:italic;color:var(--neon);line-height:1.6;}
+.tag-row{display:flex;flex-wrap:wrap;gap:7px;margin-top:1rem;}
 .tag{
   font-family:var(--ff-mono);font-size:0.58rem;
   letter-spacing:0.08em;text-transform:uppercase;
@@ -428,13 +396,16 @@ hr.divider{
 .tag:hover{border-color:rgba(0,255,180,0.3);color:var(--neon)}
 @media(max-width:700px){.story-layout{grid-template-columns:1fr}}
 
-/* ═══════════════════════════════════════════════
-   WHAT WE OFFER
-═══════════════════════════════════════════════ */
-#offer{background:var(--bg2)}
+/* ═══ WHAT WE OFFER ═══ */
+#offer{background:var(--bg2);position:relative;}
+#offer::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 80% 20%,rgba(0,212,255,0.025) 0%,transparent 60%);
+  pointer-events:none;
+}
 .offer-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
   gap:clamp(0.65rem,1.8vw,1rem);
   margin-top:1.5rem;
 }
@@ -442,58 +413,37 @@ hr.divider{
   background:var(--bg3);
   border:1px solid var(--border);
   border-radius:6px;
-  padding:clamp(1rem,2.5vw,1.5rem);
-  display:flex;flex-direction:column;gap:0.7rem;
+  padding:clamp(0.85rem,2vw,1.2rem);
   position:relative;overflow:hidden;
   transition:border-color 0.3s,transform 0.3s var(--ease),box-shadow 0.3s;
   cursor:default;
 }
 .offer-card::before{
-  content:'';
-  position:absolute;top:0;left:0;right:0;height:2px;
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
   background:linear-gradient(90deg,var(--neon),var(--neon2),transparent);
   opacity:0;transition:opacity 0.3s;
 }
-.offer-card::after{
-  content:'';
-  position:absolute;bottom:-40px;right:-20px;
-  width:100px;height:100px;border-radius:50%;
-  background:var(--neon-dim);
-  opacity:0;transition:opacity 0.3s,transform 0.3s;
-  transform:scale(0.5);
-}
-.offer-card:hover{
-  border-color:rgba(0,255,180,0.25);
-  transform:translateY(-5px);
-  box-shadow:0 12px 40px rgba(0,255,180,0.07);
-}
+.offer-card:hover{border-color:rgba(0,255,180,0.25);transform:translateY(-5px);box-shadow:0 12px 40px rgba(0,255,180,0.07);}
 .offer-card:hover::before{opacity:1}
-.offer-card:hover::after{opacity:1;transform:scale(1)}
+
+/* Icon + Title in one row */
+.oc-header{
+  display:flex;align-items:center;gap:0.7rem;
+  margin-bottom:0.55rem;
+}
 .oc-icon{
-  width:40px;height:40px;border-radius:8px;
+  width:32px;height:32px;border-radius:7px;
   background:linear-gradient(135deg,var(--neon-dim),var(--neon-dim2));
   border:1px solid var(--border2);
   display:flex;align-items:center;justify-content:center;
-  font-size:1rem;flex-shrink:0;color:var(--neon);
+  font-size:0.85rem;flex-shrink:0;color:var(--neon);
   transition:all 0.2s;
 }
-.offer-card:hover .oc-icon{
-  background:linear-gradient(135deg,rgba(0,255,180,0.2),rgba(0,212,255,0.15));
-  box-shadow:0 0 12px rgba(0,255,180,0.2);
-}
-.oc-title{
-  font-family:var(--ff-hud);font-size:0.78rem;
-  font-weight:700;color:var(--white);
-  letter-spacing:0.04em;
-}
-.oc-desc{
-  font-size:0.8rem;color:var(--muted);
-  font-weight:400;line-height:1.65;
-}
+.offer-card:hover .oc-icon{background:linear-gradient(135deg,rgba(0,255,180,0.2),rgba(0,212,255,0.15));box-shadow:0 0 12px rgba(0,255,180,0.2);}
+.oc-title{font-family:var(--ff-hud);font-size:0.72rem;font-weight:700;color:var(--white);letter-spacing:0.03em;line-height:1.3;}
+.oc-desc{font-size:0.78rem;color:var(--muted);font-weight:400;line-height:1.65;text-align:justify;}
 
-/* ═══════════════════════════════════════════════
-   RULES
-═══════════════════════════════════════════════ */
+/* ═══ RULES ═══ */
 #rules{background:var(--bg)}
 .rules-grid{
   display:grid;
@@ -502,39 +452,23 @@ hr.divider{
   margin-top:1.5rem;
 }
 .rule-card{
-  background:var(--bg2);
-  border:1px solid var(--border);
-  border-radius:6px;
+  background:var(--bg2);border:1px solid var(--border);border-radius:6px;
   padding:clamp(1rem,2.5vw,1.4rem);
   display:flex;gap:1rem;align-items:flex-start;
   transition:border-color 0.2s,background 0.2s,transform 0.2s var(--ease);
 }
-.rule-card:hover{
-  border-color:rgba(0,255,180,0.22);
-  background:var(--bg3);
-  transform:translateX(4px);
-}
+.rule-card:hover{border-color:rgba(0,255,180,0.22);background:var(--bg3);transform:translateX(4px);}
 .rule-num{
-  font-family:var(--ff-hud);font-size:1.6rem;
-  font-weight:900;
+  font-family:var(--ff-hud);font-size:1.6rem;font-weight:900;
   background:linear-gradient(135deg,rgba(0,255,180,0.25),rgba(0,212,255,0.15));
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
   line-height:1;flex-shrink:0;min-width:30px;
 }
-.rule-body h4{
-  font-family:var(--ff-ui);font-size:0.9rem;
-  font-weight:700;color:var(--white);
-  margin-bottom:0.3rem;display:flex;align-items:center;gap:8px;
-}
+.rule-body h4{font-family:var(--ff-ui);font-size:0.9rem;font-weight:700;color:var(--white);margin-bottom:0.3rem;display:flex;align-items:center;gap:8px;}
 .rule-body h4 i{font-size:0.85rem;color:var(--neon);opacity:0.8}
-.rule-body p{
-  font-size:0.8rem;color:var(--muted);
-  font-weight:400;line-height:1.65;
-}
+.rule-body p{font-size:0.8rem;color:var(--muted);font-weight:400;line-height:1.65;text-align:justify;}
 
-/* ═══════════════════════════════════════════════
-   RECRUITMENT
-═══════════════════════════════════════════════ */
+/* ═══ RECRUITMENT ═══ */
 #recruit{background:var(--bg2)}
 .recruit-layout{
   display:grid;
@@ -546,26 +480,16 @@ hr.divider{
 .req-item{
   display:flex;align-items:flex-start;gap:0.9rem;
   padding:0.85rem 1rem;
-  background:var(--bg3);
-  border:1px solid var(--border);
-  border-radius:5px;
-  font-size:0.83rem;color:var(--muted);
-  font-weight:400;line-height:1.6;
+  background:var(--bg3);border:1px solid var(--border);border-radius:5px;
+  font-size:0.83rem;color:var(--muted);font-weight:400;line-height:1.6;
   transition:border-color 0.2s,transform 0.2s var(--ease);
 }
 .req-item:hover{border-color:rgba(0,255,180,0.22);transform:translateX(4px)}
-.req-n{
-  font-family:var(--ff-hud);font-size:0.65rem;
-  font-weight:700;color:var(--neon);
-  min-width:22px;flex-shrink:0;margin-top:2px;
-}
+.req-n{font-family:var(--ff-hud);font-size:0.65rem;font-weight:700;color:var(--neon);min-width:22px;flex-shrink:0;margin-top:2px;}
 .join-box{
-  background:var(--bg3);
-  border:1px solid var(--border);
-  border-radius:6px;
-  padding:clamp(1.5rem,3vw,2.25rem);
-  position:sticky;top:70px;
-  overflow:hidden;
+  background:var(--bg3);border:1px solid var(--border);border-radius:6px;
+  padding:clamp(1.2rem,2.5vw,1.8rem);
+  position:sticky;top:70px;overflow:hidden;
 }
 .join-box::before{
   content:'';position:absolute;top:-40px;right:-40px;
@@ -573,35 +497,38 @@ hr.divider{
   background:radial-gradient(circle,rgba(0,255,180,0.06) 0%,transparent 70%);
   pointer-events:none;
 }
-.join-box h3{
-  font-family:var(--ff-hud);
-  font-size:clamp(1.1rem,2.5vw,1.6rem);
-  font-weight:700;margin-bottom:0.6rem;
-  color:var(--white);letter-spacing:0.03em;
-}
-.join-box p{
-  font-size:0.83rem;color:var(--muted);
-  line-height:1.75;margin-bottom:1.25rem;
-}
+.join-box h3{font-family:var(--ff-hud);font-size:clamp(1rem,2.2vw,1.35rem);font-weight:700;margin-bottom:0.5rem;color:var(--white);letter-spacing:0.03em;}
+.join-box p{font-size:0.8rem;color:var(--muted);line-height:1.7;margin-bottom:1rem;text-align:justify;}
 .free-badge{
   display:inline-flex;align-items:center;gap:7px;
-  font-family:var(--ff-mono);font-size:0.6rem;
+  font-family:var(--ff-mono);font-size:0.58rem;
   letter-spacing:0.1em;text-transform:uppercase;
-  padding:5px 12px;border-radius:3px;
-  background:rgba(0,255,180,0.08);
-  border:1px solid rgba(0,255,180,0.2);
-  color:var(--neon);margin-bottom:1rem;display:block;
-  width:fit-content;
+  padding:4px 10px;border-radius:3px;
+  background:rgba(0,255,180,0.08);border:1px solid rgba(0,255,180,0.2);
+  color:var(--neon);margin-bottom:0.85rem;display:block;width:fit-content;
 }
-.free-badge i{font-size:0.7rem}
+.free-badge i{font-size:0.65rem}
+
+/* Contact button — small, direct messenger link */
+.btn-contact{
+  display:inline-flex;align-items:center;gap:7px;
+  background:linear-gradient(135deg,#1877F2,#1255b3);
+  color:#fff;
+  font-family:var(--ff-hud);font-size:0.62rem;
+  font-weight:700;letter-spacing:0.07em;text-transform:uppercase;
+  padding:9px 16px;border-radius:4px;border:none;cursor:pointer;
+  box-shadow:0 0 18px rgba(24,119,242,0.3);
+  transition:all 0.2s;text-decoration:none;
+  white-space:nowrap;
+}
+.btn-contact:hover{transform:translateY(-2px);box-shadow:0 4px 24px rgba(24,119,242,0.5)}
+
 @media(max-width:700px){
   .recruit-layout{grid-template-columns:1fr}
   .join-box{position:static}
 }
 
-/* ═══════════════════════════════════════════════
-   CONNECT
-═══════════════════════════════════════════════ */
+/* ═══ CONNECT ═══ */
 #connect{background:var(--bg)}
 .connect-grid{
   display:grid;
@@ -612,41 +539,22 @@ hr.divider{
 @media(max-width:900px){.connect-grid{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:500px){.connect-grid{grid-template-columns:repeat(2,1fr)}}
 .soc-card{
-  display:flex;flex-direction:column;align-items:center;
-  gap:0.7rem;
-  padding:1.2rem 1rem;
-  background:var(--bg2);
-  border:1px solid var(--border);
-  border-radius:6px;
+  display:flex;flex-direction:column;align-items:center;gap:0.7rem;
+  padding:1.2rem 1rem;background:var(--bg2);border:1px solid var(--border);border-radius:6px;
   text-decoration:none;color:var(--white);
   transition:border-color 0.2s,transform 0.25s var(--ease),box-shadow 0.25s;
-  position:relative;overflow:hidden;
-  text-align:center;
+  position:relative;overflow:hidden;text-align:center;
 }
-.soc-card::before{
-  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
-  opacity:0;transition:opacity 0.2s;
-}
-.soc-card:hover{
-  transform:translateY(-4px);
-  box-shadow:0 8px 30px rgba(0,0,0,0.4);
-}
+.soc-card::before{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;opacity:0;transition:opacity 0.2s;}
+.soc-card:hover{transform:translateY(-4px);box-shadow:0 8px 30px rgba(0,0,0,0.4);}
 .soc-card:hover::before{opacity:1}
-.soc-ico{
-  width:42px;height:42px;border-radius:10px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:1.1rem;flex-shrink:0;
-  transition:transform 0.2s var(--ease2),box-shadow 0.2s;
-}
+.soc-ico{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;transition:transform 0.2s var(--ease2),box-shadow 0.2s;}
 .soc-card:hover .soc-ico{transform:scale(1.1)}
-
-/* platform colours */
 .ico-fb{background:rgba(24,119,242,0.15);color:#4A90FF}
 .ico-fb2{background:rgba(24,119,242,0.12);color:#4A90FF}
-.ico-dc{background:rgba(88,101,242,0.15);color:#7289DA}
+.ico-dc{background:rgba(88,101,242,0.15);color:#7289Da}
 .ico-tg{background:rgba(0,136,204,0.15);color:#29B6F6}
 .ico-web{background:var(--neon-dim);color:var(--neon)}
-
 .soc-card.card-fb:hover{border-color:rgba(74,144,255,0.3);box-shadow:0 8px 30px rgba(74,144,255,0.1)}
 .soc-card.card-dc:hover{border-color:rgba(114,137,218,0.3);box-shadow:0 8px 30px rgba(114,137,218,0.1)}
 .soc-card.card-tg:hover{border-color:rgba(41,182,246,0.3);box-shadow:0 8px 30px rgba(41,182,246,0.1)}
@@ -655,14 +563,11 @@ hr.divider{
 .soc-card.card-dc::before{background:linear-gradient(90deg,rgba(114,137,218,0.6),rgba(114,137,218,0.2))}
 .soc-card.card-tg::before{background:linear-gradient(90deg,rgba(41,182,246,0.6),rgba(41,182,246,0.2))}
 .soc-card.card-web::before{background:linear-gradient(90deg,var(--neon),transparent)}
-
 .soc-info{display:flex;flex-direction:column;gap:2px;align-items:center}
 .soc-name{font-family:var(--ff-ui);font-size:0.78rem;font-weight:600}
 .soc-handle{font-family:var(--ff-mono);font-size:0.56rem;color:var(--muted2)}
 
-/* ═══════════════════════════════════════════════
-   FOOTER
-═══════════════════════════════════════════════ */
+/* ═══ FOOTER ═══ */
 footer{
   border-top:1px solid var(--border);
   padding:clamp(2rem,5vw,3rem) clamp(1rem,5vw,3rem);
@@ -673,100 +578,52 @@ footer{
 .footer-logo{
   font-family:var(--ff-hud);font-size:1.4rem;font-weight:900;
   letter-spacing:0.1em;
-  background:linear-gradient(135deg,var(--neon),var(--neon2));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  /* single unified color — neon green */
+  color:var(--neon);
+  text-shadow:0 0 16px rgba(0,255,180,0.5);
 }
-.footer-logo span{opacity:0.5;-webkit-text-fill-color:var(--muted2)}
 footer p{font-size:0.73rem;color:var(--muted2);font-family:var(--ff-mono)}
 .footer-tags{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:0.2rem 0}
 
-/* ═══════════════════════════════════════════════
-   RGB GLOW ANIMATIONS
-═══════════════════════════════════════════════ */
-@keyframes fadeUp{
-  from{opacity:0;transform:translateY(22px)}
-  to{opacity:1;transform:translateY(0)}
-}
-@keyframes rgbShift{
-  0%,100%{filter:hue-rotate(0deg)}
-  25%{filter:hue-rotate(30deg)}
-  50%{filter:hue-rotate(-20deg)}
-  75%{filter:hue-rotate(15deg)}
-}
-@keyframes scanline{
-  0%{transform:translateY(-100%)}
-  100%{transform:translateY(100vh)}
-}
-@keyframes borderGlow{
-  0%,100%{box-shadow:0 0 8px rgba(0,255,180,0.2)}
-  50%{box-shadow:0 0 20px rgba(0,255,180,0.4),0 0 40px rgba(0,212,255,0.15)}
-}
-@keyframes countUp{
-  from{opacity:0;transform:translateY(8px)}
-  to{opacity:1;transform:translateY(0)}
-}
+/* ═══ ANIMATIONS ═══ */
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+@keyframes scanline{0%{transform:translateY(-100%)}100%{transform:translateY(100vh)}}
+@keyframes borderGlow{0%,100%{box-shadow:0 0 8px rgba(0,255,180,0.2)}50%{box-shadow:0 0 20px rgba(0,255,180,0.4),0 0 40px rgba(0,212,255,0.15)}}
 
-/* SCANLINE SWEEP */
 .scanline{
-  position:fixed;top:0;left:0;right:0;
-  height:2px;
+  position:fixed;top:0;left:0;right:0;height:2px;
   background:linear-gradient(90deg,transparent,rgba(0,255,180,0.12),transparent);
   animation:scanline 6s linear infinite;
   pointer-events:none;z-index:0;
 }
-
-/* ── SCROLL REVEAL ── */
-.reveal{
-  opacity:0;transform:translateY(20px);
-  transition:opacity 0.6s var(--ease),transform 0.6s var(--ease);
-}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity 0.6s var(--ease),transform 0.6s var(--ease);}
 .reveal.in-view{opacity:1;transform:translateY(0)}
-
-/* GLOWING BORDER PULSE for hero stats */
-.hstat.live{
-  animation:borderGlow 3s ease-in-out infinite;
-}
-
-/* ── SECTION BG ALT ── */
-#offer{
-  background:var(--bg2);
-  position:relative;
-}
-#offer::before{
-  content:'';
-  position:absolute;inset:0;
-  background:radial-gradient(ellipse at 80% 20%,rgba(0,212,255,0.025) 0%,transparent 60%);
-  pointer-events:none;
-}
-
-/* ── UTILITY ── */
-.text-neon{color:var(--neon)}
-.text-blue{color:var(--neon2)}
+.hstat.live{animation:borderGlow 3s ease-in-out infinite;}
 </style>
 </head>
 <body>
 
-<!-- AMBIENT ORBS -->
 <div class="orb orb1"></div>
 <div class="orb orb2"></div>
 <div class="orb orb3"></div>
 <div class="scanline"></div>
 
-<!-- ══════════════════════════════════════════
-     HEADER
-══════════════════════════════════════════ -->
+<!-- ══ HEADER ══ -->
 <header id="header">
   <div class="nav-left">
-    <div class="nav-logo">
-      <div class="logo-icon">🐐</div>
-      <span>GOAT<span class="fc"> FC</span></span>
-    </div>
-    <a href="#" class="nav-home-btn">
-      <i class="fa-solid fa-house"></i>
-      <span data-i18n="nav_home">Home</span>
+    <a href="https://goatfcbd.com" class="nav-logo" style="text-decoration:none;">
+      <div class="logo-icon">
+        <img src="https://i.imgur.com/SjIUSlC.png" alt="GOAT FC Logo" onerror="this.style.display='none';this.parentNode.innerHTML='🐐'"/>
+      </div>
+      <span>GOAT FC</span>
     </a>
   </div>
   <div class="nav-right">
+    <!-- Home button always visible on both PC and mobile -->
+    <a href="https://goatfcbd.com" class="nav-home-btn">
+      <i class="fa-solid fa-house"></i>
+      <span class="btn-label" data-i18n="nav_home">Home</span>
+    </a>
     <div class="lang-wrap" id="langWrap">
       <button class="lang-btn active" data-lang="en" onclick="setLang('en')">EN</button>
       <button class="lang-btn" data-lang="bn" onclick="setLang('bn')">বাং</button>
@@ -790,11 +647,9 @@ footer p{font-size:0.73rem;color:var(--muted2);font-family:var(--ff-mono)}
   </div>
 </nav>
 
-<!-- ══════════════════════════════════════════
-     HERO
-══════════════════════════════════════════ -->
+<!-- ══ HERO ══ -->
 <section id="hero">
-  <p class="hero-eyebrow" data-i18n="hero_eye">eFootball · Esports Club · Bangladesh</p>
+  <p class="hero-eyebrow" data-i18n="hero_eye">eFootball Base Esports Club</p>
   <h1 class="hero-title">
     <span class="accent">GOAT FC</span>
     <span class="sub-word" data-i18n="hero_sub_word">The Digital Football Family</span>
@@ -802,7 +657,6 @@ footer p{font-size:0.73rem;color:var(--muted2);font-family:var(--ff-mono)}
   <p class="hero-desc" data-i18n="hero_desc">A competitive eFootball club where rank systems, friendly matches, online tournaments and Club vs Club bring players together. Built on skill, respect, and passion for the game.</p>
 
   <div class="hero-stats" id="heroStats">
-    <!-- Static -->
     <div class="hstat">
       <span class="hstat-num">100+</span>
       <span class="hstat-lbl" data-i18n="st_members">Active Members</span>
@@ -811,7 +665,6 @@ footer p{font-size:0.73rem;color:var(--muted2);font-family:var(--ff-mono)}
       <span class="hstat-num blue">16+</span>
       <span class="hstat-lbl" data-i18n="st_mgmt">Management Team</span>
     </div>
-    <!-- Dynamic from CSV -->
     <div class="hstat live" id="st-overall-pl">
       <span class="hstat-num loading" id="val-overall-pl">—</span>
       <span class="hstat-lbl" data-i18n="st_overall_pl">Overall Matches</span>
@@ -838,9 +691,7 @@ footer p{font-size:0.73rem;color:var(--muted2);font-family:var(--ff-mono)}
 
 <hr class="divider"/>
 
-<!-- ══════════════════════════════════════════
-     STORY
-══════════════════════════════════════════ -->
+<!-- ══ STORY ══ -->
 <section id="story" class="section">
   <div class="section-inner">
     <p class="s-tag"><i class="fa-solid fa-flag"></i><span data-i18n="story_tag">Origin</span></p>
@@ -875,52 +726,42 @@ footer p{font-size:0.73rem;color:var(--muted2);font-family:var(--ff-mono)}
 
 <hr class="divider"/>
 
-<!-- ══════════════════════════════════════════
-     WHAT WE OFFER
-══════════════════════════════════════════ -->
+<!-- ══ WHAT WE OFFER ══ -->
 <section id="offer" class="section">
   <div class="section-inner">
     <p class="s-tag"><i class="fa-solid fa-star"></i><span data-i18n="offer_tag">Features</span></p>
     <h2 class="s-title reveal" data-i18n="offer_title">What <span>We Offer</span></h2>
     <div class="offer-grid">
       <div class="offer-card reveal">
-        <div class="oc-icon"><i class="fa-solid fa-id-card"></i></div>
-        <p class="oc-title" data-i18n="oc1h">Official Club ID Card</p>
+        <div class="oc-header"><div class="oc-icon"><i class="fa-solid fa-id-card"></i></div><p class="oc-title" data-i18n="oc1h">Official Club ID Card</p></div>
         <p class="oc-desc" data-i18n="oc1p">Every member receives an official digital Club ID card — your identity in the GOAT FC ecosystem.</p>
       </div>
       <div class="offer-card reveal">
-        <div class="oc-icon"><i class="fa-solid fa-ranking-star"></i></div>
-        <p class="oc-title" data-i18n="oc2h">Own Ranking System</p>
+        <div class="oc-header"><div class="oc-icon"><i class="fa-solid fa-ranking-star"></i></div><p class="oc-title" data-i18n="oc2h">Own Ranking System</p></div>
         <p class="oc-desc" data-i18n="oc2p">A dedicated internal ranking system tracks your progress and standing within the club across all match types.</p>
       </div>
       <div class="offer-card reveal">
-        <div class="oc-icon"><i class="fa-solid fa-handshake"></i></div>
-        <p class="oc-title" data-i18n="oc3h">Friendly Matches</p>
+        <div class="oc-header"><div class="oc-icon"><i class="fa-solid fa-handshake"></i></div><p class="oc-title" data-i18n="oc3h">Friendly Matches</p></div>
         <p class="oc-desc" data-i18n="oc3p">Regular friendly matches against club members and external players — a space to learn, experiment, and enjoy.</p>
       </div>
       <div class="offer-card reveal">
-        <div class="oc-icon"><i class="fa-solid fa-trophy"></i></div>
-        <p class="oc-title" data-i18n="oc4h">Friendly Tournaments</p>
+        <div class="oc-header"><div class="oc-icon"><i class="fa-solid fa-trophy"></i></div><p class="oc-title" data-i18n="oc4h">Friendly Tournaments</p></div>
         <p class="oc-desc" data-i18n="oc4p">Internal tournaments where members go head-to-head in a structured bracket for glory and ranking points.</p>
       </div>
       <div class="offer-card reveal">
-        <div class="oc-icon"><i class="fa-solid fa-coins"></i></div>
-        <p class="oc-title" data-i18n="oc5h">Own CP System</p>
+        <div class="oc-header"><div class="oc-icon"><i class="fa-solid fa-coins"></i></div><p class="oc-title" data-i18n="oc5h">Own CP System</p></div>
         <p class="oc-desc" data-i18n="oc5p">Our unique Club Points (CP) system rewards performance, participation, and sportsmanship every season.</p>
       </div>
       <div class="offer-card reveal">
-        <div class="oc-icon"><i class="fa-solid fa-gamepad"></i></div>
-        <p class="oc-title" data-i18n="oc6h">Game Support</p>
+        <div class="oc-header"><div class="oc-icon"><i class="fa-solid fa-gamepad"></i></div><p class="oc-title" data-i18n="oc6h">Game Support</p></div>
         <p class="oc-desc" data-i18n="oc6p">Get help from experienced players — tactics, formations, squad building, and general gameplay guidance.</p>
       </div>
       <div class="offer-card reveal">
-        <div class="oc-icon"><i class="fa-solid fa-shield-halved"></i></div>
-        <p class="oc-title" data-i18n="oc7h">Club vs Club Tournament</p>
+        <div class="oc-header"><div class="oc-icon"><i class="fa-solid fa-shield-halved"></i></div><p class="oc-title" data-i18n="oc7h">Club vs Club Tournament</p></div>
         <p class="oc-desc" data-i18n="oc7p">GOAT FC battles other eFootball communities in Club vs Club competitions — representing our flag on the biggest stage.</p>
       </div>
       <div class="offer-card reveal">
-        <div class="oc-icon"><i class="fa-solid fa-ban"></i></div>
-        <p class="oc-title" data-i18n="oc8h">Zero Entry Fee</p>
+        <div class="oc-header"><div class="oc-icon"><i class="fa-solid fa-ban"></i></div><p class="oc-title" data-i18n="oc8h">Zero Entry Fee</p></div>
         <p class="oc-desc" data-i18n="oc8p">Joining GOAT FC is completely free. No hidden costs — just show up, play, and grow with the team.</p>
       </div>
     </div>
@@ -929,65 +770,25 @@ footer p{font-size:0.73rem;color:var(--muted2);font-family:var(--ff-mono)}
 
 <hr class="divider"/>
 
-<!-- ══════════════════════════════════════════
-     RULES
-══════════════════════════════════════════ -->
+<!-- ══ RULES ══ -->
 <section id="rules" class="section">
   <div class="section-inner">
     <p class="s-tag"><i class="fa-solid fa-gavel"></i><span data-i18n="rules_tag">Code of Conduct</span></p>
     <h2 class="s-title reveal" data-i18n="rules_title">Club <span>Rules</span></h2>
     <div class="rules-grid">
-      <div class="rule-card reveal">
-        <span class="rule-num">01</span>
-        <div class="rule-body">
-          <h4><i class="fa-solid fa-users"></i><span data-i18n="r1h">Respect Everyone</span></h4>
-          <p data-i18n="r1p">Senior or junior — every member deserves equal respect. Toxic language, insults, or disrespectful behavior will not be tolerated.</p>
-        </div>
-      </div>
-      <div class="rule-card reveal">
-        <span class="rule-num">02</span>
-        <div class="rule-body">
-          <h4><i class="fa-solid fa-mobile-screen-button"></i><span data-i18n="r2h">Device Doesn't Define Skill</span></h4>
-          <p data-i18n="r2p">Gameplay varies by phone, device, and network. Never look down on a player based on their hardware or connection.</p>
-        </div>
-      </div>
-      <div class="rule-card reveal">
-        <span class="rule-num">03</span>
-        <div class="rule-body">
-          <h4><i class="fa-solid fa-graduation-cap"></i><span data-i18n="r3h">Friendlies Are for Learning</span></h4>
-          <p data-i18n="r3p">Winning isn't everything in friendly matches. Play to learn and enjoy. Avoid excessive clearing or purely negative play.</p>
-        </div>
-      </div>
-      <div class="rule-card reveal">
-        <span class="rule-num">04</span>
-        <div class="rule-body">
-          <h4><i class="fa-solid fa-envelope"></i><span data-i18n="r4h">Keep Feedback Private</span></h4>
-          <p data-i18n="r4p">After matches, encourage your teammates. If you have criticism, take it to inbox — not the group. Public shaming is banned.</p>
-        </div>
-      </div>
-      <div class="rule-card reveal">
-        <span class="rule-num">05</span>
-        <div class="rule-body">
-          <h4><i class="fa-solid fa-scale-balanced"></i><span data-i18n="r5h">Admin Decision is Final</span></h4>
-          <p data-i18n="r5p">Any disputes go to the admin team. Their ruling is final and binding for all club members.</p>
-        </div>
-      </div>
-      <div class="rule-card reveal">
-        <span class="rule-num">06</span>
-        <div class="rule-body">
-          <h4><i class="fa-solid fa-triangle-exclamation"></i><span data-i18n="r6h">Discipline System</span></h4>
-          <p data-i18n="r6p">Rule violations result in yellow card (warning), red card (suspension), or permanent removal. No political or offensive content allowed.</p>
-        </div>
-      </div>
+      <div class="rule-card reveal"><span class="rule-num">01</span><div class="rule-body"><h4><i class="fa-solid fa-users"></i><span data-i18n="r1h">Respect Everyone</span></h4><p data-i18n="r1p">Senior or junior — every member deserves equal respect. Toxic language, insults, or disrespectful behavior will not be tolerated.</p></div></div>
+      <div class="rule-card reveal"><span class="rule-num">02</span><div class="rule-body"><h4><i class="fa-solid fa-mobile-screen-button"></i><span data-i18n="r2h">Device Doesn't Define Skill</span></h4><p data-i18n="r2p">Gameplay varies by phone, device, and network. Never look down on a player based on their hardware or connection.</p></div></div>
+      <div class="rule-card reveal"><span class="rule-num">03</span><div class="rule-body"><h4><i class="fa-solid fa-graduation-cap"></i><span data-i18n="r3h">Friendlies Are for Learning</span></h4><p data-i18n="r3p">Winning isn't everything in friendly matches. Play to learn and enjoy. Avoid excessive clearing or purely negative play.</p></div></div>
+      <div class="rule-card reveal"><span class="rule-num">04</span><div class="rule-body"><h4><i class="fa-solid fa-envelope"></i><span data-i18n="r4h">Keep Feedback Private</span></h4><p data-i18n="r4p">After matches, encourage your teammates. If you have criticism, take it to inbox — not the group. Public shaming is banned.</p></div></div>
+      <div class="rule-card reveal"><span class="rule-num">05</span><div class="rule-body"><h4><i class="fa-solid fa-scale-balanced"></i><span data-i18n="r5h">Admin Decision is Final</span></h4><p data-i18n="r5p">Any disputes go to the admin team. Their ruling is final and binding for all club members.</p></div></div>
+      <div class="rule-card reveal"><span class="rule-num">06</span><div class="rule-body"><h4><i class="fa-solid fa-triangle-exclamation"></i><span data-i18n="r6h">Discipline System</span></h4><p data-i18n="r6p">Rule violations result in yellow card (warning), red card (suspension), or permanent removal. No political or offensive content allowed.</p></div></div>
     </div>
   </div>
 </section>
 
 <hr class="divider"/>
 
-<!-- ══════════════════════════════════════════
-     RECRUITMENT
-══════════════════════════════════════════ -->
+<!-- ══ RECRUITMENT ══ -->
 <section id="recruit" class="section">
   <div class="section-inner">
     <p class="s-tag"><i class="fa-solid fa-user-plus"></i><span data-i18n="rec_tag">Open Trials</span></p>
@@ -1007,12 +808,13 @@ footer p{font-size:0.73rem;color:var(--muted2);font-family:var(--ff-mono)}
       <div class="join-box reveal">
         <span class="free-badge"><i class="fa-solid fa-circle-check"></i><span data-i18n="jb_free">No Entry Fee</span></span>
         <h3 data-i18n="jb_h">Ready to Play?</h3>
-        <p data-i18n="jb_p">No fees. No barriers. Just passion, discipline, and the drive to grow alongside a team that has your back. Send us a message to get started — we'll take it from there.</p>
-        <a href="https://www.facebook.com/goatfc.official" class="btn-neon" target="_blank" rel="noopener noreferrer">
-          <i class="fa-brands fa-facebook"></i><span data-i18n="jb_btn">Message Us on Facebook</span>
+        <p data-i18n="jb_p">No fees. No barriers. Just passion, discipline, and the drive to grow alongside a team that has your back. Message us to get started.</p>
+        <!-- Direct Messenger link -->
+        <a href="https://m.me/goatfc.official" class="btn-contact" target="_blank" rel="noopener noreferrer">
+          <i class="fa-brands fa-facebook-messenger"></i><span data-i18n="jb_btn">Contact With Us</span>
         </a>
-        <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border)">
-          <p style="font-size:0.72rem;color:var(--muted2);font-family:var(--ff-mono)" data-i18n="jb_note">Alternatively reach us via Discord or Telegram</p>
+        <div style="margin-top:0.85rem;padding-top:0.85rem;border-top:1px solid var(--border)">
+          <p style="font-size:0.7rem;color:var(--muted2);font-family:var(--ff-mono);text-align:left" data-i18n="jb_note">Alternatively reach us via Discord or Telegram</p>
         </div>
       </div>
     </div>
@@ -1021,9 +823,7 @@ footer p{font-size:0.73rem;color:var(--muted2);font-family:var(--ff-mono)}
 
 <hr class="divider"/>
 
-<!-- ══════════════════════════════════════════
-     CONNECT
-══════════════════════════════════════════ -->
+<!-- ══ CONNECT ══ -->
 <section id="connect" class="section">
   <div class="section-inner">
     <p class="s-tag"><i class="fa-solid fa-satellite-dish"></i><span data-i18n="con_tag">Platforms</span></p>
@@ -1057,11 +857,9 @@ footer p{font-size:0.73rem;color:var(--muted2);font-family:var(--ff-mono)}
   </div>
 </section>
 
-<!-- ══════════════════════════════════════════
-     FOOTER
-══════════════════════════════════════════ -->
+<!-- ══ FOOTER ══ -->
 <footer>
-  <div class="footer-logo">GOAT <span>FC</span></div>
+  <div class="footer-logo">GOAT FC</div>
   <div class="footer-tags">
     <span class="tag" data-i18n="ft1">eFootball Club</span>
     <span class="tag" data-i18n="ft2">Bangladesh</span>
@@ -1071,29 +869,21 @@ footer p{font-size:0.73rem;color:var(--muted2);font-family:var(--ff-mono)}
 </footer>
 
 <script>
-/* ══════════════════════════════════════════════
-   MOBILE NAV
-══════════════════════════════════════════════ */
+/* ══ MOBILE NAV ══ */
 const navToggle = document.getElementById('navToggle');
 const mobileDrawer = document.getElementById('mobileDrawer');
 navToggle.addEventListener('click', () => {
   mobileDrawer.classList.toggle('open');
   const open = mobileDrawer.classList.contains('open');
-  navToggle.innerHTML = open
-    ? '<i class="fa-solid fa-xmark"></i>'
-    : '<i class="fa-solid fa-bars"></i>';
+  navToggle.innerHTML = open ? '<i class="fa-solid fa-xmark"></i>' : '<i class="fa-solid fa-bars"></i>';
 });
-mobileDrawer.querySelectorAll('.nav-link').forEach(l => {
-  l.addEventListener('click', closeMobile);
-});
+mobileDrawer.querySelectorAll('.nav-link').forEach(l => l.addEventListener('click', closeMobile));
 function closeMobile(){
   mobileDrawer.classList.remove('open');
   navToggle.innerHTML = '<i class="fa-solid fa-bars"></i>';
 }
 
-/* ══════════════════════════════════════════════
-   SCROLL REVEAL
-══════════════════════════════════════════════ */
+/* ══ SCROLL REVEAL ══ */
 const revObs = new IntersectionObserver((entries) => {
   entries.forEach((e, i) => {
     if (e.isIntersecting) {
@@ -1104,11 +894,7 @@ const revObs = new IntersectionObserver((entries) => {
 }, { threshold: 0.1 });
 document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
 
-/* ══════════════════════════════════════════════
-   CSV DATA FETCH — AGGREGATE STATS
-  Columns (0-indexed):
-  0:Club_ID  11:Overall_PL  5:Monthly_PL  13:Total GF  7:Montly GF
-══════════════════════════════════════════════ */
+/* ══ CSV STATS (match counts ÷ 2 for 1v1) ══ */
 const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1033046915&single=true&output=csv';
 
 function parseCSV(text) {
@@ -1130,8 +916,7 @@ function animateCount(el, target) {
   const num = parseInt(target) || 0;
   if (isNaN(num)) { el.textContent = target; return; }
   let start = 0;
-  const duration = 1200;
-  const step = Math.ceil(num / (duration / 16));
+  const step = Math.ceil(num / (1200 / 16));
   const timer = setInterval(() => {
     start = Math.min(start + step, num);
     el.textContent = start.toLocaleString();
@@ -1146,17 +931,17 @@ async function fetchStats() {
     const rows = parseCSV(text);
 
     let overallPL = 0, monthlyPL = 0, totalGF = 0, monthlyGF = 0;
-
     rows.forEach(r => {
-      overallPL  += parseInt(r['Overall_PL'])     || 0;
-      monthlyPL  += parseInt(r['Monthly_PL'])     || 0;
-      totalGF    += parseInt(r['Total GF'])        || 0;
-      monthlyGF  += parseInt(r['Montly GF'])       || 0;
+      overallPL += parseInt(r['Overall_PL']) || 0;
+      monthlyPL += parseInt(r['Monthly_PL']) || 0;
+      totalGF   += parseInt(r['Total GF'])   || 0;
+      monthlyGF += parseInt(r['Montly GF'])  || 0;
     });
 
+    /* divide match counts by 2 — each 1v1 match is counted for both players */
     const els = {
-      'val-overall-pl': overallPL,
-      'val-monthly-pl': monthlyPL,
+      'val-overall-pl': Math.floor(overallPL / 2),
+      'val-monthly-pl': Math.floor(monthlyPL / 2),
       'val-total-gf':   totalGF,
       'val-monthly-gf': monthlyGF,
     };
@@ -1179,13 +964,11 @@ async function fetchStats() {
 }
 fetchStats();
 
-/* ══════════════════════════════════════════════
-   TRANSLATIONS
-══════════════════════════════════════════════ */
+/* ══ TRANSLATIONS ══ */
 const T = {
   en: {
     nav_home:"Home", nav_story:"Story", nav_offer:"Club", nav_rules:"Rules", nav_join:"Join", nav_connect:"Connect",
-    hero_eye:"eFootball · Esports Club · Bangladesh",
+    hero_eye:"eFootball Base Esports Club",
     hero_sub_word:"The Digital Football Family",
     hero_desc:"A competitive eFootball club where rank systems, friendly matches, online tournaments and Club vs Club bring players together. Built on skill, respect, and passion for the game.",
     st_members:"Active Members", st_mgmt:"Management Team",
@@ -1226,8 +1009,8 @@ const T = {
     rq5:"Friendly attitude and respectful mindset — non-negotiable",
     rq6:"Trial Match required (exceptions made for exceptional players)",
     jb_free:"No Entry Fee", jb_h:"Ready to Play?",
-    jb_p:"No fees. No barriers. Just passion, discipline, and the drive to grow alongside a team that has your back. Send us a message to get started — we'll take it from there.",
-    jb_btn:"Message Us on Facebook",
+    jb_p:"No fees. No barriers. Just passion, discipline, and the drive to grow alongside a team that has your back. Message us to get started.",
+    jb_btn:"Contact With Us",
     jb_note:"Alternatively reach us via Discord or Telegram",
     con_tag:"Platforms", con_title:"Find Us <span>Online</span>",
     sc1n:"Facebook Page", sc2n:"Facebook Group", sc5n:"Elite Board", sc6n:"Official Website",
@@ -1236,7 +1019,7 @@ const T = {
   },
   bn: {
     nav_home:"হোম", nav_story:"গল্প", nav_offer:"ক্লাব", nav_rules:"নিয়ম", nav_join:"যোগ দিন", nav_connect:"যোগাযোগ",
-    hero_eye:"eFootball · Esports ক্লাব · বাংলাদেশ",
+    hero_eye:"eFootball ভিত্তিক Esports ক্লাব",
     hero_sub_word:"ডিজিটাল ফুটবল পরিবার",
     hero_desc:"একটি প্রতিযোগিতামূলক eFootball ক্লাব যেখানে র‍্যাঙ্ক সিস্টেম, ফ্রেন্ডলি ম্যাচ, অনলাইন টুর্নামেন্ট এবং Club vs Club খেলোয়াড়দের একত্রিত করে। দক্ষতা, সম্মান ও খেলার আবেগের উপর গড়া।",
     st_members:"সক্রিয় সদস্য", st_mgmt:"ম্যানেজমেন্ট টিম",
@@ -1278,7 +1061,7 @@ const T = {
     rq6:"ট্রায়াল ম্যাচ দিতে হবে (বিশেষ ক্ষেত্রে শিথিলতা প্রযোজ্য)",
     jb_free:"কোনো এন্ট্রি ফি নেই", jb_h:"খেলার জন্য প্রস্তুত?",
     jb_p:"কোনো ফি নেই। কোনো বাধা নেই। শুধু আবেগ, শৃঙ্খলা এবং একটি দলের সাথে বিকশিত হওয়ার ইচ্ছা নিয়ে আসুন।",
-    jb_btn:"ফেসবুকে মেসেজ করুন",
+    jb_btn:"আমাদের সাথে যোগাযোগ করুন",
     jb_note:"অথবা Discord বা Telegram-এ আমাদের সাথে যোগাযোগ করুন",
     con_tag:"প্ল্যাটফর্ম", con_title:"অনলাইনে <span>আমাদের খুঁজুন</span>",
     sc1n:"ফেসবুক পেজ", sc2n:"ফেসবুক গ্রুপ", sc5n:"এলিট বোর্ড", sc6n:"অফিশিয়াল ওয়েবসাইট",
@@ -1299,17 +1082,6 @@ function setLang(lang) {
     b.classList.toggle('active', b.dataset.lang === lang);
   });
 }
-
-/* ══════════════════════════════════════════════
-   SMOOTH NAV HIGHLIGHT
-══════════════════════════════════════════════ */
-const sections = document.querySelectorAll('section[id]');
-window.addEventListener('scroll', () => {
-  let cur = '';
-  sections.forEach(s => {
-    if (window.scrollY >= s.offsetTop - 80) cur = s.id;
-  });
-});
 </script>
 </body>
 </html>

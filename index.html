@@ -185,17 +185,20 @@ tbody tr:hover{background:rgba(0,245,255,.05)}
 .card-photo-wrap{
   position:relative;
   width:100%;
-  height:200px;
+  height:220px;
   overflow:hidden;
+  background:#060e1f;
 }
 .card-photo-wrap::after{
   content:'';
-  position:absolute;bottom:0;left:0;right:0;height:80px;
+  position:absolute;bottom:0;left:0;right:0;height:70px;
   background:linear-gradient(transparent,#060e1f);
+  pointer-events:none;
 }
 .card-photo{
   width:100%;height:100%;
-  object-fit:cover;object-position:top center;
+  object-fit:cover;
+  object-position:center 20%;
   display:block;
 }
 .card-photo-placeholder{
@@ -276,12 +279,19 @@ tbody tr:hover{background:rgba(0,245,255,.05)}
 /* Card footer brand */
 .card-brand{
   margin-top:14px;
-  text-align:center;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:0;
+}
+.card-brand-inner{
+  padding:5px 20px;
   font-family:var(--font-head);
   font-size:8px;letter-spacing:3px;
-  background:linear-gradient(90deg,var(--c),var(--g));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  opacity:.5;
+  color:#00f5ff;
+  border:1px solid rgba(0,245,255,.25);
+  border-radius:2px;
+  background:rgba(0,245,255,.06);
 }
 
 /* FOOTER */
@@ -366,7 +376,7 @@ td{font-size:11px;padding:6px 4px}
           <div class="cs"><div class="cs-val" id="cs-gf">—</div><div class="cs-lbl">GF</div></div>
           <div class="cs"><div class="cs-val" id="cs-gd">—</div><div class="cs-lbl">GD</div></div>
         </div>
-        <div class="card-brand">GOAT FC · RANK CARD</div>
+        <div class="card-brand"><span class="card-brand-inner">GOAT FC · RANK CARD</span></div>
       </div>
     </div>
   </div>
@@ -511,24 +521,43 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape") closeModalDirect();
 document.getElementById("dl-btn").addEventListener("click",function(){
   const dlBtn=document.getElementById("dl-btn");
   const closeBtn=document.querySelector(".close-btn");
-  // hide buttons before capture
   dlBtn.style.display="none";
   closeBtn.style.display="none";
 
   const target=document.getElementById("card-capture");
+  const SCALE=2;
+  const RADIUS=16*SCALE;
+
   html2canvas(target,{
     backgroundColor:"#060e1f",
-    scale:2,
+    scale:SCALE,
     useCORS:true,
     allowTaint:true,
-    logging:false
+    logging:false,
+    removeContainer:true
   }).then(canvas=>{
     dlBtn.style.display="";
     closeBtn.style.display="";
+
+    // Clip to rounded rect so saved PNG matches card shape
+    const out=document.createElement("canvas");
+    out.width=canvas.width;
+    out.height=canvas.height;
+    const ctx=out.getContext("2d");
+    const w=out.width, h=out.height, r=RADIUS;
+    ctx.beginPath();
+    ctx.moveTo(r,0);ctx.lineTo(w-r,0);ctx.quadraticCurveTo(w,0,w,r);
+    ctx.lineTo(w,h-r);ctx.quadraticCurveTo(w,h,w-r,h);
+    ctx.lineTo(r,h);ctx.quadraticCurveTo(0,h,0,h-r);
+    ctx.lineTo(0,r);ctx.quadraticCurveTo(0,0,r,0);
+    ctx.closePath();
+    ctx.clip();
+    ctx.drawImage(canvas,0,0);
+
     const name=document.getElementById("card-name").textContent.replace(/\s+/g,"_");
     const a=document.createElement("a");
     a.download="GOATFC_RankCard_"+name+".png";
-    a.href=canvas.toDataURL("image/png");
+    a.href=out.toDataURL("image/png");
     a.click();
   }).catch(()=>{
     dlBtn.style.display="";

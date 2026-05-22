@@ -99,12 +99,10 @@ tbody tr:hover{background:rgba(0,245,255,.05)}
 .rank-card{
   position:relative;
   width:320px;
-  border-radius:16px;
-  overflow:hidden;
+  /* No overflow:hidden here — let #card-capture handle its own radius */
   transform:scale(.88) translateY(20px);
   transition:transform .3s cubic-bezier(.34,1.56,.64,1);
-  /* RGB animated outer glow */
-  box-shadow:0 0 0 2px #00f5ff,0 0 40px rgba(0,245,255,.3),0 0 80px rgba(191,95,255,.15);
+  border-radius:16px;
   animation:borderRGB 4s linear infinite;
 }
 @keyframes borderRGB{
@@ -123,7 +121,7 @@ tbody tr:hover{background:rgba(0,245,255,.05)}
 
 /* ── card-capture: exactly what gets downloaded ── */
 #card-capture{
-  width:100%;
+  width:320px;
   background:#060e1f;
   border-radius:16px;
   overflow:hidden;
@@ -131,12 +129,11 @@ tbody tr:hover{background:rgba(0,245,255,.05)}
   flex-direction:column;
 }
 
-/* PHOTO — canvas-drawn so no CSS gradient seam */
+/* PHOTO */
 .card-photo-wrap{
   position:relative;
-  width:100%;
-  height:0;
-  padding-bottom:75%; /* 4:3 aspect — keeps proportions on download */
+  width:320px;
+  height:240px; /* fixed 4:3 of 320px */
   overflow:hidden;
   background:#060e1f;
   flex-shrink:0;
@@ -149,7 +146,6 @@ tbody tr:hover{background:rgba(0,245,255,.05)}
   object-position:center 18%;
   display:block;
 }
-/* fade drawn via canvas in JS — CSS ::after causes black-line artefact in html2canvas */
 .card-photo-placeholder{
   position:absolute;top:0;left:0;
   width:100%;height:100%;
@@ -159,7 +155,14 @@ tbody tr:hover{background:rgba(0,245,255,.05)}
   color:rgba(0,245,255,.2);
 }
 
-/* rank badge sits on top of canvas fade */
+/* canvas fade — drawn in JS */
+#fade-canvas{
+  position:absolute;top:0;left:0;
+  width:100%;height:100%;
+  pointer-events:none;
+  z-index:2;
+}
+
 .card-rank-badge{
   position:absolute;bottom:12px;left:50%;transform:translateX(-50%);
   z-index:3;
@@ -172,19 +175,31 @@ tbody tr:hover{background:rgba(0,245,255,.05)}
 .card-rank-badge.r-other{background:rgba(0,245,255,.15);color:var(--c);border:1px solid rgba(0,245,255,.4);box-shadow:0 0 10px rgba(0,245,255,.2);}
 
 /* CARD BODY */
-.card-body{padding:10px 20px 0;text-align:center;background:#060e1f;}
+.card-body{
+  width:320px;
+  padding:10px 20px 0;
+  text-align:center;
+  background:#060e1f;
+  flex-shrink:0;
+}
 .card-name{font-family:var(--font-head);font-size:16px;font-weight:700;letter-spacing:2px;color:#fff;text-shadow:0 0 20px rgba(0,245,255,.3);margin-bottom:3px;}
 .card-club-id{font-family:var(--font-head);font-size:9px;letter-spacing:2px;color:rgba(0,245,255,.6);margin-bottom:12px;}
 .card-divider{height:1px;background:linear-gradient(90deg,transparent,rgba(0,245,255,.35),transparent);margin:0 8px 12px;}
 
-/* STATS — number smaller, label bigger & bolder */
+/* STATS */
 .card-stats{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;padding:0 8px;}
 .cs{background:rgba(0,245,255,.06);border:1px solid rgba(0,245,255,.14);border-radius:7px;padding:8px 3px 7px;display:flex;flex-direction:column;align-items:center;gap:3px;}
 .cs-val{font-family:var(--font-head);font-size:14px;font-weight:700;color:#fff;line-height:1;letter-spacing:0;}
 .cs-lbl{font-family:var(--font-head);font-size:7px;letter-spacing:1.2px;color:rgba(0,245,255,.7);font-weight:700;}
 
 /* CARD FOOTER BRAND */
-.card-brand{margin:12px 16px 16px;display:flex;align-items:center;justify-content:center;}
+.card-brand{
+  width:320px;
+  margin:12px 0 0;
+  padding:0 16px 16px;
+  background:#060e1f;
+  flex-shrink:0;
+}
 .card-brand-inner{
   width:100%;
   padding:6px 0;
@@ -210,6 +225,7 @@ td{font-size:11px;padding:6px 4px}
 .rank-num{width:18px;height:18px;font-size:8px}
 .topbar{height:42px;padding:0 10px}
 .rank-card{width:min(310px,92vw);}
+/* On small screens, keep card-capture at fixed 320px for consistent download */
 }
 </style>
 </head>
@@ -256,7 +272,6 @@ td{font-size:11px;padding:6px 4px}
 <!-- RANK CARD MODAL -->
 <div class="modal-overlay" id="modal" onclick="closeModal(event)">
   <div class="rank-card" id="rank-card">
-    <!-- These two buttons are OUTSIDE #card-capture so they never appear in screenshot -->
     <button class="close-btn" onclick="closeModalDirect()"><i class="fa-solid fa-xmark"></i></button>
     <button class="dl-btn" id="dl-btn" title="Download Card"><i class="fa-solid fa-download"></i></button>
 
@@ -267,8 +282,7 @@ td{font-size:11px;padding:6px 4px}
         <div class="card-photo-placeholder" id="card-ph" style="display:none">
           <i class="fa-solid fa-user"></i>
         </div>
-        <!-- canvas fade overlay — no CSS ::after to avoid black-line artefact -->
-        <canvas id="fade-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:2;"></canvas>
+        <canvas id="fade-canvas"></canvas>
         <div class="card-rank-badge" id="card-rank-badge">#1</div>
       </div>
       <div class="card-body">
@@ -282,7 +296,9 @@ td{font-size:11px;padding:6px 4px}
           <div class="cs"><div class="cs-val" id="cs-gf">—</div><div class="cs-lbl">GF</div></div>
           <div class="cs"><div class="cs-val" id="cs-gd">—</div><div class="cs-lbl">GD</div></div>
         </div>
-        <div class="card-brand"><span class="card-brand-inner">WWW.GOATFCBD.COM</span></div>
+      </div>
+      <div class="card-brand">
+        <span class="card-brand-inner">WWW.GOATFCBD.COM</span>
       </div>
     </div>
   </div>
@@ -291,6 +307,9 @@ td{font-size:11px;padding:6px 4px}
 <script>
 const L="https://opensheet.elk.sh/1DSPKPaU1ZQYbFM4iYbE1VXgDAXU-FCT7--QhYJsNf1M/Leaderboard%20Goat%20FC";
 const M="https://opensheet.elk.sh/1DSPKPaU1ZQYbFM4iYbE1VXgDAXU-FCT7--QhYJsNf1M/CLUB%20MEMBERS";
+
+const CARD_W = 320;
+const CARD_PHOTO_H = 240;
 
 let currentType="monthly";
 let timer=null;
@@ -360,19 +379,18 @@ async function loadData(t){
   }
 }
 
-/* Draw bottom-fade via canvas — no CSS ::after so no black-line artefact */
+/* Draw bottom-fade via canvas at exact pixel size */
 function drawFade(){
-  const wrap=document.getElementById("photo-wrap");
-  const cnv=document.getElementById("fade-canvas");
-  const w=wrap.offsetWidth, h=wrap.offsetHeight;
-  cnv.width=w; cnv.height=h;
-  const ctx=cnv.getContext("2d");
-  ctx.clearRect(0,0,w,h);
-  const grad=ctx.createLinearGradient(0,h*0.45,0,h);
-  grad.addColorStop(0,"rgba(6,14,31,0)");
-  grad.addColorStop(1,"rgba(6,14,31,1)");
-  ctx.fillStyle=grad;
-  ctx.fillRect(0,0,w,h);
+  const cnv = document.getElementById("fade-canvas");
+  cnv.width  = CARD_W;
+  cnv.height = CARD_PHOTO_H;
+  const ctx  = cnv.getContext("2d");
+  ctx.clearRect(0, 0, CARD_W, CARD_PHOTO_H);
+  const grad = ctx.createLinearGradient(0, CARD_PHOTO_H * 0.45, 0, CARD_PHOTO_H);
+  grad.addColorStop(0, "rgba(6,14,31,0)");
+  grad.addColorStop(1, "rgba(6,14,31,1)");
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, CARD_W, CARD_PHOTO_H);
 }
 
 function openCard(id){
@@ -409,8 +427,7 @@ function openCard(id){
   document.getElementById("modal").classList.add("show");
   document.body.style.overflow="hidden";
 
-  // Redraw fade after layout settles
-  requestAnimationFrame(()=>{requestAnimationFrame(drawFade);});
+  requestAnimationFrame(()=>{ requestAnimationFrame(drawFade); });
 }
 
 function closeModalDirect(){
@@ -420,46 +437,53 @@ function closeModalDirect(){
 function closeModal(e){if(e.target===document.getElementById("modal")) closeModalDirect();}
 document.addEventListener("keydown",e=>{if(e.key==="Escape") closeModalDirect();});
 
-/* ── DOWNLOAD — captures exactly what is visible ── */
-document.getElementById("dl-btn").addEventListener("click",function(){
-  const SCALE=3;
-  const RADIUS=16;
-  const target=document.getElementById("card-capture");
+/* ── DOWNLOAD — captures exactly #card-capture at its real pixel size ── */
+document.getElementById("dl-btn").addEventListener("click", function(){
+  const SCALE = 3;
+  const RADIUS = 16;
+  const target = document.getElementById("card-capture");
 
-  // Redraw fade canvas at current size before capture
+  // Redraw fade at exact canvas pixel size before capture
   drawFade();
 
   requestAnimationFrame(()=>{
-    html2canvas(target,{
-      backgroundColor:"#060e1f",
-      scale:SCALE,
-      useCORS:true,
-      allowTaint:true,
-      logging:false,
-      removeContainer:true,
-      width:target.offsetWidth,
-      height:target.offsetHeight,
-      windowWidth:target.offsetWidth,
-      windowHeight:target.offsetHeight
-    }).then(canvas=>{
-      // Clip to rounded rect
-      const out=document.createElement("canvas");
-      out.width=canvas.width;
-      out.height=canvas.height;
-      const ctx=out.getContext("2d");
-      const w=out.width,h=out.height,r=RADIUS*SCALE;
-      ctx.beginPath();
-      ctx.moveTo(r,0);ctx.lineTo(w-r,0);ctx.arcTo(w,0,w,r,r);
-      ctx.lineTo(w,h-r);ctx.arcTo(w,h,w-r,h,r);
-      ctx.lineTo(r,h);ctx.arcTo(0,h,0,h-r,r);
-      ctx.lineTo(0,r);ctx.arcTo(0,0,r,0,r);
-      ctx.closePath();ctx.clip();
-      ctx.drawImage(canvas,0,0);
+    const captureW = CARD_W;
+    const captureH = target.scrollHeight; // real full height
 
-      const name=document.getElementById("card-name").textContent.replace(/\s+/g,"_");
-      const a=document.createElement("a");
-      a.download="GOATFC_RankCard_"+name+".png";
-      a.href=out.toDataURL("image/png");
+    html2canvas(target, {
+      backgroundColor: "#060e1f",
+      scale: SCALE,
+      useCORS: true,
+      allowTaint: true,
+      logging: false,
+      removeContainer: true,
+      width: captureW,
+      height: captureH,
+      windowWidth: captureW,
+      windowHeight: captureH,
+      x: 0,
+      y: 0,
+      scrollX: 0,
+      scrollY: 0
+    }).then(canvas => {
+      // Clip to rounded rect
+      const out = document.createElement("canvas");
+      out.width  = captureW * SCALE;
+      out.height = captureH * SCALE;
+      const ctx = out.getContext("2d");
+      const w = out.width, h = out.height, r = RADIUS * SCALE;
+      ctx.beginPath();
+      ctx.moveTo(r,0); ctx.lineTo(w-r,0); ctx.arcTo(w,0,w,r,r);
+      ctx.lineTo(w,h-r); ctx.arcTo(w,h,w-r,h,r);
+      ctx.lineTo(r,h); ctx.arcTo(0,h,0,h-r,r);
+      ctx.lineTo(0,r); ctx.arcTo(0,0,r,0,r);
+      ctx.closePath(); ctx.clip();
+      ctx.drawImage(canvas, 0, 0);
+
+      const name = document.getElementById("card-name").textContent.replace(/\s+/g,"_");
+      const a = document.createElement("a");
+      a.download = "GOATFC_RankCard_" + name + ".png";
+      a.href = out.toDataURL("image/png");
       a.click();
     });
   });

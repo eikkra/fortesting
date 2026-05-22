@@ -1,1087 +1,404 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>About — GOAT FC</title>
-<meta name="description" content="GOAT FC is a competitive eFootball Esports club with rank systems, friendly matches, tournaments, and Club vs Club."/>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<title>PLAYER RANK SYSTEM – GOAT FC</title>
+<link rel="icon" type="image/png" href="https://i.imgur.com/LY3Bb9m.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 <style>
-:root{
-  --bg:#04060f;
-  --bg2:#080c18;
-  --bg3:#0d1120;
-  --bg4:#121726;
-  --border:rgba(0,255,180,0.08);
-  --border2:rgba(0,255,180,0.18);
-  --border3:rgba(0,255,180,0.3);
-  --neon:#00FFB4;
-  --neon2:#00D4FF;
-  --neon3:#7B2FFF;
-  --neon-dim:rgba(0,255,180,0.1);
-  --neon-dim2:rgba(0,212,255,0.1);
-  --gold:#FFD166;
-  --red:#FF4655;
-  --orange:#FF6B35;
-  --white:#EEF2FF;
-  --muted:rgba(238,242,255,0.5);
-  --muted2:rgba(238,242,255,0.28);
-  --muted3:rgba(238,242,255,0.15);
-  --ff-hud:'Orbitron',sans-serif;
-  --ff-ui:'Rajdhani',sans-serif;
-  --ff-mono:'JetBrains Mono',monospace;
-  --ease:cubic-bezier(0.16,1,0.3,1);
-  --ease2:cubic-bezier(0.34,1.56,0.64,1);
-  --glow:0 0 20px rgba(0,255,180,0.3),0 0 60px rgba(0,255,180,0.1);
-  --glow2:0 0 20px rgba(0,212,255,0.3),0 0 60px rgba(0,212,255,0.1);
-  --shadow:0 8px 32px rgba(0,0,0,0.6);
-}
-
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+--c:#00f5ff;
+--g:#00ff88;
+--p:#bf5fff;
+--bg:#020817;
+--bg2:#0b1120;
+--gold:#ffd700;
+--silver:#c0c0c0;
+--bronze:#cd7f32;
+--row:rgba(255,255,255,0.03);
+--border:rgba(255,255,255,0.07);
+--font-head:'Orbitron',sans-serif;
+--font-body:'Rajdhani',sans-serif;
+}
+
 html{scroll-behavior:smooth}
+
 body{
-  background:var(--bg);
-  color:var(--white);
-  font-family:var(--ff-ui);
-  font-size:16px;
-  line-height:1.7;
-  overflow-x:hidden;
-  -webkit-font-smoothing:antialiased;
-}
-a{color:inherit;text-decoration:none}
-ul{list-style:none}
-
-/* text justify globally */
-p, .oc-desc, .rule-body p, .info-card p, .story-body p, .req-item, .join-box p {
-  text-align:justify;
+background:var(--bg);
+color:#fff;
+font-family:var(--font-body);
+min-height:100vh;
+overflow-x:hidden;
 }
 
-::-webkit-scrollbar{width:3px}
-::-webkit-scrollbar-track{background:var(--bg)}
-::-webkit-scrollbar-thumb{background:linear-gradient(var(--neon),var(--neon2));border-radius:2px}
-
+/* ── RGB scanline bg ── */
 body::before{
-  content:'';position:fixed;inset:0;
-  background-image:
-    linear-gradient(rgba(0,255,180,0.018) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(0,255,180,0.018) 1px,transparent 1px);
-  background-size:50px 50px;
-  pointer-events:none;z-index:0;
+content:'';
+position:fixed;inset:0;
+background:
+repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,245,255,0.012) 2px,rgba(0,245,255,0.012) 4px);
+pointer-events:none;
+z-index:0;
 }
 
-.orb{
-  position:fixed;border-radius:50%;
-  pointer-events:none;z-index:0;filter:blur(80px);
-  animation:orbFloat 8s ease-in-out infinite;
+/* ── TOPBAR ── */
+.topbar{
+position:sticky;top:0;z-index:9999;
+height:46px;padding:0 16px;
+display:flex;align-items:center;justify-content:space-between;
+background:rgba(2,8,23,.92);
+backdrop-filter:blur(16px);
+border-bottom:1px solid rgba(0,245,255,.15);
+text-decoration:none;
 }
-.orb1{width:400px;height:400px;background:radial-gradient(circle,rgba(0,255,180,0.06) 0%,transparent 70%);top:-100px;right:-100px;animation-delay:0s;}
-.orb2{width:300px;height:300px;background:radial-gradient(circle,rgba(0,212,255,0.05) 0%,transparent 70%);bottom:10%;left:-80px;animation-delay:-3s;}
-.orb3{width:250px;height:250px;background:radial-gradient(circle,rgba(123,47,255,0.04) 0%,transparent 70%);top:40%;right:5%;animation-delay:-5s;}
-@keyframes orbFloat{0%,100%{transform:translate(0,0)}33%{transform:translate(20px,-30px)}66%{transform:translate(-15px,20px)}}
+.topbar::after{
+content:'';
+position:absolute;bottom:0;left:0;right:0;height:1px;
+background:linear-gradient(90deg,transparent,var(--c),var(--g),var(--p),transparent);
+animation:scanbar 3s linear infinite;
+}
+@keyframes scanbar{
+0%{opacity:.5}50%{opacity:1}100%{opacity:.5}
+}
+.topbar-left{display:flex;align-items:center;gap:9px}
+.topbar-logo{width:26px;filter:drop-shadow(0 0 6px var(--c))}
+.topbar-text{
+font-family:var(--font-head);font-size:12px;font-weight:700;letter-spacing:2px;
+background:linear-gradient(90deg,var(--c),var(--g));
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.topbar-right{
+width:28px;height:28px;display:flex;align-items:center;justify-content:center;
+border-radius:50%;border:1px solid rgba(0,245,255,.3);
+color:var(--c);font-size:12px;
+background:rgba(0,245,255,.07);
+transition:box-shadow .2s,transform .2s;
+}
+.topbar-right:hover{transform:scale(1.1);box-shadow:0 0 14px rgba(0,245,255,.5)}
 
-/* ═══ HEADER ═══ */
-#header{
-  position:fixed;top:0;left:0;right:0;z-index:900;
-  height:58px;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 clamp(1rem,4vw,2.5rem);
-  background:rgba(4,6,15,0.85);
-  backdrop-filter:blur(20px);
-  border-bottom:1px solid var(--border);
-}
-
-/* LEFT: logo only */
-.nav-left{display:flex;align-items:center;gap:16px}
-.nav-logo{
-  display:flex;align-items:center;gap:10px;
-  font-family:var(--ff-hud);font-size:1rem;font-weight:900;
-  letter-spacing:0.1em;
-  /* single neon color for GOAT FC */
-  color:var(--neon);
-  text-shadow:0 0 14px rgba(0,255,180,0.6);
-}
-.logo-icon{
-  width:34px;height:34px;
-  background:linear-gradient(135deg,var(--neon-dim),rgba(0,212,255,0.1));
-  border:1px solid var(--border2);
-  border-radius:6px;
-  display:flex;align-items:center;justify-content:center;
-  overflow:hidden;
-  box-shadow:0 0 10px rgba(0,255,180,0.15);
-  flex-shrink:0;
-}
-.logo-icon img{
-  width:100%;height:100%;
-  object-fit:cover;border-radius:5px;
+/* ── WRAPPER ── */
+.wrapper{
+position:relative;z-index:1;
+max-width:920px;margin:0 auto;padding:0 12px 32px;
 }
 
-/* RIGHT: home btn + lang + mobile toggle — home always visible */
-.nav-right{display:flex;align-items:center;gap:12px}
-.nav-home-btn{
-  display:flex;align-items:center;gap:6px;
-  font-family:var(--ff-mono);font-size:0.62rem;
-  letter-spacing:0.1em;text-transform:uppercase;
-  color:var(--muted2);
-  padding:5px 10px;
-  border:1px solid var(--border);
-  border-radius:4px;
-  background:transparent;
-  transition:all 0.2s;cursor:pointer;
-  text-decoration:none;
+/* ── TITLE ── */
+.title-block{
+padding:18px 0 6px;
+text-align:center;
 }
-.nav-home-btn:hover{color:var(--neon);border-color:var(--border2);background:var(--neon-dim)}
-.nav-home-btn i{font-size:0.7rem}
-/* Always show home button on both pc and mobile */
-.nav-home-btn .btn-label{display:inline}
-
-.lang-wrap{display:flex;gap:4px;align-items:center}
-.lang-btn{
-  font-family:var(--ff-mono);font-size:0.6rem;
-  letter-spacing:0.06em;text-transform:uppercase;
-  padding:4px 9px;border-radius:3px;
-  border:1px solid var(--border);
-  background:transparent;color:var(--muted2);
-  cursor:pointer;transition:all 0.18s;
+.title-block h1{
+font-family:var(--font-head);
+font-size:clamp(16px,4vw,26px);
+font-weight:900;
+letter-spacing:4px;
+text-transform:uppercase;
+background:linear-gradient(90deg,var(--c),var(--g),var(--p),var(--c));
+background-size:300%;
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+animation:titleShift 4s linear infinite;
 }
-.lang-btn.active,.lang-btn:hover{
-  background:var(--neon);color:var(--bg);
-  border-color:var(--neon);
-  box-shadow:0 0 10px rgba(0,255,180,0.4);
+@keyframes titleShift{
+0%{background-position:0%}100%{background-position:300%}
 }
-.nav-toggle{
-  display:none;background:none;border:1px solid var(--border);
-  border-radius:4px;padding:6px 10px;cursor:pointer;
-  font-size:1rem;color:var(--neon);transition:all 0.2s;
-}
-.nav-toggle:hover{background:var(--neon-dim);border-color:var(--border2)}
-
-@media(max-width:680px){
-  .nav-toggle{display:block}
-  .lang-wrap{display:none}
-  /* keep home btn visible, just hide text label on very small */
-  .nav-home-btn .btn-label{display:none}
+.subtitle{
+font-size:11px;letter-spacing:2px;opacity:.45;margin-top:4px;
+font-family:var(--font-body);
 }
 
-/* ═══ MOBILE DRAWER ═══ */
-.mobile-drawer{
-  position:fixed;top:58px;left:0;right:0;z-index:800;
-  background:rgba(4,6,15,0.97);
-  border-bottom:1px solid var(--border);
-  padding:1rem clamp(1rem,4vw,2.5rem);
-  display:none;flex-direction:column;gap:0;
-  backdrop-filter:blur(20px);
+/* ── TABS ── */
+.tabs{
+display:flex;gap:8px;justify-content:center;
+margin:12px 0 10px;
 }
-.mobile-drawer.open{display:flex}
-.mobile-drawer .nav-link{
-  font-family:var(--ff-mono);font-size:0.72rem;
-  letter-spacing:0.1em;text-transform:uppercase;
-  color:var(--muted);padding:10px 0;
-  border-bottom:1px solid var(--border);
-  display:flex;align-items:center;gap:10px;
-  transition:color 0.2s;
+.tab-btn{
+padding:7px 22px;border:1px solid rgba(255,255,255,.1);
+border-radius:4px;
+background:rgba(255,255,255,.04);
+color:rgba(255,255,255,.5);
+font-family:var(--font-head);font-size:11px;font-weight:700;letter-spacing:2px;
+cursor:pointer;transition:all .2s;
+clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);
 }
-.mobile-drawer .nav-link:last-of-type{border-bottom:none}
-.mobile-drawer .nav-link:hover{color:var(--neon)}
-.mobile-drawer .lang-wrap{display:flex;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
-
-/* ═══ HERO ═══ */
-#hero{
-  min-height:100svh;
-  display:flex;flex-direction:column;justify-content:center;
-  padding:calc(58px + clamp(3rem,7vw,4.5rem)) clamp(1rem,5vw,3rem) clamp(3rem,6vw,4rem);
-  position:relative;overflow:hidden;z-index:1;
-}
-.hero-eyebrow{
-  font-family:var(--ff-mono);font-size:0.65rem;
-  letter-spacing:0.2em;text-transform:uppercase;
-  color:var(--neon2);margin-bottom:1rem;
-  display:inline-flex;align-items:center;gap:10px;
-  opacity:0;animation:fadeUp 0.6s var(--ease) 0.1s forwards;
-}
-.hero-eyebrow::before{content:'';width:24px;height:1px;background:var(--neon2)}
-.hero-eyebrow::after{
-  content:'';width:6px;height:6px;
-  border-radius:50%;background:var(--neon2);
-  animation:pulse 2s ease-in-out infinite;
-}
-@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(0,212,255,0.4)}50%{opacity:0.6;box-shadow:0 0 0 6px rgba(0,212,255,0)}}
-
-.hero-title{
-  font-family:var(--ff-hud);
-  font-size:clamp(2.8rem,9vw,6rem);
-  font-weight:900;line-height:0.92;
-  letter-spacing:0.02em;
-  margin-bottom:0.4rem;
-  opacity:0;animation:fadeUp 0.7s var(--ease) 0.2s forwards;
-}
-.hero-title .accent{
-  color:var(--neon);
-  text-shadow:var(--glow);
-  display:block;
-  background:linear-gradient(135deg,var(--neon) 0%,var(--neon2) 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-}
-.hero-title .sub-word{
-  font-size:clamp(0.85rem,2.2vw,1.2rem);
-  font-weight:400;
-  background:linear-gradient(135deg,var(--muted) 0%,var(--muted2) 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  letter-spacing:0.18em;
-  display:block;margin-top:0.5rem;
+.tab-btn:hover{color:#fff;border-color:var(--c);box-shadow:0 0 10px rgba(0,245,255,.2)}
+.tab-btn.active{
+background:linear-gradient(90deg,rgba(0,245,255,.2),rgba(0,255,136,.15));
+border-color:var(--c);color:var(--c);
+box-shadow:0 0 16px rgba(0,245,255,.25);
 }
 
-.hero-desc{
-  max-width:560px;
-  font-size:clamp(0.88rem,1.8vw,0.97rem);
-  color:var(--muted);
-  line-height:1.85;margin-top:1.5rem;margin-bottom:2rem;
-  opacity:0;animation:fadeUp 0.7s var(--ease) 0.35s forwards;
-  text-align:justify;
+/* ── STATS ROW ── */
+.stats{
+display:flex;justify-content:center;gap:8px;flex-wrap:wrap;
+margin-bottom:12px;
+}
+.stat{
+padding:6px 14px;border-radius:4px;
+background:rgba(0,245,255,.06);
+border:1px solid rgba(0,245,255,.12);
+font-size:12px;font-family:var(--font-body);font-weight:600;letter-spacing:1px;
+color:rgba(255,255,255,.7);
+}
+.stat span{color:var(--c);font-weight:700}
+
+/* ── TABLE CARD ── */
+.card{
+background:rgba(11,17,32,.8);
+border:1px solid var(--border);
+border-radius:8px;
+overflow:hidden;
+position:relative;
+}
+.card::before{
+content:'';
+position:absolute;inset:0;border-radius:8px;
+background:linear-gradient(135deg,rgba(0,245,255,.04),transparent 60%);
+pointer-events:none;
 }
 
-/* STATS — always 6 columns on PC, wrap on mobile */
-.hero-stats{
-  display:grid;
-  grid-template-columns:repeat(6,1fr);
-  gap:clamp(0.5rem,1.5vw,0.85rem);
-  max-width:900px;
-  opacity:0;animation:fadeUp 0.7s var(--ease) 0.5s forwards;
-}
-@media(max-width:700px){
-  .hero-stats{grid-template-columns:repeat(2,1fr)}
-}
-.hstat{
-  background:var(--bg2);
-  border:1px solid var(--border);
-  border-radius:6px;
-  padding:clamp(0.65rem,1.5vw,0.9rem) clamp(0.65rem,1.5vw,1rem);
-  display:flex;flex-direction:column;gap:4px;
-  position:relative;overflow:hidden;
-  transition:border-color 0.2s,transform 0.2s var(--ease);
-}
-.hstat::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,var(--neon),transparent);
-  opacity:0;transition:opacity 0.2s;
-}
-.hstat:hover{border-color:var(--border2);transform:translateY(-2px)}
-.hstat:hover::before{opacity:1}
-.hstat-num{
-  font-family:var(--ff-hud);font-size:clamp(1.1rem,2.5vw,1.6rem);
-  font-weight:700;color:var(--neon);line-height:1;
-}
-.hstat-num.blue{color:var(--neon2)}
-.hstat-num.gold{color:var(--gold)}
-.hstat-num.purple{color:#b084ff}
-.hstat-num.loading{
-  font-size:0.85rem;color:var(--muted2);
-  font-family:var(--ff-mono);font-weight:400;
-}
-.hstat-lbl{
-  font-family:var(--ff-mono);font-size:0.52rem;
-  letter-spacing:0.1em;text-transform:uppercase;
-  color:var(--muted2);line-height:1.3;
+/* ── RGB corner accent ── */
+.card::after{
+content:'';
+position:absolute;top:0;left:0;right:0;height:2px;
+background:linear-gradient(90deg,var(--c),var(--g),var(--p),var(--c));
+background-size:300%;
+animation:titleShift 3s linear infinite;
+border-radius:8px 8px 0 0;
 }
 
-/* CTA — single row on mobile, small buttons */
-.hero-cta{
-  margin-top:2rem;
-  opacity:0;animation:fadeUp 0.7s var(--ease) 0.65s forwards;
-  display:flex;gap:10px;flex-wrap:nowrap;align-items:center;
-}
-.btn-neon{
-  display:inline-flex;align-items:center;gap:7px;
-  background:linear-gradient(135deg,var(--neon),#00e0a0);
-  color:var(--bg);
-  font-family:var(--ff-hud);font-size:0.65rem;
-  font-weight:700;letter-spacing:0.08em;text-transform:uppercase;
-  padding:10px 20px;border-radius:4px;border:none;cursor:pointer;
-  box-shadow:0 0 24px rgba(0,255,180,0.35);
-  transition:all 0.2s;text-decoration:none;
-  white-space:nowrap;
-}
-.btn-neon:hover{transform:translateY(-2px);box-shadow:0 4px 30px rgba(0,255,180,0.5)}
-.btn-ghost{
-  display:inline-flex;align-items:center;gap:7px;
-  background:transparent;color:var(--neon);
-  font-family:var(--ff-hud);font-size:0.65rem;
-  font-weight:700;letter-spacing:0.08em;text-transform:uppercase;
-  padding:9px 20px;border-radius:4px;
-  border:1px solid var(--border2);
-  cursor:pointer;text-decoration:none;
-  transition:all 0.2s;white-space:nowrap;
-}
-.btn-ghost:hover{border-color:var(--neon);background:var(--neon-dim);transform:translateY(-2px)}
+.tbl-wrap{overflow-x:auto}
 
-@media(max-width:480px){
-  .btn-neon,.btn-ghost{padding:9px 14px;font-size:0.6rem}
-  .hero-cta{gap:8px}
+table{
+width:100%;border-collapse:collapse;
+}
+thead{background:rgba(0,0,0,.3)}
+th{
+font-family:var(--font-head);font-size:11px;letter-spacing:1.5px;
+color:var(--c);padding:10px 8px;
+border-bottom:1px solid rgba(0,245,255,.15);
+white-space:nowrap;
+}
+th:first-child{width:42px;text-align:center}
+th:nth-child(2){text-align:left}
+td{
+padding:8px 8px;
+font-size:13px;font-weight:500;
+border-bottom:1px solid var(--border);
+}
+td:first-child{text-align:center}
+
+/* ── RANK BADGE ── */
+.rank-num{
+display:inline-flex;align-items:center;justify-content:center;
+width:24px;height:24px;border-radius:4px;
+font-family:var(--font-head);font-size:11px;font-weight:700;
+background:rgba(255,255,255,.07);
+clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);
 }
 
-/* ═══ SECTIONS ═══ */
-.section{
-  padding:clamp(3rem,8vw,5.5rem) clamp(1rem,5vw,3rem);
-  position:relative;z-index:1;
+/* ── PLAYER CELL ── */
+.player-name{
+text-align:left;
+display:flex;flex-direction:column;gap:1px;
 }
-.section-inner{max-width:1100px;margin:0 auto}
-.s-tag{
-  font-family:var(--ff-mono);font-size:0.6rem;
-  letter-spacing:0.2em;text-transform:uppercase;
-  color:var(--neon);margin-bottom:0.5rem;
-  display:inline-flex;align-items:center;gap:8px;
-}
-.s-tag i{font-size:0.7rem}
-.s-title{
-  font-family:var(--ff-hud);
-  font-size:clamp(1.4rem,3.5vw,2.2rem);
-  font-weight:700;line-height:1.1;
-  letter-spacing:0.03em;
-  margin-bottom:1.5rem;
-}
-.s-title span{color:var(--neon)}
-hr.divider{
-  border:none;height:1px;
-  background:linear-gradient(90deg,transparent,var(--border),var(--border2),var(--border),transparent);
-  margin:0;
-}
+.p-name{font-weight:600;font-size:13px;line-height:1.2}
+.p-id{font-size:9px;opacity:.4;letter-spacing:.5px;font-family:var(--font-head)}
 
-/* ═══ STORY ═══ */
-#story{background:var(--bg)}
-.story-layout{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:clamp(2rem,5vw,4rem);
-  align-items:start;
+/* ── ROW STYLES ── */
+tbody tr{
+background:var(--row);
+transition:background .15s;
 }
-.story-body p{
-  font-size:clamp(0.87rem,1.7vw,0.95rem);
-  color:var(--muted);font-weight:400;
-  line-height:1.9;margin-bottom:0.9rem;
-  text-align:justify;
-}
-.story-body p:last-child{margin-bottom:0}
-.story-body strong{color:var(--white);font-weight:600}
-.info-card{
-  background:var(--bg2);
-  border:1px solid var(--border);
-  border-left:2px solid var(--neon);
-  border-radius:6px;
-  padding:clamp(1.25rem,3vw,2rem);
-  position:relative;overflow:hidden;
-}
-.info-card::before{
-  content:'';
-  position:absolute;top:0;right:0;
-  width:150px;height:150px;
-  background:radial-gradient(circle,rgba(0,255,180,0.05) 0%,transparent 70%);
-  pointer-events:none;
-}
-.ic-tag{font-family:var(--ff-mono);font-size:0.58rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--neon);margin-bottom:0.4rem;}
-.ic-val{font-family:var(--ff-hud);font-size:clamp(1rem,2.5vw,1.4rem);font-weight:700;color:var(--white);margin-bottom:0.8rem;line-height:1.2;}
-.info-card p{font-size:0.83rem;color:var(--muted);font-weight:400;line-height:1.75;text-align:justify;}
-.quote-wrap{margin-top:1.1rem;padding-top:1.1rem;border-top:1px solid var(--border);}
-.quote-wrap blockquote{font-size:clamp(0.88rem,1.8vw,1rem);font-weight:600;font-style:italic;color:var(--neon);line-height:1.6;}
-.tag-row{display:flex;flex-wrap:wrap;gap:7px;margin-top:1rem;}
-.tag{
-  font-family:var(--ff-mono);font-size:0.58rem;
-  letter-spacing:0.08em;text-transform:uppercase;
-  padding:4px 10px;border-radius:3px;
-  border:1px solid rgba(0,255,180,0.15);
-  color:var(--muted);background:rgba(0,255,180,0.05);
-  transition:all 0.2s;
-}
-.tag:hover{border-color:rgba(0,255,180,0.3);color:var(--neon)}
-@media(max-width:700px){.story-layout{grid-template-columns:1fr}}
+tbody tr:hover{background:rgba(0,245,255,.05)}
 
-/* ═══ WHAT WE OFFER ═══ */
-#offer{background:var(--bg2);position:relative;}
-#offer::before{
-  content:'';position:absolute;inset:0;
-  background:radial-gradient(ellipse at 80% 20%,rgba(0,212,255,0.025) 0%,transparent 60%);
-  pointer-events:none;
+/* RANK 1 */
+.rank1{
+background:linear-gradient(90deg,rgba(255,215,0,.18),rgba(255,215,0,.04),transparent) !important;
+border-left:3px solid var(--gold) !important;
 }
-.offer-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
-  gap:clamp(0.65rem,1.8vw,1rem);
-  margin-top:1.5rem;
-}
-.offer-card{
-  background:var(--bg3);
-  border:1px solid var(--border);
-  border-radius:6px;
-  padding:clamp(0.85rem,2vw,1.2rem);
-  position:relative;overflow:hidden;
-  transition:border-color 0.3s,transform 0.3s var(--ease),box-shadow 0.3s;
-  cursor:default;
-}
-.offer-card::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:2px;
-  background:linear-gradient(90deg,var(--neon),var(--neon2),transparent);
-  opacity:0;transition:opacity 0.3s;
-}
-.offer-card:hover{border-color:rgba(0,255,180,0.25);transform:translateY(-5px);box-shadow:0 12px 40px rgba(0,255,180,0.07);}
-.offer-card:hover::before{opacity:1}
+.rank1 .rank-num{background:rgba(255,215,0,.3);color:var(--gold);box-shadow:0 0 10px rgba(255,215,0,.5)}
 
-/* Icon + Title in one row */
-.oc-header{
-  display:flex;align-items:center;gap:0.7rem;
-  margin-bottom:0.55rem;
+/* RANK 2 */
+.rank2{
+background:linear-gradient(90deg,rgba(192,192,192,.15),rgba(192,192,192,.03),transparent) !important;
+border-left:3px solid var(--silver) !important;
 }
-.oc-icon{
-  width:32px;height:32px;border-radius:7px;
-  background:linear-gradient(135deg,var(--neon-dim),var(--neon-dim2));
-  border:1px solid var(--border2);
-  display:flex;align-items:center;justify-content:center;
-  font-size:0.85rem;flex-shrink:0;color:var(--neon);
-  transition:all 0.2s;
-}
-.offer-card:hover .oc-icon{background:linear-gradient(135deg,rgba(0,255,180,0.2),rgba(0,212,255,0.15));box-shadow:0 0 12px rgba(0,255,180,0.2);}
-.oc-title{font-family:var(--ff-hud);font-size:0.72rem;font-weight:700;color:var(--white);letter-spacing:0.03em;line-height:1.3;}
-.oc-desc{font-size:0.78rem;color:var(--muted);font-weight:400;line-height:1.65;text-align:justify;}
+.rank2 .rank-num{background:rgba(192,192,192,.25);color:var(--silver);box-shadow:0 0 8px rgba(192,192,192,.4)}
 
-/* ═══ RULES ═══ */
-#rules{background:var(--bg)}
-.rules-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
-  gap:clamp(0.65rem,1.8vw,1rem);
-  margin-top:1.5rem;
+/* RANK 3 */
+.rank3{
+background:linear-gradient(90deg,rgba(205,127,50,.18),rgba(205,127,50,.04),transparent) !important;
+border-left:3px solid var(--bronze) !important;
 }
-.rule-card{
-  background:var(--bg2);border:1px solid var(--border);border-radius:6px;
-  padding:clamp(1rem,2.5vw,1.4rem);
-  display:flex;gap:1rem;align-items:flex-start;
-  transition:border-color 0.2s,background 0.2s,transform 0.2s var(--ease);
-}
-.rule-card:hover{border-color:rgba(0,255,180,0.22);background:var(--bg3);transform:translateX(4px);}
-.rule-num{
-  font-family:var(--ff-hud);font-size:1.6rem;font-weight:900;
-  background:linear-gradient(135deg,rgba(0,255,180,0.25),rgba(0,212,255,0.15));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  line-height:1;flex-shrink:0;min-width:30px;
-}
-.rule-body h4{font-family:var(--ff-ui);font-size:0.9rem;font-weight:700;color:var(--white);margin-bottom:0.3rem;display:flex;align-items:center;gap:8px;}
-.rule-body h4 i{font-size:0.85rem;color:var(--neon);opacity:0.8}
-.rule-body p{font-size:0.8rem;color:var(--muted);font-weight:400;line-height:1.65;text-align:justify;}
+.rank3 .rank-num{background:rgba(205,127,50,.25);color:var(--bronze);box-shadow:0 0 8px rgba(205,127,50,.4)}
 
-/* ═══ RECRUITMENT ═══ */
-#recruit{background:var(--bg2)}
-.recruit-layout{
-  display:grid;
-  grid-template-columns:1.1fr 1fr;
-  gap:clamp(2rem,5vw,4rem);
-  align-items:start;
-}
-.req-list{display:flex;flex-direction:column;gap:0.5rem;margin-top:0.5rem}
-.req-item{
-  display:flex;align-items:flex-start;gap:0.9rem;
-  padding:0.85rem 1rem;
-  background:var(--bg3);border:1px solid var(--border);border-radius:5px;
-  font-size:0.83rem;color:var(--muted);font-weight:400;line-height:1.6;
-  transition:border-color 0.2s,transform 0.2s var(--ease);
-}
-.req-item:hover{border-color:rgba(0,255,180,0.22);transform:translateX(4px)}
-.req-n{font-family:var(--ff-hud);font-size:0.65rem;font-weight:700;color:var(--neon);min-width:22px;flex-shrink:0;margin-top:2px;}
-.join-box{
-  background:var(--bg3);border:1px solid var(--border);border-radius:6px;
-  padding:clamp(1.2rem,2.5vw,1.8rem);
-  position:sticky;top:70px;overflow:hidden;
-}
-.join-box::before{
-  content:'';position:absolute;top:-40px;right:-40px;
-  width:160px;height:160px;border-radius:50%;
-  background:radial-gradient(circle,rgba(0,255,180,0.06) 0%,transparent 70%);
-  pointer-events:none;
-}
-.join-box h3{font-family:var(--ff-hud);font-size:clamp(1rem,2.2vw,1.35rem);font-weight:700;margin-bottom:0.5rem;color:var(--white);letter-spacing:0.03em;}
-.join-box p{font-size:0.8rem;color:var(--muted);line-height:1.7;margin-bottom:1rem;text-align:justify;}
-.free-badge{
-  display:inline-flex;align-items:center;gap:7px;
-  font-family:var(--ff-mono);font-size:0.58rem;
-  letter-spacing:0.1em;text-transform:uppercase;
-  padding:4px 10px;border-radius:3px;
-  background:rgba(0,255,180,0.08);border:1px solid rgba(0,255,180,0.2);
-  color:var(--neon);margin-bottom:0.85rem;display:block;width:fit-content;
-}
-.free-badge i{font-size:0.65rem}
+/* TOP 10 */
+.top10{border-left:3px solid rgba(0,245,255,.35) !important}
+.top10 .rank-num{color:var(--c)}
 
-/* Contact button — small, direct messenger link */
-.btn-contact{
-  display:inline-flex;align-items:center;gap:7px;
-  background:linear-gradient(135deg,#1877F2,#1255b3);
-  color:#fff;
-  font-family:var(--ff-hud);font-size:0.62rem;
-  font-weight:700;letter-spacing:0.07em;text-transform:uppercase;
-  padding:9px 16px;border-radius:4px;border:none;cursor:pointer;
-  box-shadow:0 0 18px rgba(24,119,242,0.3);
-  transition:all 0.2s;text-decoration:none;
-  white-space:nowrap;
-}
-.btn-contact:hover{transform:translateY(-2px);box-shadow:0 4px 24px rgba(24,119,242,0.5)}
+/* ── CROWN / ICONS ── */
+.crown{font-size:10px;margin-right:3px}
 
-@media(max-width:700px){
-  .recruit-layout{grid-template-columns:1fr}
-  .join-box{position:static}
+/* ── LOADING ── */
+#loading{
+padding:40px 20px;
+font-family:var(--font-head);font-size:12px;letter-spacing:3px;
+color:var(--c);opacity:.7;
+animation:pulse 1s ease-in-out infinite alternate;
 }
+@keyframes pulse{from{opacity:.3}to{opacity:.8}}
 
-/* ═══ CONNECT ═══ */
-#connect{background:var(--bg)}
-.connect-grid{
-  display:grid;
-  grid-template-columns:repeat(6,1fr);
-  gap:clamp(0.5rem,1.5vw,0.85rem);
-  margin-top:1.5rem;
+/* ── MOBILE ── */
+@media(max-width:600px){
+.wrapper{padding:0 8px 24px}
+th,td{padding:7px 5px;font-size:11px}
+.p-name{font-size:11px}
+.topbar{height:42px;padding:0 10px}
 }
-@media(max-width:900px){.connect-grid{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:500px){.connect-grid{grid-template-columns:repeat(2,1fr)}}
-.soc-card{
-  display:flex;flex-direction:column;align-items:center;gap:0.7rem;
-  padding:1.2rem 1rem;background:var(--bg2);border:1px solid var(--border);border-radius:6px;
-  text-decoration:none;color:var(--white);
-  transition:border-color 0.2s,transform 0.25s var(--ease),box-shadow 0.25s;
-  position:relative;overflow:hidden;text-align:center;
-}
-.soc-card::before{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;opacity:0;transition:opacity 0.2s;}
-.soc-card:hover{transform:translateY(-4px);box-shadow:0 8px 30px rgba(0,0,0,0.4);}
-.soc-card:hover::before{opacity:1}
-.soc-ico{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;transition:transform 0.2s var(--ease2),box-shadow 0.2s;}
-.soc-card:hover .soc-ico{transform:scale(1.1)}
-.ico-fb{background:rgba(24,119,242,0.15);color:#4A90FF}
-.ico-fb2{background:rgba(24,119,242,0.12);color:#4A90FF}
-.ico-dc{background:rgba(88,101,242,0.15);color:#7289Da}
-.ico-tg{background:rgba(0,136,204,0.15);color:#29B6F6}
-.ico-web{background:var(--neon-dim);color:var(--neon)}
-.soc-card.card-fb:hover{border-color:rgba(74,144,255,0.3);box-shadow:0 8px 30px rgba(74,144,255,0.1)}
-.soc-card.card-dc:hover{border-color:rgba(114,137,218,0.3);box-shadow:0 8px 30px rgba(114,137,218,0.1)}
-.soc-card.card-tg:hover{border-color:rgba(41,182,246,0.3);box-shadow:0 8px 30px rgba(41,182,246,0.1)}
-.soc-card.card-web:hover{border-color:var(--border2);box-shadow:0 8px 30px rgba(0,255,180,0.08)}
-.soc-card.card-fb::before{background:linear-gradient(90deg,rgba(74,144,255,0.6),rgba(74,144,255,0.2))}
-.soc-card.card-dc::before{background:linear-gradient(90deg,rgba(114,137,218,0.6),rgba(114,137,218,0.2))}
-.soc-card.card-tg::before{background:linear-gradient(90deg,rgba(41,182,246,0.6),rgba(41,182,246,0.2))}
-.soc-card.card-web::before{background:linear-gradient(90deg,var(--neon),transparent)}
-.soc-info{display:flex;flex-direction:column;gap:2px;align-items:center}
-.soc-name{font-family:var(--ff-ui);font-size:0.78rem;font-weight:600}
-.soc-handle{font-family:var(--ff-mono);font-size:0.56rem;color:var(--muted2)}
-
-/* ═══ FOOTER ═══ */
-footer{
-  border-top:1px solid var(--border);
-  padding:clamp(2rem,5vw,3rem) clamp(1rem,5vw,3rem);
-  display:flex;flex-direction:column;align-items:center;
-  gap:0.65rem;text-align:center;position:relative;z-index:1;
-  background:var(--bg2);
-}
-.footer-logo{
-  font-family:var(--ff-hud);font-size:1.4rem;font-weight:900;
-  letter-spacing:0.1em;
-  /* single unified color — neon green */
-  color:var(--neon);
-  text-shadow:0 0 16px rgba(0,255,180,0.5);
-}
-footer p{font-size:0.73rem;color:var(--muted2);font-family:var(--ff-mono)}
-.footer-tags{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:0.2rem 0}
-
-/* ═══ ANIMATIONS ═══ */
-@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
-@keyframes scanline{0%{transform:translateY(-100%)}100%{transform:translateY(100vh)}}
-@keyframes borderGlow{0%,100%{box-shadow:0 0 8px rgba(0,255,180,0.2)}50%{box-shadow:0 0 20px rgba(0,255,180,0.4),0 0 40px rgba(0,212,255,0.15)}}
-
-.scanline{
-  position:fixed;top:0;left:0;right:0;height:2px;
-  background:linear-gradient(90deg,transparent,rgba(0,255,180,0.12),transparent);
-  animation:scanline 6s linear infinite;
-  pointer-events:none;z-index:0;
-}
-.reveal{opacity:0;transform:translateY(20px);transition:opacity 0.6s var(--ease),transform 0.6s var(--ease);}
-.reveal.in-view{opacity:1;transform:translateY(0)}
-.hstat.live{animation:borderGlow 3s ease-in-out infinite;}
 </style>
 </head>
 <body>
 
-<div class="orb orb1"></div>
-<div class="orb orb2"></div>
-<div class="orb orb3"></div>
-<div class="scanline"></div>
+<a href="https://goatfcbd.com" class="topbar">
+<div class="topbar-left">
+<img src="https://i.imgur.com/LY3Bb9m.png" class="topbar-logo">
+<span class="topbar-text">GOAT FC</span>
+</div>
+<div class="topbar-right"><i class="fa-solid fa-house"></i></div>
+</a>
 
-<!-- ══ HEADER ══ -->
-<header id="header">
-  <div class="nav-left">
-    <a href="https://goatfcbd.com" class="nav-logo" style="text-decoration:none;">
-      <div class="logo-icon">
-        <img src="https://i.imgur.com/SjIUSlC.png" alt="GOAT FC Logo" onerror="this.style.display='none';this.parentNode.innerHTML='🐐'"/>
-      </div>
-      <span>GOAT FC</span>
-    </a>
+<div class="wrapper">
+
+  <div class="title-block">
+    <h1>PLAYER RANK SYSTEM</h1>
+    <div class="subtitle">GOAT FC · LIVE COMPETITIVE RANKING</div>
   </div>
-  <div class="nav-right">
-    <!-- Home button always visible on both PC and mobile -->
-    <a href="https://goatfcbd.com" class="nav-home-btn">
-      <i class="fa-solid fa-house"></i>
-      <span class="btn-label" data-i18n="nav_home">Home</span>
-    </a>
-    <div class="lang-wrap" id="langWrap">
-      <button class="lang-btn active" data-lang="en" onclick="setLang('en')">EN</button>
-      <button class="lang-btn" data-lang="bn" onclick="setLang('bn')">বাং</button>
-    </div>
-    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
-      <i class="fa-solid fa-bars"></i>
-    </button>
+
+  <div class="tabs">
+    <button class="tab-btn active" id="monthlyBtn" onclick="loadData('monthly')">MONTHLY</button>
+    <button class="tab-btn" id="overallBtn" onclick="loadData('overall')">OVERALL</button>
   </div>
-</header>
 
-<!-- MOBILE DRAWER -->
-<nav class="mobile-drawer" id="mobileDrawer">
-  <a href="#story" class="nav-link"><i class="fa-solid fa-book-open"></i><span data-i18n="nav_story">Story</span></a>
-  <a href="#offer" class="nav-link"><i class="fa-solid fa-shield-halved"></i><span data-i18n="nav_offer">Club</span></a>
-  <a href="#rules" class="nav-link"><i class="fa-solid fa-scroll"></i><span data-i18n="nav_rules">Rules</span></a>
-  <a href="#recruit" class="nav-link"><i class="fa-solid fa-user-plus"></i><span data-i18n="nav_join">Join</span></a>
-  <a href="#connect" class="nav-link"><i class="fa-solid fa-satellite-dish"></i><span data-i18n="nav_connect">Connect</span></a>
-  <div class="lang-wrap">
-    <button class="lang-btn active" data-lang="en" onclick="setLang('en');closeMobile()">EN</button>
-    <button class="lang-btn" data-lang="bn" onclick="setLang('bn');closeMobile()">বাং</button>
+  <div class="stats">
+    <div class="stat">Matches <span id="m">—</span></div>
+    <div class="stat">Goals <span id="g">—</span></div>
+    <div class="stat">Goals/Match <span id="pm">—</span></div>
   </div>
-</nav>
 
-<!-- ══ HERO ══ -->
-<section id="hero">
-  <p class="hero-eyebrow" data-i18n="hero_eye">eFootball Base Esports Club</p>
-  <h1 class="hero-title">
-    <span class="accent">GOAT FC</span>
-    <span class="sub-word" data-i18n="hero_sub_word">The Digital Football Family</span>
-  </h1>
-  <p class="hero-desc" data-i18n="hero_desc">A competitive eFootball club where rank systems, friendly matches, online tournaments and Club vs Club bring players together. Built on skill, respect, and passion for the game.</p>
-
-  <div class="hero-stats" id="heroStats">
-    <div class="hstat">
-      <span class="hstat-num">100+</span>
-      <span class="hstat-lbl" data-i18n="st_members">Active Members</span>
-    </div>
-    <div class="hstat">
-      <span class="hstat-num blue">16+</span>
-      <span class="hstat-lbl" data-i18n="st_mgmt">Management Team</span>
-    </div>
-    <div class="hstat live" id="st-overall-pl">
-      <span class="hstat-num loading" id="val-overall-pl">—</span>
-      <span class="hstat-lbl" data-i18n="st_overall_pl">Overall Matches</span>
-    </div>
-    <div class="hstat live" id="st-monthly-pl">
-      <span class="hstat-num loading blue" id="val-monthly-pl">—</span>
-      <span class="hstat-lbl" data-i18n="st_monthly_pl">Monthly Matches</span>
-    </div>
-    <div class="hstat live" id="st-total-gf">
-      <span class="hstat-num loading gold" id="val-total-gf">—</span>
-      <span class="hstat-lbl" data-i18n="st_total_gf">Overall Goals</span>
-    </div>
-    <div class="hstat live" id="st-monthly-gf">
-      <span class="hstat-num loading purple" id="val-monthly-gf">—</span>
-      <span class="hstat-lbl" data-i18n="st_monthly_gf">Monthly Goals</span>
+  <div class="card">
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th style="text-align:left">PLAYER</th>
+            <th>PTS</th>
+            <th>M</th>
+            <th>WIN%</th>
+            <th>GF</th>
+            <th>GA</th>
+            <th>GD</th>
+          </tr>
+        </thead>
+        <tbody id="table">
+          <tr><td colspan="8" id="loading">LOADING DATA...</td></tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
-  <div class="hero-cta">
-    <a href="#recruit" class="btn-neon"><i class="fa-solid fa-bolt"></i><span data-i18n="hero_cta1">Join the Club</span></a>
-    <a href="#story" class="btn-ghost"><i class="fa-solid fa-arrow-down"></i><span data-i18n="hero_cta2">Our Story</span></a>
-  </div>
-</section>
-
-<hr class="divider"/>
-
-<!-- ══ STORY ══ -->
-<section id="story" class="section">
-  <div class="section-inner">
-    <p class="s-tag"><i class="fa-solid fa-flag"></i><span data-i18n="story_tag">Origin</span></p>
-    <h2 class="s-title reveal" data-i18n="story_title">Who We <span>Are</span></h2>
-    <div class="story-layout">
-      <div class="story-body reveal">
-        <p data-i18n="s_p1">GOAT FC started on <strong>December 28, 2023</strong> — born from a group of passionate eFootball players in Bangladesh who believed gaming communities should be more than casual lobbies.</p>
-        <p data-i18n="s_p2">We built a structured club with a <strong>rank system, friendly matches, and regular online tournaments</strong>. Every member gets an official Club ID card and a place in a real ranking ecosystem.</p>
-        <p data-i18n="s_p3">We also compete in <strong>Club vs Club (CVC) matches</strong> — taking on other eFootball communities to represent GOAT FC's name. Today we are <strong>100+ active members</strong> strong, backed by a 16-member management team.</p>
-        <p data-i18n="s_p4">We don't just play matches. We build <strong>character, community, and competitive spirit</strong> — one game at a time.</p>
-        <div class="tag-row">
-          <span class="tag" data-i18n="tag1">Rank System</span>
-          <span class="tag" data-i18n="tag2">Friendly Matches</span>
-          <span class="tag" data-i18n="tag3">Online Tournaments</span>
-          <span class="tag" data-i18n="tag4">Club vs Club</span>
-          <span class="tag" data-i18n="tag5">eFootball</span>
-        </div>
-      </div>
-      <div class="reveal">
-        <div class="info-card">
-          <p class="ic-tag" data-i18n="ic_tag">Club Founded</p>
-          <p class="ic-val">December 28, 2023</p>
-          <p data-i18n="ic_desc">From a free-to-play passion project to a fully structured competitive eFootball &amp; Esports club — with dedicated leadership for tournaments, CVC battles, discipline, and player development.</p>
-          <div class="quote-wrap">
-            <blockquote data-i18n="ic_quote">"To build a respectful, competitive, and skill-based eFootball family."</blockquote>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<hr class="divider"/>
-
-<!-- ══ WHAT WE OFFER ══ -->
-<section id="offer" class="section">
-  <div class="section-inner">
-    <p class="s-tag"><i class="fa-solid fa-star"></i><span data-i18n="offer_tag">Features</span></p>
-    <h2 class="s-title reveal" data-i18n="offer_title">What <span>We Offer</span></h2>
-    <div class="offer-grid">
-      <div class="offer-card reveal">
-        <div class="oc-header"><div class="oc-icon"><i class="fa-solid fa-id-card"></i></div><p class="oc-title" data-i18n="oc1h">Official Club ID Card</p></div>
-        <p class="oc-desc" data-i18n="oc1p">Every member receives an official digital Club ID card — your identity in the GOAT FC ecosystem.</p>
-      </div>
-      <div class="offer-card reveal">
-        <div class="oc-header"><div class="oc-icon"><i class="fa-solid fa-ranking-star"></i></div><p class="oc-title" data-i18n="oc2h">Own Ranking System</p></div>
-        <p class="oc-desc" data-i18n="oc2p">A dedicated internal ranking system tracks your progress and standing within the club across all match types.</p>
-      </div>
-      <div class="offer-card reveal">
-        <div class="oc-header"><div class="oc-icon"><i class="fa-solid fa-handshake"></i></div><p class="oc-title" data-i18n="oc3h">Friendly Matches</p></div>
-        <p class="oc-desc" data-i18n="oc3p">Regular friendly matches against club members and external players — a space to learn, experiment, and enjoy.</p>
-      </div>
-      <div class="offer-card reveal">
-        <div class="oc-header"><div class="oc-icon"><i class="fa-solid fa-trophy"></i></div><p class="oc-title" data-i18n="oc4h">Friendly Tournaments</p></div>
-        <p class="oc-desc" data-i18n="oc4p">Internal tournaments where members go head-to-head in a structured bracket for glory and ranking points.</p>
-      </div>
-      <div class="offer-card reveal">
-        <div class="oc-header"><div class="oc-icon"><i class="fa-solid fa-coins"></i></div><p class="oc-title" data-i18n="oc5h">Own CP System</p></div>
-        <p class="oc-desc" data-i18n="oc5p">Our unique Club Points (CP) system rewards performance, participation, and sportsmanship every season.</p>
-      </div>
-      <div class="offer-card reveal">
-        <div class="oc-header"><div class="oc-icon"><i class="fa-solid fa-gamepad"></i></div><p class="oc-title" data-i18n="oc6h">Game Support</p></div>
-        <p class="oc-desc" data-i18n="oc6p">Get help from experienced players — tactics, formations, squad building, and general gameplay guidance.</p>
-      </div>
-      <div class="offer-card reveal">
-        <div class="oc-header"><div class="oc-icon"><i class="fa-solid fa-shield-halved"></i></div><p class="oc-title" data-i18n="oc7h">Club vs Club Tournament</p></div>
-        <p class="oc-desc" data-i18n="oc7p">GOAT FC battles other eFootball communities in Club vs Club competitions — representing our flag on the biggest stage.</p>
-      </div>
-      <div class="offer-card reveal">
-        <div class="oc-header"><div class="oc-icon"><i class="fa-solid fa-ban"></i></div><p class="oc-title" data-i18n="oc8h">Zero Entry Fee</p></div>
-        <p class="oc-desc" data-i18n="oc8p">Joining GOAT FC is completely free. No hidden costs — just show up, play, and grow with the team.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<hr class="divider"/>
-
-<!-- ══ RULES ══ -->
-<section id="rules" class="section">
-  <div class="section-inner">
-    <p class="s-tag"><i class="fa-solid fa-gavel"></i><span data-i18n="rules_tag">Code of Conduct</span></p>
-    <h2 class="s-title reveal" data-i18n="rules_title">Club <span>Rules</span></h2>
-    <div class="rules-grid">
-      <div class="rule-card reveal"><span class="rule-num">01</span><div class="rule-body"><h4><i class="fa-solid fa-users"></i><span data-i18n="r1h">Respect Everyone</span></h4><p data-i18n="r1p">Senior or junior — every member deserves equal respect. Toxic language, insults, or disrespectful behavior will not be tolerated.</p></div></div>
-      <div class="rule-card reveal"><span class="rule-num">02</span><div class="rule-body"><h4><i class="fa-solid fa-mobile-screen-button"></i><span data-i18n="r2h">Device Doesn't Define Skill</span></h4><p data-i18n="r2p">Gameplay varies by phone, device, and network. Never look down on a player based on their hardware or connection.</p></div></div>
-      <div class="rule-card reveal"><span class="rule-num">03</span><div class="rule-body"><h4><i class="fa-solid fa-graduation-cap"></i><span data-i18n="r3h">Friendlies Are for Learning</span></h4><p data-i18n="r3p">Winning isn't everything in friendly matches. Play to learn and enjoy. Avoid excessive clearing or purely negative play.</p></div></div>
-      <div class="rule-card reveal"><span class="rule-num">04</span><div class="rule-body"><h4><i class="fa-solid fa-envelope"></i><span data-i18n="r4h">Keep Feedback Private</span></h4><p data-i18n="r4p">After matches, encourage your teammates. If you have criticism, take it to inbox — not the group. Public shaming is banned.</p></div></div>
-      <div class="rule-card reveal"><span class="rule-num">05</span><div class="rule-body"><h4><i class="fa-solid fa-scale-balanced"></i><span data-i18n="r5h">Admin Decision is Final</span></h4><p data-i18n="r5p">Any disputes go to the admin team. Their ruling is final and binding for all club members.</p></div></div>
-      <div class="rule-card reveal"><span class="rule-num">06</span><div class="rule-body"><h4><i class="fa-solid fa-triangle-exclamation"></i><span data-i18n="r6h">Discipline System</span></h4><p data-i18n="r6p">Rule violations result in yellow card (warning), red card (suspension), or permanent removal. No political or offensive content allowed.</p></div></div>
-    </div>
-  </div>
-</section>
-
-<hr class="divider"/>
-
-<!-- ══ RECRUITMENT ══ -->
-<section id="recruit" class="section">
-  <div class="section-inner">
-    <p class="s-tag"><i class="fa-solid fa-user-plus"></i><span data-i18n="rec_tag">Open Trials</span></p>
-    <h2 class="s-title reveal" data-i18n="rec_title">Join <span>GOAT FC</span></h2>
-    <div class="recruit-layout">
-      <div>
-        <p style="font-size:0.86rem;color:var(--muted);margin-bottom:1.1rem" data-i18n="rec_intro">Requirements to join the GOAT FC roster:</p>
-        <div class="req-list">
-          <div class="req-item reveal"><span class="req-n">01</span><span data-i18n="rq1">Ranked in eFootball Division 1, 2, or 3</span></div>
-          <div class="req-item reveal"><span class="req-n">02</span><span data-i18n="rq2">Good quality Game ID, device &amp; stable internet connection</span></div>
-          <div class="req-item reveal"><span class="req-n">03</span><span data-i18n="rq3">Regular and consistently active player</span></div>
-          <div class="req-item reveal"><span class="req-n">04</span><span data-i18n="rq4">Must be a Free Agent or willing to transfer clubs</span></div>
-          <div class="req-item reveal"><span class="req-n">05</span><span data-i18n="rq5">Friendly attitude and respectful mindset — non-negotiable</span></div>
-          <div class="req-item reveal"><span class="req-n">06</span><span data-i18n="rq6">Trial Match required (exceptions made for exceptional players)</span></div>
-        </div>
-      </div>
-      <div class="join-box reveal">
-        <span class="free-badge"><i class="fa-solid fa-circle-check"></i><span data-i18n="jb_free">No Entry Fee</span></span>
-        <h3 data-i18n="jb_h">Ready to Play?</h3>
-        <p data-i18n="jb_p">No fees. No barriers. Just passion, discipline, and the drive to grow alongside a team that has your back. Message us to get started.</p>
-        <!-- Direct Messenger link -->
-        <a href="https://m.me/goatfc.official" class="btn-contact" target="_blank" rel="noopener noreferrer">
-          <i class="fa-brands fa-facebook-messenger"></i><span data-i18n="jb_btn">Contact With Us</span>
-        </a>
-        <div style="margin-top:0.85rem;padding-top:0.85rem;border-top:1px solid var(--border)">
-          <p style="font-size:0.7rem;color:var(--muted2);font-family:var(--ff-mono);text-align:left" data-i18n="jb_note">Alternatively reach us via Discord or Telegram</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<hr class="divider"/>
-
-<!-- ══ CONNECT ══ -->
-<section id="connect" class="section">
-  <div class="section-inner">
-    <p class="s-tag"><i class="fa-solid fa-satellite-dish"></i><span data-i18n="con_tag">Platforms</span></p>
-    <h2 class="s-title reveal" data-i18n="con_title">Find Us <span>Online</span></h2>
-    <div class="connect-grid">
-      <a href="https://www.facebook.com/goatfc.official" class="soc-card card-fb reveal" target="_blank" rel="noopener noreferrer">
-        <div class="soc-ico ico-fb"><i class="fa-brands fa-facebook-f"></i></div>
-        <div class="soc-info"><span class="soc-name" data-i18n="sc1n">Facebook Page</span><span class="soc-handle">goatfc.official</span></div>
-      </a>
-      <a href="https://www.facebook.com/groups/goatfc.official" class="soc-card card-fb reveal" target="_blank" rel="noopener noreferrer">
-        <div class="soc-ico ico-fb2"><i class="fa-solid fa-users"></i></div>
-        <div class="soc-info"><span class="soc-name" data-i18n="sc2n">Facebook Group</span><span class="soc-handle">groups/goatfc</span></div>
-      </a>
-      <a href="https://discord.gg/vfvtFK8A" class="soc-card card-dc reveal" target="_blank" rel="noopener noreferrer">
-        <div class="soc-ico ico-dc"><i class="fa-brands fa-discord"></i></div>
-        <div class="soc-info"><span class="soc-name">Discord</span><span class="soc-handle">discord.gg/vfvtFK8A</span></div>
-      </a>
-      <a href="https://t.me/+24t3hcLTQSQ3NTY1" class="soc-card card-tg reveal" target="_blank" rel="noopener noreferrer">
-        <div class="soc-ico ico-tg"><i class="fa-brands fa-telegram"></i></div>
-        <div class="soc-info"><span class="soc-name">Telegram</span><span class="soc-handle">GOAT FC Channel</span></div>
-      </a>
-      <a href="https://goatfcbd.com/eliteboard/" class="soc-card card-web reveal" target="_blank" rel="noopener noreferrer">
-        <div class="soc-ico ico-web"><i class="fa-solid fa-ranking-star"></i></div>
-        <div class="soc-info"><span class="soc-name" data-i18n="sc5n">Elite Board</span><span class="soc-handle">goatfcbd.com</span></div>
-      </a>
-      <a href="https://goatfcbd.com" class="soc-card card-web reveal" target="_blank" rel="noopener noreferrer">
-        <div class="soc-ico ico-web"><i class="fa-solid fa-globe"></i></div>
-        <div class="soc-info"><span class="soc-name" data-i18n="sc6n">Official Website</span><span class="soc-handle">goatfcbd.com</span></div>
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- ══ FOOTER ══ -->
-<footer>
-  <div class="footer-logo">GOAT FC</div>
-  <div class="footer-tags">
-    <span class="tag" data-i18n="ft1">eFootball Club</span>
-    <span class="tag" data-i18n="ft2">Bangladesh</span>
-    <span class="tag" data-i18n="ft3">Est. 2023</span>
-  </div>
-  <p data-i18n="ft_copy">© 2025 GOAT FC · Est. December 28, 2023 · All Rights Reserved</p>
-</footer>
+</div>
 
 <script>
-/* ══ MOBILE NAV ══ */
-const navToggle = document.getElementById('navToggle');
-const mobileDrawer = document.getElementById('mobileDrawer');
-navToggle.addEventListener('click', () => {
-  mobileDrawer.classList.toggle('open');
-  const open = mobileDrawer.classList.contains('open');
-  navToggle.innerHTML = open ? '<i class="fa-solid fa-xmark"></i>' : '<i class="fa-solid fa-bars"></i>';
-});
-mobileDrawer.querySelectorAll('.nav-link').forEach(l => l.addEventListener('click', closeMobile));
-function closeMobile(){
-  mobileDrawer.classList.remove('open');
-  navToggle.innerHTML = '<i class="fa-solid fa-bars"></i>';
+const L="https://opensheet.elk.sh/1DSPKPaU1ZQYbFM4iYbE1VXgDAXU-FCT7--QhYJsNf1M/Leaderboard%20Goat%20FC";
+const M="https://opensheet.elk.sh/1DSPKPaU1ZQYbFM4iYbE1VXgDAXU-FCT7--QhYJsNf1M/CLUB%20MEMBERS";
+
+let currentType="monthly";
+let timer=null;
+let memberMap=null;
+
+/* Fetch member map once */
+async function getMembers(){
+  if(memberMap) return memberMap;
+  const d=await fetch(M).then(r=>r.json());
+  memberMap={};
+  d.forEach(x=>{if(x["Club ID Number"]) memberMap[x["Club ID Number"].trim()]=x["Full Name"]});
+  return memberMap;
 }
 
-/* ══ SCROLL REVEAL ══ */
-const revObs = new IntersectionObserver((entries) => {
-  entries.forEach((e, i) => {
-    if (e.isIntersecting) {
-      setTimeout(() => e.target.classList.add('in-view'), i * 60);
-      revObs.unobserve(e.target);
-    }
-  });
-}, { threshold: 0.1 });
-document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+async function loadData(t){
+  currentType=t;
+  document.getElementById("overallBtn").classList.toggle("active",t==="overall");
+  document.getElementById("monthlyBtn").classList.toggle("active",t==="monthly");
 
-/* ══ CSV STATS (match counts ÷ 2 for 1v1) ══ */
-const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1033046915&single=true&output=csv';
+  try{
+    const [ld,map]=await Promise.all([
+      fetch(L).then(r=>r.json()),
+      getMembers()
+    ]);
 
-function parseCSV(text) {
-  const lines = text.trim().split('\n');
-  const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
-  const rows = [];
-  for (let i = 1; i < lines.length; i++) {
-    const cols = lines[i].split(',').map(c => c.trim().replace(/"/g, ''));
-    if (cols.length >= headers.length) {
-      const obj = {};
-      headers.forEach((h, idx) => obj[h] = cols[idx] || '0');
-      rows.push(obj);
-    }
-  }
-  return rows;
-}
+    /* Filter only club members */
+    let rows=ld.filter(r=>r["Club_ID"] && map[r["Club_ID"].trim()]);
 
-function animateCount(el, target) {
-  const num = parseInt(target) || 0;
-  if (isNaN(num)) { el.textContent = target; return; }
-  let start = 0;
-  const step = Math.ceil(num / (1200 / 16));
-  const timer = setInterval(() => {
-    start = Math.min(start + step, num);
-    el.textContent = start.toLocaleString();
-    if (start >= num) clearInterval(timer);
-  }, 16);
-}
-
-async function fetchStats() {
-  try {
-    const res = await fetch(CSV_URL);
-    const text = await res.text();
-    const rows = parseCSV(text);
-
-    let overallPL = 0, monthlyPL = 0, totalGF = 0, monthlyGF = 0;
-    rows.forEach(r => {
-      overallPL += parseInt(r['Overall_PL']) || 0;
-      monthlyPL += parseInt(r['Monthly_PL']) || 0;
-      totalGF   += parseInt(r['Total GF'])   || 0;
-      monthlyGF += parseInt(r['Montly GF'])  || 0;
+    /* Sort */
+    rows.sort((a,b)=>{
+      const am=+(t==="overall"?a["Overall_PL"]:a["Monthly_PL"])||0;
+      const bm=+(t==="overall"?b["Overall_PL"]:b["Monthly_PL"])||0;
+      if(am===0&&bm>0) return 1;
+      if(bm===0&&am>0) return -1;
+      const ap=+(t==="overall"?a["Overall_Point"]:a["Monthly_Point"])||0;
+      const bp=+(t==="overall"?b["Overall_Point"]:b["Monthly_Point"])||0;
+      if(bp!==ap) return bp-ap;
+      const aw=+(t==="overall"?a["Overall_Win%"]:a["Monthly_Win%"])||0;
+      const bw=+(t==="overall"?b["Overall_Win%"]:b["Monthly_Win%"])||0;
+      if(bw!==aw) return bw-aw;
+      const agd=+(t==="overall"?a["Total GD"]:a["Montly GD"])||0;
+      const bgd=+(t==="overall"?b["Total GD"]:b["Montly GD"])||0;
+      return bgd-agd;
     });
 
-    /* divide match counts by 2 — each 1v1 match is counted for both players */
-    const els = {
-      'val-overall-pl': Math.floor(overallPL / 2),
-      'val-monthly-pl': Math.floor(monthlyPL / 2),
-      'val-total-gf':   totalGF,
-      'val-monthly-gf': monthlyGF,
-    };
+    /* Build HTML */
+    let html="";
+    let totalM=0,totalG=0;
 
-    Object.entries(els).forEach(([id, val]) => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      el.classList.remove('loading');
-      el.style.fontSize = '';
-      animateCount(el, val);
+    rows.forEach((r,i)=>{
+      const cls=i===0?"rank1":i===1?"rank2":i===2?"rank3":i<10?"top10":"";
+      const icon=i===0?"👑":i===1?"🥈":i===2?"🥉":"";
+      const m=+(t==="overall"?r["Overall_PL"]:r["Monthly_PL"])||0;
+      const gf=+(t==="overall"?r["Total GF"]:r["Montly GF"])||0;
+      const pt=+(t==="overall"?r["Overall_Point"]:r["Monthly_Point"])||0;
+      const win=((+(t==="overall"?r["Overall_Win%"]:r["Monthly_Win%"])||0)*100).toFixed(1);
+      const ga=t==="overall"?r["Total GA"]:r["Montly GA"];
+      const gd=t==="overall"?r["Total GD"]:r["Montly GD"];
+      totalM+=m; totalG+=gf;
+      html+=`<tr class="${cls}">
+<td><span class="rank-num">${i+1}</span></td>
+<td><div class="player-name"><span class="p-name">${icon?`<span class="crown">${icon}</span>`:""}${map[r["Club_ID"].trim()]}</span><span class="p-id">${r["Club_ID"]}</span></div></td>
+<td>${pt}</td><td>${m}</td><td>${win}%</td><td>${gf}</td><td>${ga||0}</td><td>${gd||0}</td>
+</tr>`;
     });
 
-  } catch (err) {
-    console.warn('CSV fetch failed:', err);
-    ['val-overall-pl','val-monthly-pl','val-total-gf','val-monthly-gf'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.textContent = 'N/A';
-    });
+    document.getElementById("table").innerHTML=html||`<tr><td colspan="8" style="padding:20px;opacity:.5;font-size:12px;letter-spacing:2px;font-family:var(--font-head)">NO DATA</td></tr>`;
+    const match=Math.round(totalM/2);
+    document.getElementById("m").textContent=match;
+    document.getElementById("g").textContent=totalG;
+    document.getElementById("pm").textContent=match?(totalG/match).toFixed(2):"0";
+
+  }catch(e){
+    document.getElementById("table").innerHTML=`<tr><td colspan="8" style="padding:20px;color:#ff4466;font-size:11px;letter-spacing:1px;font-family:var(--font-head)">ERROR LOADING DATA</td></tr>`;
   }
 }
-fetchStats();
 
-/* ══ TRANSLATIONS ══ */
-const T = {
-  en: {
-    nav_home:"Home", nav_story:"Story", nav_offer:"Club", nav_rules:"Rules", nav_join:"Join", nav_connect:"Connect",
-    hero_eye:"eFootball Base Esports Club",
-    hero_sub_word:"The Digital Football Family",
-    hero_desc:"A competitive eFootball club where rank systems, friendly matches, online tournaments and Club vs Club bring players together. Built on skill, respect, and passion for the game.",
-    st_members:"Active Members", st_mgmt:"Management Team",
-    st_overall_pl:"Overall Matches", st_monthly_pl:"Monthly Matches",
-    st_total_gf:"Overall Goals", st_monthly_gf:"Monthly Goals",
-    hero_cta1:"Join the Club", hero_cta2:"Our Story",
-    story_tag:"Origin", story_title:"Who We <span>Are</span>",
-    s_p1:"GOAT FC started on <strong>December 28, 2023</strong> — born from a group of passionate eFootball players in Bangladesh who believed gaming communities should be more than casual lobbies.",
-    s_p2:"We built a structured club with a <strong>rank system, friendly matches, and regular online tournaments</strong>. Every member gets an official Club ID card and a place in a real ranking ecosystem.",
-    s_p3:"We also compete in <strong>Club vs Club (CVC) matches</strong> — taking on other eFootball communities to represent GOAT FC's name. Today we are <strong>100+ active members</strong> strong, backed by a 16-member management team.",
-    s_p4:"We don't just play matches. We build <strong>character, community, and competitive spirit</strong> — one game at a time.",
-    tag1:"Rank System", tag2:"Friendly Matches", tag3:"Online Tournaments", tag4:"Club vs Club", tag5:"eFootball",
-    ic_tag:"Club Founded",
-    ic_desc:"From a free-to-play passion project to a fully structured competitive eFootball &amp; Esports club — with dedicated leadership for tournaments, CVC battles, discipline, and player development.",
-    ic_quote:'"To build a respectful, competitive, and skill-based eFootball family."',
-    offer_tag:"Features", offer_title:"What <span>We Offer</span>",
-    oc1h:"Official Club ID Card", oc1p:"Every member receives an official digital Club ID card — your identity in the GOAT FC ecosystem.",
-    oc2h:"Own Ranking System", oc2p:"A dedicated internal ranking system tracks your progress and standing across all match types.",
-    oc3h:"Friendly Matches", oc3p:"Regular friendly matches against club members and external players — learn, experiment, and enjoy.",
-    oc4h:"Friendly Tournaments", oc4p:"Internal tournaments where members go head-to-head in a structured bracket for glory and ranking points.",
-    oc5h:"Own CP System", oc5p:"Our unique Club Points (CP) system rewards performance, participation, and sportsmanship every season.",
-    oc6h:"Game Support", oc6p:"Get help from experienced players — tactics, formations, squad building, and general gameplay guidance.",
-    oc7h:"Club vs Club Tournament", oc7p:"GOAT FC battles other eFootball communities in Club vs Club competitions — representing our flag on the biggest stage.",
-    oc8h:"Zero Entry Fee", oc8p:"Joining GOAT FC is completely free. No hidden costs — just show up, play, and grow with the team.",
-    rules_tag:"Code of Conduct", rules_title:"Club <span>Rules</span>",
-    r1h:"Respect Everyone", r1p:"Senior or junior — every member deserves equal respect. Toxic language, insults, or disrespectful behavior will not be tolerated.",
-    r2h:"Device Doesn't Define Skill", r2p:"Gameplay varies by phone, device, and network. Never look down on a player based on their hardware or connection.",
-    r3h:"Friendlies Are for Learning", r3p:"Winning isn't everything in friendly matches. Play to learn and enjoy. Avoid excessive clearing or purely negative play.",
-    r4h:"Keep Feedback Private", r4p:"After matches, encourage your teammates. If you have criticism, take it to inbox — not the group. Public shaming is banned.",
-    r5h:"Admin Decision is Final", r5p:"Any disputes go to the admin team. Their ruling is final and binding for all club members.",
-    r6h:"Discipline System", r6p:"Rule violations result in yellow card (warning), red card (suspension), or permanent removal. No political or offensive content allowed.",
-    rec_tag:"Open Trials", rec_title:"Join <span>GOAT FC</span>",
-    rec_intro:"Requirements to join the GOAT FC roster:",
-    rq1:"Ranked in eFootball Division 1, 2, or 3",
-    rq2:"Good quality Game ID, device &amp; stable internet connection",
-    rq3:"Regular and consistently active player",
-    rq4:"Must be a Free Agent or willing to transfer clubs",
-    rq5:"Friendly attitude and respectful mindset — non-negotiable",
-    rq6:"Trial Match required (exceptions made for exceptional players)",
-    jb_free:"No Entry Fee", jb_h:"Ready to Play?",
-    jb_p:"No fees. No barriers. Just passion, discipline, and the drive to grow alongside a team that has your back. Message us to get started.",
-    jb_btn:"Contact With Us",
-    jb_note:"Alternatively reach us via Discord or Telegram",
-    con_tag:"Platforms", con_title:"Find Us <span>Online</span>",
-    sc1n:"Facebook Page", sc2n:"Facebook Group", sc5n:"Elite Board", sc6n:"Official Website",
-    ft1:"eFootball Club", ft2:"Bangladesh", ft3:"Est. 2023",
-    ft_copy:"© 2025 GOAT FC · Est. December 28, 2023 · All Rights Reserved",
-  },
-  bn: {
-    nav_home:"হোম", nav_story:"গল্প", nav_offer:"ক্লাব", nav_rules:"নিয়ম", nav_join:"যোগ দিন", nav_connect:"যোগাযোগ",
-    hero_eye:"eFootball ভিত্তিক Esports ক্লাব",
-    hero_sub_word:"ডিজিটাল ফুটবল পরিবার",
-    hero_desc:"একটি প্রতিযোগিতামূলক eFootball ক্লাব যেখানে র‍্যাঙ্ক সিস্টেম, ফ্রেন্ডলি ম্যাচ, অনলাইন টুর্নামেন্ট এবং Club vs Club খেলোয়াড়দের একত্রিত করে। দক্ষতা, সম্মান ও খেলার আবেগের উপর গড়া।",
-    st_members:"সক্রিয় সদস্য", st_mgmt:"ম্যানেজমেন্ট টিম",
-    st_overall_pl:"মোট ম্যাচ", st_monthly_pl:"মাসিক ম্যাচ",
-    st_total_gf:"মোট গোল", st_monthly_gf:"মাসিক গোল",
-    hero_cta1:"ক্লাবে যোগ দিন", hero_cta2:"আমাদের গল্প",
-    story_tag:"উৎপত্তি", story_title:"আমরা <span>কারা</span>",
-    s_p1:"GOAT FC শুরু হয়েছিল <strong>২৮ ডিসেম্বর ২০২৩</strong>-এ — বাংলাদেশের একদল আবেগী eFootball খেলোয়াড়ের হাত ধরে।",
-    s_p2:"আমরা একটি কাঠামোবদ্ধ ক্লাব তৈরি করেছি যেখানে <strong>র‍্যাঙ্ক সিস্টেম, ফ্রেন্ডলি ম্যাচ এবং নিয়মিত অনলাইন টুর্নামেন্ট</strong> রয়েছে।",
-    s_p3:"আমরা <strong>Club vs Club (CVC)</strong> ম্যাচেও অংশ নিই — অন্যান্য eFootball কমিউনিটির বিরুদ্ধে GOAT FC-এর প্রতিনিধিত্ব করতে। আজ আমরা <strong>১০০+ সক্রিয় সদস্য</strong> নিয়ে শক্তিশালী।",
-    s_p4:"আমরা শুধু ম্যাচ খেলি না। আমরা <strong>চরিত্র, সম্প্রদায় এবং প্রতিযোগিতামূলক মনোভাব</strong> গড়ে তুলি।",
-    tag1:"র‍্যাঙ্ক সিস্টেম", tag2:"ফ্রেন্ডলি ম্যাচ", tag3:"অনলাইন টুর্নামেন্ট", tag4:"ক্লাব বনাম ক্লাব", tag5:"eFootball",
-    ic_tag:"ক্লাব প্রতিষ্ঠিত",
-    ic_desc:"একটি ফ্রি-টু-প্লে আবেগের প্রকল্প থেকে টুর্নামেন্ট, CVC যুদ্ধ, শৃঙ্খলা ও খেলোয়াড় উন্নয়নের জন্য নিবেদিত একটি পূর্ণ কাঠামোবদ্ধ ক্লাব।",
-    ic_quote:'"একটি সম্মানজনক, প্রতিযোগিতামূলক ও দক্ষতা-ভিত্তিক eFootball পরিবার গড়ে তোলা।"',
-    offer_tag:"বৈশিষ্ট্য", offer_title:"আমরা কী <span>অফার করি</span>",
-    oc1h:"অফিশিয়াল ক্লাব আইডি কার্ড", oc1p:"প্রতিটি সদস্য একটি অফিশিয়াল ডিজিটাল ক্লাব আইডি কার্ড পায়।",
-    oc2h:"নিজস্ব র‍্যাঙ্কিং সিস্টেম", oc2p:"একটি নিবেদিত অভ্যন্তরীণ র‍্যাঙ্কিং সিস্টেম সমস্ত ম্যাচে আপনার অগ্রগতি ট্র্যাক করে।",
-    oc3h:"ফ্রেন্ডলি ম্যাচ", oc3p:"নিয়মিত ফ্রেন্ডলি ম্যাচ — শেখার ও উপভোগের জায়গা।",
-    oc4h:"ফ্রেন্ডলি টুর্নামেন্ট", oc4p:"অভ্যন্তরীণ টুর্নামেন্ট যেখানে সদস্যরা র‍্যাঙ্কিং পয়েন্টের জন্য প্রতিদ্বন্দ্বিতা করে।",
-    oc5h:"নিজস্ব CP সিস্টেম", oc5p:"আমাদের ক্লাব পয়েন্ট (CP) সিস্টেম পারফরম্যান্স, অংশগ্রহণ ও খেলাধুলার মনোভাবকে পুরস্কৃত করে।",
-    oc6h:"গেম সহায়তা", oc6p:"অভিজ্ঞ খেলোয়াড়দের কাছ থেকে কৌশল, ফর্মেশন ও গেমপ্লে গাইডেন্স পান।",
-    oc7h:"ক্লাব বনাম ক্লাব টুর্নামেন্ট", oc7p:"GOAT FC অন্যান্য eFootball কমিউনিটির বিরুদ্ধে CVC প্রতিযোগিতায় অংশ নেয়।",
-    oc8h:"শূন্য এন্ট্রি ফি", oc8p:"GOAT FC-তে যোগ দেওয়া সম্পূর্ণ বিনামূল্যে।",
-    rules_tag:"আচরণবিধি", rules_title:"ক্লাবের <span>নিয়ম</span>",
-    r1h:"সকলকে সম্মান করুন", r1p:"সিনিয়র বা জুনিয়র — প্রতিটি সদস্য সমান সম্মানের যোগ্য।",
-    r2h:"ডিভাইস দক্ষতা নির্ধারণ করে না", r2p:"ফোন, ডিভাইস ও নেটওয়ার্কভেদে গেমপ্লে ভিন্ন হয়।",
-    r3h:"ফ্রেন্ডলি মানে শেখা", r3p:"ফ্রেন্ডলি ম্যাচে জেতাই সব কিছু নয়। শিখতে ও উপভোগ করতে খেলুন।",
-    r4h:"মতামত ব্যক্তিগতভাবে দিন", r4p:"সমালোচনা ইনবক্সে পাঠান — গ্রুপে নয়।",
-    r5h:"অ্যাডমিনের সিদ্ধান্ত চূড়ান্ত", r5p:"যেকোনো বিবাদের সিদ্ধান্ত অ্যাডমিন টিমের — সকলের জন্য বাধ্যকর।",
-    r6h:"শৃঙ্খলা ব্যবস্থা", r6p:"নিয়ম লঙ্ঘনে হলুদ কার্ড, লাল কার্ড বা স্থায়ী অপসারণ।",
-    rec_tag:"ট্রায়াল খোলা", rec_title:"<span>GOAT FC</span>-তে যোগ দিন",
-    rec_intro:"GOAT FC রোস্টারে যোগ দেওয়ার শর্তাবলী:",
-    rq1:"eFootball ডিভিশন ১, ২ বা ৩-এ র‍্যাঙ্কড",
-    rq2:"ভালো মানের গেম আইডি, ডিভাইস ও স্থিতিশীল ইন্টারনেট",
-    rq3:"নিয়মিত ও সক্রিয় খেলোয়াড়",
-    rq4:"ফ্রি এজেন্ট অথবা ক্লাব পরিবর্তনে আগ্রহী",
-    rq5:"বন্ধুত্বপূর্ণ মনোভাব ও সম্মানজনক দৃষ্টিভঙ্গি — বাধ্যতামূলক",
-    rq6:"ট্রায়াল ম্যাচ দিতে হবে (বিশেষ ক্ষেত্রে শিথিলতা প্রযোজ্য)",
-    jb_free:"কোনো এন্ট্রি ফি নেই", jb_h:"খেলার জন্য প্রস্তুত?",
-    jb_p:"কোনো ফি নেই। কোনো বাধা নেই। শুধু আবেগ, শৃঙ্খলা এবং একটি দলের সাথে বিকশিত হওয়ার ইচ্ছা নিয়ে আসুন।",
-    jb_btn:"আমাদের সাথে যোগাযোগ করুন",
-    jb_note:"অথবা Discord বা Telegram-এ আমাদের সাথে যোগাযোগ করুন",
-    con_tag:"প্ল্যাটফর্ম", con_title:"অনলাইনে <span>আমাদের খুঁজুন</span>",
-    sc1n:"ফেসবুক পেজ", sc2n:"ফেসবুক গ্রুপ", sc5n:"এলিট বোর্ড", sc6n:"অফিশিয়াল ওয়েবসাইট",
-    ft1:"eFootball ক্লাব", ft2:"বাংলাদেশ", ft3:"প্রতিষ্ঠা ২০২৩",
-    ft_copy:"© ২০২৫ GOAT FC · প্রতিষ্ঠা ২৮ ডিসেম্বর ২০২৩ · সর্বস্বত্ব সংরক্ষিত",
-  }
-};
-
-let currentLang = 'en';
-function setLang(lang) {
-  const d = T[lang]; if (!d) return;
-  currentLang = lang;
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    const k = el.getAttribute('data-i18n');
-    if (d[k] !== undefined) el.innerHTML = d[k];
-  });
-  document.querySelectorAll('.lang-btn').forEach(b => {
-    b.classList.toggle('active', b.dataset.lang === lang);
-  });
+function startAutoRefresh(){
+  if(timer) clearInterval(timer);
+  timer=setInterval(()=>loadData(currentType),30000);
 }
+
+loadData("monthly");
+startAutoRefresh();
 </script>
 </body>
 </html>

@@ -1,496 +1,292 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>PLAYER RANK SYSTEM</title>
-<link rel="icon" type="image/png" href="https://i.imgur.com/LY3Bb9m.png">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GOAT FC ELITE BOARD</title>
+<link rel="icon" type="image/png" href="https://i.imgur.com/LY3Bb9m.png">
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
---c:#00f5ff;--g:#00ff88;--p:#bf5fff;
---bg:#020817;
---gold:#ffd700;--silver:#c0c0c0;--bronze:#cd7f32;
---row:rgba(255,255,255,0.03);--border:rgba(255,255,255,0.07);
---font-head:'Orbitron',sans-serif;--font-body:'Rajdhani',sans-serif;
---card-w:320px;
+  --c:#00f5ff;--g:#00ff88;--p:#bf5fff;--bg:#020817;
+  --gold:#ffd700;--border:rgba(255,255,255,0.07);
+  --fh:'Orbitron',sans-serif;--fb:'Rajdhani',sans-serif;
 }
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:#fff;font-family:var(--font-body);min-height:100vh;overflow-x:hidden;display:flex;flex-direction:column;}
-body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,245,255,0.012) 2px,rgba(0,245,255,0.012) 4px);pointer-events:none;z-index:0;}
+body{background:var(--bg);color:#fff;font-family:var(--fb);min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,245,255,0.01) 2px,rgba(0,245,255,0.01) 4px);pointer-events:none;z-index:0;}
 
-/* TOPBAR */
-.topbar{position:sticky;top:0;z-index:9999;height:46px;padding:0 16px;display:flex;align-items:center;justify-content:space-between;background:rgba(2,8,23,.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(0,245,255,.15);text-decoration:none;}
+/* ── TOPBAR ── */
+.topbar{position:sticky;top:0;z-index:9999;height:46px;padding:0 16px;display:flex;align-items:center;justify-content:space-between;background:rgba(2,8,23,.95);backdrop-filter:blur(16px);border-bottom:1px solid rgba(0,245,255,.15);text-decoration:none;}
 .topbar::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--c),var(--g),var(--p),transparent);animation:scanbar 3s linear infinite;}
-@keyframes scanbar{0%{opacity:.5}50%{opacity:1}100%{opacity:.5}}
+@keyframes scanbar{0%{opacity:.4}50%{opacity:1}100%{opacity:.4}}
 .topbar-left{display:flex;align-items:center;gap:9px}
 .topbar-logo{width:26px;filter:drop-shadow(0 0 6px var(--c))}
-.topbar-text{font-family:var(--font-head);font-size:12px;font-weight:700;letter-spacing:2px;background:linear-gradient(90deg,var(--c),var(--g));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.topbar-right{width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:50%;border:1px solid rgba(0,245,255,.3);color:var(--c);font-size:12px;background:rgba(0,245,255,.07);transition:box-shadow .2s,transform .2s;}
-.topbar-right:hover{transform:scale(1.1);box-shadow:0 0 14px rgba(0,245,255,.5)}
+.topbar-text{font-family:var(--fh);font-size:12px;font-weight:700;letter-spacing:2px;background:linear-gradient(90deg,var(--c),var(--g));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.topbar-right{width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:50%;border:1px solid rgba(0,245,255,.3);color:var(--c);font-size:12px;background:rgba(0,245,255,.07);}
 
-/* MAIN */
-.main{position:relative;z-index:1;flex:1;}
-.wrapper{max-width:920px;margin:0 auto;padding:0 12px 24px;}
+/* ── HERO HEADER ── */
+.hero{position:relative;z-index:1;text-align:center;padding:20px 16px 10px;}
+.hero h1{font-family:var(--fh);font-size:clamp(14px,4vw,22px);font-weight:900;letter-spacing:4px;text-transform:uppercase;background:linear-gradient(90deg,var(--c),var(--g),var(--p),var(--c));background-size:300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shift 4s linear infinite;}
+@keyframes shift{0%{background-position:0%}100%{background-position:300%}}
+.hero-sub{font-size:10px;letter-spacing:2.5px;opacity:.4;margin-top:3px;font-family:var(--fb);}
 
-/* TITLE */
-.title-block{padding:18px 0 6px;text-align:center;}
-.title-block h1{font-family:var(--font-head);font-size:clamp(15px,3.5vw,24px);font-weight:900;letter-spacing:4px;text-transform:uppercase;background:linear-gradient(90deg,var(--c),var(--g),var(--p),var(--c));background-size:300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:titleShift 4s linear infinite;}
-@keyframes titleShift{0%{background-position:0%}100%{background-position:300%}}
-.subtitle{font-size:10px;letter-spacing:2px;opacity:.4;margin-top:4px;font-family:var(--font-body);}
+/* ── TABS ── */
+.tabs{display:flex;justify-content:center;gap:6px;flex-wrap:nowrap;overflow-x:auto;padding:10px 12px 6px;scrollbar-width:none;position:relative;z-index:1;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{padding:6px 14px;border:1px solid rgba(255,255,255,.1);border-radius:4px;background:rgba(255,255,255,.04);color:rgba(255,255,255,.5);font-family:var(--fh);font-size:10px;font-weight:700;letter-spacing:1.5px;cursor:pointer;transition:all .2s;white-space:nowrap;clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);}
+.tab:hover{color:#fff;border-color:var(--c);box-shadow:0 0 10px rgba(0,245,255,.2)}
+.tab.active{background:linear-gradient(90deg,rgba(0,245,255,.2),rgba(0,255,136,.15));border-color:var(--c);color:var(--c);box-shadow:0 0 16px rgba(0,245,255,.25);}
 
-/* TABS */
-.tabs{display:flex;gap:8px;justify-content:center;margin:12px 0 10px;}
-.tab-btn{padding:7px 22px;border:1px solid rgba(255,255,255,.1);border-radius:4px;background:rgba(255,255,255,.04);color:rgba(255,255,255,.5);font-family:var(--font-head);font-size:11px;font-weight:700;letter-spacing:2px;cursor:pointer;transition:all .2s;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);}
-.tab-btn:hover{color:#fff;border-color:var(--c);box-shadow:0 0 10px rgba(0,245,255,.2)}
-.tab-btn.active{background:linear-gradient(90deg,rgba(0,245,255,.2),rgba(0,255,136,.15));border-color:var(--c);color:var(--c);box-shadow:0 0 16px rgba(0,245,255,.25);}
+/* team accent tabs */
+.tab[data-t="Main"].active{background:linear-gradient(90deg,rgba(0,245,255,.2),rgba(0,245,255,.08));border-color:var(--c);color:var(--c);}
+.tab[data-t="Academy"].active{background:linear-gradient(90deg,rgba(0,255,136,.2),rgba(0,255,136,.08));border-color:var(--g);color:var(--g);box-shadow:0 0 16px rgba(0,255,136,.25);}
+.tab[data-t="Youth"].active{background:linear-gradient(90deg,rgba(191,95,255,.2),rgba(191,95,255,.08));border-color:var(--p);color:var(--p);box-shadow:0 0 16px rgba(191,95,255,.25);}
+.tab[data-t="Goat"].active{background:linear-gradient(90deg,rgba(255,77,77,.2),rgba(255,77,77,.08));border-color:#ff4d4d;color:#ff4d4d;box-shadow:0 0 16px rgba(255,77,77,.25);}
 
-/* STATS */
-.stats{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
-.stat{padding:5px 13px;border-radius:4px;background:rgba(0,245,255,.06);border:1px solid rgba(0,245,255,.12);font-size:11px;font-family:var(--font-body);font-weight:600;letter-spacing:1px;color:rgba(255,255,255,.6);}
-.stat span{color:var(--c);font-weight:700}
+/* ── FILTERS ── */
+.filter-box{display:flex;justify-content:center;gap:6px;flex-wrap:nowrap;overflow-x:auto;padding:4px 12px 10px;scrollbar-width:none;position:relative;z-index:1;}
+.filter-box::-webkit-scrollbar{display:none;}
+.filter-box select{flex:0 0 auto;padding:5px 8px;background:rgba(0,0,0,.6);color:rgba(255,255,255,.7);border:1px solid rgba(0,245,255,.2);border-radius:4px;font-size:10px;font-family:var(--fb);outline:none;cursor:pointer;}
+.filter-box select:focus{border-color:var(--c);box-shadow:0 0 8px rgba(0,245,255,.2);}
 
-/* TABLE CARD */
-.card{background:rgba(11,17,32,.8);border:1px solid var(--border);border-radius:8px;overflow:hidden;position:relative;}
-.card::before{content:'';position:absolute;inset:0;border-radius:8px;background:linear-gradient(135deg,rgba(0,245,255,.04),transparent 60%);pointer-events:none;z-index:0;}
-.card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--c),var(--g),var(--p),var(--c));background-size:300%;animation:titleShift 3s linear infinite;border-radius:8px 8px 0 0;}
-.tbl-wrap{overflow-x:auto;position:relative;z-index:1;}
-table{width:100%;border-collapse:collapse;}
-thead{background:rgba(0,0,0,.35)}
-th{font-family:var(--font-head);font-size:9px;letter-spacing:1px;color:var(--c);padding:9px 6px;border-bottom:1px solid rgba(0,245,255,.15);white-space:nowrap;text-align:center;}
-th:nth-child(2){text-align:left;padding-left:10px;}
-td{padding:7px 6px;font-size:12px;font-weight:500;border-bottom:1px solid var(--border);text-align:center;vertical-align:middle;}
-td:nth-child(2){text-align:left;padding-left:10px;}
-.rank-num{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:3px;font-family:var(--font-head);font-size:9px;font-weight:700;background:rgba(255,255,255,.07);clip-path:polygon(5px 0%,100% 0%,calc(100% - 5px) 100%,0% 100%);}
-.player-name{display:flex;flex-direction:column;gap:1px;cursor:pointer;}
-.player-name:hover .p-name{color:var(--c);text-shadow:0 0 8px rgba(0,245,255,.5);}
-.p-name{font-weight:600;font-size:12px;line-height:1.2;transition:color .2s;}
-.p-id{font-size:9px;letter-spacing:.5px;font-family:var(--font-head);}
-.rank1 .p-id{color:rgba(255,233,122,.55)!important;}
-.rank2 .p-id{color:rgba(210,210,210,.55)!important;}
-.rank3 .p-id{color:rgba(220,160,100,.55)!important;}
-.top10 .p-id{color:rgba(140,230,255,.5)!important;}
-tbody tr:not(.rank1):not(.rank2):not(.rank3):not(.top10) .p-id{color:rgba(180,200,220,.45)!important;}
-tbody tr{background:var(--row);transition:background .15s;}
-tbody tr:hover{background:rgba(0,245,255,.05)}
-.rank1{background:linear-gradient(90deg,rgba(255,215,0,.16),rgba(255,215,0,.03),transparent) !important;border-left:3px solid var(--gold) !important;animation:goldPulse 2.5s ease-in-out infinite;}
-@keyframes goldPulse{0%,100%{box-shadow:inset 2px 0 12px rgba(255,215,0,.1)}50%{box-shadow:inset 2px 0 22px rgba(255,215,0,.25)}}
-.rank1 td{color:#ffe97a;}
-.rank1 .rank-num{background:rgba(255,215,0,.28);color:var(--gold);box-shadow:0 0 10px rgba(255,215,0,.55);}
-.rank2{background:linear-gradient(90deg,rgba(192,192,192,.13),rgba(192,192,192,.02),transparent) !important;border-left:3px solid var(--silver) !important;animation:silverPulse 2.5s ease-in-out infinite;}
-@keyframes silverPulse{0%,100%{box-shadow:inset 2px 0 10px rgba(192,192,192,.08)}50%{box-shadow:inset 2px 0 20px rgba(192,192,192,.2)}}
-.rank2 td{color:#e0e0e0;}
-.rank2 .rank-num{background:rgba(192,192,192,.22);color:var(--silver);box-shadow:0 0 8px rgba(192,192,192,.45);}
-.rank3{background:linear-gradient(90deg,rgba(205,127,50,.15),rgba(205,127,50,.03),transparent) !important;border-left:3px solid var(--bronze) !important;animation:bronzePulse 2.5s ease-in-out infinite;}
-@keyframes bronzePulse{0%,100%{box-shadow:inset 2px 0 10px rgba(205,127,50,.1)}50%{box-shadow:inset 2px 0 20px rgba(205,127,50,.25)}}
-.rank3 td{color:#e8a87c;}
-.rank3 .rank-num{background:rgba(205,127,50,.25);color:var(--bronze);box-shadow:0 0 8px rgba(205,127,50,.45);}
-.top10{border-left:3px solid rgba(0,245,255,.3) !important;}
-.top10 td{color:#a0f0ff;}
-.top10 .rank-num{color:var(--c);background:rgba(0,245,255,.1);}
-.loading-cell{padding:40px 20px;font-family:var(--font-head);font-size:11px;letter-spacing:3px;color:var(--c);opacity:.7;animation:pulse 1s ease-in-out infinite alternate;text-align:center;}
-@keyframes pulse{from{opacity:.3}to{opacity:.8}}
+/* ── GRID ── */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:10px;padding:6px 12px 24px;position:relative;z-index:1;}
 
-/* ══ RANK CARD MODAL ══ */
-.modal-overlay{
-  position:fixed;inset:0;z-index:99999;
-  background:rgba(2,8,23,.88);
-  backdrop-filter:blur(10px);
-  display:flex;align-items:center;justify-content:center;
-  opacity:0;pointer-events:none;transition:opacity .25s;
-  /* key: no overflow hidden on overlay */
-}
-.modal-overlay.show{opacity:1;pointer-events:all;}
-
-/* Outer wrapper just for glow — no clipping */
-.rank-card{
-  position:relative;
-  width:320px;
-  flex-shrink:0;
-  transform:scale(.88) translateY(20px);
-  transition:transform .3s cubic-bezier(.34,1.56,.64,1);
-  border-radius:16px;
-  /* glow lives here, NOT on #card-capture */
-  animation:borderRGB 4s linear infinite;
-}
-@keyframes borderRGB{
-  0%  {box-shadow:0 0 0 2px #00f5ff,0 0 40px rgba(0,245,255,.3),0 0 80px rgba(191,95,255,.15);}
-  33% {box-shadow:0 0 0 2px #00ff88,0 0 40px rgba(0,255,136,.3),0 0 80px rgba(0,245,255,.15);}
-  66% {box-shadow:0 0 0 2px #bf5fff,0 0 40px rgba(191,95,255,.3),0 0 80px rgba(0,255,136,.15);}
-  100%{box-shadow:0 0 0 2px #00f5ff,0 0 40px rgba(0,245,255,.3),0 0 80px rgba(191,95,255,.15);}
-}
-.modal-overlay.show .rank-card{transform:scale(1) translateY(0);}
-
-/* UI buttons — outside capture zone */
-.dl-btn{
-  position:absolute;top:10px;right:10px;z-index:20;
-  width:32px;height:32px;border-radius:50%;
-  background:rgba(0,0,0,.65);border:1px solid rgba(0,245,255,.4);
-  color:var(--c);font-size:13px;
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;transition:all .2s;backdrop-filter:blur(6px);
-}
-.dl-btn:hover{background:rgba(0,245,255,.25);box-shadow:0 0 12px rgba(0,245,255,.5);}
-.close-btn{
-  position:absolute;top:10px;left:10px;z-index:20;
-  width:32px;height:32px;border-radius:50%;
-  background:rgba(0,0,0,.65);border:1px solid rgba(255,255,255,.15);
-  color:rgba(255,255,255,.6);font-size:13px;
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;transition:all .2s;
-}
-.close-btn:hover{background:rgba(255,50,50,.25);color:#fff;border-color:rgba(255,50,50,.5);}
-
-/* ── #card-capture: the exact image that gets saved ── */
-#card-capture{
-  width:320px;
-  background:#060e1f;
-  border-radius:16px;
-  overflow:hidden;        /* clips children to rounded corners */
+/* ── CARD ── */
+.card{
+  background:rgba(11,17,32,.85);
+  border:1px solid var(--border);
+  border-radius:12px;
+  overflow:hidden;
+  transition:transform .2s,box-shadow .2s;
   display:flex;
   flex-direction:column;
-  align-items:stretch;    /* children fill full width */
 }
+.card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,245,255,.12);}
 
-/* PHOTO */
-.card-photo-wrap{
-  position:relative;
-  width:320px;
-  height:240px;
-  overflow:hidden;
-  background:#060e1f;
-  flex-shrink:0;
-}
-.card-photo{
-  position:absolute;top:0;left:0;
-  width:100%;height:100%;
-  object-fit:cover;
-  object-position:center 18%;
-  display:block;
-}
-.card-photo-placeholder{
-  position:absolute;top:0;left:0;
-  width:100%;height:100%;
-  display:flex;align-items:center;justify-content:center;
-  background:linear-gradient(135deg,#0a1628,#111e35);
-  font-size:64px;
-  color:rgba(0,245,255,.2);
-}
-#fade-canvas{
-  position:absolute;top:0;left:0;
-  width:320px;height:240px;   /* match photo-wrap exactly */
-  pointer-events:none;z-index:2;
-}
-.card-rank-badge{
-  position:absolute;bottom:12px;left:50%;transform:translateX(-50%);
-  z-index:3;
-  font-family:var(--font-head);font-size:11px;letter-spacing:2px;font-weight:700;
-  padding:4px 16px;border-radius:20px;white-space:nowrap;
-}
-.card-rank-badge.r1{background:rgba(255,215,0,.3);color:var(--gold);border:1px solid rgba(255,215,0,.6);box-shadow:0 0 16px rgba(255,215,0,.35);}
-.card-rank-badge.r2{background:rgba(192,192,192,.25);color:var(--silver);border:1px solid rgba(192,192,192,.5);box-shadow:0 0 12px rgba(192,192,192,.3);}
-.card-rank-badge.r3{background:rgba(205,127,50,.28);color:var(--bronze);border:1px solid rgba(205,127,50,.5);box-shadow:0 0 12px rgba(205,127,50,.35);}
-.card-rank-badge.r-other{background:rgba(0,245,255,.15);color:var(--c);border:1px solid rgba(0,245,255,.4);box-shadow:0 0 10px rgba(0,245,255,.2);}
+/* team border accents */
+.card.management{border-color:rgba(255,215,0,.35);}
+.card.management.available-card{border-color:var(--gold);box-shadow:0 0 10px rgba(255,215,0,.15);}
+.card.main{border-color:rgba(0,245,255,.25);}
+.card.main.available-card{border-color:var(--c);box-shadow:0 0 10px rgba(0,245,255,.15);}
+.card.academy{border-color:rgba(0,255,136,.25);}
+.card.academy.available-card{border-color:var(--g);box-shadow:0 0 10px rgba(0,255,136,.15);}
+.card.youth{border-color:rgba(191,95,255,.25);}
+.card.youth.available-card{border-color:var(--p);box-shadow:0 0 10px rgba(191,95,255,.15);}
+.card.goat{border-color:rgba(255,77,77,.25);}
+.card.goat.available-card{border-color:#ff4d4d;box-shadow:0 0 10px rgba(255,77,77,.15);}
 
-/* CARD BODY */
-.card-body{
-  width:320px;
-  padding:10px 20px 0;
-  text-align:center;
-  background:#060e1f;
-  flex-shrink:0;
-}
-.card-name{font-family:var(--font-head);font-size:16px;font-weight:700;letter-spacing:2px;color:#fff;text-shadow:0 0 20px rgba(0,245,255,.3);margin-bottom:3px;}
-.card-club-id{font-family:var(--font-head);font-size:9px;letter-spacing:2px;color:rgba(0,245,255,.6);margin-bottom:12px;}
-.card-divider{height:1px;background:linear-gradient(90deg,transparent,rgba(0,245,255,.35),transparent);margin:0 8px 12px;}
-.card-stats{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;padding:0 8px;}
-.cs{background:rgba(0,245,255,.06);border:1px solid rgba(0,245,255,.14);border-radius:7px;padding:8px 3px 7px;display:flex;flex-direction:column;align-items:center;gap:3px;}
-.cs-val{font-family:var(--font-head);font-size:14px;font-weight:700;color:#fff;line-height:1;letter-spacing:0;}
-.cs-lbl{font-family:var(--font-head);font-size:7px;letter-spacing:1.2px;color:rgba(0,245,255,.7);font-weight:700;}
+/* card top color bar */
+.card::before{content:'';display:block;height:2px;width:100%;}
+.card.management::before{background:linear-gradient(90deg,var(--gold),transparent);}
+.card.main::before{background:linear-gradient(90deg,var(--c),transparent);}
+.card.academy::before{background:linear-gradient(90deg,var(--g),transparent);}
+.card.youth::before{background:linear-gradient(90deg,var(--p),transparent);}
+.card.goat::before{background:linear-gradient(90deg,#ff4d4d,transparent);}
 
-/* BRAND FOOTER — fixed width + centered text */
-.card-brand{
-  width:320px;
-  padding:10px 16px 16px;
-  background:#060e1f;
-  flex-shrink:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-.card-brand-inner{
-  display:block;
-  width:200px;
-  padding:6px 24px;
-  text-align:center;
-  font-family:var(--font-head);
-  font-size:8px;
-  letter-spacing:3px;
-  color:#00f5ff;
-  border:1px solid rgba(0,245,255,.28);
-  border-radius:3px;
-  background:rgba(0,245,255,.06);
-  white-space:nowrap;
-  overflow:hidden;
-}
+/* photo */
+.card-img-wrap{position:relative;width:100%;aspect-ratio:1/1;overflow:hidden;background:#0a1220;}
+.card-img-wrap img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block;}
 
-/* PAGE FOOTER */
-footer{position:relative;z-index:1;text-align:center;padding:14px 0 16px;border-top:1px solid rgba(0,245,255,.08);background:rgba(2,8,23,.6);}
-.footer-text{font-family:var(--font-head);font-size:9px;letter-spacing:2.5px;background:linear-gradient(90deg,var(--c),var(--g));-webkit-background-clip:text;-webkit-text-fill-color:transparent;opacity:.55;}
+/* status dot on photo */
+.status-dot{position:absolute;bottom:6px;right:6px;width:8px;height:8px;border-radius:50%;border:1px solid rgba(0,0,0,.5);}
+.dot-avail{background:#00ff88;box-shadow:0 0 6px #00ff88;animation:dotpulse 1.5s infinite;}
+.dot-busy{background:#ff4d4d;}
+@keyframes dotpulse{0%,100%{opacity:1}50%{opacity:.3}}
 
-/* MOBILE — keep card at 320px wide, scroll if viewport smaller */
-@media(max-width:600px){
-  .wrapper{padding:0 6px 20px}
-  th{font-size:8px;padding:8px 4px;letter-spacing:.5px}
-  td{font-size:11px;padding:6px 4px}
-  .p-name{font-size:11px}.p-id{font-size:8px}
-  .rank-num{width:18px;height:18px;font-size:8px}
-  .topbar{height:42px;padding:0 10px}
-  /* modal: center the fixed-320px card; allow horizontal scroll if <320px screen */
-  .modal-overlay{align-items:center;justify-content:center;overflow:auto;}
-  .rank-card{margin:auto;}
-}
+/* card info row — all in one line */
+.card-info{padding:7px 8px 5px;display:flex;flex-direction:column;gap:3px;flex:1;}
+
+/* name + role in ONE line */
+.info-row1{display:flex;align-items:center;gap:5px;overflow:hidden;}
+.p-name{font-family:var(--fh);font-size:10px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0;}
+.p-role{font-size:8px;font-family:var(--fb);font-weight:600;color:#ffcc00;white-space:nowrap;flex-shrink:0;}
+
+/* pos + time in ONE line */
+.info-row2{display:flex;align-items:center;gap:4px;flex-wrap:nowrap;overflow:hidden;}
+.p-badge{display:inline-flex;align-items:center;gap:3px;padding:2px 5px;border-radius:3px;font-size:8px;font-family:var(--fh);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:50%;}
+.p-pos{background:rgba(0,245,255,.1);border:1px solid rgba(0,245,255,.2);color:var(--c);}
+.p-time{background:rgba(191,95,255,.1);border:1px solid rgba(191,95,255,.2);color:#cf9fff;}
+
+/* status text */
+.info-row3{display:flex;align-items:center;gap:4px;}
+.p-status{font-size:8px;font-family:var(--fb);font-weight:600;}
+.p-status.avail{color:#00ff88;}
+.p-status.busy{color:#ff6b6b;}
+.p-status i{font-size:7px;}
+
+/* action buttons */
+.card-btns{display:flex;gap:5px;padding:0 8px 8px;}
+.btn{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:4px;padding:5px 4px;border-radius:4px;font-size:9px;font-family:var(--fh);font-weight:700;letter-spacing:.5px;text-decoration:none;transition:all .2s;border:none;cursor:pointer;}
+.btn-msg{background:rgba(0,245,255,.15);border:1px solid rgba(0,245,255,.3);color:var(--c);}
+.btn-msg:hover{background:rgba(0,245,255,.3);box-shadow:0 0 10px rgba(0,245,255,.3);}
+.btn-call{background:rgba(0,255,136,.15);border:1px solid rgba(0,255,136,.3);color:var(--g);}
+.btn-call:hover{background:rgba(0,255,136,.3);box-shadow:0 0 10px rgba(0,255,136,.3);}
+
+/* empty */
+.empty{grid-column:1/-1;text-align:center;padding:40px 20px;font-family:var(--fh);font-size:11px;letter-spacing:3px;color:rgba(0,245,255,.4);}
+
+/* loading pulse */
+.loading{grid-column:1/-1;text-align:center;padding:40px;font-family:var(--fh);font-size:11px;letter-spacing:3px;color:var(--c);animation:lp 1s ease-in-out infinite alternate;}
+@keyframes lp{from{opacity:.2}to{opacity:.8}}
+
+/* footer */
+footer{position:relative;z-index:1;text-align:center;padding:14px 0 16px;border-top:1px solid rgba(0,245,255,.08);}
+.footer-text{font-family:var(--fh);font-size:9px;letter-spacing:2.5px;background:linear-gradient(90deg,var(--c),var(--g));-webkit-background-clip:text;-webkit-text-fill-color:transparent;opacity:.5;}
 </style>
 </head>
 <body>
 
-<a href="https://goatfcbd.com" class="topbar">
+<!-- TOPBAR -->
+<a href="https://goatfcbd.com" class="topbar" style="text-decoration:none;">
   <div class="topbar-left">
-    <img src="https://i.imgur.com/LY3Bb9m.png" class="topbar-logo">
+    <img src="https://i.imgur.com/LY3Bb9m.png" class="topbar-logo" alt="GOAT FC">
     <span class="topbar-text">GOAT FC</span>
   </div>
   <div class="topbar-right"><i class="fa-solid fa-house"></i></div>
 </a>
 
-<div class="main"><div class="wrapper">
-  <div class="title-block">
-    <h1>PLAYER RANK SYSTEM</h1>
-    <div class="subtitle">GOAT FC · LIVE COMPETITIVE RANKING</div>
-  </div>
-  <div class="tabs">
-    <button class="tab-btn active" id="monthlyBtn" onclick="loadData('monthly')">MONTHLY</button>
-    <button class="tab-btn" id="overallBtn" onclick="loadData('overall')">OVERALL</button>
-  </div>
-  <div class="stats">
-    <div class="stat">Matches <span id="m">—</span></div>
-    <div class="stat">Goals <span id="g">—</span></div>
-    <div class="stat">Goals/Match <span id="pm">—</span></div>
-  </div>
-  <div class="card">
-    <div class="tbl-wrap">
-      <table>
-        <thead>
-          <tr><th>#</th><th>PLAYER</th><th>PTS</th><th>M</th><th>WIN%</th><th>GF</th><th>GA</th><th>GD</th></tr>
-        </thead>
-        <tbody id="table">
-          <tr><td colspan="8" class="loading-cell">LOADING DATA...</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div></div>
+<!-- HERO -->
+<div class="hero">
+  <h1>GOAT FC ELITE BOARD</h1>
+  <div class="hero-sub">OUR HONORABLE MANAGEMENT &amp; TEAM MEMBERS</div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <div class="tab active" data-t="management" onclick="showTab(event,'management')"><i class="fa-solid fa-crown" style="font-size:9px;margin-right:4px;"></i>Management</div>
+  <div class="tab" data-t="Main" onclick="showTab(event,'Main')"><i class="fa-solid fa-shield-halved" style="font-size:9px;margin-right:4px;"></i>Main</div>
+  <div class="tab" data-t="Academy" onclick="showTab(event,'Academy')"><i class="fa-solid fa-graduation-cap" style="font-size:9px;margin-right:4px;"></i>Academy</div>
+  <div class="tab" data-t="Youth" onclick="showTab(event,'Youth')"><i class="fa-solid fa-star" style="font-size:9px;margin-right:4px;"></i>Youth</div>
+  <div class="tab" data-t="Goat" onclick="showTab(event,'Goat')"><i class="fa-solid fa-bolt" style="font-size:9px;margin-right:4px;"></i>Goat</div>
+</div>
+
+<!-- FILTER -->
+<div class="filter-box">
+  <select id="statusFilter"><option value="">All Status</option><option>Available</option><option>Busy (1-2 Days)</option><option>Busy (3-7 Days)</option><option>Busy (7-15 Days)</option><option>Busy (15-30 Days)</option></select>
+  <select id="posFilter"><option value="">All Position</option></select>
+  <select id="timeFilter"><option value="">All Time</option></select>
+</div>
+
+<!-- GRID -->
+<div id="content" class="grid">
+  <div class="loading">LOADING DATA...</div>
+</div>
 
 <footer><div class="footer-text">POWERED BY GOAT FC</div></footer>
 
-<!-- RANK CARD MODAL -->
-<div class="modal-overlay" id="modal" onclick="closeModal(event)">
-  <div class="rank-card" id="rank-card">
-    <button class="close-btn" onclick="closeModalDirect()"><i class="fa-solid fa-xmark"></i></button>
-    <button class="dl-btn" id="dl-btn" title="Download Card"><i class="fa-solid fa-download"></i></button>
-
-    <div id="card-capture">
-      <div class="card-photo-wrap" id="photo-wrap">
-        <img class="card-photo" id="card-img" src="" alt=""
-          onerror="this.style.display='none';document.getElementById('card-ph').style.display='flex'">
-        <div class="card-photo-placeholder" id="card-ph" style="display:none">
-          <i class="fa-solid fa-user"></i>
-        </div>
-        <canvas id="fade-canvas"></canvas>
-        <div class="card-rank-badge" id="card-rank-badge">#1</div>
-      </div>
-
-      <div class="card-body">
-        <div class="card-name" id="card-name">—</div>
-        <div class="card-club-id" id="card-cid">—</div>
-        <div class="card-divider"></div>
-        <div class="card-stats">
-          <div class="cs"><div class="cs-val" id="cs-pts">—</div><div class="cs-lbl">PTS</div></div>
-          <div class="cs"><div class="cs-val" id="cs-m">—</div><div class="cs-lbl">M</div></div>
-          <div class="cs"><div class="cs-val" id="cs-win">—</div><div class="cs-lbl">WIN%</div></div>
-          <div class="cs"><div class="cs-val" id="cs-gf">—</div><div class="cs-lbl">GF</div></div>
-          <div class="cs"><div class="cs-val" id="cs-gd">—</div><div class="cs-lbl">GD</div></div>
-        </div>
-      </div>
-
-      <div class="card-brand">
-        <span class="card-brand-inner">WWW.GOATFCBD.COM</span>
-      </div>
-    </div><!-- end #card-capture -->
-  </div><!-- end .rank-card -->
-</div><!-- end .modal-overlay -->
-
 <script>
-const L="https://opensheet.elk.sh/1DSPKPaU1ZQYbFM4iYbE1VXgDAXU-FCT7--QhYJsNf1M/Leaderboard%20Goat%20FC";
-const M="https://opensheet.elk.sh/1DSPKPaU1ZQYbFM4iYbE1VXgDAXU-FCT7--QhYJsNf1M/CLUB%20MEMBERS";
+const SHEET="https://docs.google.com/spreadsheets/d/1j8HRakCsKmB-GTdfKJ3kd7XNEwBfNEg3AvtWTpPpKK0/gviz/tq?tqx=out:json&sheet=Dashboard";
+let data=[],currentTab="management";
 
-const CARD_W=320, PHOTO_H=240;
+function loadData(){
+  fetch(SHEET)
+    .then(r=>r.text())
+    .then(d=>{
+      const j=JSON.parse(d.substring(47).slice(0,-2));
+      data=j.table.rows.map((r,i)=>({
+        index:i,
+        name:r.c[0]?.v||"",
+        role:r.c[1]?.v||"",
+        status:r.c[3]?.v||"",
+        fb:r.c[4]?.v||"#",
+        phone:r.c[5]?.v||"",
+        img:r.c[7]?.v||"",
+        manage:r.c[8]?.v||"",
+        team:(r.c[9]?.v||"").trim(),
+        pos:r.c[10]?.v||"",
+        time:r.c[11]?.v||""
+      }));
+      initFilters();
+      renderCurrent();
+    })
+    .catch(()=>{
+      document.getElementById("content").innerHTML='<div class="empty" style="color:#ff4466;">ERROR LOADING DATA</div>';
+    });
+}
 
-let currentType="monthly", timer=null, memberMap=null, rowDataMap={};
+function showTab(e,t){
+  currentTab=t;
+  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+  e.currentTarget.classList.add("active");
+  renderCurrent();
+}
 
-async function getMembers(){
-  if(memberMap) return memberMap;
-  const d=await fetch(M).then(r=>r.json());
-  memberMap={};
-  d.forEach(x=>{
-    if(x["Club ID Number"]){
-      const id=x["Club ID Number"].trim();
-      memberMap[id]={name:x["Full Name"]||"",pic:x["Profile Picture (For Web)"]||""};
-    }
+function initFilters(){
+  const posSet=new Set(),timeSet=new Set();
+  data.forEach(p=>{
+    if(p.pos&&p.pos.length<=15&&p.pos!="Position") posSet.add(p.pos.trim());
+    if(p.time&&p.time.length<=30&&p.time!="Time") timeSet.add(p.time.trim());
   });
-  return memberMap;
+  const pEl=document.getElementById("posFilter"),tEl=document.getElementById("timeFilter");
+  pEl.innerHTML='<option value="">All Position</option>';
+  tEl.innerHTML='<option value="">All Time</option>';
+  [...posSet].sort().forEach(p=>pEl.innerHTML+=`<option>${p}</option>`);
+  [...timeSet].sort().forEach(t=>tEl.innerHTML+=`<option>${t}</option>`);
 }
 
-async function loadData(t){
-  currentType=t;
-  document.getElementById("overallBtn").classList.toggle("active",t==="overall");
-  document.getElementById("monthlyBtn").classList.toggle("active",t==="monthly");
-  try{
-    const [ld,map]=await Promise.all([fetch(L).then(r=>r.json()),getMembers()]);
-    let rows=ld.filter(r=>r["Club_ID"]&&map[r["Club_ID"].trim()]);
-    rows.sort((a,b)=>{
-      const am=+(t==="overall"?a["Overall_PL"]:a["Monthly_PL"])||0;
-      const bm=+(t==="overall"?b["Overall_PL"]:b["Monthly_PL"])||0;
-      if(am===0&&bm>0)return 1; if(bm===0&&am>0)return -1;
-      const ap=+(t==="overall"?a["Overall_Point"]:a["Monthly_Point"])||0;
-      const bp=+(t==="overall"?b["Overall_Point"]:b["Monthly_Point"])||0;
-      if(bp!==ap)return bp-ap;
-      const aw=+(t==="overall"?a["Overall_Win%"]:a["Monthly_Win%"])||0;
-      const bw=+(t==="overall"?b["Overall_Win%"]:b["Monthly_Win%"])||0;
-      if(bw!==aw)return bw-aw;
-      const agd=+(t==="overall"?a["Total GD"]:a["Montly GD"])||0;
-      const bgd=+(t==="overall"?b["Total GD"]:b["Montly GD"])||0;
-      return bgd-agd;
-    });
-    rowDataMap={};
-    let html="",totalM=0,totalG=0;
-    rows.forEach((r,i)=>{
-      const cls=i===0?"rank1":i===1?"rank2":i===2?"rank3":i<10?"top10":"";
-      const id=r["Club_ID"].trim();
-      const m=+(t==="overall"?r["Overall_PL"]:r["Monthly_PL"])||0;
-      const gf=+(t==="overall"?r["Total GF"]:r["Montly GF"])||0;
-      const pt=+(t==="overall"?r["Overall_Point"]:r["Monthly_Point"])||0;
-      const win=((+(t==="overall"?r["Overall_Win%"]:r["Monthly_Win%"])||0)*100).toFixed(1);
-      const ga=r[t==="overall"?"Total GA":"Montly GA"]||0;
-      const gd=r[t==="overall"?"Total GD":"Montly GD"]||0;
-      totalM+=m; totalG+=gf;
-      rowDataMap[id]={rank:i+1,pts:pt,m,win,gf,ga,gd};
-      html+=`<tr class="${cls}"><td><span class="rank-num">${i+1}</span></td>
-<td><div class="player-name" onclick="openCard('${id}')" title="View Rank Card">
-<span class="p-name">${map[id].name}</span><span class="p-id">${id}</span>
-</div></td>
-<td>${pt}</td><td>${m}</td><td>${win}%</td><td>${gf}</td><td>${ga}</td><td>${gd}</td></tr>`;
-    });
-    document.getElementById("table").innerHTML=html||`<tr><td colspan="8" style="padding:20px;opacity:.4;font-size:11px;letter-spacing:2px;font-family:var(--font-head);text-align:center">NO DATA</td></tr>`;
-    const match=Math.round(totalM/2);
-    document.getElementById("m").textContent=match;
-    document.getElementById("g").textContent=totalG;
-    document.getElementById("pm").textContent=match?(totalG/match).toFixed(2):"0";
-  }catch(e){
-    document.getElementById("table").innerHTML=`<tr><td colspan="8" style="padding:20px;color:#ff4466;font-size:11px;letter-spacing:1px;font-family:var(--font-head);text-align:center">ERROR LOADING DATA</td></tr>`;
-  }
-}
-
-function drawFade(){
-  const cnv=document.getElementById("fade-canvas");
-  cnv.width=CARD_W; cnv.height=PHOTO_H;
-  const ctx=cnv.getContext("2d");
-  ctx.clearRect(0,0,CARD_W,PHOTO_H);
-  const g=ctx.createLinearGradient(0,PHOTO_H*0.45,0,PHOTO_H);
-  g.addColorStop(0,"rgba(6,14,31,0)");
-  g.addColorStop(1,"rgba(6,14,31,1)");
-  ctx.fillStyle=g;
-  ctx.fillRect(0,0,CARD_W,PHOTO_H);
-}
-
-function openCard(id){
-  if(!memberMap||!memberMap[id])return;
-  const info=memberMap[id], stats=rowDataMap[id]||{}, rank=stats.rank||0;
-  const img=document.getElementById("card-img"), ph=document.getElementById("card-ph");
-  if(info.pic){
-    img.crossOrigin="anonymous";
-    img.src=info.pic;
-    img.style.display="block"; ph.style.display="none";
-    img.onload=drawFade;
-    img.onerror=()=>{img.style.display="none";ph.style.display="flex";drawFade();};
-  } else {
-    img.style.display="none"; ph.style.display="flex"; drawFade();
-  }
-  const badge=document.getElementById("card-rank-badge");
-  badge.textContent="#"+rank;
-  badge.className="card-rank-badge "+(rank===1?"r1":rank===2?"r2":rank===3?"r3":"r-other");
-  document.getElementById("card-name").textContent=info.name;
-  document.getElementById("card-cid").textContent=id;
-  document.getElementById("cs-pts").textContent=stats.pts??"—";
-  document.getElementById("cs-m").textContent=stats.m??"—";
-  document.getElementById("cs-win").textContent=(stats.win??0)+"%";
-  document.getElementById("cs-gf").textContent=stats.gf??"—";
-  document.getElementById("cs-gd").textContent=stats.gd??"—";
-  document.getElementById("modal").classList.add("show");
-  document.body.style.overflow="hidden";
-  requestAnimationFrame(()=>requestAnimationFrame(drawFade));
-}
-
-function closeModalDirect(){
-  document.getElementById("modal").classList.remove("show");
-  document.body.style.overflow="";
-}
-function closeModal(e){if(e.target===document.getElementById("modal"))closeModalDirect();}
-document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModalDirect();});
-
-/* DOWNLOAD */
-document.getElementById("dl-btn").addEventListener("click",function(){
-  const SCALE=3, RADIUS=16;
-  const target=document.getElementById("card-capture");
-  drawFade();
-  requestAnimationFrame(()=>{
-    const captureH=target.scrollHeight;
-    html2canvas(target,{
-      backgroundColor:"#060e1f",
-      scale:SCALE,
-      useCORS:true,
-      allowTaint:true,
-      logging:false,
-      removeContainer:true,
-      width:CARD_W,
-      height:captureH,
-      windowWidth:CARD_W,
-      windowHeight:captureH,
-      x:0,y:0,scrollX:0,scrollY:0
-    }).then(canvas=>{
-      const out=document.createElement("canvas");
-      out.width=CARD_W*SCALE; out.height=captureH*SCALE;
-      const ctx=out.getContext("2d");
-      const w=out.width,h=out.height,r=RADIUS*SCALE;
-      ctx.beginPath();
-      ctx.moveTo(r,0);ctx.lineTo(w-r,0);ctx.arcTo(w,0,w,r,r);
-      ctx.lineTo(w,h-r);ctx.arcTo(w,h,w-r,h,r);
-      ctx.lineTo(r,h);ctx.arcTo(0,h,0,h-r,r);
-      ctx.lineTo(0,r);ctx.arcTo(0,0,r,0,r);
-      ctx.closePath();ctx.clip();
-      ctx.drawImage(canvas,0,0);
-      const name=document.getElementById("card-name").textContent.replace(/\s+/g,"_");
-      const a=document.createElement("a");
-      a.download="GOATFC_RankCard_"+name+".png";
-      a.href=out.toDataURL("image/png");
-      a.click();
-    });
+function renderCurrent(){
+  let f=data.filter(p=>currentTab==="management"?p.manage==="YES":p.team===currentTab);
+  const s=document.getElementById("statusFilter").value;
+  const p=document.getElementById("posFilter").value;
+  const t=document.getElementById("timeFilter").value;
+  f=f.filter(x=>(!s||x.status===s)&&(!p||x.pos===p)&&(!t||x.time===t));
+  f.sort((a,b)=>{
+    const A=a.status.includes("Available"),B=b.status.includes("Available");
+    return A===B?a.index-b.index:A?-1:1;
   });
-});
+  render(f);
+}
 
-loadData("monthly");
-timer=setInterval(()=>loadData(currentType),30000);
+function teamClass(p){
+  if(p.manage==="YES") return "management";
+  if(p.team==="Main") return "main";
+  if(p.team==="Academy") return "academy";
+  if(p.team==="Youth") return "youth";
+  if(p.team==="Goat") return "goat";
+  return "";
+}
+
+function render(arr){
+  const c=document.getElementById("content");
+  if(!arr.length){c.innerHTML='<div class="empty">NO MEMBERS FOUND</div>';return;}
+  c.innerHTML=arr.map(p=>{
+    const tc=teamClass(p);
+    const avail=p.status.includes("Available");
+    return `<div class="card ${tc}${avail?' available-card':''}">
+  <div class="card-img-wrap">
+    <img src="${p.img}" loading="lazy" onerror="this.src='https://placehold.co/300x300/0a1220/00f5ff?text=GFC'">
+    <div class="status-dot ${avail?'dot-avail':'dot-busy'}"></div>
+  </div>
+  <div class="card-info">
+    <div class="info-row1">
+      <span class="p-name">${p.name}</span>
+      <span class="p-role">${p.role}</span>
+    </div>
+    <div class="info-row2">
+      ${p.pos?`<span class="p-badge p-pos"><i class="fa-solid fa-futbol" style="font-size:7px;"></i>${p.pos}</span>`:''}
+      ${p.time?`<span class="p-badge p-time"><i class="fa-solid fa-clock" style="font-size:7px;"></i>${p.time}</span>`:''}
+    </div>
+    <div class="info-row3">
+      <span class="p-status ${avail?'avail':'busy'}">
+        <i class="fa-solid ${avail?'fa-circle-check':'fa-circle-xmark'}"></i> ${p.status}
+      </span>
+    </div>
+  </div>
+  <div class="card-btns">
+    <a href="${p.fb}" target="_blank" class="btn btn-msg"><i class="fa-brands fa-facebook-messenger"></i> MSG</a>
+    <a href="tel:${p.phone}" class="btn btn-call"><i class="fa-solid fa-phone"></i> CALL</a>
+  </div>
+</div>`;
+  }).join("");
+}
+
+document.querySelectorAll("select").forEach(s=>s.addEventListener("change",renderCurrent));
+loadData();
+setInterval(loadData,30000);
 </script>
 </body>
 </html>

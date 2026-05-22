@@ -3,378 +3,1151 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ELITE BOARD</title>
-<link rel="icon" type="image/png" href="https://i.imgur.com/LY3Bb9m.png">
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+<title>GOAT FC — Match Result Parser</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --c:#00f5ff;--g:#00ff88;--p:#bf5fff;--bg:#020817;
-  --gold:#ffd700;--border:rgba(255,255,255,0.07);
-  --fh:'Orbitron',sans-serif;--fb:'Rajdhani',sans-serif;
-}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:#fff;font-family:var(--fb);min-height:100vh;overflow-x:hidden;}
-body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,245,255,0.01) 2px,rgba(0,245,255,0.01) 4px);pointer-events:none;z-index:0;}
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --surface2: #1a1a1a;
+    --border: #222;
+    --accent: #e8ff00;
+    --accent2: #ff4444;
+    --accent3: #44ff88;
+    --text: #f0f0f0;
+    --text-dim: #666;
+    --text-mid: #999;
+    --win: #44ff88;
+    --loss: #ff4444;
+    --draw: #ffaa00;
+  }
 
-/* ── TOPBAR ── */
-.topbar{position:sticky;top:0;z-index:9999;height:46px;padding:0 16px;display:flex;align-items:center;justify-content:space-between;background:rgba(2,8,23,.95);backdrop-filter:blur(16px);border-bottom:1px solid rgba(0,245,255,.15);text-decoration:none;}
-.topbar::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--c),var(--g),var(--p),transparent);animation:scanbar 3s linear infinite;}
-@keyframes scanbar{0%{opacity:.4}50%{opacity:1}100%{opacity:.4}}
-.topbar-left{display:flex;align-items:center;gap:9px}
-.topbar-logo{width:26px;filter:drop-shadow(0 0 6px var(--c))}
-.topbar-text{font-family:var(--fh);font-size:12px;font-weight:700;letter-spacing:2px;background:linear-gradient(90deg,var(--c),var(--g));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.topbar-right{width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:50%;border:1px solid rgba(0,245,255,.3);color:var(--c);font-size:12px;background:rgba(0,245,255,.07);}
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
-/* ── HERO ── */
-.hero{position:relative;z-index:1;text-align:center;padding:18px 16px 8px;}
-.hero h1{font-family:var(--fh);font-size:clamp(13px,3.8vw,21px);font-weight:900;letter-spacing:4px;text-transform:uppercase;background:linear-gradient(90deg,var(--c),var(--g),var(--p),var(--c));background-size:300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shift 4s linear infinite;}
-@keyframes shift{0%{background-position:0%}100%{background-position:300%}}
-.hero-sub{font-size:10px;letter-spacing:2px;opacity:.4;margin-top:3px;font-family:var(--fb);}
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
 
-/* ── TABS — all 5 in one row ── */
-.tabs{display:flex;justify-content:center;gap:5px;padding:10px 12px 6px;position:relative;z-index:1;flex-wrap:nowrap;}
-.tab{
-  flex:1;max-width:80px;
-  padding:5px 0;
-  border:1px solid rgba(255,255,255,.1);
-  border-radius:4px;
-  background:rgba(255,255,255,.04);
-  color:rgba(255,255,255,.5);
-  font-family:var(--fh);
-  font-size:8.5px;
-  font-weight:700;
-  letter-spacing:.5px;
-  cursor:pointer;
-  transition:all .2s;
-  text-align:center;
-  white-space:nowrap;
-}
-.tab:hover{color:#fff;border-color:var(--c);}
-.tab.active{background:linear-gradient(90deg,rgba(0,245,255,.2),rgba(0,255,136,.12));border-color:var(--c);color:var(--c);box-shadow:0 0 12px rgba(0,245,255,.2);}
-.tab[data-t="Academy"].active{border-color:var(--g);color:var(--g);box-shadow:0 0 12px rgba(0,255,136,.2);background:linear-gradient(90deg,rgba(0,255,136,.2),rgba(0,255,136,.08));}
-.tab[data-t="Youth"].active{border-color:var(--p);color:var(--p);box-shadow:0 0 12px rgba(191,95,255,.2);background:linear-gradient(90deg,rgba(191,95,255,.2),rgba(191,95,255,.08));}
-.tab[data-t="Goat"].active{border-color:#ff4d4d;color:#ff4d4d;box-shadow:0 0 12px rgba(255,77,77,.2);background:linear-gradient(90deg,rgba(255,77,77,.2),rgba(255,77,77,.08));}
+  /* NOISE TEXTURE */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
 
-/* ── FILTER BOX ── */
-.filter-box{
-  display:flex;
-  justify-content:center;
-  gap:6px;
-  padding:4px 12px 10px;
-  position:relative;z-index:1;
-}
-.filter-wrap{
-  flex:1;
-  max-width:160px;
-  position:relative;
-}
-.filter-wrap i{
-  position:absolute;
-  left:8px;top:50%;transform:translateY(-50%);
-  font-size:9px;color:var(--c);opacity:.7;
-  pointer-events:none;
-}
-.filter-wrap select{
-  width:100%;
-  padding:6px 8px 6px 22px;
-  background:rgba(0,0,0,.55);
-  color:rgba(255,255,255,.75);
-  border:1px solid rgba(0,245,255,.2);
-  border-radius:5px;
-  font-size:10px;
-  font-family:var(--fb);
-  font-weight:600;
-  outline:none;
-  cursor:pointer;
-  appearance:none;
-  -webkit-appearance:none;
-}
-.filter-wrap select:focus{border-color:var(--c);box-shadow:0 0 8px rgba(0,245,255,.15);}
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+    position: relative;
+    z-index: 1;
+  }
 
-/* ── GRID ── */
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
-  gap:10px;
-  padding:4px 12px 24px;
-  position:relative;z-index:1;
-}
+  /* HEADER */
+  header {
+    display: flex;
+    align-items: flex-end;
+    gap: 20px;
+    margin-bottom: 48px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+  }
 
-/* ── CARD ── */
-.card{
-  background:rgba(11,17,32,.88);
-  border:1px solid var(--border);
-  border-radius:12px;
-  overflow:hidden;
-  transition:transform .2s,box-shadow .2s;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-}
-.card:hover{transform:translateY(-3px);}
+  .logo-block {
+    display: flex;
+    flex-direction: column;
+  }
 
-/* top accent bar */
-.card::before{content:'';display:block;width:100%;height:2px;flex-shrink:0;}
-.card.management::before{background:linear-gradient(90deg,transparent,var(--gold),transparent);}
-.card.main::before{background:linear-gradient(90deg,transparent,var(--c),transparent);}
-.card.academy::before{background:linear-gradient(90deg,transparent,var(--g),transparent);}
-.card.youth::before{background:linear-gradient(90deg,transparent,var(--p),transparent);}
-.card.goat::before{background:linear-gradient(90deg,transparent,#ff4d4d,transparent);}
+  .logo-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(40px, 8vw, 72px);
+    line-height: 0.9;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-shadow: 0 0 40px rgba(232,255,0,0.3);
+  }
 
-/* team border */
-.card.management.available-card{border-color:rgba(255,215,0,.4);box-shadow:0 0 10px rgba(255,215,0,.1);}
-.card.main.available-card{border-color:rgba(0,245,255,.35);box-shadow:0 0 10px rgba(0,245,255,.1);}
-.card.academy.available-card{border-color:rgba(0,255,136,.35);box-shadow:0 0 10px rgba(0,255,136,.1);}
-.card.youth.available-card{border-color:rgba(191,95,255,.35);box-shadow:0 0 10px rgba(191,95,255,.1);}
-.card.goat.available-card{border-color:rgba(255,77,77,.35);box-shadow:0 0 10px rgba(255,77,77,.1);}
+  .logo-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
 
-/* photo */
-.card-img-wrap{position:relative;width:100%;aspect-ratio:1/1;overflow:hidden;background:#0a1220;}
-.card-img-wrap img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block;}
-.status-dot{position:absolute;bottom:6px;right:6px;width:8px;height:8px;border-radius:50%;border:1.5px solid rgba(0,0,0,.6);}
-.dot-avail{background:#00ff88;box-shadow:0 0 6px #00ff88;animation:dotpulse 1.5s infinite;}
-.dot-busy{background:#ff4d4d;}
-@keyframes dotpulse{0%,100%{opacity:1}50%{opacity:.2}}
+  .header-badge {
+    margin-left: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+  }
 
-/* card body — all centered */
-.card-body{
-  width:100%;
-  padding:7px 6px 4px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:4px;
-  text-align:center;
-}
+  .badge-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    padding: 4px 10px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
 
-/* NAME */
-.p-name{
-  font-family:var(--fh);
-  font-size:11px;
-  font-weight:700;
-  color:#fff;
-  letter-spacing:.5px;
-  line-height:1.2;
-  width:100%;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-}
+  .pill-green { background: rgba(68,255,136,0.1); color: var(--win); border: 1px solid rgba(68,255,136,0.2); }
+  .pill-yellow { background: rgba(232,255,0,0.08); color: var(--accent); border: 1px solid rgba(232,255,0,0.15); }
 
-/* ROLE */
-.p-role{
-  font-size:10px;
-  font-family:var(--fb);
-  font-weight:600;
-  color:#ffcc00;
-  line-height:1;
-}
+  /* SETTINGS BAR */
+  .settings-bar {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
 
-/* POSITION + TIME badges in one row */
-.badge-row{display:flex;gap:4px;align-items:center;justify-content:center;flex-wrap:wrap;}
-.p-badge{
-  display:inline-flex;align-items:center;gap:3px;
-  padding:2px 6px;border-radius:3px;
-  font-size:9px;font-family:var(--fh);
-  white-space:nowrap;
-}
-.p-pos{background:rgba(0,245,255,.1);border:1px solid rgba(0,245,255,.2);color:var(--c);}
-.p-time{background:rgba(191,95,255,.1);border:1px solid rgba(191,95,255,.2);color:#cf9fff;}
+  .settings-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
 
-/* STATUS */
-.p-status{
-  font-size:9px;font-family:var(--fb);font-weight:700;
-  display:flex;align-items:center;gap:3px;justify-content:center;
-}
-.p-status.avail{color:#00ff88;}
-.p-status.busy{color:#ff6b6b;}
+  .settings-bar input[type="text"] {
+    flex: 1;
+    min-width: 200px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 8px 12px;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
 
-/* BUTTONS */
-.card-btns{display:flex;gap:5px;padding:4px 8px 8px;width:100%;}
-.btn{
-  flex:1;
-  display:inline-flex;align-items:center;justify-content:center;gap:4px;
-  padding:6px 4px;border-radius:4px;
-  font-size:9px;font-family:var(--fh);font-weight:700;letter-spacing:.5px;
-  text-decoration:none;transition:all .2s;
-}
-.btn-msg{background:rgba(0,245,255,.12);border:1px solid rgba(0,245,255,.25);color:var(--c);}
-.btn-msg:hover{background:rgba(0,245,255,.25);box-shadow:0 0 8px rgba(0,245,255,.25);}
-.btn-call{background:rgba(0,255,136,.12);border:1px solid rgba(0,255,136,.25);color:var(--g);}
-.btn-call:hover{background:rgba(0,255,136,.25);box-shadow:0 0 8px rgba(0,255,136,.25);}
+  .settings-bar input[type="text"]:focus {
+    border-color: rgba(232,255,0,0.4);
+  }
 
-/* states */
-.empty{grid-column:1/-1;text-align:center;padding:40px 20px;font-family:var(--fh);font-size:11px;letter-spacing:3px;color:rgba(0,245,255,.4);}
-.loading{grid-column:1/-1;text-align:center;padding:40px;font-family:var(--fh);font-size:11px;letter-spacing:3px;color:var(--c);animation:lp 1s ease-in-out infinite alternate;}
-@keyframes lp{from{opacity:.2}to{opacity:.8}}
+  .settings-bar input::placeholder { color: var(--text-dim); }
 
-footer{position:relative;z-index:1;text-align:center;padding:14px 0 16px;border-top:1px solid rgba(0,245,255,.08);}
-.footer-text{font-family:var(--fh);font-size:9px;letter-spacing:2.5px;background:linear-gradient(90deg,var(--c),var(--g));-webkit-background-clip:text;-webkit-text-fill-color:transparent;opacity:.5;}
+  /* MAIN CARD */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+
+  .card-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .card-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-mid);
+  }
+
+  .step-badge {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    color: var(--accent);
+    letter-spacing: 1px;
+  }
+
+  .card-body { padding: 20px; }
+
+  textarea {
+    width: 100%;
+    min-height: 220px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    line-height: 1.8;
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  textarea:focus { border-color: rgba(232,255,0,0.3); }
+  textarea::placeholder { color: var(--text-dim); }
+
+  /* BUTTONS */
+  .btn-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+  }
+
+  button {
+    cursor: pointer;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-size: 11px;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    transition: all 0.15s;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #000;
+    font-weight: 500;
+  }
+
+  .btn-primary:hover { background: #f5ff33; transform: translateY(-1px); }
+  .btn-primary:active { transform: translateY(0); }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--text-mid);
+    border: 1px solid var(--border);
+  }
+
+  .btn-secondary:hover { border-color: var(--text-mid); color: var(--text); }
+
+  .btn-submit {
+    background: var(--win);
+    color: #000;
+    font-weight: 500;
+    padding: 12px 28px;
+    font-size: 12px;
+  }
+
+  .btn-submit:hover { background: #66ffaa; transform: translateY(-1px); }
+  .btn-submit:disabled { background: #333; color: #555; cursor: not-allowed; transform: none; }
+
+  /* RESULTS */
+  .results-section { display: none; }
+  .results-section.visible { display: block; }
+
+  .match-info-bar {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .match-info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .info-key {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .info-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--accent);
+  }
+
+  /* SUMMARY STATS */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .stat-card {
+    border-radius: 6px;
+    padding: 16px;
+    text-align: center;
+    border: 1px solid;
+  }
+
+  .stat-win { background: rgba(68,255,136,0.06); border-color: rgba(68,255,136,0.2); }
+  .stat-loss { background: rgba(255,68,68,0.06); border-color: rgba(255,68,68,0.2); }
+  .stat-draw { background: rgba(255,170,0,0.06); border-color: rgba(255,170,0,0.2); }
+
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 40px;
+    line-height: 1;
+  }
+
+  .stat-win .stat-num { color: var(--win); }
+  .stat-loss .stat-num { color: var(--loss); }
+  .stat-draw .stat-num { color: var(--draw); }
+
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+
+  /* MATCH ROWS */
+  .match-list { display: flex; flex-direction: column; gap: 8px; }
+
+  .match-row {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    align-items: center;
+    gap: 12px;
+    transition: border-color 0.15s;
+  }
+
+  .match-row:hover { border-color: #333; }
+
+  .result-badge {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    letter-spacing: 1px;
+    width: 36px;
+    height: 36px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .badge-win { background: rgba(68,255,136,0.15); color: var(--win); }
+  .badge-loss { background: rgba(255,68,68,0.15); color: var(--loss); }
+  .badge-draw { background: rgba(255,170,0,0.15); color: var(--draw); }
+  .badge-unknown { background: rgba(100,100,100,0.15); color: var(--text-dim); }
+
+  .player-info { display: flex; flex-direction: column; gap: 2px; }
+
+  .player-name-gfc {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--text);
+  }
+
+  .player-matched {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+  }
+
+  .match-matched { color: var(--win) !important; }
+  .match-fuzzy { color: var(--draw) !important; }
+  .match-none { color: var(--loss) !important; }
+
+  .score-display {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: var(--text-mid);
+  }
+
+  .opponent-name {
+    font-size: 12px;
+    color: var(--text-dim);
+    text-align: right;
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* UNMATCHED WARNING */
+  .unmatched-section {
+    background: rgba(255,68,68,0.05);
+    border: 1px solid rgba(255,68,68,0.2);
+    border-radius: 6px;
+    padding: 16px;
+    margin-top: 16px;
+    display: none;
+  }
+
+  .unmatched-section.visible { display: block; }
+
+  .unmatched-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--loss);
+    margin-bottom: 10px;
+  }
+
+  .unmatched-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .unmatched-chip {
+    background: rgba(255,68,68,0.1);
+    border: 1px solid rgba(255,68,68,0.2);
+    border-radius: 3px;
+    padding: 4px 10px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--loss);
+  }
+
+  /* SUBMIT SECTION */
+  .submit-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    display: none;
+  }
+
+  .submit-section.visible { display: block; }
+
+  .submit-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .submit-info {
+    font-size: 13px;
+    color: var(--text-mid);
+    line-height: 1.6;
+  }
+
+  .submit-info span { color: var(--accent); font-weight: 600; }
+
+  /* STATUS MESSAGE */
+  .status-msg {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    padding: 10px 14px;
+    border-radius: 4px;
+    margin-top: 12px;
+    display: none;
+  }
+
+  .status-msg.visible { display: block; }
+  .status-success { background: rgba(68,255,136,0.1); color: var(--win); border: 1px solid rgba(68,255,136,0.2); }
+  .status-error { background: rgba(255,68,68,0.1); color: var(--loss); border: 1px solid rgba(255,68,68,0.2); }
+  .status-loading { background: rgba(232,255,0,0.06); color: var(--accent); border: 1px solid rgba(232,255,0,0.15); }
+
+  /* APPS SCRIPT SETUP GUIDE */
+  .setup-guide {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+
+  .setup-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .setup-toggle-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-mid);
+  }
+
+  .toggle-arrow {
+    color: var(--text-dim);
+    transition: transform 0.2s;
+    font-size: 14px;
+  }
+
+  .toggle-arrow.open { transform: rotate(180deg); }
+
+  .setup-content {
+    display: none;
+    margin-top: 16px;
+  }
+
+  .setup-content.open { display: block; }
+
+  .setup-step {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 14px;
+    align-items: flex-start;
+  }
+
+  .step-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    color: var(--accent);
+    line-height: 1;
+    min-width: 20px;
+  }
+
+  .step-text {
+    font-size: 13px;
+    color: var(--text-mid);
+    line-height: 1.6;
+  }
+
+  .step-text code {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 1px 6px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+  }
+
+  .code-block {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px;
+    margin-top: 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: #aaa;
+    line-height: 1.8;
+    overflow-x: auto;
+    white-space: pre;
+  }
+
+  .code-block .kw { color: #7dd3fc; }
+  .code-block .str { color: #86efac; }
+  .code-block .fn { color: var(--accent); }
+  .code-block .cm { color: #555; }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 24px 0;
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    .match-row { grid-template-columns: auto 1fr auto; }
+    .opponent-name { display: none; }
+    .stats-row { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  /* ANIMATE IN */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .match-row { animation: fadeUp 0.25s ease both; }
 </style>
 </head>
 <body>
+<div class="container">
 
-<!-- TOPBAR -->
-<a href="https://goatfcbd.com" class="topbar">
-  <div class="topbar-left">
-    <img src="https://i.imgur.com/LY3Bb9m.png" class="topbar-logo" alt="GOAT FC">
-    <span class="topbar-text">GOAT FC</span>
+  <!-- HEADER -->
+  <header>
+    <div class="logo-block">
+      <div class="logo-text">GOAT FC</div>
+      <div class="logo-sub">Match Result Parser · v1.0</div>
+    </div>
+    <div class="header-badge">
+      <span class="badge-pill pill-green">⚽ Active</span>
+      <span class="badge-pill pill-yellow">100 Players Loaded</span>
+    </div>
+  </header>
+
+  <!-- GOOGLE SHEETS SETUP GUIDE -->
+  <div class="setup-guide">
+    <div class="setup-toggle" onclick="toggleSetup()">
+      <span class="setup-toggle-title">⚙ Google Sheets Setup Guide</span>
+      <span class="toggle-arrow" id="setupArrow">▼</span>
+    </div>
+    <div class="setup-content" id="setupContent">
+      <div class="setup-step">
+        <div class="step-num">1</div>
+        <div class="step-text">আপনার Google Sheet এ যান → <code>Extensions</code> → <code>Apps Script</code> এ click করুন</div>
+      </div>
+      <div class="setup-step">
+        <div class="step-num">2</div>
+        <div class="step-text">নিচের code টা paste করুন এবং Save করুন:</div>
+      </div>
+      <div class="code-block"><span class="kw">function</span> <span class="fn">doPost</span>(e) {
+  <span class="kw">var</span> sheet = SpreadsheetApp.<span class="fn">getActiveSpreadsheet</span>()
+    .<span class="fn">getSheetByName</span>(<span class="str">"Match_Results"</span>); <span class="cm">// sheet name</span>
+  
+  <span class="cm">// Create sheet if not exists</span>
+  <span class="kw">if</span> (!sheet) {
+    sheet = SpreadsheetApp.<span class="fn">getActiveSpreadsheet</span>().<span class="fn">insertSheet</span>(<span class="str">"Match_Results"</span>);
+    sheet.<span class="fn">appendRow</span>([<span class="str">"Date"</span>,<span class="str">"Round"</span>,<span class="str">"Tournament"</span>,<span class="str">"GFC_Player"</span>,
+      <span class="str">"GFC_ID"</span>,<span class="str">"Opponent"</span>,<span class="str">"GFC_Score"</span>,<span class="str">"Opp_Score"</span>,<span class="str">"Result"</span>,<span class="str">"Submitted_At"</span>]);
+  }
+  
+  <span class="kw">var</span> data = JSON.<span class="fn">parse</span>(e.postData.contents);
+  <span class="kw">var</span> rows = data.matches;
+  <span class="kw">var</span> now = <span class="kw">new</span> <span class="fn">Date</span>().toISOString();
+  
+  rows.<span class="fn">forEach</span>(<span class="kw">function</span>(m) {
+    sheet.<span class="fn">appendRow</span>([
+      m.date, m.round, m.tournament,
+      m.gfc_player, m.gfc_id, m.opponent,
+      m.gfc_score, m.opp_score, m.result, now
+    ]);
+  });
+  
+  <span class="kw">return</span> ContentService
+    .<span class="fn">createTextOutput</span>(JSON.<span class="fn">stringify</span>({status:<span class="str">"ok"</span>, rows: rows.length}))
+    .<span class="fn">setMimeType</span>(ContentService.MimeType.JSON);
+}</div>
+      <div class="setup-step" style="margin-top:14px">
+        <div class="step-num">3</div>
+        <div class="step-text"><code>Deploy</code> → <code>New deployment</code> → Type: <code>Web app</code> → Execute as: <code>Me</code> → Who has access: <code>Anyone</code> → Deploy করুন</div>
+      </div>
+      <div class="setup-step">
+        <div class="step-num">4</div>
+        <div class="step-text">Deploy হলে যে <code>Web app URL</code> পাবেন সেটা নিচের settings এ paste করুন</div>
+      </div>
+    </div>
   </div>
-  <div class="topbar-right"><i class="fa-solid fa-house"></i></div>
-</a>
 
-<!-- HERO -->
-<div class="hero">
-  <h1>GOAT FC ELITE BOARD</h1>
-  <div class="hero-sub">OUR HONORABLE MANAGEMENT &amp; TEAM MEMBERS</div>
-</div>
-
-<!-- TABS — all 5 in one row, no icons -->
-<div class="tabs">
-  <div class="tab active" data-t="management" onclick="showTab(event,'management')">MGMT</div>
-  <div class="tab" data-t="Main" onclick="showTab(event,'Main')">MAIN</div>
-  <div class="tab" data-t="Academy" onclick="showTab(event,'Academy')">ACADEMY</div>
-  <div class="tab" data-t="Youth" onclick="showTab(event,'Youth')">YOUTH</div>
-  <div class="tab" data-t="Goat" onclick="showTab(event,'Goat')">GOAT</div>
-</div>
-
-<!-- FILTER — 3 in one row with icons -->
-<div class="filter-box">
-  <div class="filter-wrap">
-    <i class="fa-solid fa-circle-dot"></i>
-    <select id="statusFilter">
-      <option value="">All Status</option>
-      <option>Available</option>
-      <option>Busy (1-2 Days)</option>
-      <option>Busy (3-7 Days)</option>
-      <option>Busy (7-15 Days)</option>
-      <option>Busy (15-30 Days)</option>
-    </select>
+  <!-- SETTINGS -->
+  <div class="settings-bar">
+    <span class="settings-label">⚡ Sheet URL</span>
+    <input type="text" id="sheetUrl" placeholder="https://script.google.com/macros/s/YOUR_ID/exec" />
+    <button class="btn-secondary" onclick="saveUrl()">Save</button>
   </div>
-  <div class="filter-wrap">
-    <i class="fa-solid fa-futbol"></i>
-    <select id="posFilter"><option value="">All Position</option></select>
-  </div>
-  <div class="filter-wrap">
-    <i class="fa-solid fa-clock"></i>
-    <select id="timeFilter"><option value="">All Time</option></select>
-  </div>
-</div>
 
-<!-- GRID -->
-<div id="content" class="grid">
-  <div class="loading">LOADING DATA...</div>
-</div>
+  <!-- STEP 1: PASTE MATCH TEXT -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-title">Match Result Text</span>
+      <span class="step-badge">STEP 01</span>
+    </div>
+    <div class="card-body">
+      <textarea id="matchInput" placeholder="এখানে match result text paste করুন...
 
-<footer><div class="footer-text">POWERED BY GOAT FC</div></footer>
+উদাহরণ:
+COBEG World Cup Qualifiers — GRP12-R6 / 29
+𝐃𝐇𝐀𝐊𝐀 𝐄𝐋𝐈𝐓𝐄 𝐒𝐐𝐔𝐀𝐃 ⚒️ 𝐆𝐎𝐀𝐓 𝐅𝐂
+𝗙𝗶𝗿𝘀𝘁 𝗗𝗮𝘆: May 23 | Response 12:20am-12:30am
+Meherab Hossain Sakib 🔑 0🆚2 Faiaz ur Rahman
+..."></textarea>
+      <div class="btn-row">
+        <button class="btn-primary" onclick="parseMatch()">⚡ Parse Results</button>
+        <button class="btn-secondary" onclick="clearAll()">Clear</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 2: RESULTS PREVIEW -->
+  <div class="results-section card" id="resultsSection">
+    <div class="card-header">
+      <span class="card-title">Parsed Results — GOAT FC Players</span>
+      <span class="step-badge">STEP 02</span>
+    </div>
+    <div class="card-body">
+      <div class="match-info-bar" id="matchInfoBar"></div>
+      <div class="stats-row" id="statsRow"></div>
+      <div class="match-list" id="matchList"></div>
+      <div class="unmatched-section" id="unmatchedSection">
+        <div class="unmatched-title">⚠ Unmatched Names (Manual Review Needed)</div>
+        <div class="unmatched-list" id="unmatchedList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3: SUBMIT -->
+  <div class="submit-section" id="submitSection">
+    <div class="submit-top">
+      <div>
+        <div class="card-title" style="margin-bottom:6px">Submit to Google Sheets</div>
+        <div class="submit-info" id="submitInfo"></div>
+      </div>
+      <button class="btn-submit" id="submitBtn" onclick="submitToSheets()">↑ Submit to Sheets</button>
+    </div>
+    <div class="status-msg" id="statusMsg"></div>
+  </div>
+
+</div>
 
 <script>
-const SHEET="https://docs.google.com/spreadsheets/d/1j8HRakCsKmB-GTdfKJ3kd7XNEwBfNEg3AvtWTpPpKK0/gviz/tq?tqx=out:json&sheet=Dashboard";
-let data=[],currentTab="management";
+// =============================================
+// GOAT FC PLAYER LIST (from Google Sheets)
+// =============================================
+const GFC_PLAYERS = [
+  {name:"Md Rashedul Hasan",id:"GFC-001"},
+  {name:"Joy das",id:"GFC-002"},
+  {name:"Ashraful Mannan",id:"GFC-003"},
+  {name:"Mainul Islam",id:"GFC-004"},
+  {name:"Ariful Islam Arif",id:"GFC-005"},
+  {name:"Rian Forhad",id:"GFC-006"},
+  {name:"Ashraful Islam",id:"GFC-007"},
+  {name:"Mashrur Rayat",id:"GFC-008"},
+  {name:"Ishmam Wahid",id:"GFC-009"},
+  {name:"Md Mirajul Islam",id:"GFC-010"},
+  {name:"Shoyon",id:"GFC-011"},
+  {name:"Asadul Islam",id:"GFC-012"},
+  {name:"Parvez Emon",id:"GFC-013"},
+  {name:"Ayon Chowdhury",id:"GFC-014"},
+  {name:"Ahmmad Hossain",id:"GFC-015"},
+  {name:"Mohammad Babu",id:"GFC-016"},
+  {name:"Arniv Rahman",id:"GFC-017"},
+  {name:"Anayet Ullah",id:"GFC-018"},
+  {name:"Md Jobair Hossain",id:"GFC-019"},
+  {name:"Tahseen Shawon",id:"GFC-020"},
+  {name:"Md Shah Newaj",id:"GFC-021"},
+  {name:"Ashaduzzaman Tuha",id:"GFC-022"},
+  {name:"Rizwanul Islam",id:"GFC-023"},
+  {name:"Annay Chowdhury",id:"GFC-024"},
+  {name:"Kamruzzaman Shafi",id:"GFC-025"},
+  {name:"Harunor Rashed",id:"GFC-026"},
+  {name:"Aditya Das",id:"GFC-027"},
+  {name:"Shuvo Gaming",id:"GFC-028"},
+  {name:"Md Shakawat",id:"GFC-029"},
+  {name:"Ahmed Shiam",id:"GFC-030"},
+  {name:"Mishfaq Shafi",id:"GFC-031"},
+  {name:"Saifour Rahman",id:"GFC-032"},
+  {name:"Abir Bin Hossain",id:"GFC-033"},
+  {name:"Md Kawsar Mahmud",id:"GFC-034"},
+  {name:"Mushfiqur Rahman",id:"GFC-035"},
+  {name:"Belal Hasan Biplob",id:"GFC-036"},
+  {name:"ABU YOUSUF",id:"GFC-037"},
+  {name:"Tanbirul Islam",id:"GFC-038"},
+  {name:"Samir Bin Mamun",id:"GFC-039"},
+  {name:"MI Shoriyat",id:"GFC-040"},
+  {name:"Md sahadat Hossen",id:"GFC-041"},
+  {name:"S R Tamim",id:"GFC-042"},
+  {name:"RJ Romjan",id:"GFC-043"},
+  {name:"Hridoy Khan Monir",id:"GFC-044"},
+  {name:"Junaidul islam",id:"GFC-045"},
+  {name:"Sadman Chowdhury",id:"GFC-046"},
+  {name:"Hasnat Hasib",id:"GFC-047"},
+  {name:"Tonmoy Kumar",id:"GFC-048"},
+  {name:"Riaz Uddin",id:"GFC-049"},
+  {name:"AB IR",id:"GFC-050"},
+  {name:"Farhan Bhuiya",id:"GFC-051"},
+  {name:"Simanto Islam",id:"GFC-052"},
+  {name:"Nahid Hasan",id:"GFC-053"},
+  {name:"Sagor Hossain",id:"GFC-054"},
+  {name:"Imtiaz Ahmed",id:"GFC-055"},
+  {name:"Sahed Chowdhury",id:"GFC-056"},
+  {name:"Redwan Islam",id:"GFC-057"},
+  {name:"Ahmed Samir",id:"GFC-058"},
+  {name:"Sanjil Chowdhury",id:"GFC-059"},
+  {name:"Saimum Ahnaf",id:"GFC-060"},
+  {name:"Shahriar Islam",id:"GFC-061"},
+  {name:"Tanbir Hossain",id:"GFC-063"},
+  {name:"Nurul Iman",id:"GFC-064"},
+  {name:"Rahul Islam",id:"GFC-065"},
+  {name:"MD Fahim Rezwan",id:"GFC-066"},
+  {name:"Jun Nurain",id:"GFC-068"},
+  {name:"Sofiullah Sofi",id:"GFC-069"},
+  {name:"Fa Him Hossen",id:"GFC-071"},
+  {name:"Rm Rumman",id:"GFC-072"},
+  {name:"Tahmid Ahmad",id:"GFC-073"},
+  {name:"Priyo Biswas",id:"GFC-074"},
+  {name:"Alifur Rahman",id:"GFC-075"},
+  {name:"Inkyad Rakeen",id:"GFC-076"},
+  {name:"Shaidur Rahman",id:"GFC-077"},
+  {name:"Promise Roy",id:"GFC-078"},
+  {name:"Hridoy",id:"GFC-079"},
+  {name:"Abid Hasan",id:"GFC-080"},
+  {name:"Shahjalal Alvi",id:"GFC-081"},
+  {name:"Md. Jubayer Abadin",id:"GFC-082"},
+  {name:"Shihab ahmed",id:"GFC-083"},
+  {name:"Md Ibrahim",id:"GFC-084"},
+  {name:"Tahmid Amin",id:"GFC-085"},
+  {name:"Prantik dhar",id:"GFC-086"},
+  {name:"Md. Roni Sarder",id:"GFC-087"},
+  {name:"Md Parvej",id:"GFC-088"},
+  {name:"Tahsin Shuvo",id:"GFC-089"},
+  {name:"S M Tajbirul kabir",id:"GFC-090"},
+  {name:"Syed Md Shahriar",id:"GFC-091"},
+  {name:"Sifatul Islam",id:"GFC-092"},
+  {name:"Md Abu Sufean",id:"GFC-093"},
+  {name:"MaHiN",id:"GFC-094"},
+  {name:"Md. Abdullah Rafi",id:"GFC-096"},
+  {name:"Md Mubtasim",id:"GFC-097"},
+  {name:"Sadman Saydi",id:"GFC-098"},
+  {name:"Seraj uddin Akib",id:"GFC-099"},
+  {name:"MD Mehedi Hasan",id:"GFC-100"},
+  {name:"MD. Najmus Sakib",id:"GFC-102"},
+  {name:"Osman Bhuiyan",id:"GFC-103"},
+  {name:"Hasnat Nayeem",id:"GFC-104"},
+];
 
-function loadData(){
-  fetch(SHEET)
-    .then(r=>r.text())
-    .then(d=>{
-      const j=JSON.parse(d.substring(47).slice(0,-2));
-      data=j.table.rows.map((r,i)=>({
-        index:i,
-        name:r.c[0]?.v||"",
-        role:r.c[1]?.v||"",
-        status:r.c[3]?.v||"",
-        fb:r.c[4]?.v||"#",
-        phone:r.c[5]?.v||"",
-        img:r.c[7]?.v||"",
-        manage:r.c[8]?.v||"",
-        team:(r.c[9]?.v||"").trim(),
-        pos:r.c[10]?.v||"",
-        time:r.c[11]?.v||""
-      }));
-      initFilters();
-      renderCurrent();
-    })
-    .catch(()=>{
-      document.getElementById("content").innerHTML='<div class="empty" style="color:#ff4466;">ERROR LOADING DATA</div>';
+// =============================================
+// FUZZY MATCHING (Levenshtein)
+// =============================================
+function levenshtein(a, b) {
+  a = a.toLowerCase().trim();
+  b = b.toLowerCase().trim();
+  const m = a.length, n = b.length;
+  const dp = Array.from({length: m+1}, (_, i) => 
+    Array.from({length: n+1}, (_, j) => i === 0 ? j : j === 0 ? i : 0)
+  );
+  for (let i = 1; i <= m; i++)
+    for (let j = 1; j <= n; j++)
+      dp[i][j] = a[i-1] === b[j-1] ? dp[i-1][j-1] :
+        1 + Math.min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]);
+  return dp[m][n];
+}
+
+function similarity(a, b) {
+  const maxLen = Math.max(a.length, b.length);
+  if (maxLen === 0) return 1;
+  return 1 - levenshtein(a, b) / maxLen;
+}
+
+function findBestMatch(name) {
+  // Normalize: remove emojis, extra spaces, unicode variations
+  const clean = name.replace(/[^\w\s]/gu, '').replace(/\s+/g, ' ').trim();
+  
+  let best = null, bestScore = 0;
+  
+  for (const p of GFC_PLAYERS) {
+    const pClean = p.name.replace(/[^\w\s]/gu, '').replace(/\s+/g, ' ').trim();
+    
+    // Exact match
+    if (pClean.toLowerCase() === clean.toLowerCase()) {
+      return { player: p, score: 1.0, type: 'exact' };
+    }
+    
+    // Full similarity
+    let score = similarity(clean, pClean);
+    
+    // Partial: check if last name matches
+    const nameParts = clean.toLowerCase().split(' ');
+    const pParts = pClean.toLowerCase().split(' ');
+    const lastMatch = nameParts[nameParts.length-1] === pParts[pParts.length-1];
+    const firstMatch = nameParts[0] === pParts[0];
+    if (lastMatch) score = Math.max(score, 0.72);
+    if (firstMatch && nameParts.length > 1 && pParts.length > 1) score = Math.max(score, 0.65);
+    
+    // Contains check
+    if (pClean.toLowerCase().includes(clean.toLowerCase()) || clean.toLowerCase().includes(pClean.toLowerCase())) {
+      score = Math.max(score, 0.75);
+    }
+    
+    if (score > bestScore) { bestScore = score; best = p; }
+  }
+  
+  if (bestScore >= 0.72) return { player: best, score: bestScore, type: bestScore >= 0.9 ? 'exact' : 'fuzzy' };
+  return { player: null, score: bestScore, type: 'none' };
+}
+
+// =============================================
+// PARSE MATCH TEXT
+// =============================================
+let parsedData = null;
+
+function parseMatch() {
+  const text = document.getElementById('matchInput').value.trim();
+  if (!text) return;
+
+  // Extract metadata
+  const tournamentMatch = text.match(/^(.+?)(?:\n|$)/);
+  const tournament = tournamentMatch ? tournamentMatch[1].trim() : 'Unknown';
+
+  // Detect which side is GOAT FC
+  // Look for header line with team names
+  const headerLine = text.split('\n').find(l => 
+    l.toLowerCase().includes('goat') && l.toLowerCase().includes('fc')
+  ) || '';
+
+  // Determine GOAT FC side: if header is "TEAM A ⚒️ GOAT FC" → right side
+  // if "GOAT FC ⚒️ TEAM A" → left side
+  const cleanHeader = headerLine.replace(/[\u{1F000}-\u{1FFFF}]/gu, '').replace(/[^\w\s⚒️]/g, '').trim();
+  const gfcIndex = headerLine.toLowerCase().indexOf('goat');
+  const midIndex = headerLine.length / 2;
+  const gfcOnRight = gfcIndex > midIndex;
+
+  // Extract date from text
+  const dateMatch = text.match(/(?:May|Jun|Jul|Aug|Sep|Oct|Nov|Dec|Jan|Feb|Mar|Apr)\s+\d+/i);
+  const matchDate = dateMatch ? dateMatch[0] + ' 2025' : new Date().toDateString();
+
+  // Extract round
+  const roundMatch = text.match(/R(\d+)/i) || text.match(/Round\s*(\d+)/i);
+  const round = roundMatch ? 'R' + roundMatch[1] : 'Unknown';
+
+  // Extract group
+  const groupMatch = text.match(/GRP(\w+)/i);
+  const group = groupMatch ? 'GRP' + groupMatch[1] : '';
+
+  // Find match lines: pattern "Name 🔑 X🆚Y Name" or "Name X🆚Y Name 🔑"
+  const matchLines = [];
+  const lines = text.split('\n');
+
+  for (const line of lines) {
+    // Match pattern: has 🆚 (or VS)
+    if (!line.includes('🆚') && !line.includes('vs')) continue;
+    
+    // Parse: "LeftName SCORE🆚SCOREScore RightName"
+    // Score pattern like 0🆚2 or 2🆚2
+    const scorePattern = /(\d+)\s*🆚\s*(\d+)/;
+    const scoreMatch = line.match(scorePattern);
+    if (!scoreMatch) continue;
+
+    const scoreIdx = line.indexOf(scoreMatch[0]);
+    const leftPart = line.substring(0, scoreIdx).trim();
+    const rightPart = line.substring(scoreIdx + scoreMatch[0].length).trim();
+
+    // Clean names: remove 🔑 and other emojis
+    const cleanName = n => n.replace(/[^\w\s\u0080-\u{FFFF}]/gu, '').replace(/\s+/g, ' ').trim();
+    
+    const leftName = cleanName(leftPart);
+    const rightName = cleanName(rightPart);
+    
+    const leftScore = parseInt(scoreMatch[1]);
+    const rightScore = parseInt(scoreMatch[2]);
+
+    // Determine GFC player based on header
+    let gfcName, oppName, gfcScore, oppScore;
+    if (gfcOnRight) {
+      gfcName = rightName;
+      oppName = leftName;
+      gfcScore = rightScore;
+      oppScore = leftScore;
+    } else {
+      gfcName = leftName;
+      oppName = rightName;
+      gfcScore = leftScore;
+      oppScore = rightScore;
+    }
+
+    const result = gfcScore > oppScore ? 'WIN' : gfcScore < oppScore ? 'LOSS' : 'DRAW';
+    
+    // Find matching GFC player
+    const match = findBestMatch(gfcName);
+
+    matchLines.push({
+      rawName: gfcName,
+      opponent: oppName,
+      gfcScore,
+      oppScore,
+      result,
+      matchedPlayer: match.player,
+      matchScore: match.score,
+      matchType: match.type,
+      date: matchDate,
+      round,
+      group,
+      tournament,
     });
+  }
+
+  parsedData = { matches: matchLines, tournament, round, group, matchDate, gfcOnRight };
+  renderResults(parsedData);
 }
 
-function showTab(e,t){
-  currentTab=t;
-  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
-  e.currentTarget.classList.add("active");
-  renderCurrent();
-}
+function renderResults(data) {
+  const { matches } = data;
+  
+  // Show sections
+  document.getElementById('resultsSection').classList.add('visible', 'results-section');
+  document.getElementById('resultsSection').style.display = 'block';
+  document.getElementById('submitSection').style.display = 'block';
+  document.getElementById('submitSection').classList.add('visible');
 
-function initFilters(){
-  const posSet=new Set(),timeSet=new Set();
-  data.forEach(p=>{
-    if(p.pos&&p.pos.length<=15&&p.pos!="Position") posSet.add(p.pos.trim());
-    if(p.time&&p.time.length<=30&&p.time!="Time") timeSet.add(p.time.trim());
+  // Match info bar
+  const infoBar = document.getElementById('matchInfoBar');
+  infoBar.innerHTML = `
+    <div class="match-info-item"><div class="info-key">Tournament</div><div class="info-val" style="font-size:11px">${data.tournament.substring(0,40)}</div></div>
+    <div class="match-info-item"><div class="info-key">Round</div><div class="info-val">${data.round} ${data.group}</div></div>
+    <div class="match-info-item"><div class="info-key">Date</div><div class="info-val">${data.matchDate}</div></div>
+    <div class="match-info-item"><div class="info-key">Total Matches</div><div class="info-val">${matches.length}</div></div>
+  `;
+
+  // Stats
+  const wins = matches.filter(m => m.result === 'WIN').length;
+  const losses = matches.filter(m => m.result === 'LOSS').length;
+  const draws = matches.filter(m => m.result === 'DRAW').length;
+
+  document.getElementById('statsRow').innerHTML = `
+    <div class="stat-card stat-win"><div class="stat-num">${wins}</div><div class="stat-label">Wins</div></div>
+    <div class="stat-card stat-loss"><div class="stat-num">${losses}</div><div class="stat-label">Losses</div></div>
+    <div class="stat-card stat-draw"><div class="stat-num">${draws}</div><div class="stat-label">Draws</div></div>
+  `;
+
+  // Match rows
+  const matchList = document.getElementById('matchList');
+  matchList.innerHTML = '';
+  const unmatched = [];
+
+  matches.forEach((m, i) => {
+    const badgeClass = m.result === 'WIN' ? 'badge-win' : m.result === 'LOSS' ? 'badge-loss' : 'badge-draw';
+    const resultLabel = m.result === 'WIN' ? 'W' : m.result === 'LOSS' ? 'L' : 'D';
+    
+    let matchedText = '';
+    let matchClass = '';
+    if (m.matchType === 'exact') {
+      matchedText = `✓ ${m.matchedPlayer.name} (${m.matchedPlayer.id})`;
+      matchClass = 'match-matched';
+    } else if (m.matchType === 'fuzzy') {
+      matchedText = `~ ${m.matchedPlayer.name} (${m.matchedPlayer.id}) — ${Math.round(m.matchScore*100)}% match`;
+      matchClass = 'match-fuzzy';
+    } else {
+      matchedText = `✗ No match found`;
+      matchClass = 'match-none';
+      unmatched.push(m.rawName);
+    }
+
+    const div = document.createElement('div');
+    div.className = 'match-row';
+    div.style.animationDelay = (i * 0.04) + 's';
+    div.innerHTML = `
+      <div class="result-badge ${badgeClass}">${resultLabel}</div>
+      <div class="player-info">
+        <div class="player-name-gfc">${m.rawName}</div>
+        <div class="player-matched ${matchClass}">${matchedText}</div>
+      </div>
+      <div class="score-display">${m.gfcScore}–${m.oppScore}</div>
+      <div class="opponent-name">vs ${m.opponent}</div>
+    `;
+    matchList.appendChild(div);
   });
-  const pEl=document.getElementById("posFilter"),tEl=document.getElementById("timeFilter");
-  pEl.innerHTML='<option value="">All Position</option>';
-  tEl.innerHTML='<option value="">All Time</option>';
-  [...posSet].sort().forEach(p=>pEl.innerHTML+=`<option>${p}</option>`);
-  [...timeSet].sort().forEach(t=>tEl.innerHTML+=`<option>${t}</option>`);
+
+  // Unmatched
+  const unmatchedSec = document.getElementById('unmatchedSection');
+  const unmatchedList = document.getElementById('unmatchedList');
+  if (unmatched.length > 0) {
+    unmatchedSec.classList.add('visible');
+    unmatchedList.innerHTML = unmatched.map(n => `<span class="unmatched-chip">${n}</span>`).join('');
+  } else {
+    unmatchedSec.classList.remove('visible');
+  }
+
+  // Submit info
+  const matched = matches.filter(m => m.matchType !== 'none').length;
+  document.getElementById('submitInfo').innerHTML = 
+    `<span>${matched}</span> টি match Google Sheets এ submit হবে। ${matches.length - matched > 0 ? `<span style="color:var(--loss)">${matches.length - matched} টি unmatched</span> — manually verify করুন।` : 'সব players matched! ✓'}`;
 }
 
-function renderCurrent(){
-  let f=data.filter(p=>currentTab==="management"?p.manage==="YES":p.team===currentTab);
-  const s=document.getElementById("statusFilter").value;
-  const p=document.getElementById("posFilter").value;
-  const t=document.getElementById("timeFilter").value;
-  f=f.filter(x=>(!s||x.status===s)&&(!p||x.pos===p)&&(!t||x.time===t));
-  f.sort((a,b)=>{
-    const A=a.status.includes("Available"),B=b.status.includes("Available");
-    return A===B?a.index-b.index:A?-1:1;
-  });
-  render(f);
+// =============================================
+// SUBMIT TO GOOGLE SHEETS
+// =============================================
+async function submitToSheets() {
+  const url = document.getElementById('sheetUrl').value.trim() || localStorage.getItem('gfc_sheet_url');
+  if (!url) {
+    showStatus('error', '⚠ Please enter your Google Apps Script Web App URL first');
+    return;
+  }
+  if (!parsedData) return;
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = '↑ Submitting...';
+  showStatus('loading', '⏳ Submitting to Google Sheets...');
+
+  const matchesToSubmit = parsedData.matches
+    .filter(m => m.matchType !== 'none')
+    .map(m => ({
+      date: m.date,
+      round: m.round + (m.group ? ' ' + m.group : ''),
+      tournament: m.tournament,
+      gfc_player: m.matchedPlayer.name,
+      gfc_id: m.matchedPlayer.id,
+      opponent: m.opponent,
+      gfc_score: m.gfcScore,
+      opp_score: m.oppScore,
+      result: m.result,
+    }));
+
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ matches: matchesToSubmit }),
+    });
+    // no-cors means we can't read response, but if no error thrown it likely worked
+    showStatus('success', `✓ ${matchesToSubmit.length} টি match successfully submitted to Google Sheets!`);
+    btn.textContent = '✓ Submitted!';
+  } catch (err) {
+    showStatus('error', '✗ Error: ' + err.message + ' — Check the URL and try again.');
+    btn.disabled = false;
+    btn.textContent = '↑ Submit to Sheets';
+  }
 }
 
-function getTeamClass(p){
-  if(p.manage==="YES") return "management";
-  if(p.team==="Main") return "main";
-  if(p.team==="Academy") return "academy";
-  if(p.team==="Youth") return "youth";
-  if(p.team==="Goat") return "goat";
-  return "";
+function showStatus(type, msg) {
+  const el = document.getElementById('statusMsg');
+  el.className = 'status-msg visible status-' + type;
+  el.textContent = msg;
 }
 
-function render(arr){
-  const c=document.getElementById("content");
-  if(!arr.length){c.innerHTML='<div class="empty">NO MEMBERS FOUND</div>';return;}
-  c.innerHTML=arr.map(p=>{
-    const tc=getTeamClass(p);
-    const avail=p.status.includes("Available");
-    return `<div class="card ${tc}${avail?' available-card':''}">
-  <div class="card-img-wrap">
-    <img src="${p.img}" loading="lazy" onerror="this.src='https://placehold.co/300x300/0a1220/00f5ff?text=GFC'">
-    <div class="status-dot ${avail?'dot-avail':'dot-busy'}"></div>
-  </div>
-  <div class="card-body">
-    <div class="p-name">${p.name}</div>
-    <div class="p-role">${p.role}</div>
-    <div class="badge-row">
-      ${p.pos?`<span class="p-badge p-pos">${p.pos}</span>`:''}
-      ${p.time?`<span class="p-badge p-time">${p.time}</span>`:''}
-    </div>
-    <div class="p-status ${avail?'avail':'busy'}">
-      <i class="fa-solid ${avail?'fa-circle-check':'fa-circle-xmark'}" style="font-size:8px;"></i>${p.status}
-    </div>
-  </div>
-  <div class="card-btns">
-    <a href="${p.fb}" target="_blank" class="btn btn-msg"><i class="fa-brands fa-facebook-messenger"></i> MSG</a>
-    <a href="tel:${p.phone}" class="btn btn-call"><i class="fa-solid fa-phone"></i> CALL</a>
-  </div>
-</div>`;
-  }).join("");
+function clearAll() {
+  document.getElementById('matchInput').value = '';
+  document.getElementById('resultsSection').style.display = 'none';
+  document.getElementById('submitSection').style.display = 'none';
+  parsedData = null;
 }
 
-document.querySelectorAll("select").forEach(s=>s.addEventListener("change",renderCurrent));
-loadData();
-setInterval(loadData,30000);
+function saveUrl() {
+  const url = document.getElementById('sheetUrl').value.trim();
+  if (url) localStorage.setItem('gfc_sheet_url', url);
+  showStatus('success', '✓ URL saved');
+  document.getElementById('statusMsg').style.display = 'block';
+}
+
+function toggleSetup() {
+  const content = document.getElementById('setupContent');
+  const arrow = document.getElementById('setupArrow');
+  content.classList.toggle('open');
+  arrow.classList.toggle('open');
+}
+
+// Load saved URL
+window.addEventListener('load', () => {
+  const saved = localStorage.getItem('gfc_sheet_url');
+  if (saved) document.getElementById('sheetUrl').value = saved;
+});
 </script>
 </body>
 </html>

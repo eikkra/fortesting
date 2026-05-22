@@ -1,119 +1,561 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>GOAT FC — Match Result Submission</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: var(--font-sans); }
-.wrap { padding: 1.5rem 0; }
-.header { display: flex; align-items: center; gap: 10px; margin-bottom: 1.5rem; }
-.badge { background: #1a1a2e; color: #f0c040; font-size: 11px; font-weight: 500; padding: 4px 10px; border-radius: 20px; letter-spacing: 0.5px; }
-.title { font-size: 20px; font-weight: 500; color: var(--color-text-primary); }
-.sub { font-size: 13px; color: var(--color-text-secondary); margin-top: 2px; }
-.card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.25rem; margin-bottom: 1rem; }
-.label { font-size: 12px; color: var(--color-text-secondary); margin-bottom: 6px; letter-spacing: 0.3px; }
-textarea { width: 100%; min-height: 180px; resize: vertical; font-family: var(--font-mono); font-size: 12px; line-height: 1.6; padding: 10px 12px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-secondary); color: var(--color-text-primary); }
-textarea:focus { outline: none; border-color: #f0c040; box-shadow: 0 0 0 2px rgba(240,192,64,0.15); }
-.btn-row { display: flex; gap: 8px; margin-top: 10px; }
-.btn-primary { background: #1a1a2e; color: #f0c040; border: none; border-radius: var(--border-radius-md); padding: 9px 20px; font-size: 13px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: opacity 0.15s; }
-.btn-primary:hover { opacity: 0.85; }
-.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
-.btn-clear { background: transparent; color: var(--color-text-secondary); border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); padding: 9px 16px; font-size: 13px; cursor: pointer; }
-.btn-clear:hover { background: var(--color-background-secondary); }
-.preview { display: none; }
-.preview.show { display: block; }
-.preview-title { font-size: 13px; font-weight: 500; color: var(--color-text-secondary); margin-bottom: 8px; }
-.match-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 0.5px solid var(--color-border-tertiary); font-size: 13px; }
-.match-row:last-child { border-bottom: none; }
-.player-name { font-weight: 500; color: var(--color-text-primary); flex: 1; }
-.score-box { display: flex; align-items: center; gap: 6px; margin: 0 12px; }
-.score { font-size: 14px; font-weight: 500; padding: 2px 8px; border-radius: 4px; min-width: 24px; text-align: center; }
-.score.goat { background: #1a1a2e; color: #f0c040; }
-.score.opp { background: var(--color-background-secondary); color: var(--color-text-primary); }
-.vs-sep { font-size: 11px; color: var(--color-text-tertiary); }
-.result-badge { font-size: 11px; font-weight: 500; padding: 3px 9px; border-radius: 20px; min-width: 46px; text-align: center; }
-.result-badge.win { background: #EAF3DE; color: #3B6D11; }
-.result-badge.loss { background: #FCEBEB; color: #A32D2D; }
-.result-badge.draw { background: #FAEEDA; color: #854F0B; }
-.session-label { font-size: 11px; color: var(--color-text-tertiary); padding: 6px 0 2px; font-style: italic; }
-.status-bar { padding: 10px 14px; border-radius: var(--border-radius-md); font-size: 13px; margin-top: 10px; display: none; }
-.status-bar.success { background: #EAF3DE; color: #3B6D11; display: flex; align-items: center; gap: 6px; }
-.status-bar.error { background: #FCEBEB; color: #A32D2D; display: flex; align-items: center; gap: 6px; }
-.status-bar.loading { background: var(--color-background-secondary); color: var(--color-text-secondary); display: flex; align-items: center; gap: 6px; }
-.spin { animation: spin 1s linear infinite; display: inline-block; }
-@keyframes spin { to { transform: rotate(360deg); } }
-.stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 8px; }
-.stat-card { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 10px; text-align: center; }
-.stat-num { font-size: 20px; font-weight: 500; color: var(--color-text-primary); }
-.stat-lbl { font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; }
-.stat-num.win-c { color: #3B6D11; }
-.stat-num.draw-c { color: #854F0B; }
-.stat-num.loss-c { color: #A32D2D; }
-.opp-player { color: var(--color-text-secondary); flex: 1; text-align: right; }
-</style>
+:root {
+  --gold: #F5C842;
+  --gold-dim: #c9a22a;
+  --gold-glow: rgba(245,200,66,0.18);
+  --bg: #0b0d11;
+  --bg2: #12151b;
+  --bg3: #1a1e27;
+  --bg4: #222736;
+  --border: rgba(255,255,255,0.07);
+  --border-gold: rgba(245,200,66,0.3);
+  --text: #f0f2f5;
+  --text2: #8b90a0;
+  --text3: #555c6e;
+  --green: #3ecf8e;
+  --green-bg: rgba(62,207,142,0.12);
+  --amber: #f59e0b;
+  --amber-bg: rgba(245,158,11,0.12);
+  --red: #f26b6b;
+  --red-bg: rgba(242,107,107,0.12);
+  --radius: 12px;
+  --radius-sm: 8px;
+}
 
-<div class="wrap">
-  <div class="header">
-    <div>
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
-        <span class="badge">GOAT FC</span>
-        <span style="font-size:12px;color:var(--color-text-tertiary)">Match Data Submitter</span>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── BACKGROUND GRID ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(245,200,66,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(245,200,66,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: -200px; right: -200px;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(245,200,66,0.06) 0%, transparent 65%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.page { position: relative; z-index: 1; max-width: 760px; margin: 0 auto; padding: 24px 16px 60px; }
+
+/* ── TOP BAR ── */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0 28px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 28px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.brand { display: flex; align-items: center; gap: 12px; }
+
+.crest {
+  width: 44px; height: 44px;
+  background: var(--gold);
+  border-radius: 50% 50% 44% 44% / 60% 60% 40% 40%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 15px; color: #0b0d11;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+  box-shadow: 0 0 20px rgba(245,200,66,0.3);
+}
+
+.brand-text { display: flex; flex-direction: column; }
+.brand-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px; letter-spacing: 2px;
+  color: var(--gold);
+  line-height: 1;
+}
+.brand-sub { font-size: 11px; color: var(--text3); letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
+
+.cobeg-badge {
+  font-size: 10px; font-weight: 500; letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text3);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 5px 12px;
+}
+
+/* ── SECTION TITLE ── */
+.section-label {
+  font-size: 10px; font-weight: 600; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--gold);
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 10px;
+}
+.section-label::after {
+  content: ''; flex: 1; height: 1px; background: var(--border-gold);
+}
+
+/* ── TEXTAREA BLOCK ── */
+.input-block {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 16px;
+  transition: border-color 0.2s;
+}
+.input-block:focus-within { border-color: var(--border-gold); }
+
+.input-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg3);
+}
+.input-header-left { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text2); }
+.dot { width: 8px; height: 8px; border-radius: 50%; }
+.dot.r { background: #ff5f57; }
+.dot.y { background: #febc2e; }
+.dot.g { background: #28c840; }
+
+.char-count { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text3); }
+
+textarea {
+  width: 100%;
+  min-height: 200px;
+  background: transparent;
+  color: var(--text);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  line-height: 1.7;
+  border: none;
+  resize: vertical;
+  padding: 16px;
+  outline: none;
+}
+textarea::placeholder { color: var(--text3); }
+
+/* ── BUTTON ROW ── */
+.btn-row { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 11px 20px;
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px; font-weight: 500;
+  cursor: pointer; border: none;
+  transition: all 0.18s;
+  white-space: nowrap;
+}
+
+.btn-gold {
+  background: var(--gold);
+  color: #0b0d11;
+}
+.btn-gold:hover { background: #ffd84d; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(245,200,66,0.3); }
+.btn-gold:active { transform: translateY(0); }
+.btn-gold:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+
+.btn-outline {
+  background: transparent;
+  color: var(--text2);
+  border: 1px solid var(--border);
+}
+.btn-outline:hover { background: var(--bg3); color: var(--text); border-color: rgba(255,255,255,0.15); }
+
+.btn-submit {
+  background: linear-gradient(135deg, #1f6f4a 0%, #155e3b 100%);
+  color: #3ecf8e;
+  border: 1px solid rgba(62,207,142,0.25);
+  display: none;
+}
+.btn-submit:hover { background: linear-gradient(135deg, #25875a 0%, #1a7549 100%); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(62,207,142,0.2); }
+.btn-submit:active { transform: translateY(0); }
+.btn-submit:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+.btn-submit.visible { display: inline-flex; }
+
+.btn svg { width: 15px; height: 15px; flex-shrink: 0; }
+
+/* ── STATUS BAR ── */
+.status {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  margin-bottom: 16px;
+  border: 1px solid transparent;
+}
+.status.show { display: flex; }
+.status.success { background: var(--green-bg); color: var(--green); border-color: rgba(62,207,142,0.2); }
+.status.error { background: var(--red-bg); color: var(--red); border-color: rgba(242,107,107,0.2); }
+.status.loading { background: var(--bg3); color: var(--text2); border-color: var(--border); }
+.status.warn { background: var(--amber-bg); color: var(--amber); border-color: rgba(245,158,11,0.2); }
+
+.spin { animation: spin 0.8s linear infinite; display: inline-flex; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── PREVIEW PANEL ── */
+.preview-panel {
+  display: none;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  animation: fadeUp 0.3s ease;
+}
+.preview-panel.show { display: block; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.preview-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 20px;
+  background: var(--bg3);
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap; gap: 8px;
+}
+.preview-header-title { font-size: 13px; font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 8px; }
+.preview-header-title span { color: var(--gold); }
+
+/* ── STATS ROW ── */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.stat-cell {
+  background: var(--bg2);
+  padding: 16px 12px;
+  text-align: center;
+}
+.stat-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 32px;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.stat-num.w { color: var(--green); }
+.stat-num.d { color: var(--amber); }
+.stat-num.l { color: var(--red); }
+.stat-label { font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text3); }
+
+/* ── MATCH LIST ── */
+.match-list { padding: 8px 0; }
+
+.session-divider {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 20px 6px;
+  font-size: 10px; font-weight: 600; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--text3);
+}
+.session-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+.match-item {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.15s;
+  animation: fadeIn 0.25s ease both;
+}
+.match-item:last-child { border-bottom: none; }
+.match-item:hover { background: var(--bg3); }
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.player-goat {
+  font-size: 13px; font-weight: 500;
+  color: var(--text);
+  display: flex; align-items: center; gap: 6px;
+}
+.player-goat .key-icon { color: var(--gold); font-size: 11px; }
+
+.player-opp { font-size: 12px; color: var(--text2); text-align: right; }
+
+.score-display {
+  display: flex; align-items: center; gap: 0;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.s-goat {
+  padding: 4px 10px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 17px;
+  background: var(--bg4);
+  color: var(--gold);
+  min-width: 32px; text-align: center;
+  line-height: 1;
+}
+.s-sep { padding: 4px 5px; font-size: 9px; color: var(--text3); background: var(--bg3); border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
+.s-opp {
+  padding: 4px 10px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 17px;
+  background: var(--bg4);
+  color: var(--text2);
+  min-width: 32px; text-align: center;
+  line-height: 1;
+}
+
+.result-chip {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 10px; font-weight: 600; letter-spacing: 1px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+.result-chip.win { background: var(--green-bg); color: var(--green); }
+.result-chip.draw { background: var(--amber-bg); color: var(--amber); }
+.result-chip.loss { background: var(--red-bg); color: var(--red); }
+
+/* ── DUPLICATE NOTICE ── */
+.dup-block {
+  display: none;
+  margin: 0 20px 12px;
+  padding: 10px 14px;
+  background: rgba(245,158,11,0.08);
+  border: 1px solid rgba(245,158,11,0.2);
+  border-radius: var(--radius-sm);
+  font-size: 12px; color: var(--amber);
+  gap: 8px; align-items: flex-start;
+}
+.dup-block.show { display: flex; }
+.dup-list { margin-top: 4px; }
+.dup-list li { font-size: 11px; font-family: 'JetBrains Mono', monospace; margin-top: 2px; color: var(--amber); opacity: 0.8; list-style: none; }
+.dup-list li::before { content: '↳ '; }
+
+/* ── FOOTER ── */
+.footer { text-align: center; margin-top: 40px; font-size: 11px; color: var(--text3); letter-spacing: 0.5px; }
+.footer span { color: var(--gold-dim); }
+
+/* ── MOBILE ── */
+@media (max-width: 520px) {
+  .page { padding: 16px 12px 48px; }
+  .topbar { padding-bottom: 20px; margin-bottom: 20px; }
+  .brand-name { font-size: 18px; }
+  .crest { width: 38px; height: 38px; font-size: 13px; }
+
+  .match-item {
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+    gap: 6px;
+    padding: 10px 14px;
+  }
+  .player-goat { grid-column: 1; grid-row: 1; font-size: 12px; }
+  .score-display { grid-column: 2; grid-row: 1 / 3; }
+  .player-opp { grid-column: 1; grid-row: 2; font-size: 11px; text-align: left; }
+  .result-chip { display: none; }
+
+  .stats-row { gap: 0; }
+  .stat-num { font-size: 26px; }
+  .s-goat, .s-opp { padding: 4px 8px; font-size: 15px; min-width: 26px; }
+
+  .btn-row { gap: 8px; }
+  .btn { padding: 10px 16px; font-size: 12px; }
+  textarea { font-size: 11px; min-height: 160px; }
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="brand">
+      <div class="crest">GFC</div>
+      <div class="brand-text">
+        <div class="brand-name">GOAT FC</div>
+        <div class="brand-sub">Match Result Submission</div>
       </div>
-      <div class="title">Match Result Submission</div>
-      <div class="sub">Paste COBEG match text → auto-detect GOAT FC results → send to Google Sheet</div>
     </div>
+    <div class="cobeg-badge">COBEG World Cup</div>
   </div>
 
-  <div class="card">
-    <div class="label">Match text paste করো</div>
-    <textarea id="matchText" placeholder="COBEG World Cup Qualifiers — GRP12-R6 / 29
+  <!-- INPUT SECTION -->
+  <div class="section-label">Match Data Input</div>
+  <div class="input-block">
+    <div class="input-header">
+      <div class="input-header-left">
+        <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+        <span style="margin-left:4px;">match_data.txt</span>
+      </div>
+      <div class="char-count" id="charCount">0 chars</div>
+    </div>
+    <textarea id="matchText"
+      placeholder="COBEG World Cup Qualifiers — GRP12-R6 / 29
 𝐃𝐇𝐀𝐊𝐀 𝐄𝐋𝐈𝐓𝐄 𝐒𝐐𝐔𝐀𝐃 ⚒️ 𝐆𝐎𝐀𝐓 𝐅𝐂
 𝗙𝗶𝗿𝘀𝘁 𝗗𝗮𝘆: May 23 | Response 12:20am-12:30am
 Meherab Hossain Sakib 🔑 0🆚2 Faiaz ur Rahman
+Redwan Imtiaz 2🆚2 Ashraful Ashik 🔑
 ..."></textarea>
-    <div class="btn-row">
-      <button class="btn-primary" id="previewBtn" onclick="doPreview()">
-        <i class="ti ti-eye" aria-hidden="true"></i> Preview
-      </button>
-      <button class="btn-primary" id="submitBtn" onclick="doSubmit()" style="display:none;">
-        <i class="ti ti-upload" aria-hidden="true"></i> Submit to Sheet
-      </button>
-      <button class="btn-clear" onclick="doClear()">Clear</button>
-    </div>
-    <div class="status-bar" id="statusBar"></div>
   </div>
 
-  <div class="card preview" id="previewCard">
-    <div class="preview-title">Preview — GOAT FC matches detected</div>
-    <div id="statRow" class="stat-row"></div>
-    <div style="margin-top:12px;" id="matchList"></div>
+  <!-- BUTTONS -->
+  <div class="btn-row">
+    <button class="btn btn-gold" id="previewBtn" onclick="doPreview()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      Preview Matches
+    </button>
+    <button class="btn btn-submit" id="submitBtn" onclick="doSubmit()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+      Submit to Sheet
+    </button>
+    <button class="btn btn-outline" onclick="doClear()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
+      Clear
+    </button>
   </div>
+
+  <!-- STATUS -->
+  <div class="status" id="statusBar">
+    <span id="statusIcon"></span>
+    <span id="statusMsg"></span>
+  </div>
+
+  <!-- PREVIEW PANEL -->
+  <div class="preview-panel" id="previewPanel">
+
+    <div class="preview-header">
+      <div class="preview-header-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;color:var(--gold)"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Parsed Results — <span id="matchCountLabel">0 matches</span>
+      </div>
+      <div style="font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace;" id="goatSideLabel"></div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-row">
+      <div class="stat-cell">
+        <div class="stat-num w" id="statW">0</div>
+        <div class="stat-label">Wins</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num d" id="statD">0</div>
+        <div class="stat-label">Draws</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num l" id="statL">0</div>
+        <div class="stat-label">Losses</div>
+      </div>
+    </div>
+
+    <!-- DUPLICATE NOTICE -->
+    <div class="dup-block" id="dupBlock">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;flex-shrink:0;margin-top:1px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <div>
+        <div style="font-weight:600;margin-bottom:2px;">Duplicate matches detected — এগুলো skip করা হবে</div>
+        <ul class="dup-list" id="dupList"></ul>
+      </div>
+    </div>
+
+    <!-- MATCH LIST -->
+    <div class="match-list" id="matchList"></div>
+
+  </div>
+
+  <div class="footer">Powered by <span>GOAT FC</span> Analytics System &nbsp;·&nbsp; COBEG World Cup</div>
+
 </div>
 
 <script>
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwo_Ov7hGowzvzY6qe308MBYaayATQFe4NkCK_NNPMVFWCiLigXhke4kNeQ5bZ6rfv9pw/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwo_Ov7hGowzvzY6qe308MBYaayATQFe4NkCK_NNPMVFWCiLigXhke4kNeQ5bZ6rfv9pw/exec";
 
-let parsedMatches = [];
+// ── Submitted hashes stored in localStorage (duplicate prevention) ──
+const STORAGE_KEY = "goatfc_submitted_hashes";
 
-function detectGoatSide(text) {
-  const headerMatch = text.match(/([^\n]*GOAT[^\n]*FC[^\n]*|[^\n]*FC[^\n]*GOAT[^\n]*)/i);
-  if (!headerMatch) return "right";
-  const line = headerMatch[0];
-  const goatIdx = line.search(/GOAT/i);
-  const sepIdx = line.search(/⚒️|🆚/);
-  if (sepIdx !== -1 && goatIdx < sepIdx) return "left";
-  return "right";
+function loadHashes() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"); }
+  catch { return []; }
+}
+function saveHashes(arr) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
 }
 
+function makeHash(m) {
+  // Canonical key: goatPlayer + oppPlayer + goatScore + oppScore + session (normalised)
+  return [
+    m.goatPlayer.toLowerCase().trim(),
+    m.oppPlayer.toLowerCase().trim(),
+    m.goatScore,
+    m.oppScore,
+    m.session.toLowerCase().trim()
+  ].join("|");
+}
+
+// ── Char counter ──
+document.getElementById("matchText").addEventListener("input", function() {
+  document.getElementById("charCount").textContent = this.value.length + " chars";
+});
+
+// ── Side detection ──
+function detectGoatSide(text) {
+  const m = text.match(/([^\n]*GOAT[^\n]*)/i);
+  if (!m) return "right";
+  const line = m[0];
+  const gi = line.search(/GOAT/i);
+  const si = line.search(/⚒️|🆚/);
+  return (si !== -1 && gi < si) ? "left" : "right";
+}
+
+// ── Parse round/event ──
+function parseRound(text) {
+  const m = text.match(/GRP[\w\-\/\s\d]+/i);
+  return m ? m[0].trim() : "";
+}
+
+// ── Parse all match lines ──
 function parseMatches(text) {
   const goatSide = detectGoatSide(text);
   const lines = text.split("\n").map(l => l.trim()).filter(Boolean);
   const results = [];
   let session = "General";
-
   const sessionMap = [
     { r: /first\s*day/i, l: "First Day" },
-    { r: /star[^\n]*(may|response)/i, l: "Star" },
-    { r: /mid\s*night/i, l: "Mid Night" },
-    { r: /late\s*night/i, l: "Late Night" },
+    { r: /\bstar\b.*?(may|response|\|)/i, l: "Star" },
+    { r: /mid[\s_]?night/i, l: "Mid Night" },
+    { r: /late[\s_]?night/i, l: "Late Night" },
     { r: /morning/i, l: "Morning" },
+    { r: /afternoon/i, l: "Afternoon" },
     { r: /evening/i, l: "Evening" },
   ];
 
@@ -124,113 +566,199 @@ function parseMatches(text) {
     const m = line.match(/^(.+?)\s+(\d+)\s*🆚\s*(\d+)\s+(.+)$/);
     if (!m) return;
 
-    let p1 = m[1].replace(/🔑/g, "").trim();
-    let s1 = parseInt(m[2]);
-    let s2 = parseInt(m[3]);
-    let p2 = m[4].replace(/🔑/g, "").trim();
+    const p1raw = m[1], s1 = parseInt(m[2]), s2 = parseInt(m[3]), p2raw = m[4];
+    const p1 = p1raw.replace(/🔑/g, "").trim();
+    const p2 = p2raw.replace(/🔑/g, "").trim();
+    const key1 = p1raw.includes("🔑");
+    const key2 = p2raw.includes("🔑");
 
     const goatPlayer = goatSide === "right" ? p2 : p1;
     const oppPlayer  = goatSide === "right" ? p1 : p2;
     const goatScore  = goatSide === "right" ? s2 : s1;
     const oppScore   = goatSide === "right" ? s1 : s2;
+    const isKey      = goatSide === "right" ? key2 : key1;
 
     let result = "Draw";
     if (goatScore > oppScore) result = "Win";
     else if (goatScore < oppScore) result = "Loss";
 
-    results.push({ goatPlayer, oppPlayer, goatScore, oppScore, result, session });
+    results.push({ goatPlayer, oppPlayer, goatScore, oppScore, result, session, isKey });
   });
 
-  return results;
+  return { matches: results, goatSide };
 }
+
+let parsedData = { matches: [], goatSide: "right" };
+let newMatches = [];  // after dup filter
 
 function doPreview() {
   const text = document.getElementById("matchText").value.trim();
-  if (!text) { showStatus("error", "Match text paste করো আগে"); return; }
+  if (!text) { showStatus("error", "Match text paste করো আগে।"); return; }
 
-  parsedMatches = parseMatches(text);
-  if (!parsedMatches.length) { showStatus("error", "কোনো match line detect হয়নি। Format ঠিক আছে কিনা দেখো।"); return; }
+  parsedData = parseMatches(text);
+  const { matches, goatSide } = parsedData;
 
-  const wins = parsedMatches.filter(m => m.result === "Win").length;
-  const draws = parsedMatches.filter(m => m.result === "Draw").length;
-  const losses = parsedMatches.filter(m => m.result === "Loss").length;
+  if (!matches.length) {
+    showStatus("error", "কোনো match line detect হয়নি। 🆚 format ঠিক আছে কিনা দেখো।");
+    document.getElementById("previewPanel").classList.remove("show");
+    document.getElementById("submitBtn").classList.remove("visible");
+    return;
+  }
 
-  document.getElementById("statRow").innerHTML = `
-    <div class="stat-card"><div class="stat-num win-c">${wins}</div><div class="stat-lbl">Wins</div></div>
-    <div class="stat-card"><div class="stat-num draw-c">${draws}</div><div class="stat-lbl">Draws</div></div>
-    <div class="stat-card"><div class="stat-num loss-c">${losses}</div><div class="stat-lbl">Losses</div></div>
-  `;
+  // ── Duplicate check ──
+  const stored = loadHashes();
+  const dups = [];
+  newMatches = [];
 
+  matches.forEach(m => {
+    const h = makeHash(m);
+    if (stored.includes(h)) {
+      dups.push(`${m.goatPlayer} vs ${m.oppPlayer} (${m.goatScore}–${m.oppScore})`);
+    } else {
+      newMatches.push(m);
+    }
+  });
+
+  // ── Stats (from newMatches only) ──
+  const wins   = newMatches.filter(m => m.result === "Win").length;
+  const draws  = newMatches.filter(m => m.result === "Draw").length;
+  const losses = newMatches.filter(m => m.result === "Loss").length;
+
+  document.getElementById("statW").textContent = wins;
+  document.getElementById("statD").textContent = draws;
+  document.getElementById("statL").textContent = losses;
+  document.getElementById("matchCountLabel").textContent =
+    newMatches.length + " match" + (newMatches.length !== 1 ? "es" : "");
+  document.getElementById("goatSideLabel").textContent =
+    "GOAT FC → " + (goatSide === "right" ? "right side" : "left side");
+
+  // ── Dup notice ──
+  const dupBlock = document.getElementById("dupBlock");
+  if (dups.length) {
+    dupBlock.classList.add("show");
+    document.getElementById("dupList").innerHTML =
+      dups.map(d => `<li>${d}</li>`).join("");
+  } else {
+    dupBlock.classList.remove("show");
+  }
+
+  // ── Render match list ──
   let html = "";
   let lastSession = "";
-  parsedMatches.forEach(m => {
+  let delay = 0;
+
+  const renderList = newMatches.length ? newMatches : matches;
+  const dimAll = newMatches.length === 0;
+
+  renderList.forEach((m, i) => {
     if (m.session !== lastSession) {
-      html += `<div class="session-label"><i class="ti ti-clock" aria-hidden="true"></i> ${m.session}</div>`;
+      html += `<div class="session-divider">${m.session}</div>`;
       lastSession = m.session;
     }
     const rc = m.result.toLowerCase();
-    html += `<div class="match-row">
-      <span class="player-name">${m.goatPlayer}</span>
-      <div class="score-box">
-        <span class="score goat">${m.goatScore}</span>
-        <span class="vs-sep">vs</span>
-        <span class="score opp">${m.oppScore}</span>
-      </div>
-      <span class="opp-player">${m.oppPlayer}</span>
-      <span class="result-badge ${rc}" style="margin-left:10px;">${m.result}</span>
-    </div>`;
+    const isDup = dups.some(d => d.startsWith(m.goatPlayer + " vs " + m.oppPlayer));
+    html += `
+      <div class="match-item" style="animation-delay:${i * 35}ms;${isDup ? 'opacity:0.35;' : ''}">
+        <div class="player-goat">
+          ${m.isKey ? '<span class="key-icon">🔑</span>' : ''}
+          ${esc(m.goatPlayer)}
+        </div>
+        <div class="score-display">
+          <div class="s-goat">${m.goatScore}</div>
+          <div class="s-sep">vs</div>
+          <div class="s-opp">${m.oppScore}</div>
+        </div>
+        <div class="player-opp">${esc(m.oppPlayer)}</div>
+        <div class="result-chip ${rc}">${m.result}</div>
+      </div>`;
   });
 
   document.getElementById("matchList").innerHTML = html;
-  document.getElementById("previewCard").classList.add("show");
-  document.getElementById("submitBtn").style.display = "flex";
-  clearStatus();
+  document.getElementById("previewPanel").classList.add("show");
+
+  if (newMatches.length > 0) {
+    document.getElementById("submitBtn").classList.add("visible");
+    clearStatus();
+  } else {
+    document.getElementById("submitBtn").classList.remove("visible");
+    showStatus("warn", "সব matches আগেই submit হয়ে গেছে। কোনো নতুন data নেই।");
+  }
 }
 
 async function doSubmit() {
-  if (!parsedMatches.length) { showStatus("error", "আগে Preview করো"); return; }
+  if (!newMatches.length) { showStatus("warn", "কোনো নতুন match নেই।"); return; }
+
+  const submitBtn = document.getElementById("submitBtn");
+  const previewBtn = document.getElementById("previewBtn");
+  submitBtn.disabled = true;
+  previewBtn.disabled = true;
+  showStatus("loading", "Google Sheet এ submit হচ্ছে…", true);
 
   const text = document.getElementById("matchText").value.trim();
-  const submitBtn = document.getElementById("submitBtn");
-  submitBtn.disabled = true;
-  showStatus("loading", '<span class="spin"><i class="ti ti-loader"></i></span> Google Sheet এ submit হচ্ছে...');
 
   try {
-    const formData = new FormData();
-    formData.append("text", text);
+    const fd = new FormData();
+    fd.append("text", text);
 
-    const res = await fetch(APPS_SCRIPT_URL, {
-      method: "POST",
-      body: formData,
-      mode: "no-cors"
+    await fetch(SCRIPT_URL, { method: "POST", body: fd, mode: "no-cors" });
+
+    // Save hashes of submitted matches
+    const stored = loadHashes();
+    newMatches.forEach(m => {
+      const h = makeHash(m);
+      if (!stored.includes(h)) stored.push(h);
     });
+    saveHashes(stored);
 
-    showStatus("success", '<i class="ti ti-check"></i> ' + parsedMatches.length + 'টি match successfully submit হয়েছে Google Sheet এ!');
-    submitBtn.style.display = "none";
+    showStatus("success", `✓ ${newMatches.length}টি match সফলভাবে Google Sheet এ submit হয়েছে!`);
+    submitBtn.classList.remove("visible");
+    newMatches = [];
   } catch (err) {
-    showStatus("error", '<i class="ti ti-alert-circle"></i> Error: ' + err.message);
+    showStatus("error", "Submit failed: " + err.message);
   }
 
   submitBtn.disabled = false;
+  previewBtn.disabled = false;
 }
 
 function doClear() {
   document.getElementById("matchText").value = "";
-  document.getElementById("previewCard").classList.remove("show");
-  document.getElementById("submitBtn").style.display = "none";
-  parsedMatches = [];
+  document.getElementById("charCount").textContent = "0 chars";
+  document.getElementById("previewPanel").classList.remove("show");
+  document.getElementById("submitBtn").classList.remove("visible");
+  document.getElementById("dupBlock").classList.remove("show");
+  parsedData = { matches: [], goatSide: "right" };
+  newMatches = [];
   clearStatus();
 }
 
-function showStatus(type, msg) {
+function showStatus(type, msg, spin) {
   const bar = document.getElementById("statusBar");
-  bar.className = "status-bar " + type;
-  bar.innerHTML = msg;
+  const icon = document.getElementById("statusIcon");
+  const msgEl = document.getElementById("statusMsg");
+  bar.className = "status show " + type;
+  msgEl.textContent = msg;
+  if (spin) {
+    icon.innerHTML = `<span class="spin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg></span>`;
+  } else if (type === "success") {
+    icon.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:14px;height:14px;"><polyline points="20 6 9 17 4 12"/></svg>`;
+  } else if (type === "error") {
+    icon.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`;
+  } else if (type === "warn") {
+    icon.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`;
+  } else {
+    icon.innerHTML = "";
+  }
 }
 
 function clearStatus() {
   const bar = document.getElementById("statusBar");
-  bar.className = "status-bar";
-  bar.innerHTML = "";
+  bar.className = "status";
+}
+
+function esc(s) {
+  return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 }
 </script>
+</body>
+</html>

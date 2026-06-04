@@ -125,6 +125,7 @@ body::before{
 .card{
   background:rgba(10,22,40,.9);border:1px solid var(--border);
   border-radius:8px;overflow:hidden;position:relative;
+  isolation:isolate;
 }
 .card::after{
   content:'';position:absolute;top:0;left:0;right:0;height:2px;
@@ -132,8 +133,8 @@ body::before{
   background-size:300%;animation:ts 4s linear infinite;
   border-radius:8px 8px 0 0;
 }
-.tbl-wrap{overflow-x:auto;position:relative;z-index:1;}
-table{width:100%;border-collapse:collapse;}
+.tbl-wrap{overflow-x:auto;overflow-y:hidden;position:relative;z-index:1;}
+table{width:100%;border-collapse:collapse;min-width:520px;}
 thead{background:rgba(0,0,0,.45);}
 th{
   font-family:var(--fh);font-size:8.5px;letter-spacing:1.2px;color:var(--c);
@@ -181,18 +182,13 @@ tbody tr:hover{background:rgba(0,245,255,.05);}
 
 /* rank rows */
 .rank1{
-  background:linear-gradient(90deg,rgba(255,215,0,.15),rgba(255,215,0,.04),transparent) !important;
+  background:linear-gradient(90deg,rgba(255,215,0,.18),rgba(255,215,0,.06),rgba(255,215,0,.02)) !important;
   border-left:3px solid var(--gold) !important;
-  position:relative;
-}
-.rank1::before{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(90deg,rgba(255,215,0,.06),transparent);
   animation:g1pulse 2.5s ease-in-out infinite;
-  pointer-events:none;
 }
 @keyframes g1pulse{
-  0%,100%{opacity:.4;}50%{opacity:1;}
+  0%,100%{background:linear-gradient(90deg,rgba(255,215,0,.14),rgba(255,215,0,.04),transparent) !important;}
+  50%{background:linear-gradient(90deg,rgba(255,215,0,.28),rgba(255,215,0,.12),transparent) !important;}
 }
 .rank1 td{color:#ffe97a;}
 .rank1 .rn{background:rgba(255,215,0,.3);color:var(--gold);box-shadow:0 0 12px rgba(255,215,0,.6);}
@@ -314,18 +310,23 @@ tbody tr:not(.rank1):not(.rank2):not(.rank3):not(.top10) .pid{color:rgba(180,200
 
 /* Vertical text: PLAYER OF THE WEEK */
 .fc-potw-txt{
-  position:absolute;right:8px;top:8px;z-index:5;
+  position:absolute;right:6px;top:6px;z-index:5;
   writing-mode:vertical-rl;text-orientation:mixed;
-  font-family:var(--fh);font-size:clamp(7px,1.5vw,9px);font-weight:900;
-  letter-spacing:2px;line-height:1;
-  color:#00ff88;text-shadow:0 0 10px rgba(0,255,136,.6);
+  font-family:var(--fh);font-size:clamp(8px,1.8vw,11px);font-weight:900;
+  letter-spacing:3px;line-height:1.1;
+  color:#00ff88;
+  text-shadow:0 0 12px rgba(0,255,136,.9),0 0 4px rgba(0,255,136,.5);
   text-transform:uppercase;
+  background:rgba(0,0,0,.25);
+  padding:4px 2px;
+  border-right:2px solid rgba(0,255,136,.5);
 }
 .fc-potw-year{
-  position:absolute;right:8px;bottom:48%;z-index:5;
+  position:absolute;right:6px;bottom:43%;z-index:5;
   writing-mode:vertical-rl;
-  font-family:var(--fh);font-size:7px;
-  color:rgba(0,255,136,.55);letter-spacing:1px;
+  font-family:var(--fh);font-size:clamp(6px,1.2vw,8px);
+  color:rgba(0,255,136,.65);letter-spacing:2px;
+  padding:2px 2px;
 }
 
 /* Bottom: week label */
@@ -517,12 +518,16 @@ tbody tr:not(.rank1):not(.rank2):not(.rank3):not(.top10) .pid{color:rgba(180,200
 
 /* Vertical PLAYER OF THE WEEK text */
 .pc-potw-vert{
-  position:absolute;right:10px;top:8px;z-index:5;
+  position:absolute;right:8px;top:8px;z-index:5;
   writing-mode:vertical-rl;text-orientation:mixed;
-  font-family:var(--fh);font-size:9px;font-weight:900;
-  letter-spacing:2.5px;color:#00ff88;
-  text-shadow:0 0 12px rgba(0,255,136,.7);
-  text-transform:uppercase;line-height:1;
+  font-family:var(--fh);font-size:13px;font-weight:900;
+  letter-spacing:4px;color:#00ff88;
+  text-shadow:0 0 16px rgba(0,255,136,1),0 0 6px rgba(0,255,136,.6);
+  text-transform:uppercase;line-height:1.1;
+  background:rgba(0,0,0,.3);
+  padding:6px 3px;
+  border-right:3px solid rgba(0,255,136,.7);
+  border-left:1px solid rgba(0,255,136,.15);
 }
 
 /* Chevrons */
@@ -530,7 +535,7 @@ tbody tr:not(.rank1):not(.rank2):not(.rank3):not(.top10) .pid{color:rgba(180,200
 .pc-chev{width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:9px solid rgba(0,255,136,.35);}
 
 /* Year */
-.pc-year{position:absolute;right:10px;bottom:48%;z-index:5;writing-mode:vertical-rl;font-family:var(--fh);font-size:7px;color:rgba(0,255,136,.5);letter-spacing:1.5px;}
+.pc-year{position:absolute;right:8px;bottom:44%;z-index:5;writing-mode:vertical-rl;font-family:var(--fh);font-size:8px;color:rgba(0,255,136,.6);letter-spacing:2px;background:rgba(0,0,0,.25);padding:2px 3px;}
 
 /* Name area */
 .pc-name-area{

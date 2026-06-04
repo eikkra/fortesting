@@ -526,9 +526,9 @@ function getRefData(name,clubId) {
 // ═══════════════════════════════════
 function buildEnrichedPlayers(filterFn) {
   return S.players
-    .filter(p=>p['Player'])
-    .filter(filterFn||_=>true)
-    .map(p=>{
+  .filter(p => p['Player'])
+  .filter(filterFn || (() => true))
+  .map(p => {
       const name=(p['Player']||'').trim();
       const clubId=(p['Club ID']||'').trim();
       const {pts:refPts,isRef}=getRefData(name,clubId);

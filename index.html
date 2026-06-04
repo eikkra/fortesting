@@ -475,10 +475,18 @@ function friendlyMonth(key) {
 // DATA LOAD
 // ═══════════════════════════════════
 async function loadData() {
-  const [players,matches,refs,members]=await Promise.all([
-    fetchCSV(CSV.playerSummary),fetchCSV(CSV.rawMatches),
-    fetchCSV(CSV.referee),fetchCSV(CSV.members)
+
+  const results = await Promise.allSettled([
+    fetchCSV(CSV.playerSummary),
+    fetchCSV(CSV.rawMatches),
+    fetchCSV(CSV.referee),
+    fetchCSV(CSV.members)
   ]);
+
+  const players = results[0].status === "fulfilled" ? results[0].value : [];
+  const matches = results[1].status === "fulfilled" ? results[1].value : [];
+  const refs = results[2].status === "fulfilled" ? results[2].value : [];
+  const members = results[3].status === "fulfilled" ? results[3].value : [];
   S.players=players; S.matches=matches; S.refs=refs; S.members=members;
 
   const wSet=new Set(), mSet=new Set();
@@ -846,9 +854,20 @@ function escObj(obj) {
 // INIT
 // ═══════════════════════════════════
 async function init() {
-  await loadData();
-  populatePeriodSelect();
-  renderRanking();
+  try {
+    await loadData();
+
+    populatePeriodSelect();
+    renderRanking();
+    renderPOTW();
+
+    console.log("Loaded OK");
+  } catch (err) {
+    console.error(err);
+
+    document.getElementById('rankTable').innerHTML =
+      '<tr><td colspan="9" class="no-data-cell">DATA LOAD FAILED</td></tr>';
+  }
 }
 init();
 </script>

@@ -1,1412 +1,1642 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rival Tracker · GOAT FC</title>
-  <link rel="icon" type="image/png" href="https://i.imgur.com/LY3Bb9m.png">
-  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@500;600;700&family=Orbitron:wght@700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
-  <style>
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    :root {
-      --neon-cyan: #00f5ff;
-      --neon-green: #00ff88;
-      --neon-pink: #ff007f;
-      --neon-purple: #bd00ff;
-      --gold: #ffd700;
-      --dark-bg: #060913;
-      --panel-bg: rgba(10, 16, 32, 0.75);
-      --border-color: rgba(0, 245, 255, 0.15);
-      --border-glow: rgba(0, 245, 255, 0.3);
-      --font-hud: 'Orbitron', sans-serif;
-      --font-body: 'Rajdhani', sans-serif;
-      --font-mono: 'Share Tech Mono', monospace;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      background: var(--dark-bg);
-      color: #ffffff;
-      font-family: var(--font-body);
-      min-height: 100vh;
-      overflow-x: hidden;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-    }
-
-    /* Scanline & Grid Atmosphere */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background: 
-        linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
-        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-      background-size: 100% 4px, 6px 100%;
-      pointer-events: none;
-      z-index: 999;
-      opacity: 0.4;
-    }
-
-    body::after {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background: radial-gradient(circle at 50% 50%, transparent 60%, rgba(2, 4, 10, 0.8) 100%);
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    /* Ambient Background Glows */
-    .bg-glow {
-      position: fixed;
-      width: 400px;
-      height: 400px;
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.12;
-      filter: blur(120px);
-    }
-    .bg-glow-1 {
-      top: -100px;
-      left: -100px;
-      background: var(--neon-cyan);
-      animation: floatGlow 15s ease-in-out infinite alternate;
-    }
-    .bg-glow-2 {
-      bottom: -100px;
-      right: -100px;
-      background: var(--neon-purple);
-      animation: floatGlow 20s ease-in-out infinite alternate-reverse;
-    }
-
-    @keyframes floatGlow {
-      0% { transform: translate(0, 0) scale(1); }
-      100% { transform: translate(60px, 80px) scale(1.25); }
-    }
-
-    /* ── TOPBAR ── */
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      height: 52px;
-      padding: 0 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: rgba(4, 8, 20, 0.9);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border-color);
-      text-decoration: none;
-      box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
-    }
-
-    .topbar::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, var(--neon-cyan), var(--neon-green), var(--neon-pink), transparent);
-      background-size: 200% 100%;
-      animation: scanbar 4s linear infinite;
-    }
-
-    @keyframes scanbar {
-      0% { background-position: 0% 0%; }
-      100% { background-position: 200% 0%; }
-    }
-
-    .topbar-left {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .topbar-logo {
-      width: 32px;
-      height: 32px;
-      object-fit: contain;
-      filter: drop-shadow(0 0 8px var(--neon-cyan));
-      transition: transform 0.3s ease;
-    }
-
-    .topbar:hover .topbar-logo {
-      transform: rotate(360deg);
-    }
-
-    .topbar-text {
-      font-family: var(--font-hud);
-      font-size: 14px;
-      font-weight: 800;
-      letter-spacing: 3px;
-      background: linear-gradient(90deg, #fff, var(--neon-cyan));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .topbar-right {
-      width: 32px;
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 8px;
-      border: 1px solid rgba(0, 245, 255, 0.3);
-      color: var(--neon-cyan);
-      font-size: 13px;
-      background: rgba(0, 245, 255, 0.05);
-      transition: all 0.3s ease;
-    }
-
-    .topbar:hover .topbar-right {
-      background: var(--neon-cyan);
-      color: #000;
-      box-shadow: 0 0 12px var(--neon-cyan);
-    }
-
-    /* ── MAIN ── */
-    .main {
-      position: relative;
-      z-index: 2;
-      flex: 1;
-    }
-
-    .wrapper {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 24px 16px 40px;
-    }
-
-    /* ── TITLE BLOCK ── */
-    .title-block {
-      padding: 24px 0 16px;
-      text-align: center;
-      position: relative;
-    }
-
-    .title-block h1 {
-      font-family: var(--font-hud);
-      font-size: clamp(20px, 5vw, 36px);
-      font-weight: 900;
-      letter-spacing: 6px;
-      text-transform: uppercase;
-      background: linear-gradient(90deg, var(--neon-cyan), var(--neon-green), var(--neon-pink), var(--neon-cyan));
-      background-size: 300% auto;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: titleShift 6s linear infinite;
-      text-shadow: 0 0 20px rgba(0, 245, 255, 0.2);
-    }
-
-    .subtitle {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 4px;
-      color: rgba(255, 255, 255, 0.5);
-      margin-top: 6px;
-      text-transform: uppercase;
-      font-family: var(--font-hud);
-    }
-
-    .subtitle-badge {
-      display: inline-block;
-      margin-top: 8px;
-      padding: 2px 10px;
-      border: 1px dashed var(--neon-cyan);
-      border-radius: 4px;
-      color: var(--neon-cyan);
-      font-size: 9px;
-      font-family: var(--font-mono);
-      background: rgba(0, 245, 255, 0.05);
-    }
-
-    /* ── FILTERS SECTION ── */
-    .filter-section {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin: 20px 0;
-      background: rgba(8, 14, 28, 0.8);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 16px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(8px);
-    }
-
-    .select-wrap {
-      position: relative;
-      flex: 1;
-    }
-
-    .select-wrap i {
-      position: absolute;
-      left: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 14px;
-      color: var(--neon-cyan);
-      opacity: 0.85;
-      pointer-events: none;
-      z-index: 2;
-      text-shadow: 0 0 8px var(--neon-cyan);
-    }
-
-    .select-wrap select {
-      width: 100%;
-      padding: 12px 40px 12px 38px;
-      background: rgba(3, 6, 12, 0.85);
-      color: #ffffff;
-      border: 1px solid rgba(0, 245, 255, 0.25);
-      border-radius: 8px;
-      font-size: 13px;
-      font-family: var(--font-hud);
-      font-weight: 600;
-      outline: none;
-      cursor: pointer;
-      appearance: none;
-      -webkit-appearance: none;
-      letter-spacing: 1px;
-      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    }
-
-    .select-wrap::after {
-      content: '\f107';
-      font-family: 'Font Awesome 6 Free';
-      font-weight: 900;
-      position: absolute;
-      right: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 14px;
-      color: var(--neon-cyan);
-      pointer-events: none;
-      transition: transform 0.3s ease;
-    }
-
-    .select-wrap:focus-within::after {
-      transform: translateY(-50%) rotate(180deg);
-    }
-
-    .select-wrap select:focus,
-    .select-wrap select:hover {
-      border-color: var(--neon-cyan);
-      box-shadow: 0 0 15px rgba(0, 245, 255, 0.3);
-      background: rgba(0, 245, 255, 0.05);
-    }
-
-    .filter-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    /* ── PLAYER STATISTICS DASHBOARD ── */
-    .player-dashboard {
-      display: none;
-      margin-bottom: 24px;
-      opacity: 0;
-      transform: translateY(15px);
-      transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
-    }
-
-    .player-dashboard.active {
-      display: block;
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .db-card {
-      background: var(--panel-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 20px;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(12px);
-    }
-
-    .db-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 4px;
-      height: 100%;
-      background: linear-gradient(to bottom, var(--neon-cyan), var(--neon-purple));
-    }
-
-    .db-grid {
-      display: grid;
-      grid-template-columns: 1.5fr 1fr 2fr;
-      gap: 20px;
-    }
-
-    /* Profile info */
-    .db-profile {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      border-right: 1px solid rgba(255, 255, 255, 0.08);
-      padding-right: 15px;
-    }
-
-    .db-avatar-container {
-      width: 64px;
-      height: 64px;
-      border-radius: 12px;
-      border: 1px solid var(--neon-cyan);
-      background: rgba(0, 245, 255, 0.05);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 12px;
-      box-shadow: 0 0 15px rgba(0, 245, 255, 0.15);
-      font-size: 28px;
-      color: var(--neon-cyan);
-    }
-
-    .db-player-name {
-      font-family: var(--font-hud);
-      font-size: 20px;
-      font-weight: 800;
-      color: #ffffff;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      line-height: 1.2;
-    }
-
-    .db-player-id {
-      font-family: var(--font-mono);
-      font-size: 12px;
-      color: var(--neon-cyan);
-      letter-spacing: 2px;
-      margin-top: 4px;
-    }
-
-    /* Winrate circular meter */
-    .db-winrate-box {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      border-right: 1px solid rgba(255, 255, 255, 0.08);
-      padding-right: 15px;
-    }
-
-    .radial-progress {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      background: radial-gradient(closest-side, #090e1a 79%, transparent 80% 100%),
-                  conic-gradient(var(--neon-green) 0%, rgba(255,255,255,0.05) 0%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      margin-bottom: 8px;
-      box-shadow: inset 0 0 10px rgba(0,0,0,0.5), 0 0 15px rgba(0, 255, 136, 0.1);
-    }
-
-    .radial-value {
-      font-family: var(--font-hud);
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--neon-green);
-    }
-
-    .radial-label {
-      font-size: 10px;
-      font-family: var(--font-hud);
-      letter-spacing: 2px;
-      color: rgba(255, 255, 255, 0.5);
-      text-transform: uppercase;
-    }
-
-    /* Stat blocks */
-    .db-stats {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    .stat-row-summary {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-    }
-
-    .mini-stat-card {
-      background: rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(255, 255, 255, 0.04);
-      border-radius: 8px;
-      padding: 8px;
-      text-align: center;
-    }
-
-    .mini-stat-label {
-      font-size: 9px;
-      font-family: var(--font-hud);
-      color: rgba(255, 255, 255, 0.4);
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      margin-bottom: 4px;
-    }
-
-    .mini-stat-value {
-      font-family: var(--font-mono);
-      font-size: 16px;
-      font-weight: 700;
-    }
-
-    .mini-stat-value.val-m { color: var(--neon-cyan); }
-    .mini-stat-value.val-w { color: var(--neon-green); }
-    .mini-stat-value.val-d { color: rgba(255, 255, 255, 0.7); }
-    .mini-stat-value.val-l { color: var(--neon-pink); }
-
-    /* Tactical intel cards */
-    .tactical-intel {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin-top: 8px;
-    }
-
-    .intel-pill {
-      background: rgba(0, 245, 255, 0.03);
-      border: 1px solid rgba(0, 245, 255, 0.08);
-      border-radius: 6px;
-      padding: 6px 8px;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .intel-title {
-      font-size: 8px;
-      font-family: var(--font-hud);
-      letter-spacing: 1px;
-      color: rgba(255, 255, 255, 0.45);
-      text-transform: uppercase;
-      margin-bottom: 2px;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .intel-title.arch { color: var(--gold); }
-    .intel-title.nemesis { color: var(--neon-pink); }
-    .intel-title.prey { color: var(--neon-green); }
-
-    .intel-opp-name {
-      font-size: 11px;
-      font-weight: 700;
-      color: #fff;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .intel-opp-meta {
-      font-family: var(--font-mono);
-      font-size: 9px;
-      color: rgba(255, 255, 255, 0.4);
-      margin-top: 1px;
-    }
-
-    /* ── CARD (TABLE CONTAINER) ── */
-    .card {
-      background: var(--panel-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      overflow: hidden;
-      position: relative;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(12px);
-    }
-
-    .card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: 12px;
-      background: linear-gradient(135deg, rgba(0, 245, 255, 0.05), transparent 60%);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .card::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, var(--neon-cyan), var(--neon-green), var(--neon-pink), var(--neon-cyan));
-      background-size: 300% auto;
-      animation: titleShift 4s linear infinite;
-    }
-
-    .tbl-wrap {
-      overflow-x: auto;
-      position: relative;
-      z-index: 1;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      table-layout: fixed;
-    }
-
-    thead {
-      background: rgba(2, 4, 10, 0.6);
-    }
-
-    th {
-      font-family: var(--font-hud);
-      font-size: 10px;
-      letter-spacing: 2px;
-      color: var(--neon-cyan);
-      padding: 14px 8px;
-      border-bottom: 1px solid var(--border-color);
-      text-align: center;
-      white-space: nowrap;
-      text-shadow: 0 0 8px rgba(0, 245, 255, 0.2);
-    }
-
-    th.col-opp {
-      text-align: left;
-      padding-left: 20px;
-    }
-
-    td {
-      padding: 14px 8px;
-      font-size: 13px;
-      font-weight: 600;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      text-align: center;
-      vertical-align: middle;
-      font-family: var(--font-body);
-      transition: all 0.2s ease;
-    }
-
-    td.col-opp {
-      text-align: left;
-      padding-left: 20px;
-    }
-
-    tbody tr {
-      background: rgba(255, 255, 255, 0.01);
-      transition: background 0.25s, transform 0.2s;
-    }
-
-    tbody tr:hover {
-      background: rgba(0, 245, 255, 0.05);
-    }
-
-    tbody tr.warning-row {
-      background: linear-gradient(90deg, rgba(255, 0, 127, 0.08), transparent) !important;
-      border-left: 3px solid var(--neon-pink) !important;
-    }
-
-    /* Opponent Details */
-    .opp-row {
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-    }
-
-    .opp-meta {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .opp-name {
-      font-family: var(--font-hud);
-      font-size: 11px;
-      font-weight: 700;
-      color: #ffffff;
-      line-height: 1.3;
-    }
-
-    .opp-id {
-      font-size: 10px;
-      color: var(--neon-cyan);
-      font-family: var(--font-mono);
-      letter-spacing: 0.5px;
-      opacity: 0.8;
-    }
-
-    .opp-former {
-      font-size: 9px;
-      color: rgba(255, 255, 255, 0.35);
-      font-style: italic;
-      font-family: var(--font-body);
-    }
-
-    /* Visual H2H Ratio Bar */
-    .h2h-bar-container {
-      display: flex;
-      height: 4px;
-      background: rgba(255, 255, 255, 0.06);
-      border-radius: 2px;
-      overflow: hidden;
-      margin-top: 6px;
-      width: 90%;
-      box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);
-    }
-
-    .h2h-segment {
-      height: 100%;
-      transition: width 0.4s ease;
-    }
-
-    .h2h-win {
-      background: var(--neon-green);
-      box-shadow: 0 0 6px rgba(0, 255, 136, 0.4);
-    }
-
-    .h2h-draw {
-      background: rgba(255, 255, 255, 0.4);
-    }
-
-    .h2h-loss {
-      background: var(--neon-pink);
-      box-shadow: 0 0 6px rgba(255, 0, 127, 0.4);
-    }
-
-    /* Stat Numbers */
-    .stat-win {
-      color: var(--neon-green);
-      font-weight: 700;
-      font-family: var(--font-mono);
-      font-size: 14px;
-      text-shadow: 0 0 8px rgba(0, 255, 136, 0.15);
-    }
-
-    .stat-draw {
-      color: rgba(255, 255, 255, 0.7);
-      font-family: var(--font-mono);
-      font-size: 14px;
-    }
-
-    .stat-loss {
-      color: var(--neon-pink);
-      font-weight: 700;
-      font-family: var(--font-mono);
-      font-size: 14px;
-      text-shadow: 0 0 8px rgba(255, 0, 127, 0.15);
-    }
-
-    .stat-total {
-      color: var(--neon-cyan);
-      font-weight: 700;
-      font-family: var(--font-mono);
-      font-size: 14px;
-      text-shadow: 0 0 8px rgba(0, 245, 255, 0.15);
-    }
-
-    /* Badges */
-    .badge {
-      display: inline-block;
-      padding: 4px 10px;
-      border-radius: 4px;
-      font-size: 9px;
-      font-family: var(--font-hud);
-      font-weight: 700;
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-      box-shadow: 0 0 10px rgba(0,0,0,0.3);
-      position: relative;
-    }
-
-    .badge-ok {
-      background: rgba(0, 255, 136, 0.08);
-      color: var(--neon-green);
-      border: 1px solid rgba(0, 255, 136, 0.3);
-      box-shadow: 0 0 8px rgba(0, 255, 136, 0.1);
-    }
-
-    .badge-alert {
-      background: rgba(255, 0, 127, 0.12);
-      color: var(--neon-pink);
-      border: 1px solid rgba(255, 0, 127, 0.4);
-      animation: alertPulse 1.5s infinite alternate;
-    }
-
-    @keyframes alertPulse {
-      0% {
-        box-shadow: 0 0 4px rgba(255, 0, 127, 0.2);
-        border-color: rgba(255, 0, 127, 0.4);
-      }
-      100% {
-        box-shadow: 0 0 12px rgba(255, 0, 127, 0.5);
-        border-color: rgba(255, 0, 127, 0.8);
-      }
-    }
-
-    /* Empty / Loading Screens */
-    .info-cell {
-      padding: 48px 24px;
-      font-family: var(--font-hud);
-      font-size: 11px;
-      letter-spacing: 2px;
-      color: rgba(0, 245, 255, 0.4);
-      text-align: center;
-      line-height: 1.6;
-    }
-
-    .info-cell i {
-      font-size: 24px;
-      margin-bottom: 12px;
-      display: block;
-      color: var(--neon-cyan);
-      opacity: 0.6;
-      animation: floatIcon 3s ease-in-out infinite;
-    }
-
-    @keyframes floatIcon {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
-    }
-
-    .loading-cell {
-      padding: 48px 24px;
-      font-family: var(--font-hud);
-      font-size: 11px;
-      letter-spacing: 3px;
-      color: var(--neon-cyan);
-      opacity: 0.8;
-      text-align: center;
-      position: relative;
-    }
-
-    .loading-spinner {
-      width: 32px;
-      height: 32px;
-      border: 2px solid rgba(0, 245, 255, 0.1);
-      border-top: 2px solid var(--neon-cyan);
-      border-radius: 50%;
-      margin: 0 auto 16px;
-      animation: spin 1s linear infinite, glowPulse 1.5s ease-in-out infinite alternate;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    @keyframes glowPulse {
-      from { box-shadow: 0 0 4px rgba(0, 245, 255, 0.1); }
-      to { box-shadow: 0 0 15px rgba(0, 245, 255, 0.4); }
-    }
-
-    /* Embedded labels for mobile card view (hidden on desktop) */
-    .mob-stat-label,
-    .mob-status-label {
-      display: none;
-    }
-
-    /* FOOTER */
-    footer {
-      position: relative;
-      z-index: 2;
-      text-align: center;
-      padding: 20px 0;
-      border-top: 1px solid rgba(0, 245, 255, 0.08);
-      background: rgba(4, 8, 20, 0.8);
-      margin-top: auto;
-    }
-
-    .footer-text {
-      font-family: var(--font-hud);
-      font-size: 9px;
-      letter-spacing: 3px;
-      background: linear-gradient(90deg, var(--neon-cyan), var(--neon-green));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      opacity: 0.65;
-    }
-
-    /* ── MOBILE DESIGN (RESPONSIVE GRID / CARDS) ── */
-    @media (max-width: 768px) {
-      .wrapper {
-        padding: 16px 8px 30px;
-      }
-
-      .title-block {
-        padding: 12px 0 6px;
-      }
-
-      .db-grid {
-        grid-template-columns: 1fr;
-        gap: 16px;
-      }
-
-      .db-profile {
-        border-right: none;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-        padding-right: 0;
-        padding-bottom: 16px;
-        align-items: center;
-        text-align: center;
-      }
-
-      .db-winrate-box {
-        border-right: none;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-        padding-right: 0;
-        padding-bottom: 16px;
-        flex-direction: row;
-        gap: 20px;
-      }
-
-      .radial-progress {
-        margin-bottom: 0;
-      }
-
-      .tactical-intel {
-        grid-template-columns: 1fr;
-        gap: 8px;
-      }
-    }
-
-    @media (max-width: 600px) {
-      /* Transform table rows into modular "Combat Cards" using CSS Grid */
-      thead {
-        display: none;
-      }
-
-      table, tbody, tr, td {
-        display: block;
-        width: 100%;
-      }
-
-      tbody tr {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 8px;
-        margin-bottom: 12px;
-        border: 1px solid rgba(255, 255, 255, 0.06);
-        border-radius: 10px;
-        background: rgba(8, 14, 28, 0.85);
-        padding: 12px;
-        position: relative;
-        overflow: hidden;
-      }
-
-      tbody tr::after {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        width: 3px;
-        background: var(--neon-cyan);
-      }
-
-      tbody tr.warning-row::after {
-        background: var(--neon-pink);
-      }
-
-      td {
-        padding: 0 !important;
-        border: none !important;
-        text-align: left !important;
-      }
-
-      td.col-opp {
-        grid-column: span 4;
-        margin-bottom: 4px;
-      }
-
-      .h2h-bar-container {
-        width: 100%;
-      }
-
-      /* Stats columns - style as mini grid items side by side */
-      td.stat-total, td.stat-win, td.stat-draw, td.stat-loss {
-        grid-column: span 1;
-        background: rgba(0, 0, 0, 0.25);
-        border-radius: 6px;
-        padding: 6px 4px !important;
-        text-align: center !important;
-        border: 1px solid rgba(255, 255, 255, 0.02) !important;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-      }
-
-      .mob-stat-label {
-        font-family: var(--font-hud);
-        font-size: 8px;
-        color: rgba(255, 255, 255, 0.4);
-        display: block;
-        text-transform: uppercase;
-        margin-bottom: 2px;
-      }
-
-      .stat-total, .stat-win, .stat-draw, .stat-loss {
-        font-size: 13px;
-      }
-
-      /* Badges placement inside the mobile card */
-      td.col-status {
-        grid-column: span 4;
-        margin-top: 6px;
-        padding-top: 8px !important;
-        border-top: 1px dashed rgba(255, 255, 255, 0.08) !important;
-      }
-
-      .mob-status-container {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
-      }
-
-      .mob-status-label {
-        font-family: var(--font-hud);
-        font-size: 9px;
-        color: rgba(255, 255, 255, 0.45);
-        text-transform: uppercase;
-        display: inline-block;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GOAT FC — Ranking System</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&family=Exo+2:wght@300;400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --neon-green: #00ff41;
+    --neon-cyan: #00e5ff;
+    --neon-pink: #ff006e;
+    --neon-gold: #ffd700;
+    --neon-purple: #bf00ff;
+    --bg-dark: #030810;
+    --bg-card: #0a1628;
+    --bg-panel: #0d1f3c;
+    --border-glow: rgba(0,255,65,0.4);
+    --text-primary: #e8f4f8;
+    --text-dim: #7fa8c0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg-dark);
+    font-family: 'Rajdhani', sans-serif;
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated RGB grid background */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(0,255,65,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,255,65,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    animation: gridPulse 4s ease-in-out infinite;
+    pointer-events: none; z-index: 0;
+  }
+
+  @keyframes gridPulse {
+    0%,100% { opacity: 0.5; }
+    50% { opacity: 1; }
+  }
+
+  /* Floating orbs */
+  .orb {
+    position: fixed; border-radius: 50%;
+    filter: blur(80px); opacity: 0.12;
+    pointer-events: none; z-index: 0;
+    animation: orbFloat 8s ease-in-out infinite;
+  }
+  .orb1 { width: 400px; height: 400px; background: var(--neon-green); top: -100px; left: -100px; animation-delay: 0s; }
+  .orb2 { width: 300px; height: 300px; background: var(--neon-cyan); bottom: -100px; right: -100px; animation-delay: 3s; }
+  .orb3 { width: 250px; height: 250px; background: var(--neon-pink); top: 50%; left: 50%; animation-delay: 6s; }
+
+  @keyframes orbFloat {
+    0%,100% { transform: translate(0,0) scale(1); }
+    50% { transform: translate(30px,-30px) scale(1.1); }
+  }
+
+  /* HEADER */
+  header {
+    position: relative; z-index: 10;
+    text-align: center; padding: 30px 20px 20px;
+    border-bottom: 1px solid rgba(0,255,65,0.2);
+    background: linear-gradient(180deg, rgba(0,255,65,0.05) 0%, transparent 100%);
+  }
+
+  .logo-wrap {
+    display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap;
+  }
+
+  .logo-icon {
+    width: 60px; height: 60px;
+    background: radial-gradient(circle, var(--neon-green), #004d14);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+    box-shadow: 0 0 30px var(--neon-green), 0 0 60px rgba(0,255,65,0.3);
+    animation: logoPulse 2s ease-in-out infinite;
+  }
+
+  @keyframes logoPulse {
+    0%,100% { box-shadow: 0 0 30px var(--neon-green), 0 0 60px rgba(0,255,65,0.3); }
+    50% { box-shadow: 0 0 50px var(--neon-green), 0 0 100px rgba(0,255,65,0.5); }
+  }
+
+  h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(24px, 5vw, 48px);
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--neon-green) 0%, var(--neon-cyan) 50%, var(--neon-green) 100%);
+    background-size: 200% 200%;
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    animation: gradientShift 3s ease infinite;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+  }
+
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .subtitle {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 13px; letter-spacing: 8px;
+    color: var(--neon-cyan); opacity: 0.7;
+    text-transform: uppercase; margin-top: 6px;
+  }
+
+  .live-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(255,0,110,0.15);
+    border: 1px solid var(--neon-pink);
+    border-radius: 20px; padding: 4px 14px;
+    font-size: 11px; letter-spacing: 3px;
+    color: var(--neon-pink); margin-top: 10px;
+    text-transform: uppercase;
+  }
+
+  .live-dot {
+    width: 7px; height: 7px;
+    background: var(--neon-pink); border-radius: 50%;
+    animation: blink 1s ease-in-out infinite;
+  }
+
+  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.2; } }
+
+  /* TEAM TYPE TABS */
+  .tabs-container {
+    position: relative; z-index: 10;
+    display: flex; justify-content: center; gap: 8px;
+    padding: 20px 16px 0;
+    flex-wrap: wrap;
+  }
+
+  .tab-btn {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+    padding: 10px 24px; border-radius: 4px;
+    border: 1px solid rgba(0,255,65,0.3);
+    background: rgba(0,255,65,0.05);
+    color: var(--text-dim); cursor: pointer;
+    transition: all 0.3s ease;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    position: relative; overflow: hidden;
+  }
+
+  .tab-btn::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, var(--neon-green), var(--neon-cyan));
+    opacity: 0; transition: opacity 0.3s;
+  }
+
+  .tab-btn:hover { color: var(--neon-green); border-color: var(--neon-green); }
+  .tab-btn.active {
+    border-color: var(--neon-green);
+    color: var(--bg-dark);
+    background: var(--neon-green);
+    box-shadow: 0 0 20px rgba(0,255,65,0.5), 0 0 40px rgba(0,255,65,0.2);
+    text-shadow: none;
+  }
+
+  /* PERIOD TABS */
+  .period-tabs {
+    position: relative; z-index: 10;
+    display: flex; justify-content: center; gap: 6px;
+    padding: 14px 16px 0;
+  }
+
+  .period-btn {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 13px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+    padding: 7px 20px; border-radius: 2px;
+    border: 1px solid rgba(0,229,255,0.25);
+    background: transparent; color: var(--text-dim);
+    cursor: pointer; transition: all 0.3s;
+  }
+
+  .period-btn:hover { color: var(--neon-cyan); border-color: var(--neon-cyan); }
+  .period-btn.active {
+    border-color: var(--neon-cyan);
+    color: var(--neon-cyan);
+    background: rgba(0,229,255,0.1);
+    box-shadow: 0 0 15px rgba(0,229,255,0.3);
+  }
+
+  /* WEEK SELECTOR */
+  .week-selector {
+    position: relative; z-index: 10;
+    display: none; justify-content: center; align-items: center; gap: 12px;
+    padding: 12px 16px 0; flex-wrap: wrap;
+  }
+
+  .week-selector.visible { display: flex; }
+
+  .week-label {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 11px; color: var(--text-dim);
+    letter-spacing: 2px;
+  }
+
+  .week-select {
+    background: var(--bg-panel);
+    border: 1px solid rgba(0,255,65,0.3);
+    color: var(--neon-green);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 11px; padding: 6px 12px;
+    border-radius: 4px; cursor: pointer;
+    outline: none;
+  }
+
+  /* MAIN CONTENT */
+  .main-content {
+    position: relative; z-index: 10;
+    padding: 20px 16px 40px;
+    max-width: 1400px; margin: 0 auto;
+  }
+
+  /* SECTION HEADER */
+  .section-header {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .section-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(14px, 3vw, 20px);
+    font-weight: 900; letter-spacing: 3px;
+    color: var(--neon-green);
+    text-transform: uppercase;
+  }
+
+  .section-line {
+    flex: 1; height: 1px;
+    background: linear-gradient(90deg, var(--neon-green), transparent);
+  }
+
+  /* LOADING / ERROR */
+  .loader {
+    text-align: center; padding: 60px 20px;
+  }
+
+  .loader-ring {
+    width: 60px; height: 60px;
+    border: 3px solid rgba(0,255,65,0.1);
+    border-top-color: var(--neon-green);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 16px;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .loader-text {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 12px; letter-spacing: 3px;
+    color: var(--neon-green); opacity: 0.7;
+  }
+
+  /* TOP 3 PODIUM */
+  .podium-section { margin-bottom: 40px; }
+
+  .podium-grid {
+    display: flex; justify-content: center; align-items: flex-end;
+    gap: 12px; flex-wrap: nowrap;
+  }
+
+  /* PLAYER CARD — podium */
+  .player-card {
+    position: relative;
+    width: 160px;
+    background: linear-gradient(160deg, #0d1f3c 0%, #050e1f 100%);
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+    flex-shrink: 0;
+  }
+
+  .player-card:hover {
+    transform: translateY(-8px) scale(1.02);
+  }
+
+  .player-card.rank-1 {
+    width: 190px;
+    border: 2px solid var(--neon-gold);
+    box-shadow: 0 0 25px rgba(255,215,0,0.4), 0 0 60px rgba(255,215,0,0.15), inset 0 0 20px rgba(255,215,0,0.05);
+    animation: goldGlow 2s ease-in-out infinite;
+    margin-bottom: 0;
+  }
+
+  @keyframes goldGlow {
+    0%,100% { box-shadow: 0 0 25px rgba(255,215,0,0.4), 0 0 60px rgba(255,215,0,0.15), inset 0 0 20px rgba(255,215,0,0.05); }
+    50% { box-shadow: 0 0 40px rgba(255,215,0,0.7), 0 0 80px rgba(255,215,0,0.3), inset 0 0 30px rgba(255,215,0,0.1); }
+  }
+
+  .player-card.rank-2 {
+    width: 165px; margin-bottom: 20px;
+    border: 2px solid #c0c0c0;
+    box-shadow: 0 0 20px rgba(192,192,192,0.3);
+  }
+
+  .player-card.rank-3 {
+    width: 155px; margin-bottom: 35px;
+    border: 2px solid #cd7f32;
+    box-shadow: 0 0 20px rgba(205,127,50,0.3);
+  }
+
+  /* Card RGB border animation */
+  .player-card::before {
+    content: '';
+    position: absolute; inset: -2px; z-index: -1;
+    border-radius: 10px;
+    background: linear-gradient(45deg, var(--neon-green), var(--neon-cyan), var(--neon-pink), var(--neon-green));
+    background-size: 300% 300%;
+    animation: rgbBorder 3s linear infinite;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .player-card:hover::before { opacity: 1; }
+
+  @keyframes rgbBorder {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .card-rank-badge {
+    position: absolute; top: 8px; left: 8px; z-index: 5;
+    width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 4px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 14px; font-weight: 900;
+  }
+
+  .rank-1 .card-rank-badge { background: linear-gradient(135deg, #ffd700, #ff8c00); color: #000; box-shadow: 0 0 15px rgba(255,215,0,0.8); }
+  .rank-2 .card-rank-badge { background: linear-gradient(135deg, #e0e0e0, #a0a0a0); color: #000; }
+  .rank-3 .card-rank-badge { background: linear-gradient(135deg, #cd7f32, #8b4513); color: #fff; }
+
+  .ref-icon {
+    position: absolute; top: 8px; right: 8px; z-index: 5;
+    width: 22px; height: 22px;
+    background: rgba(255,215,0,0.2);
+    border: 1px solid var(--neon-gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    box-shadow: 0 0 8px rgba(255,215,0,0.5);
+    cursor: help;
+  }
+
+  .card-img-wrap {
+    width: 100%; aspect-ratio: 1/1.1;
+    overflow: hidden; position: relative;
+    background: linear-gradient(160deg, #0a2040, #051020);
+  }
+
+  .card-img-wrap img {
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: center top;
+    transition: transform 0.5s ease;
+  }
+
+  .player-card:hover .card-img-wrap img {
+    transform: scale(1.08);
+  }
+
+  .card-img-placeholder {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 48px;
+    background: radial-gradient(circle, rgba(0,255,65,0.1), transparent);
+  }
+
+  /* Scanline overlay on image */
+  .card-img-wrap::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px);
+    pointer-events: none;
+  }
+
+  .card-flag {
+    position: absolute; bottom: 8px; left: 8px; z-index: 5;
+    width: 28px; height: 18px; border-radius: 2px;
+    overflow: hidden; border: 1px solid rgba(255,255,255,0.3);
+  }
+
+  .card-flag img { width: 100%; height: 100%; object-fit: cover; }
+
+  .card-bottom {
+    padding: 10px 10px 12px;
+    background: linear-gradient(180deg, rgba(0,255,65,0.03), rgba(0,0,0,0.5));
+    position: relative;
+  }
+
+  .card-bottom::before {
+    content: '';
+    position: absolute; top: 0; left: 10%; right: 10%; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--neon-green), transparent);
+    opacity: 0.5;
+  }
+
+  .card-name {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(9px, 1.5vw, 11px);
+    font-weight: 700; letter-spacing: 1px;
+    color: #fff; text-transform: uppercase;
+    white-space: nowrap; overflow: hidden;
+    text-overflow: ellipsis;
+    text-shadow: 0 0 10px rgba(0,255,65,0.5);
+    margin-bottom: 8px;
+  }
+
+  .card-stats-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+  }
+
+  .stat-box {
+    text-align: center;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(0,255,65,0.1);
+    border-radius: 3px; padding: 3px 2px;
+  }
+
+  .stat-val {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 13px; font-weight: 900;
+    color: var(--neon-green);
+    line-height: 1;
+  }
+
+  .stat-lbl {
+    font-size: 8px; letter-spacing: 1px;
+    color: var(--text-dim); text-transform: uppercase;
+    margin-top: 1px;
+  }
+
+  .card-total-pts {
+    text-align: center; margin-top: 8px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 18px; font-weight: 900;
+    color: var(--neon-gold);
+    text-shadow: 0 0 15px rgba(255,215,0,0.7);
+  }
+
+  .card-total-label {
+    font-size: 8px; letter-spacing: 2px;
+    color: var(--text-dim); text-align: center;
+    margin-top: 2px; text-transform: uppercase;
+  }
+
+  /* RANK TABLE */
+  .rank-table-wrap {
+    background: var(--bg-panel);
+    border: 1px solid rgba(0,255,65,0.15);
+    border-radius: 8px; overflow: hidden;
+    box-shadow: 0 0 30px rgba(0,0,0,0.5);
+  }
+
+  .rank-table {
+    width: 100%; border-collapse: collapse;
+  }
+
+  .rank-table thead tr {
+    background: linear-gradient(90deg, rgba(0,255,65,0.1), rgba(0,229,255,0.05));
+    border-bottom: 1px solid rgba(0,255,65,0.2);
+  }
+
+  .rank-table th {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 9px; letter-spacing: 2px;
+    color: var(--neon-green); text-transform: uppercase;
+    padding: 12px 10px; text-align: center;
+    white-space: nowrap;
+  }
+
+  .rank-table th:nth-child(2) { text-align: left; }
+
+  .rank-table tbody tr {
+    border-bottom: 1px solid rgba(0,255,65,0.06);
+    transition: background 0.2s;
+    cursor: pointer;
+  }
+
+  .rank-table tbody tr:hover {
+    background: rgba(0,255,65,0.05);
+  }
+
+  .rank-table td {
+    padding: 10px 10px; text-align: center;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 14px; font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+  }
+
+  .rank-table td:nth-child(2) { text-align: left; }
+
+  .rank-num {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 12px; font-weight: 900;
+  }
+
+  .rank-1-row .rank-num { color: var(--neon-gold); }
+  .rank-2-row .rank-num { color: #c0c0c0; }
+  .rank-3-row .rank-num { color: #cd7f32; }
+
+  .player-cell {
+    display: flex; align-items: center; gap: 10px;
+  }
+
+  .table-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    object-fit: cover; object-position: center top;
+    border: 2px solid rgba(0,255,65,0.3);
+    flex-shrink: 0;
+  }
+
+  .table-avatar-ph {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: rgba(0,255,65,0.1);
+    border: 2px solid rgba(0,255,65,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0;
+  }
+
+  .player-name-wrap { min-width: 0; }
+
+  .table-name {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 14px; font-weight: 700;
+    white-space: nowrap; overflow: hidden;
+    text-overflow: ellipsis; max-width: 140px;
+  }
+
+  .table-teamtype {
+    font-size: 10px; color: var(--text-dim);
+    letter-spacing: 1px;
+  }
+
+  .pts-val {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900; font-size: 15px;
+    color: var(--neon-cyan);
+  }
+
+  .positive { color: #00ff41; }
+  .negative { color: #ff4444; }
+  .neutral { color: var(--text-dim); }
+
+  .ref-pts-cell { color: var(--neon-gold); font-size: 13px; }
+
+  td .ref-mini {
+    font-size: 10px; vertical-align: super;
+    cursor: help;
+  }
+
+  /* WEEKLY CARD OF THE WEEK */
+  .cotw-section { margin-bottom: 40px; }
+
+  .cotw-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 16px;
+  }
+
+  /* BIG CARD (weekly POTW) */
+  .big-card {
+    position: relative;
+    background: linear-gradient(160deg, #0a1628 0%, #040c1a 100%);
+    border: 2px solid var(--neon-green);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow:
+      0 0 30px rgba(0,255,65,0.3),
+      0 0 60px rgba(0,255,65,0.1),
+      inset 0 0 30px rgba(0,255,65,0.03);
+    animation: bigCardPulse 3s ease-in-out infinite;
+    transition: transform 0.3s;
+    cursor: pointer;
+  }
+
+  .big-card:hover { transform: scale(1.03); }
+
+  @keyframes bigCardPulse {
+    0%,100% { box-shadow: 0 0 30px rgba(0,255,65,0.3), 0 0 60px rgba(0,255,65,0.1); }
+    50% { box-shadow: 0 0 50px rgba(0,255,65,0.6), 0 0 100px rgba(0,255,65,0.2); }
+  }
+
+  /* RGB corner decorations */
+  .big-card::before, .big-card::after {
+    content: '';
+    position: absolute; width: 40px; height: 40px;
+    border: 2px solid var(--neon-green); z-index: 2;
+  }
+
+  .big-card::before { top: 6px; right: 6px; border-left: none; border-bottom: none; }
+  .big-card::after  { bottom: 6px; left: 6px; border-right: none; border-top: none; }
+
+  .big-card-header {
+    position: absolute; top: 0; right: 0; z-index: 5;
+    writing-mode: vertical-rl; text-orientation: mixed;
+    transform: rotate(180deg);
+    background: var(--neon-green);
+    color: var(--bg-dark);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 10px; font-weight: 900;
+    letter-spacing: 2px; padding: 10px 6px;
+    text-transform: uppercase;
+  }
+
+  .big-card-pts {
+    position: absolute; top: 14px; left: 14px; z-index: 5;
+  }
+
+  .big-card-pts-num {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 32px; font-weight: 900;
+    color: #fff; line-height: 1;
+    text-shadow: 0 0 20px rgba(0,255,65,0.8);
+  }
+
+  .big-card-pts-lbl {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 10px; letter-spacing: 3px;
+    color: var(--neon-green); text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  .big-card-img {
+    width: 100%; aspect-ratio: 3/4;
+    position: relative; overflow: hidden;
+    background: radial-gradient(ellipse at bottom, #001a0a, #000);
+  }
+
+  .big-card-img img {
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: center top;
+    filter: drop-shadow(0 0 20px rgba(0,255,65,0.4));
+  }
+
+  .big-card-img-ph {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 80px;
+  }
+
+  /* Vertical text on right */
+  .big-card-vtext {
+    position: absolute; right: 30px; top: 0; bottom: 0;
+    display: flex; align-items: center;
+    writing-mode: vertical-rl;
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(20px, 4vw, 30px);
+    font-weight: 900; letter-spacing: 4px;
+    color: var(--neon-green);
+    text-transform: uppercase;
+    text-shadow: 0 0 20px var(--neon-green);
+    opacity: 0.15; pointer-events: none;
+    z-index: 1;
+  }
+
+  .big-card-flag {
+    position: absolute; bottom: 12px; left: 12px; z-index: 5;
+    width: 36px; height: 24px; border-radius: 3px;
+    overflow: hidden; border: 2px solid rgba(255,255,255,0.4);
+  }
+
+  .big-card-flag img { width: 100%; height: 100%; object-fit: cover; }
+
+  .big-card-footer {
+    padding: 12px 14px;
+    background: linear-gradient(180deg, rgba(0,255,65,0.05), rgba(0,0,0,0.6));
+    border-top: 1px solid rgba(0,255,65,0.2);
+  }
+
+  .big-card-name {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(11px, 2vw, 14px);
+    font-weight: 900; letter-spacing: 2px;
+    color: #fff; text-transform: uppercase;
+    text-shadow: 0 0 15px rgba(0,255,65,0.6);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    margin-bottom: 6px;
+  }
+
+  .big-card-stars {
+    display: flex; gap: 3px;
+  }
+
+  .star { color: var(--neon-gold); font-size: 12px; }
+
+  .big-card-week-tag {
+    position: absolute; bottom: -1px; right: 14px;
+    background: rgba(0,0,0,0.8);
+    border: 1px solid rgba(0,229,255,0.3);
+    border-bottom: none;
+    padding: 3px 10px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 8px; letter-spacing: 2px;
+    color: var(--neon-cyan); text-transform: uppercase;
+  }
+
+  /* HISTORY CARDS */
+  .history-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 12px;
+  }
+
+  .history-card {
+    position: relative;
+    background: linear-gradient(160deg, #0d1f3c, #050e1f);
+    border: 1px solid rgba(0,255,65,0.25);
+    border-radius: 8px; overflow: hidden;
+    transition: all 0.3s; cursor: pointer;
+  }
+
+  .history-card:hover {
+    border-color: var(--neon-green);
+    box-shadow: 0 0 20px rgba(0,255,65,0.2);
+    transform: translateY(-4px);
+  }
+
+  .history-card-week {
+    background: rgba(0,255,65,0.1);
+    border-bottom: 1px solid rgba(0,255,65,0.2);
+    padding: 6px 10px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 9px; letter-spacing: 2px;
+    color: var(--neon-green); text-transform: uppercase;
+    text-align: center;
+  }
+
+  .history-card-img {
+    width: 100%; aspect-ratio: 1/1;
+    overflow: hidden;
+    background: radial-gradient(circle, #001a0a, #000);
+  }
+
+  .history-card-img img {
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: center top;
+  }
+
+  .history-card-img-ph {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 36px;
+  }
+
+  .history-card-info {
+    padding: 8px 8px 10px;
+    text-align: center;
+  }
+
+  .history-card-name {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 9px; font-weight: 700;
+    color: #fff; letter-spacing: 1px;
+    text-transform: uppercase;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+
+  .history-card-pts {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 14px; font-weight: 900;
+    color: var(--neon-gold);
+    text-shadow: 0 0 10px rgba(255,215,0,0.5);
+    margin-top: 3px;
+  }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 1000;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(10px);
+    display: none; align-items: center; justify-content: center;
+    padding: 20px;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--bg-panel);
+    border: 1px solid rgba(0,255,65,0.3);
+    border-radius: 12px; padding: 24px;
+    max-width: 480px; width: 100%;
+    box-shadow: 0 0 60px rgba(0,255,65,0.2);
+    position: relative; max-height: 85vh; overflow-y: auto;
+  }
+
+  .modal-close {
+    position: absolute; top: 14px; right: 14px;
+    background: none; border: none;
+    color: var(--text-dim); font-size: 20px; cursor: pointer;
+    transition: color 0.2s;
+  }
+
+  .modal-close:hover { color: var(--neon-pink); }
+
+  .modal-player-header {
+    display: flex; gap: 16px; align-items: flex-start;
+    margin-bottom: 20px;
+  }
+
+  .modal-avatar {
+    width: 80px; height: 80px; border-radius: 8px;
+    object-fit: cover; object-position: center top;
+    border: 2px solid var(--neon-green);
+    box-shadow: 0 0 20px rgba(0,255,65,0.3);
+    flex-shrink: 0;
+  }
+
+  .modal-avatar-ph {
+    width: 80px; height: 80px; border-radius: 8px;
+    background: rgba(0,255,65,0.1);
+    border: 2px solid var(--neon-green);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 36px; flex-shrink: 0;
+  }
+
+  .modal-name {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 18px; font-weight: 900;
+    color: #fff; letter-spacing: 2px; text-transform: uppercase;
+  }
+
+  .modal-team-badge {
+    display: inline-block; margin-top: 4px;
+    background: rgba(0,255,65,0.1);
+    border: 1px solid rgba(0,255,65,0.3);
+    border-radius: 4px; padding: 2px 8px;
+    font-size: 11px; letter-spacing: 2px;
+    color: var(--neon-green);
+  }
+
+  .modal-total-pts {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 28px; font-weight: 900;
+    color: var(--neon-gold);
+    text-shadow: 0 0 20px rgba(255,215,0,0.5);
+    margin-top: 8px;
+  }
+
+  .modal-stats-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 8px; margin-top: 16px;
+  }
+
+  .modal-stat {
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(0,255,65,0.1);
+    border-radius: 6px; padding: 10px 8px;
+    text-align: center;
+  }
+
+  .modal-stat-val {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 18px; font-weight: 900;
+    color: var(--neon-cyan);
+  }
+
+  .modal-stat-lbl {
+    font-size: 10px; letter-spacing: 1px;
+    color: var(--text-dim); margin-top: 3px;
+    text-transform: uppercase;
+  }
+
+  .modal-ref-section {
+    margin-top: 16px; padding: 12px;
+    background: rgba(255,215,0,0.05);
+    border: 1px solid rgba(255,215,0,0.2);
+    border-radius: 6px;
+  }
+
+  .modal-ref-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 11px; letter-spacing: 2px;
+    color: var(--neon-gold); margin-bottom: 8px;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    .podium-grid { gap: 8px; }
+    .player-card.rank-1 { width: 140px; }
+    .player-card.rank-2 { width: 120px; margin-bottom: 20px; }
+    .player-card.rank-3 { width: 110px; margin-bottom: 35px; }
+    .rank-table th, .rank-table td { padding: 8px 6px; font-size: 12px; }
+    .table-name { max-width: 90px; }
+    .cotw-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 400px) {
+    .player-card.rank-1 { width: 120px; }
+    .player-card.rank-2 { width: 100px; }
+    .player-card.rank-3 { width: 90px; }
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg-dark); }
+  ::-webkit-scrollbar-thumb { background: rgba(0,255,65,0.3); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--neon-green); }
+
+  /* No data */
+  .no-data {
+    text-align: center; padding: 40px 20px;
+    color: var(--text-dim);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 12px; letter-spacing: 3px;
+  }
+
+  .error-msg {
+    background: rgba(255,0,110,0.1);
+    border: 1px solid rgba(255,0,110,0.3);
+    border-radius: 8px; padding: 16px;
+    color: var(--neon-pink);
+    font-size: 13px; margin: 10px 0;
+    text-align: center;
+  }
+</style>
 </head>
 <body>
 
-  <div class="bg-glow bg-glow-1"></div>
-  <div class="bg-glow bg-glow-2"></div>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
 
-  <!-- TOPBAR -->
-  <a href="https://goatfcbd.com" class="topbar">
-    <div class="topbar-left">
-      <img src="https://i.imgur.com/LY3Bb9m.png" class="topbar-logo" alt="GOAT FC">
-      <span class="topbar-text">GOAT FC</span>
-    </div>
-    <div class="topbar-right"><i class="fa-solid fa-house"></i></div>
-  </a>
-
-  <div class="main">
-    <div class="wrapper">
-
-      <!-- TITLE -->
-      <div class="title-block">
-        <h1>Rival Tracker</h1>
-        <div class="subtitle">GOAT FC · Player Head-to-Head Statistics</div>
-        <div class="subtitle-badge"><i class="fa-solid fa-microchip"></i> H2H ENGAGEMENT ENGINE</div>
-      </div>
-
-      <!-- FILTERS -->
-      <div class="filter-section">
-        <div class="select-wrap">
-          <i class="fa-solid fa-user-shield"></i>
-          <select id="playerSelect">
-            <option value="">— Select Player —</option>
-          </select>
-        </div>
-        <div class="filter-row">
-          <div class="select-wrap">
-            <i class="fa-solid fa-calendar-days"></i>
-            <select id="periodFilter">
-              <option value="monthly">Monthly</option>
-              <option value="overall">Overall</option>
-            </select>
-          </div>
-          <div class="select-wrap">
-            <i class="fa-solid fa-shield-halved"></i>
-            <select id="typeFilter">
-              <option value="all">All Match</option>
-              <option value="Friendly">Friendly</option>
-              <option value="Tournament">Tournament</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <!-- PLAYER SUMMARY DASHBOARD (NEW) -->
-      <div id="playerDashboard" class="player-dashboard">
-        <div class="db-card">
-          <div class="db-grid">
-            <div class="db-profile">
-              <div class="db-avatar-container">
-                <i class="fa-solid fa-circle-user"></i>
-              </div>
-              <div>
-                <h3 id="dbPlayerName" class="db-player-name">PLAYER NAME</h3>
-                <div id="dbPlayerId" class="db-player-id">GFC-000</div>
-              </div>
-            </div>
-            <div class="db-winrate-box">
-              <div id="dbWinrateRing" class="radial-progress">
-                <span id="dbWinrateVal" class="radial-value">0%</span>
-              </div>
-              <span class="radial-label">WIN RATE</span>
-            </div>
-            <div class="db-stats">
-              <div class="stat-row-summary">
-                <div class="mini-stat-card">
-                  <div class="mini-stat-label">Matches</div>
-                  <div id="dbStatM" class="mini-stat-value val-m">0</div>
-                </div>
-                <div class="mini-stat-card">
-                  <div class="mini-stat-label">Wins</div>
-                  <div id="dbStatW" class="mini-stat-value val-w">0</div>
-                </div>
-                <div class="mini-stat-card">
-                  <div class="mini-stat-label">Draws</div>
-                  <div id="dbStatD" class="mini-stat-value val-d">0</div>
-                </div>
-                <div class="mini-stat-card">
-                  <div class="mini-stat-label">Losses</div>
-                  <div id="dbStatL" class="mini-stat-value val-l">0</div>
-                </div>
-              </div>
-              <div class="tactical-intel">
-                <div class="intel-pill">
-                  <span class="intel-title arch"><i class="fa-solid fa-fire"></i> Arch-Rival</span>
-                  <span id="intelArch" class="intel-opp-name">N/A</span>
-                  <span id="intelArchMeta" class="intel-opp-meta">0 matches</span>
-                </div>
-                <div class="intel-pill">
-                  <span class="intel-title nemesis"><i class="fa-solid fa-skull"></i> Nemesis</span>
-                  <span id="intelNemesis" class="intel-opp-name">N/A</span>
-                  <span id="intelNemesisMeta" class="intel-opp-meta">0 losses</span>
-                </div>
-                <div class="intel-pill">
-                  <span class="intel-title prey"><i class="fa-solid fa-crosshairs"></i> Prey</span>
-                  <span id="intelPrey" class="intel-opp-name">N/A</span>
-                  <span id="intelPreyMeta" class="intel-opp-meta">0 wins</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- LEADERBOARD / RIVALS LIST -->
-      <div class="card">
-        <div class="tbl-wrap">
-          <table id="mainTable">
-            <thead>
-              <tr>
-                <th class="col-opp" style="width:45%">Opponent Record</th>
-                <th style="width:11%">M</th>
-                <th style="width:11%">W</th>
-                <th style="width:11%">D</th>
-                <th style="width:11%">L</th>
-                <th style="width:11%">Status</th>
-              </tr>
-            </thead>
-            <tbody id="resultTable">
-              <tr>
-                <td colspan="6" class="loading-cell">
-                  <div class="loading-spinner"></div>
-                  INITIALIZING HUD INTERFACE...
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
+<!-- HEADER -->
+<header>
+  <div class="logo-wrap">
+    <div class="logo-icon">⚽</div>
+    <div>
+      <h1>GOAT FC</h1>
+      <div class="subtitle">Ranking System</div>
     </div>
   </div>
+  <div class="live-badge"><span class="live-dot"></span> Live Rankings</div>
+</header>
 
-  <footer>
-    <div class="footer-text">POWERED BY GOAT FC</div>
-  </footer>
+<!-- TEAM TYPE TABS -->
+<div class="tabs-container" id="teamTabs">
+  <button class="tab-btn active" data-team="all" onclick="setTeam('all',this)">🏆 All</button>
+  <button class="tab-btn" data-team="Main" onclick="setTeam('Main',this)">⭐ Main</button>
+  <button class="tab-btn" data-team="Academy" onclick="setTeam('Academy',this)">🌱 Academy</button>
+</div>
 
-  <script>
-    const MONTHLY_MATCH_LIMIT = 5;
-    const MATCH_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=1588171329&single=true&output=csv";
-    const MEMBER_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv";
+<!-- PERIOD TABS -->
+<div class="period-tabs">
+  <button class="period-btn active" data-period="overall" onclick="setPeriod('overall',this)">Overall</button>
+  <button class="period-btn" data-period="monthly" onclick="setPeriod('monthly',this)">Monthly</button>
+  <button class="period-btn" data-period="weekly" onclick="setPeriod('weekly',this)">Weekly</button>
+</div>
 
-    let matches = [], members = {};
-    const clean = v => String(v || "").replace(/^"+|"+$/g, "").trim();
-    const isValidID = id => /^GFC-\d+$/i.test(clean(id));
+<!-- WEEK SELECTOR -->
+<div class="week-selector" id="weekSelector">
+  <span class="week-label">📅 Week:</span>
+  <select class="week-select" id="weekSelect" onchange="onWeekChange()"></select>
+  <span class="week-label">|</span>
+  <span class="week-label">📆 Month:</span>
+  <select class="week-select" id="monthSelect" onchange="onMonthChange()"></select>
+</div>
 
-    function parseCSV(text) {
-      const rows = []; let row = [], cur = "", q = false;
-      for (let i = 0; i < text.length; i++) {
-        const c = text[i], n = text[i + 1];
-        if (c === '"' && q && n === '"') { cur += '"'; i++; }
-        else if (c === '"') { q = !q; }
-        else if (c === ',' && !q) { row.push(cur); cur = ""; }
-        else if ((c === '\n' || c === '\r') && !q) {
-          if (cur || row.length) { row.push(cur); rows.push(row); }
-          row = []; cur = "";
-        } else cur += c;
-      }
-      if (cur || row.length) { row.push(cur); rows.push(row); }
-      return rows;
+<!-- MAIN -->
+<div class="main-content" id="mainContent">
+  <div class="loader" id="loader">
+    <div class="loader-ring"></div>
+    <div class="loader-text">Loading GOAT FC Data...</div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" id="modalContent"></div>
+</div>
+
+<script>
+// =====================
+// CONFIG
+// =====================
+const CSV = {
+  playerSummary: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRBY2ORgmyKXCM-OFDvL3B63y0fe_1CgS3NvrG7VHQ5TcSrkEn1pV8VvCdXCLDmbWFI_xx4fJ9pxVeu/pub?gid=2117536811&single=true&output=csv',
+  rawMatches:    'https://docs.google.com/spreadsheets/d/e/2PACX-1vRBY2ORgmyKXCM-OFDvL3B63y0fe_1CgS3NvrG7VHQ5TcSrkEn1pV8VvCdXCLDmbWFI_xx4fJ9pxVeu/pub?gid=1272733514&single=true&output=csv',
+  referee:       'https://docs.google.com/spreadsheets/d/e/2PACX-1vRBY2ORgmyKXCM-OFDvL3B63y0fe_1CgS3NvrG7VHQ5TcSrkEn1pV8VvCdXCLDmbWFI_xx4fJ9pxVeu/pub?gid=895725044&single=true&output=csv',
+  members:       'https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv'
+};
+
+const PROXY = 'https://corsproxy.io/?';
+
+// =====================
+// STATE
+// =====================
+let state = {
+  currentTeam: 'all',
+  currentPeriod: 'overall',
+  currentWeek: null,
+  currentMonth: null,
+  players: [],        // PlayerSummary
+  matches: [],        // RawMatches
+  refs: [],           // RefereeSummary
+  members: [],        // Club Members (pics)
+  weeks: [],          // unique weeks
+  months: [],         // unique months
+  weeklyHistory: [],  // [{week, player, pts}]
+  loaded: false
+};
+
+// =====================
+// CSV PARSER
+// =====================
+function parseCSV(text) {
+  const lines = text.trim().split('\n');
+  if (lines.length < 2) return [];
+  const headers = parseCSVLine(lines[0]);
+  return lines.slice(1).map(line => {
+    const vals = parseCSVLine(line);
+    const obj = {};
+    headers.forEach((h, i) => { obj[h.trim()] = (vals[i] || '').trim(); });
+    return obj;
+  }).filter(r => Object.values(r).some(v => v));
+}
+
+function parseCSVLine(line) {
+  const result = []; let cur = ''; let inQ = false;
+  for (let i = 0; i < line.length; i++) {
+    const c = line[i];
+    if (c === '"') { inQ = !inQ; }
+    else if (c === ',' && !inQ) { result.push(cur); cur = ''; }
+    else { cur += c; }
+  }
+  result.push(cur); return result;
+}
+
+async function fetchCSV(url) {
+  try {
+    const res = await fetch(PROXY + encodeURIComponent(url));
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const text = await res.text();
+    return parseCSV(text);
+  } catch(e) {
+    // Try without proxy
+    try {
+      const res = await fetch(url);
+      const text = await res.text();
+      return parseCSV(text);
+    } catch(e2) {
+      console.warn('CSV fetch failed:', url, e2);
+      return [];
     }
+  }
+}
 
-    function approved(v) { return clean(v).toLowerCase() === "yes"; }
-    
-    function isCurrentMonth(d) {
-      const x = new Date(d), n = new Date();
-      return !isNaN(x) && x.getMonth() === n.getMonth() && x.getFullYear() === n.getFullYear();
-    }
+// =====================
+// DATE HELPERS
+// =====================
+function getWeekNumber(date) {
+  const d = new Date(date);
+  d.setHours(0,0,0,0);
+  d.setDate(d.getDate() + 3 - (d.getDay()+6)%7);
+  const week1 = new Date(d.getFullYear(),0,4);
+  const wn = 1 + Math.round(((d.getTime()-week1.getTime())/86400000 - 3 + (week1.getDay()+6)%7)/7);
+  return `${d.getFullYear()}-W${String(wn).padStart(2,'0')}`;
+}
 
-    async function loadAll() {
-      try {
-        const [mRes, uRes] = await Promise.all([fetch(MATCH_CSV), fetch(MEMBER_CSV)]);
-        const [mTxt, uTxt] = await Promise.all([mRes.text(), uRes.text()]);
-        loadMembers(uTxt);
-        loadMatches(mTxt);
-        populatePlayers();
-        document.getElementById("resultTable").innerHTML = `
-          <tr>
-            <td colspan="6" class="info-cell">
-              <i class="fa-solid fa-gamepad"></i>
-              SELECT A PLAYER TO DEPLOY DIAGNOSTICS
-            </td>
-          </tr>`;
-      } catch (e) {
-        document.getElementById("resultTable").innerHTML = `
-          <tr>
-            <td colspan="6" class="info-cell" style="color:var(--neon-pink);">
-              <i class="fa-solid fa-triangle-exclamation"></i>
-              CRITICAL: ERROR LOADING REMOTE DATABASE
-            </td>
-          </tr>`;
-      }
-    }
+function getMonthKey(date) {
+  const d = new Date(date);
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+}
 
-    function loadMembers(csv) {
-      const rows = parseCSV(csv), h = rows[0];
-      rows.slice(1).forEach(r => {
-        const obj = {}; h.forEach((x, i) => obj[clean(x)] = clean(r[i]));
-        const id = obj["Club ID Number"], name = obj["Full Name"];
-        if (isValidID(id) && name) members[id] = { name, id };
-      });
-    }
+function friendlyMonth(key) {
+  if (!key) return '';
+  const [y, m] = key.split('-');
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return `${months[parseInt(m)-1]} ${y}`;
+}
 
-    function loadMatches(csv) {
-      const rows = parseCSV(csv), h = rows[0];
-      matches = rows.slice(1).map(r => {
-        const obj = {}; h.forEach((x, i) => obj[clean(x)] = clean(r[i]));
-        return obj;
-      }).filter(m => isValidID(m.P1_ID) && isValidID(m.P2_ID));
-    }
+// =====================
+// LOAD DATA
+// =====================
+async function loadData() {
+  const [players, matches, refs, members] = await Promise.all([
+    fetchCSV(CSV.playerSummary),
+    fetchCSV(CSV.rawMatches),
+    fetchCSV(CSV.referee),
+    fetchCSV(CSV.members)
+  ]);
 
-    function populatePlayers() {
-      const ids = [...new Set(matches.flatMap(m => [m.P1_ID, m.P2_ID]))].filter(id => members[id]).sort();
-      const sel = document.getElementById("playerSelect");
-      sel.innerHTML = '<option value="">— Select Player —</option>';
-      ids.forEach(id => {
-        const o = document.createElement("option");
-        o.value = id;
-        o.textContent = `${members[id].name}  ·  ${id}`;
-        sel.appendChild(o);
-      });
-    }
+  state.players = players;
+  state.matches = matches;
+  state.refs = refs;
+  state.members = members;
 
-    function oppCell(id, s) {
-      // Calculate percentages for the visual ratio bar
-      const total = s.total || 1;
-      const winPct = (s.win / total) * 100;
-      const drawPct = (s.draw / total) * 100;
-      const lossPct = (s.loss / total) * 100;
+  // Build week/month lists from matches
+  const weekSet = new Set(), monthSet = new Set();
+  matches.forEach(m => {
+    const ts = m['Timestamp'] || '';
+    if (!ts) return;
+    const d = new Date(ts);
+    if (isNaN(d)) return;
+    weekSet.add(getWeekNumber(d));
+    monthSet.add(getMonthKey(d));
+  });
 
-      let nameAndId = "";
-      if (!members[id]) {
-        nameAndId = `
-          <div class="opp-meta">
-            <span class="opp-name">${id}</span>
-          </div>
-          <div class="opp-former">Former / Unknown Player</div>`;
-      } else {
-        nameAndId = `
-          <div class="opp-meta">
-            <span class="opp-name">${members[id].name}</span>
-            <span class="opp-id">${id}</span>
-          </div>`;
-      }
+  state.weeks = [...weekSet].sort().reverse();
+  state.months = [...monthSet].sort().reverse();
 
-      return `
-        <div class="opp-row">
-          ${nameAndId}
-          <div class="h2h-bar-container">
-            <div class="h2h-segment h2h-win" style="width: ${winPct}%" title="Wins: ${s.win} (${Math.round(winPct)}%)"></div>
-            <div class="h2h-segment h2h-draw" style="width: ${drawPct}%" title="Draws: ${s.draw} (${Math.round(drawPct)}%)"></div>
-            <div class="h2h-segment h2h-loss" style="width: ${lossPct}%" title="Losses: ${s.loss} (${Math.round(lossPct)}%)"></div>
-          </div>
-        </div>`;
-    }
+  // Default selections
+  state.currentWeek = state.weeks[0] || null;
+  state.currentMonth = state.months[0] || null;
 
-    function updateDashboard(player, stats) {
-      const dash = document.getElementById("playerDashboard");
-      if (!members[player]) {
-        dash.classList.remove("active");
-        return;
-      }
+  // Build weekly history (top player per week by computed score)
+  buildWeeklyHistory();
 
-      // Compute aggregates
-      let totalM = 0, totalW = 0, totalD = 0, totalL = 0;
-      let archId = null, nemesisId = null, preyId = null;
-      let maxMatches = 0, maxLosses = 0, maxWins = 0;
+  state.loaded = true;
+}
 
-      Object.entries(stats).forEach(([oppId, s]) => {
-        totalM += s.total;
-        totalW += s.win;
-        totalD += s.draw;
-        totalL += s.loss;
+// =====================
+// MERGE: player data + ref points + picture
+// =====================
+function getMemberPic(clubId) {
+  const m = state.members.find(m => String(m['Club ID Number']).trim() === String(clubId).trim());
+  return m ? (m['Profile Picture (For Web)'] || m['Profile Picture'] || '') : '';
+}
 
-        if (s.total > maxMatches) { maxMatches = s.total; archId = oppId; }
-        if (s.loss > maxLosses) { maxLosses = s.loss; nemesisId = oppId; }
-        if (s.win > maxWins) { maxWins = s.win; preyId = oppId; }
-      });
+function getRefPoints(playerName, clubId) {
+  // Match by name or clubId
+  const r = state.refs.find(r =>
+    (r['Player'] && r['Player'].trim().toLowerCase() === (playerName||'').trim().toLowerCase()) ||
+    (r['Club ID'] && String(r['Club ID']).trim() === String(clubId).trim())
+  );
+  if (!r) return 0;
+  const pts = parseFloat(r['Points Earned'] || r['Points'] || 0);
+  return isNaN(pts) ? 0 : pts;
+}
 
-      const winRate = totalM > 0 ? Math.round((totalW / totalM) * 100) : 0;
+function isReferee(playerName, clubId) {
+  return state.refs.some(r =>
+    (r['Player'] && r['Player'].trim().toLowerCase() === (playerName||'').trim().toLowerCase()) ||
+    (r['Club ID'] && String(r['Club ID']).trim() === String(clubId).trim())
+  );
+}
 
-      // Populate elements
-      document.getElementById("dbPlayerName").textContent = members[player].name;
-      document.getElementById("dbPlayerId").textContent = player;
-      
-      document.getElementById("dbStatM").textContent = totalM;
-      document.getElementById("dbStatW").textContent = totalW;
-      document.getElementById("dbStatD").textContent = totalD;
-      document.getElementById("dbStatL").textContent = totalL;
-
-      // Update radial circular winrate meter
-      document.getElementById("dbWinrateVal").textContent = `${winRate}%`;
-      const ring = document.getElementById("dbWinrateRing");
-      ring.style.background = `radial-gradient(closest-side, #090e1a 79%, transparent 80% 100%), conic-gradient(var(--neon-green) ${winRate}%, rgba(255,255,255,0.05) ${winRate}% 100%)`;
-
-      // Tactical Intel mapping helper
-      const fillIntel = (elementId, metaId, oppId, count, label) => {
-        const nameEl = document.getElementById(elementId);
-        const metaEl = document.getElementById(metaId);
-        if (oppId) {
-          nameEl.textContent = members[oppId] ? members[oppId].name : oppId;
-          metaEl.textContent = `${count} ${label}`;
-        } else {
-          nameEl.textContent = "NONE";
-          metaEl.textContent = `0 ${label}`;
-        }
+function buildEnrichedPlayers(filterFn) {
+  return state.players
+    .filter(p => p['Player'])
+    .filter(filterFn || (() => true))
+    .map(p => {
+      const name = (p['Player'] || '').trim();
+      const clubId = (p['Club ID'] || '').trim();
+      const refPts = getRefPoints(name, clubId);
+      const basePts = parseFloat(p['Points'] || 0) || 0;
+      const totalPts = basePts + refPts;
+      const pic = getMemberPic(clubId);
+      return {
+        name, clubId,
+        teamType: (p['Team Type'] || '').trim(),
+        matches: parseInt(p['Matches'] || 0) || 0,
+        wins: parseInt(p['Wins'] || 0) || 0,
+        draws: parseInt(p['Draws'] || 0) || 0,
+        losses: parseInt(p['Losses'] || 0) || 0,
+        gf: parseInt(p['Goals For'] || 0) || 0,
+        ga: parseInt(p['Goals Against'] || 0) || 0,
+        gd: parseInt(p['Goal Diff'] || 0) || 0,
+        motm: parseInt(p['MOTM'] || 0) || 0,
+        yellow: parseInt(p['Yellow'] || p['Yellow Card'] || 0) || 0,
+        red: parseInt(p['Red'] || p['Red Card'] || 0) || 0,
+        basePts, refPts, totalPts,
+        pic,
+        isRef: refPts > 0
       };
+    })
+    .sort((a, b) => b.totalPts - a.totalPts)
+    .map((p, i) => ({ ...p, rank: i + 1 }));
+}
 
-      fillIntel("intelArch", "intelArchMeta", archId, maxMatches, "matches");
-      fillIntel("intelNemesis", "intelNemesisMeta", nemesisId, maxLosses, "losses");
-      fillIntel("intelPrey", "intelPreyMeta", preyId, maxWins, "wins");
+// =====================
+// PERIOD-BASED FILTERS
+// =====================
+function filterMatchesByWeek(week) {
+  return state.matches.filter(m => {
+    const ts = m['Timestamp'];
+    if (!ts) return false;
+    const d = new Date(ts);
+    return !isNaN(d) && getWeekNumber(d) === week;
+  });
+}
 
-      dash.classList.add("active");
+function filterMatchesByMonth(month) {
+  return state.matches.filter(m => {
+    const ts = m['Timestamp'];
+    if (!ts) return false;
+    const d = new Date(ts);
+    return !isNaN(d) && getMonthKey(d) === month;
+  });
+}
+
+function computePointsFromMatches(filteredMatches) {
+  // pts: win=3, draw=1, loss=0. MOTM=+2
+  const playerMap = {};
+  filteredMatches.forEach(m => {
+    const player = (m['GOAT FC Player'] || '').trim();
+    const result = (m['Result'] || '').trim().toLowerCase();
+    const motm = (m['MOTM'] || '').trim();
+    const yellow = parseInt(m['Yellow Card'] || 0) || 0;
+    const red = parseInt(m['Red Card'] || 0) || 0;
+    if (!player) return;
+    if (!playerMap[player]) {
+      playerMap[player] = { name: player, matches: 0, wins: 0, draws: 0, losses: 0,
+        gf: 0, ga: 0, gd: 0, motm: 0, yellow: 0, red: 0, basePts: 0 };
     }
+    const pm = playerMap[player];
+    pm.matches++;
+    const gs = parseInt(m['GOAT Score'] || 0) || 0;
+    const os = parseInt(m['Opp Score'] || 0) || 0;
+    pm.gf += gs; pm.ga += os; pm.gd += (gs - os);
+    if (result === 'win' || result === 'w') { pm.wins++; pm.basePts += 3; }
+    else if (result === 'draw' || result === 'd') { pm.draws++; pm.basePts += 1; }
+    else { pm.losses++; }
+    if (motm && motm.toLowerCase() === player.toLowerCase()) pm.motm++;
+    pm.yellow += yellow; pm.red += red;
+  });
 
-    function renderData() {
-      const player = clean(document.getElementById("playerSelect").value);
-      const period = document.getElementById("periodFilter").value;
-      const type = document.getElementById("typeFilter").value;
-      const tbody = document.getElementById("resultTable");
+  return Object.values(playerMap).map(p => {
+    const sp = state.players.find(sp => sp['Player'] && sp['Player'].trim().toLowerCase() === p.name.toLowerCase());
+    const clubId = sp ? (sp['Club ID'] || '').trim() : '';
+    const teamType = sp ? (sp['Team Type'] || '').trim() : '';
+    const refPts = getRefPoints(p.name, clubId);
+    const totalPts = p.basePts + refPts;
+    const pic = getMemberPic(clubId);
+    return { ...p, clubId, teamType, refPts, totalPts, pic, isRef: refPts > 0 };
+  }).sort((a, b) => b.totalPts - a.totalPts)
+    .map((p, i) => ({ ...p, rank: i + 1 }));
+}
 
-      if (!members[player]) {
-        tbody.innerHTML = `
-          <tr>
-            <td colspan="6" class="info-cell">
-              <i class="fa-solid fa-gamepad"></i>
-              SELECT A PLAYER TO DEPLOY DIAGNOSTICS
-            </td>
-          </tr>`;
-        document.getElementById("playerDashboard").classList.remove("active");
-        return;
-      }
+// =====================
+// WEEKLY HISTORY
+// =====================
+function buildWeeklyHistory() {
+  state.weeklyHistory = [];
+  state.weeks.forEach(week => {
+    const matches = filterMatchesByWeek(week);
+    if (!matches.length) return;
+    const pts = computePointsFromMatches(matches);
+    if (!pts.length) return;
+    const top = pts[0];
+    state.weeklyHistory.push({ week, player: top, pts: top.totalPts });
+  });
+}
 
-      let data = matches.filter(m => approved(m.Approved));
-      if (period === "monthly") data = data.filter(m => isCurrentMonth(m.Match_Date));
-      if (type === "Friendly") data = data.filter(m => clean(m.Match_Type) === "Friendly");
-      if (type === "Tournament") data = data.filter(m => clean(m.Match_Type) !== "Friendly");
+// =====================
+// GET CURRENT RANKED LIST
+// =====================
+function getCurrentRankedList() {
+  let teamFilter = p => state.currentTeam === 'all' ? true :
+    (p['Team Type'] || p.teamType || '').trim() === state.currentTeam;
 
-      const stats = {};
-      data.forEach(m => {
-        const p1 = m.P1_ID, p2 = m.P2_ID, s1 = +m.P1_Score || 0, s2 = +m.P2_Score || 0;
-        let opp, res;
-        if (p1 === player) { opp = p2; res = s1 > s2 ? "win" : s1 < s2 ? "loss" : "draw"; }
-        else if (p2 === player) { opp = p1; res = s2 > s1 ? "win" : s2 < s1 ? "loss" : "draw"; }
-        else return;
-        
-        if (!stats[opp]) stats[opp] = { total: 0, win: 0, draw: 0, loss: 0 };
-        stats[opp].total++; stats[opp][res]++;
-      });
-
-      // Update Player Profile metrics
-      updateDashboard(player, stats);
-
-      const rows = Object.entries(stats).sort((a, b) => b[1].total - a[1].total);
-      if (!rows.length) {
-        tbody.innerHTML = `
-          <tr>
-            <td colspan="6" class="info-cell">
-              <i class="fa-solid fa-triangle-exclamation"></i>
-              NO head-to-head records found under selected filters
-            </td>
-          </tr>`;
-        return;
-      }
-
-      // Render Rows with Embedded Mobile Labels
-      tbody.innerHTML = rows.map(([opp, s]) => {
-        const limit = period === "monthly" && s.total > MONTHLY_MATCH_LIMIT;
-        
-        return `
-          <tr class="${limit ? 'warning-row' : ''}">
-            <td class="col-opp">${oppCell(opp, s)}</td>
-            
-            <td class="stat-total">
-              <span class="mob-stat-label">Matches</span>
-              ${s.total}
-            </td>
-            <td class="stat-win">
-              <span class="mob-stat-label">Wins</span>
-              ${s.win}
-            </td>
-            <td class="stat-draw">
-              <span class="mob-stat-label">Draws</span>
-              ${s.draw}
-            </td>
-            <td class="stat-loss">
-              <span class="mob-stat-label">Losses</span>
-              ${s.loss}
-            </td>
-            
-            <td class="col-status">
-              <div class="mob-status-container">
-                <span class="mob-status-label">Limit Status</span>
-                <span class="badge ${limit ? 'badge-alert' : 'badge-ok'}">${limit ? 'LIMIT' : 'OK'}</span>
-              </div>
-            </td>
-          </tr>`;
-      }).join("");
-    }
-
-    // Bind event listeners
-    ["playerSelect", "periodFilter", "typeFilter"].forEach(id => {
-      document.getElementById(id).addEventListener("change", renderData);
+  if (state.currentPeriod === 'overall') {
+    return buildEnrichedPlayers(p => {
+      const tt = (p['Team Type'] || '').trim();
+      return state.currentTeam === 'all' || tt === state.currentTeam;
     });
+  } else if (state.currentPeriod === 'weekly') {
+    const matches = filterMatchesByWeek(state.currentWeek);
+    let data = computePointsFromMatches(matches);
+    if (state.currentTeam !== 'all') data = data.filter(p => p.teamType === state.currentTeam);
+    return data.map((p, i) => ({ ...p, rank: i + 1 }));
+  } else {
+    const matches = filterMatchesByMonth(state.currentMonth);
+    let data = computePointsFromMatches(matches);
+    if (state.currentTeam !== 'all') data = data.filter(p => p.teamType === state.currentTeam);
+    return data.map((p, i) => ({ ...p, rank: i + 1 }));
+  }
+}
 
-    // Run Initialization
-    loadAll();
-  </script>
+// =====================
+// RENDER
+// =====================
+function render() {
+  const mc = document.getElementById('mainContent');
+  mc.innerHTML = '';
+
+  if (!state.loaded) {
+    mc.innerHTML = '<div class="loader"><div class="loader-ring"></div><div class="loader-text">Loading...</div></div>';
+    return;
+  }
+
+  const ranked = getCurrentRankedList();
+
+  if (!ranked.length) {
+    mc.innerHTML = '<div class="no-data">⚽ NO DATA FOUND</div>';
+    return;
+  }
+
+  // TOP 3 PODIUM
+  const podium = ranked.slice(0, 3);
+  const ordered = [];
+  if (podium[1]) ordered.push({ ...podium[1], rank: 2 });
+  if (podium[0]) ordered.push({ ...podium[0], rank: 1 });
+  if (podium[2]) ordered.push({ ...podium[2], rank: 3 });
+
+  const podiumHtml = `
+    <div class="podium-section">
+      <div class="section-header">
+        <div class="section-title">🏆 Top Players</div>
+        <div class="section-line"></div>
+      </div>
+      <div class="podium-grid">
+        ${ordered.map(p => buildPlayerCard(p)).join('')}
+      </div>
+    </div>
+  `;
+
+  // FULL RANK TABLE
+  const tableHtml = `
+    <div style="margin-bottom:40px">
+      <div class="section-header">
+        <div class="section-title">📊 Full Rankings</div>
+        <div class="section-line"></div>
+      </div>
+      <div class="rank-table-wrap">
+        <table class="rank-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Player</th>
+              <th>M</th>
+              <th>W</th>
+              <th>D</th>
+              <th>L</th>
+              <th>GD</th>
+              <th>MOTM</th>
+              <th>⚠️</th>
+              <th>🟥</th>
+              <th>PTS</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${ranked.map(p => buildTableRow(p)).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+
+  // WEEKLY HISTORY (only in weekly period)
+  let historyHtml = '';
+  if (state.currentPeriod === 'weekly') {
+    const otherWeeks = state.weeklyHistory.filter(h => h.week !== state.currentWeek);
+    if (otherWeeks.length) {
+      historyHtml = `
+        <div class="cotw-section">
+          <div class="section-header">
+            <div class="section-title">🌟 Player of the Week History</div>
+            <div class="section-line"></div>
+          </div>
+          <div class="history-grid">
+            ${otherWeeks.map(h => buildHistoryCard(h)).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    // Current week POTW card
+    const curWeekTop = state.weeklyHistory.find(h => h.week === state.currentWeek);
+    if (curWeekTop) {
+      const cotwHtml = `
+        <div class="cotw-section">
+          <div class="section-header">
+            <div class="section-title">⚡ Player of the Week</div>
+            <div class="section-line"></div>
+          </div>
+          <div style="display:flex;justify-content:center">
+            ${buildBigCard(curWeekTop.player, state.currentWeek)}
+          </div>
+        </div>
+      `;
+      mc.innerHTML = cotwHtml + podiumHtml + tableHtml + historyHtml;
+      return;
+    }
+  }
+
+  mc.innerHTML = podiumHtml + tableHtml + historyHtml;
+}
+
+// =====================
+// CARD BUILDERS
+// =====================
+function imgOrPh(pic, cls='', phSize='36px') {
+  if (pic && (pic.startsWith('http') || pic.startsWith('data:'))) {
+    return `<img src="${pic}" class="${cls}" onerror="this.style.display='none';this.nextSibling.style.display='flex';" loading="lazy">
+            <div style="display:none;width:100%;height:100%;align-items:center;justify-content:center;font-size:${phSize}">🧑</div>`;
+  }
+  return `<div style="display:flex;width:100%;height:100%;align-items:center;justify-content:center;font-size:${phSize}">🧑</div>`;
+}
+
+function buildPlayerCard(p) {
+  const rankClass = p.rank <= 3 ? `rank-${p.rank}` : '';
+  const pic = p.pic;
+  return `
+  <div class="player-card ${rankClass}" onclick="showModal(${JSON.stringify(p).replace(/"/g,'&quot;')})">
+    <div class="card-rank-badge">${p.rank}</div>
+    ${p.isRef ? `<div class="ref-icon" title="Referee Points: +${p.refPts}">🟨</div>` : ''}
+    <div class="card-img-wrap">
+      ${imgOrPh(pic, 'card-img', '48px')}
+      <div class="card-flag">
+        <img src="https://flagcdn.com/w40/bd.png" alt="BD" onerror="this.style.display='none'">
+      </div>
+    </div>
+    <div class="card-bottom">
+      <div class="card-name">${p.name}</div>
+      <div class="card-stats-grid">
+        <div class="stat-box"><div class="stat-val">${p.wins}</div><div class="stat-lbl">W</div></div>
+        <div class="stat-box"><div class="stat-val">${p.draws}</div><div class="stat-lbl">D</div></div>
+        <div class="stat-box"><div class="stat-val">${p.losses}</div><div class="stat-lbl">L</div></div>
+      </div>
+      <div class="card-total-pts">${p.totalPts}</div>
+      <div class="card-total-label">Total Points</div>
+    </div>
+  </div>`;
+}
+
+function buildTableRow(p) {
+  const rankCls = p.rank === 1 ? 'rank-1-row' : p.rank === 2 ? 'rank-2-row' : p.rank === 3 ? 'rank-3-row' : '';
+  const gdCls = p.gd > 0 ? 'positive' : p.gd < 0 ? 'negative' : 'neutral';
+  const refBadge = p.isRef ? `<span class="ref-mini" title="Includes Referee Points: +${p.refPts}">🟨</span>` : '';
+  const pic = p.pic;
+
+  let avatarHtml;
+  if (pic && pic.startsWith('http')) {
+    avatarHtml = `<img src="${pic}" class="table-avatar" onerror="this.outerHTML='<div class=table-avatar-ph>🧑</div>'" loading="lazy">`;
+  } else {
+    avatarHtml = `<div class="table-avatar-ph">🧑</div>`;
+  }
+
+  return `
+  <tr class="${rankCls}" onclick="showModal(${JSON.stringify(p).replace(/"/g,'&quot;')})">
+    <td><span class="rank-num">${p.rank}</span></td>
+    <td>
+      <div class="player-cell">
+        ${avatarHtml}
+        <div class="player-name-wrap">
+          <div class="table-name">${p.name}${refBadge}</div>
+          <div class="table-teamtype">${p.teamType}</div>
+        </div>
+      </div>
+    </td>
+    <td>${p.matches}</td>
+    <td class="positive">${p.wins}</td>
+    <td class="neutral">${p.draws}</td>
+    <td class="negative">${p.losses}</td>
+    <td class="${gdCls}">${p.gd > 0 ? '+' : ''}${p.gd}</td>
+    <td style="color:var(--neon-cyan)">${p.motm}</td>
+    <td style="color:#ffd700">${p.yellow}</td>
+    <td style="color:#ff4444">${p.red}</td>
+    <td><span class="pts-val">${p.totalPts}</span></td>
+  </tr>`;
+}
+
+function buildBigCard(p, week) {
+  const pic = p.pic;
+  const weekLabel = week ? `Week ${week.split('-W')[1]} · ${week.split('-W')[0]}` : 'POTW';
+  return `
+  <div class="big-card" onclick="showModal(${JSON.stringify(p).replace(/"/g,'&quot;')})">
+    <div class="big-card-header">Player of the Week</div>
+    <div class="big-card-pts">
+      <div class="big-card-pts-num">${p.totalPts}</div>
+      <div class="big-card-pts-lbl">Rank #${p.rank}</div>
+    </div>
+    <div class="big-card-img">
+      ${pic && pic.startsWith('http')
+        ? `<img src="${pic}" onerror="this.style.display='none'" loading="lazy">`
+        : `<div class="big-card-img-ph">🧑</div>`}
+      <div class="big-card-vtext">POTW</div>
+      <div class="big-card-flag">
+        <img src="https://flagcdn.com/w40/bd.png" alt="BD" onerror="this.style.display='none'">
+      </div>
+    </div>
+    <div class="big-card-footer">
+      <div class="big-card-name">${p.name}</div>
+      <div class="big-card-stars">${'<span class="star">★</span>'.repeat(Math.min(5, Math.max(1, Math.round(p.wins / Math.max(p.matches,1) * 5))))}</div>
+    </div>
+    <div class="big-card-week-tag">${weekLabel}</div>
+  </div>`;
+}
+
+function buildHistoryCard(h) {
+  const p = h.player;
+  const pic = p.pic;
+  const wNum = h.week ? h.week.split('-W')[1] : '?';
+  const yr = h.week ? h.week.split('-W')[0].slice(2) : '';
+  return `
+  <div class="history-card" onclick="showModal(${JSON.stringify(p).replace(/"/g,'&quot;')})">
+    <div class="history-card-week">Week ${wNum} '${yr}</div>
+    <div class="history-card-img">
+      ${pic && pic.startsWith('http')
+        ? `<img src="${pic}" onerror="this.style.display='none'" loading="lazy">`
+        : `<div class="history-card-img-ph">🧑</div>`}
+    </div>
+    <div class="history-card-info">
+      <div class="history-card-name">${p.name}</div>
+      <div class="history-card-pts">${h.pts} PTS</div>
+    </div>
+  </div>`;
+}
+
+// =====================
+// MODAL
+// =====================
+function showModal(p) {
+  const mc = document.getElementById('modalContent');
+  const pic = p.pic;
+  let avatarHtml;
+  if (pic && pic.startsWith('http')) {
+    avatarHtml = `<img src="${pic}" class="modal-avatar" onerror="this.outerHTML='<div class=modal-avatar-ph>🧑</div>'" loading="lazy">`;
+  } else {
+    avatarHtml = `<div class="modal-avatar-ph">🧑</div>`;
+  }
+
+  const refSection = p.isRef ? `
+    <div class="modal-ref-section">
+      <div class="modal-ref-title">🟨 Referee Contribution</div>
+      <div style="font-size:13px;color:var(--text-dim)">Base Points: <span style="color:var(--neon-cyan)">${p.basePts}</span> + Referee Points: <span style="color:var(--neon-gold)">${p.refPts}</span> = <span style="color:var(--neon-green)">${p.totalPts}</span></div>
+    </div>` : '';
+
+  mc.innerHTML = `
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-player-header">
+      ${avatarHtml}
+      <div>
+        <div class="modal-name">${p.name}</div>
+        <div class="modal-team-badge">${p.teamType || 'GOAT FC'}</div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
+          <img src="https://flagcdn.com/w40/bd.png" style="width:28px;height:18px;border-radius:2px;border:1px solid rgba(255,255,255,0.3)" onerror="this.style.display='none'">
+          <span style="font-size:11px;color:var(--text-dim);letter-spacing:2px">ID: ${p.clubId}</span>
+        </div>
+        <div class="modal-total-pts">${p.totalPts} <span style="font-size:14px;color:var(--text-dim)">PTS</span></div>
+        <div style="font-size:10px;letter-spacing:2px;color:var(--text-dim);margin-top:2px">RANK #${p.rank}</div>
+      </div>
+    </div>
+    <div class="modal-stats-grid">
+      <div class="modal-stat"><div class="modal-stat-val">${p.matches}</div><div class="modal-stat-lbl">Matches</div></div>
+      <div class="modal-stat"><div class="modal-stat-val" style="color:#00ff41">${p.wins}</div><div class="modal-stat-lbl">Wins</div></div>
+      <div class="modal-stat"><div class="modal-stat-val" style="color:#aaa">${p.draws}</div><div class="modal-stat-lbl">Draws</div></div>
+      <div class="modal-stat"><div class="modal-stat-val" style="color:#ff4444">${p.losses}</div><div class="modal-stat-lbl">Losses</div></div>
+      <div class="modal-stat"><div class="modal-stat-val">${p.gf}</div><div class="modal-stat-lbl">Goals For</div></div>
+      <div class="modal-stat"><div class="modal-stat-val">${p.gd > 0 ? '+':''}<span style="color:${p.gd>=0?'#00ff41':'#ff4444'}">${p.gd}</span></div><div class="modal-stat-lbl">Goal Diff</div></div>
+      <div class="modal-stat"><div class="modal-stat-val" style="color:var(--neon-cyan)">${p.motm}</div><div class="modal-stat-lbl">MOTM</div></div>
+      <div class="modal-stat"><div class="modal-stat-val" style="color:#ffd700">${p.yellow}</div><div class="modal-stat-lbl">Yellow</div></div>
+      <div class="modal-stat"><div class="modal-stat-val" style="color:#ff4444">${p.red}</div><div class="modal-stat-lbl">Red</div></div>
+    </div>
+    ${refSection}
+  `;
+
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal(e) {
+  if (!e || e.target === document.getElementById('modalOverlay') || e === undefined) {
+    document.getElementById('modalOverlay').classList.remove('open');
+  }
+}
+
+// =====================
+// CONTROLS
+// =====================
+function setTeam(team, btn) {
+  state.currentTeam = team;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+function setPeriod(period, btn) {
+  state.currentPeriod = period;
+  document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  const ws = document.getElementById('weekSelector');
+  ws.classList.toggle('visible', period !== 'overall');
+
+  populateWeekMonthSelects();
+  render();
+}
+
+function populateWeekMonthSelects() {
+  const wSel = document.getElementById('weekSelect');
+  const mSel = document.getElementById('monthSelect');
+
+  wSel.innerHTML = state.weeks.map(w =>
+    `<option value="${w}" ${w === state.currentWeek ? 'selected':''}>${w}</option>`
+  ).join('') || '<option>No data</option>';
+
+  mSel.innerHTML = state.months.map(m =>
+    `<option value="${m}" ${m === state.currentMonth ? 'selected':''}>${friendlyMonth(m)}</option>`
+  ).join('') || '<option>No data</option>';
+}
+
+function onWeekChange() {
+  state.currentWeek = document.getElementById('weekSelect').value;
+  if (state.currentPeriod === 'weekly') render();
+}
+
+function onMonthChange() {
+  state.currentMonth = document.getElementById('monthSelect').value;
+  if (state.currentPeriod === 'monthly') render();
+}
+
+// =====================
+// INIT
+// =====================
+async function init() {
+  document.getElementById('mainContent').innerHTML = `
+    <div class="loader">
+      <div class="loader-ring"></div>
+      <div class="loader-text">Loading GOAT FC Data...</div>
+    </div>`;
+
+  await loadData();
+
+  populateWeekMonthSelects();
+  render();
+}
+
+init();
+</script>
 </body>
 </html>

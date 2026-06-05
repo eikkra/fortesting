@@ -74,31 +74,32 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .tbl-wrap{overflow:hidden;position:relative;z-index:1;width:100%;}
 table{width:100%;border-collapse:collapse;table-layout:fixed;}
 
-/* col widths — total fixed cols = 24+18+18+18+18+22+20+20+20+28 = 206
-   player col gets remainder: ~360px screen - 206 - 6px padding = ~148px
-   works down to 320px screens */
-col.ck{width:24px;}   /* # */
-col.cp{}              /* PLAYER — flex fill */
-col.cm{width:18px;}   /* M */
-col.cw{width:18px;}   /* W */
-col.cd{width:18px;}   /* D */
-col.cl{width:18px;}   /* L */
-col.cg{width:22px;}   /* GD */
-col.co{width:20px;}   /* 👑 */
-col.cy{width:20px;}   /* 🟨 */
-col.cr{width:20px;}   /* 🟥 */
-col.cref{width:20px;} /* ★ ref */
-col.cs{width:28px;}   /* PTS */
+/* ── MOBILE col widths (default) ── */
+col.ck{width:24px;}
+col.cp{}
+col.cm{width:18px;}col.cw{width:18px;}col.cd{width:18px;}col.cl{width:18px;}
+col.cg{width:22px;}col.co{width:20px;}col.cy{width:20px;}col.cr{width:20px;}col.cref{width:20px;}col.cs{width:28px;}
+
+/* ── DESKTOP col widths (≥769px) — player gets fixed 220px, stats spread evenly ── */
+@media(min-width:769px){
+  col.ck{width:40px;}
+  col.cp{width:220px;}
+  col.cm{width:40px;}col.cw{width:40px;}col.cd{width:40px;}col.cl{width:40px;}
+  col.cg{width:50px;}col.co{width:44px;}col.cy{width:44px;}col.cr{width:44px;}col.cref{width:44px;}col.cs{width:54px;}
+}
 
 thead{background:rgba(0,0,0,.45);}
 th{font-family:var(--fh);font-size:6.5px;letter-spacing:0;color:var(--c);padding:8px 0;border-bottom:1px solid rgba(0,245,255,.12);white-space:nowrap;text-align:center;overflow:hidden;}
 th.th-p{text-align:left;padding-left:3px;}
+@media(min-width:769px){th{font-size:9px;padding:12px 4px;letter-spacing:.5px;}th.th-p{padding-left:14px;}}
 
 td{padding:6px 0;font-size:10.5px;font-weight:500;border-bottom:1px solid var(--border);text-align:center;vertical-align:middle;overflow:hidden;}
 td.td-p{text-align:left;padding-left:3px;}
+@media(min-width:769px){td{padding:11px 4px;font-size:13px;}td.td-p{padding-left:14px;}}
 
 /* th icons sizing */
 th .fi{font-size:9px;}
+@media(min-width:769px){th .fi{font-size:13px;}}
 
 /* rank badge */
 .rn{display:inline-flex;align-items:center;justify-content:center;width:19px;height:19px;border-radius:3px;font-family:var(--fh);font-size:7.5px;font-weight:700;background:rgba(255,255,255,.07);clip-path:polygon(4px 0%,100% 0%,calc(100% - 4px) 100%,0% 100%);}

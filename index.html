@@ -320,6 +320,116 @@ body::after{content:"";position:fixed;inset:0;background-image:repeating-linear-
   .find-handle{font-size:8.5px;}
   .find-card{padding:14px 10px 13px;gap:8px;}
 }
+
+/* ── MUSIC PLAYER ── */
+@keyframes musicPulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(0,240,255,0.4),0 0 14px rgba(0,240,255,0.3);}
+  50%{box-shadow:0 0 0 8px rgba(0,240,255,0),0 0 22px rgba(0,240,255,0.5);}
+}
+@keyframes musicRing{
+  0%{transform:scale(1);opacity:0.6;}
+  100%{transform:scale(2.2);opacity:0;}
+}
+@keyframes noteFloat1{
+  0%{opacity:0;transform:translate(0,0) scale(0.7);}
+  30%{opacity:1;}
+  100%{opacity:0;transform:translate(-14px,-28px) scale(1);}
+}
+@keyframes noteFloat2{
+  0%{opacity:0;transform:translate(0,0) scale(0.7);}
+  30%{opacity:1;}
+  100%{opacity:0;transform:translate(12px,-32px) scale(1);}
+}
+@keyframes noteFloat3{
+  0%{opacity:0;transform:translate(0,0) scale(0.7);}
+  30%{opacity:1;}
+  100%{opacity:0;transform:translate(4px,-36px) scale(1);}
+}
+@keyframes trackSlide{
+  0%{opacity:0;transform:translateY(6px);}
+  100%{opacity:1;transform:translateY(0);}
+}
+@keyframes eqBar{
+  0%,100%{transform:scaleY(0.3);}
+  50%{transform:scaleY(1);}
+}
+
+#musicBtn{
+  position:fixed;
+  bottom:18px;right:16px;
+  z-index:1000;
+  width:46px;height:46px;
+  border-radius:50%;
+  background:rgba(6,6,16,0.92);
+  border:1.5px solid rgba(0,240,255,0.5);
+  color:var(--neon-cyan);
+  font-size:16px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  backdrop-filter:blur(12px);
+  transition:background .25s,border-color .25s,transform .2s;
+  outline:none;
+}
+#musicBtn:hover{background:rgba(0,240,255,0.08);border-color:var(--neon-cyan);transform:scale(1.08);}
+#musicBtn.playing{animation:musicPulse 2s ease-in-out infinite;}
+#musicBtn.playing{border-color:var(--neon-cyan);}
+
+/* ripple ring */
+#musicBtn .m-ring{
+  position:absolute;inset:-2px;
+  border-radius:50%;
+  border:1.5px solid rgba(0,240,255,0.5);
+  pointer-events:none;
+  opacity:0;
+}
+#musicBtn.playing .m-ring{animation:musicRing 2s ease-out infinite;}
+
+/* floating notes */
+.m-note{
+  position:absolute;
+  font-size:11px;color:var(--neon-cyan);
+  pointer-events:none;opacity:0;
+  text-shadow:0 0 8px var(--neon-cyan);
+}
+#musicBtn.playing .m-note:nth-child(1){animation:noteFloat1 2s ease-out infinite 0s;}
+#musicBtn.playing .m-note:nth-child(2){animation:noteFloat2 2s ease-out infinite .6s;}
+#musicBtn.playing .m-note:nth-child(3){animation:noteFloat3 2s ease-out infinite 1.2s;}
+
+/* track info tooltip */
+#musicInfo{
+  position:fixed;
+  bottom:22px;right:70px;
+  z-index:999;
+  background:rgba(6,6,16,0.92);
+  border:1px solid rgba(0,240,255,0.2);
+  border-radius:6px;
+  padding:7px 11px;
+  display:flex;align-items:center;gap:8px;
+  backdrop-filter:blur(14px);
+  opacity:0;pointer-events:none;
+  transition:opacity .3s;
+  max-width:200px;
+  white-space:nowrap;overflow:hidden;
+}
+#musicInfo.show{opacity:1;}
+
+/* mini EQ bars */
+.m-eq{display:flex;align-items:flex-end;gap:2px;height:14px;flex-shrink:0;}
+.m-eq span{
+  width:3px;border-radius:1px;
+  background:var(--neon-cyan);
+  box-shadow:0 0 4px var(--neon-cyan);
+  transform-origin:bottom;
+  transform:scaleY(0.3);
+}
+#musicInfo.show .m-eq span:nth-child(1){animation:eqBar .7s ease-in-out infinite 0s;}
+#musicInfo.show .m-eq span:nth-child(2){animation:eqBar .7s ease-in-out infinite .15s;}
+#musicInfo.show .m-eq span:nth-child(3){animation:eqBar .7s ease-in-out infinite .3s;}
+#musicInfo.show .m-eq span:nth-child(4){animation:eqBar .7s ease-in-out infinite .1s;}
+
+.m-track-info{display:flex;flex-direction:column;gap:1px;min-width:0;}
+.m-track-name{font-family:'Exo 2',sans-serif;font-size:9px;font-weight:800;letter-spacing:1px;color:var(--neon-cyan);text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;animation:trackSlide .3s ease forwards;}
+.m-track-num{font-family:'Orbitron',sans-serif;font-size:7px;font-weight:700;color:var(--muted);letter-spacing:1px;}
 </style>
 </head>
 <body>
@@ -510,6 +620,17 @@ body::after{content:"";position:fixed;inset:0;background-image:repeating-linear-
   </div>
 </div>
 
+<!-- MUSIC PLAYER -->
+<audio id="bgMusic" preload="none"></audio>
+<div id="musicInfo">
+  <div class="m-eq"><span style="height:14px"></span><span style="height:10px"></span><span style="height:12px"></span><span style="height:8px"></span></div>
+  <div class="m-track-info"><div class="m-track-name" id="trackName">Loading...</div><div class="m-track-num" id="trackNum">TRACK 1 / 5</div></div>
+</div>
+<button id="musicBtn" title="Toggle Music" onclick="toggleMusic()">
+  <div class="m-ring"></div>
+  <span class="m-note">♪</span><span class="m-note">♫</span><span class="m-note">♩</span>
+  <i class="fa-solid fa-music" id="musicIcon"></i>
+</button>
 <!-- FOOTER -->
 <footer class="footer">
   <div class="footer-brand">GOAT FC</div>
@@ -626,6 +747,81 @@ fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vS3VQ-e6O8uHjlq8Lsdp5j0vx
     const items=parseCSV(csv);
     document.getElementById('storeGrid').innerHTML=items.map(item=>`<div class="store-card"><img src="${item['Image Url']}" alt="Item"><a class="store-btn" href="${item['Link Url']}" target="_blank">${item['Botton Name']}</a></div>`).join('');
   }).catch(()=>{document.getElementById('storeGrid').innerHTML='<div class="loader-row">Failed to load</div>';});
+
+/* ── BACKGROUND MUSIC PLAYER ── */
+const tracks=[
+  {name:"Stadium Anthem",url:"https://cdn.pixabay.com/audio/2023/09/22/audio_2abd9deff0.mp3"},
+  {name:"Epic Sports",url:"https://cdn.pixabay.com/audio/2023/06/08/audio_0a6b5d6d9f.mp3"},
+  {name:"Football Vibes",url:"https://cdn.pixabay.com/audio/2022/10/30/audio_9f8c11862c.mp3"},
+  {name:"Champion Beat",url:"https://cdn.pixabay.com/audio/2023/03/09/audio_fd6b4e9523.mp3"},
+  {name:"Victory March",url:"https://cdn.pixabay.com/audio/2022/11/22/audio_febc508520.mp3"}
+];
+let currentTrack=0,musicPlaying=false,musicStarted=false;
+const audio=document.getElementById('bgMusic');
+const musicBtn=document.getElementById('musicBtn');
+const musicInfo=document.getElementById('musicInfo');
+const trackName=document.getElementById('trackName');
+const trackNum=document.getElementById('trackNum');
+const musicIcon=document.getElementById('musicIcon');
+
+audio.volume=0.18;
+
+function loadTrack(idx){
+  audio.src=tracks[idx].url;
+  trackName.textContent=tracks[idx].name;
+  trackNum.textContent='TRACK '+(idx+1)+' / '+tracks.length;
+}
+
+function playMusic(){
+  if(!musicStarted){loadTrack(currentTrack);musicStarted=true;}
+  audio.play().then(()=>{
+    musicPlaying=true;
+    musicBtn.classList.add('playing');
+    musicIcon.className='fa-solid fa-pause';
+    musicInfo.classList.add('show');
+    setTimeout(()=>musicInfo.classList.remove('show'),3000);
+  }).catch(()=>{});
+}
+
+function pauseMusic(){
+  audio.pause();
+  musicPlaying=false;
+  musicBtn.classList.remove('playing');
+  musicIcon.className='fa-solid fa-music';
+  musicInfo.classList.remove('show');
+}
+
+function toggleMusic(){
+  if(musicPlaying){pauseMusic();}
+  else{playMusic();}
+}
+
+/* next track auto-play on end */
+audio.addEventListener('ended',()=>{
+  currentTrack=(currentTrack+1)%tracks.length;
+  loadTrack(currentTrack);
+  audio.play().catch(()=>{});
+  musicInfo.classList.add('show');
+  setTimeout(()=>musicInfo.classList.remove('show'),3000);
+});
+
+/* auto-start on first user interaction anywhere on page */
+document.addEventListener('click',()=>{
+  if(!musicStarted&&!musicPlaying){
+    setTimeout(()=>{
+      loadTrack(currentTrack);
+      musicStarted=true;
+      audio.play().then(()=>{
+        musicPlaying=true;
+        musicBtn.classList.add('playing');
+        musicIcon.className='fa-solid fa-pause';
+        musicInfo.classList.add('show');
+        setTimeout(()=>musicInfo.classList.remove('show'),3500);
+      }).catch(()=>{});
+    },800);
+  }
+},{once:true});
+
 </script>
 </body>
 </html>

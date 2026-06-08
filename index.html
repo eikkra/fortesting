@@ -195,14 +195,14 @@ body::after{content:"";position:fixed;inset:0;background-image:repeating-linear-
 }
 .rank-card:hover{transform:translateY(-4px) scale(1.03);border-color:rgba(0,240,255,0.6);}
 
-/* Pic: shorter aspect ratio */
+/* ── CHANGED: square aspect ratio for perfect pic fit ── */
 .rank-pic-wrap{
-  width:100%;aspect-ratio:4/3;overflow:hidden;
+  width:100%;aspect-ratio:1/1;overflow:hidden;
   position:relative;background:var(--surface2);
 }
 .rank-pic-wrap img{
   width:100%;height:100%;
-  object-fit:cover;object-position:center top;
+  object-fit:cover;object-position:center center;
   display:block;transition:transform .3s;
 }
 .rank-card:hover .rank-pic-wrap img{transform:scale(1.06);}
@@ -214,7 +214,6 @@ body::after{content:"";position:fixed;inset:0;background-image:repeating-linear-
   animation:rankNumPulse 2.5s ease-in-out infinite;letter-spacing:1px;
 }
 .rank-body{padding:6px 7px 8px;}
-/* Name: smaller, centered */
 .rank-name{
   font-family:'Exo 2',sans-serif;font-size:9.5px;font-weight:900;
   color:var(--text);letter-spacing:0.3px;margin-bottom:5px;
@@ -244,14 +243,15 @@ body::after{content:"";position:fixed;inset:0;background-image:repeating-linear-
   -webkit-mask-composite:xor;mask-composite:exclude;
   animation:goldBorderScan 2.5s linear infinite;pointer-events:none;
 }
-/* Admin pic: shorter aspect ratio */
+
+/* ── CHANGED: square aspect ratio for perfect pic fit ── */
 .admin-pic-wrap{
-  width:100%;aspect-ratio:4/3;overflow:hidden;
+  width:100%;aspect-ratio:1/1;overflow:hidden;
   position:relative;background:var(--surface2);
 }
 .admin-pic-wrap img{
   width:100%;height:100%;
-  object-fit:cover;object-position:center top;
+  object-fit:cover;object-position:center center;
   display:block;transition:transform .3s;
 }
 .admin-card:hover .admin-pic-wrap img{transform:scale(1.06);}
@@ -267,7 +267,6 @@ body::after{content:"";position:fixed;inset:0;background-image:repeating-linear-
 .status-badge.active .s-dot{background:#00ff88;box-shadow:0 0 4px #00ff88;}
 .status-badge.busy .s-dot{background:#ffaa00;box-shadow:0 0 4px #ffaa00;}
 .admin-body{padding:6px 7px 8px;}
-/* Admin name: smaller */
 .admin-name{font-family:'Exo 2',sans-serif;font-size:9.5px;font-weight:900;color:var(--text);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .admin-role{font-family:'Exo 2',sans-serif;font-size:7px;font-weight:800;letter-spacing:0.5px;color:var(--neon-cyan);text-transform:uppercase;margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .admin-stars{display:flex;align-items:center;gap:2px;}
@@ -466,7 +465,7 @@ body::after{content:"";position:fixed;inset:0;background-image:repeating-linear-
 </div>
 <div class="sdiv"></div>
 
-<!-- PLAYER HUB (formerly Player Rank) — moved above Club Hub -->
+<!-- PLAYER HUB -->
 <div class="section">
   <div class="sec-head">
     <div class="sec-line"></div>
@@ -639,26 +638,23 @@ function formatWinPct(val){
 
 /* ════════════════════════════════════════════
    PURE JS AUTO-SCROLL + DRAG SLIDER
-   — no CSS animation involved —
    ════════════════════════════════════════════ */
 function makeSlider(wrapEl, trackEl, speedPx) {
-  /* speedPx = pixels per second for auto-scroll */
   if(!wrapEl||!trackEl) return;
 
-  let pos = 0;           // current translateX (negative = scrolled right)
-  let halfW = 0;         // half of doubled track (= one full set)
+  let pos = 0;
+  let halfW = 0;
   let raf = null;
   let lastTime = null;
   let dragging = false;
   let dragStartX = 0;
   let dragStartPos = 0;
   let moved = false;
-  let paused = false;    // paused by hover
+  let paused = false;
 
   function getHalfW(){ return trackEl.scrollWidth / 2; }
 
   function applyPos(p){
-    /* keep in seamless loop range */
     halfW = getHalfW();
     if(halfW > 0){
       while(p > 0) p -= halfW;
@@ -670,7 +666,7 @@ function makeSlider(wrapEl, trackEl, speedPx) {
 
   function step(ts){
     if(lastTime===null) lastTime=ts;
-    const dt = Math.min(ts - lastTime, 50); // cap delta to avoid jump on tab-switch
+    const dt = Math.min(ts - lastTime, 50);
     lastTime = ts;
     if(!dragging && !paused){
       applyPos(pos - speedPx * dt / 1000);
@@ -679,13 +675,10 @@ function makeSlider(wrapEl, trackEl, speedPx) {
   }
 
   function startRAF(){ if(!raf) raf=requestAnimationFrame(step); }
-  function stopRAF(){ if(raf){cancelAnimationFrame(raf);raf=null;lastTime=null;} }
 
-  /* ── hover pause ── */
   wrapEl.addEventListener('mouseenter', ()=>{ paused=true; });
   wrapEl.addEventListener('mouseleave', ()=>{ if(!dragging) paused=false; });
 
-  /* ── drag / swipe ── */
   function onDragStart(clientX){
     dragging=true; moved=false;
     dragStartX=clientX; dragStartPos=pos;
@@ -701,7 +694,7 @@ function makeSlider(wrapEl, trackEl, speedPx) {
     if(!dragging) return;
     dragging=false; paused=false;
     wrapEl.style.cursor='grab';
-    lastTime=null; // reset time so no position jump
+    lastTime=null;
   }
 
   wrapEl.addEventListener('mousedown', e=>{ onDragStart(e.clientX); e.preventDefault(); });
@@ -712,7 +705,6 @@ function makeSlider(wrapEl, trackEl, speedPx) {
   wrapEl.addEventListener('touchmove',  e=>{ if(dragging){ e.preventDefault(); onDragMove(e.touches[0].clientX); } }, {passive:false});
   wrapEl.addEventListener('touchend',   ()=>{ onDragEnd(); });
 
-  /* prevent link-click after drag */
   wrapEl.addEventListener('click', e=>{ if(moved){ e.preventDefault(); e.stopPropagation(); } }, true);
 
   startRAF();
@@ -811,9 +803,7 @@ Promise.all([
         +'<div class="rank-stat goal"><div class="rank-stat-val">'+gf+'</div><div class="rank-stat-lbl">Goals</div></div>'
         +'</div></div></a>';
     }).join('');
-    /* Duplicate for seamless loop */
     document.getElementById('rankTrack').innerHTML = cards + cards;
-    /* Start smooth JS auto-scroll — 50px/s */
     makeSlider(document.getElementById('rankWrap'), document.getElementById('rankTrack'), 50);
   } else {
     document.getElementById('rankTrack').innerHTML='<div style="padding:20px;font-family:\'Exo 2\',sans-serif;font-size:10px;color:var(--muted);">No ranked players yet</div>';
@@ -844,7 +834,6 @@ Promise.all([
         +'</div></div>';
     }).join('');
     document.getElementById('adminTrack').innerHTML = adminCards + adminCards;
-    /* Start smooth JS auto-scroll — 45px/s */
     makeSlider(document.getElementById('adminWrap'), document.getElementById('adminTrack'), 45);
   } else {
     document.getElementById('adminTrack').innerHTML='<div style="padding:20px;font-family:\'Exo 2\',sans-serif;font-size:10px;color:var(--muted);">No data</div>';

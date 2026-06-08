@@ -164,6 +164,7 @@ body::after{content:"";position:fixed;inset:0;background-image:repeating-linear-
 .match-date{font-family:'Exo 2',sans-serif;font-size:8px;font-weight:700;color:#7dd3fc;text-shadow:0 0 5px rgba(125,211,252,0.4);white-space:nowrap;}
 
 /* ── CLUB HUB ── */
+/* Default: 3 cols mobile, overridden per breakpoint */
 .hub-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;justify-items:center;}
 .hub-card{background:var(--surface);border:1px solid rgba(0,240,255,0.65);border-radius:6px;padding:18px 10px;cursor:pointer;text-align:center;position:relative;overflow:hidden;width:100%;animation:hubRgb 18s linear infinite;transition:transform .22s,background .22s,box-shadow .22s;}
 .hub-card:hover{transform:translateY(-3px);background:var(--surface2);box-shadow:0 0 18px rgba(0,240,255,0.12);}
@@ -187,12 +188,23 @@ body::after{content:"";position:fixed;inset:0;background-image:repeating-linear-
 0%,100%{text-shadow:0 0 6px rgba(0,240,255,0.5),0 0 12px rgba(0,240,255,0.2);}
 50%{text-shadow:0 0 10px rgba(191,0,255,0.6),0 0 20px rgba(191,0,255,0.3);}
 }
-.rank-slider-wrap{overflow:hidden;position:relative;width:100%;}
-.rank-slider-wrap::before,.rank-slider-wrap::after{content:'';position:absolute;top:0;bottom:0;width:40px;z-index:10;pointer-events:none;}
-.rank-slider-wrap::before{left:0;background:linear-gradient(90deg,var(--bg),transparent);}
-.rank-slider-wrap::after{right:0;background:linear-gradient(270deg,var(--bg),transparent);}
+
+/* ── SLIDER WRAPPER (rank + admin) ── */
+.rank-slider-wrap, .admin-slider-wrap{
+  overflow:hidden;position:relative;width:100%;
+  cursor:grab;user-select:none;
+}
+.rank-slider-wrap:active, .admin-slider-wrap:active{cursor:grabbing;}
+.rank-slider-wrap::before,.rank-slider-wrap::after,
+.admin-slider-wrap::before,.admin-slider-wrap::after{
+  content:'';position:absolute;top:0;bottom:0;width:40px;z-index:10;pointer-events:none;
+}
+.rank-slider-wrap::before,.admin-slider-wrap::before{left:0;background:linear-gradient(90deg,var(--bg),transparent);}
+.rank-slider-wrap::after,.admin-slider-wrap::after{right:0;background:linear-gradient(270deg,var(--bg),transparent);}
+
 .rank-track{display:flex;gap:10px;width:max-content;animation:rankSlide 40s linear infinite;}
-.rank-track:hover{animation-play-state:paused;}
+.rank-track.paused,.admin-track.paused{animation-play-state:paused;}
+
 .rank-card{
   flex:0 0 160px;background:var(--surface);border:1px solid rgba(0,240,255,0.3);
   border-radius:8px;overflow:hidden;cursor:pointer;text-decoration:none;
@@ -208,8 +220,17 @@ body::after{content:"";position:fixed;inset:0;background-image:repeating-linear-
   animation:rankBorderScan 4s linear infinite;pointer-events:none;
 }
 .rank-card:hover{transform:translateY(-4px) scale(1.03);border-color:rgba(0,240,255,0.6);}
-.rank-pic-wrap{width:100%;aspect-ratio:1/1;overflow:hidden;position:relative;background:var(--surface2);}
-.rank-pic-wrap img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block;transition:transform .3s;}
+
+/* Pic: square crop, proper fill */
+.rank-pic-wrap{
+  width:100%;aspect-ratio:1/1;overflow:hidden;position:relative;
+  background:var(--surface2);
+}
+.rank-pic-wrap img{
+  width:100%;height:100%;
+  object-fit:cover;object-position:center top;
+  display:block;transition:transform .3s;
+}
 .rank-card:hover .rank-pic-wrap img{transform:scale(1.06);}
 .rank-pic-wrap .rank-num-badge{
   position:absolute;top:6px;left:6px;
@@ -219,7 +240,13 @@ body::after{content:"";position:fixed;inset:0;background-image:repeating-linear-
   animation:rankNumPulse 2.5s ease-in-out infinite;letter-spacing:1px;
 }
 .rank-body{padding:8px 8px 10px;}
-.rank-name{font-family:'Exo 2',sans-serif;font-size:11px;font-weight:900;color:var(--text);letter-spacing:0.4px;margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+/* Name centered */
+.rank-name{
+  font-family:'Exo 2',sans-serif;font-size:11px;font-weight:900;
+  color:var(--text);letter-spacing:0.4px;margin-bottom:6px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  text-align:center;
+}
 .rank-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:3px;}
 .rank-stat{background:rgba(0,240,255,0.05);border:1px solid rgba(0,240,255,0.1);border-radius:4px;padding:4px 3px;text-align:center;}
 .rank-stat-val{font-family:'Orbitron',sans-serif;font-size:10px;font-weight:900;color:var(--neon-cyan);line-height:1;margin-bottom:1px;}
@@ -241,12 +268,7 @@ body::after{content:"";position:fixed;inset:0;background-image:repeating-linear-
 }
 @keyframes statusPulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
 
-.admin-slider-wrap{overflow:hidden;position:relative;width:100%;}
-.admin-slider-wrap::before,.admin-slider-wrap::after{content:'';position:absolute;top:0;bottom:0;width:40px;z-index:10;pointer-events:none;}
-.admin-slider-wrap::before{left:0;background:linear-gradient(90deg,var(--bg),transparent);}
-.admin-slider-wrap::after{right:0;background:linear-gradient(270deg,var(--bg),transparent);}
 .admin-track{display:flex;gap:10px;width:max-content;animation:adminSlide 35s linear infinite;}
-.admin-track:hover{animation-play-state:paused;}
 .admin-card{
   flex:0 0 150px;background:var(--surface);border:1px solid rgba(0,240,255,0.25);
   border-radius:8px;overflow:hidden;position:relative;
@@ -262,8 +284,17 @@ body::after{content:"";position:fixed;inset:0;background-image:repeating-linear-
   -webkit-mask-composite:xor;mask-composite:exclude;
   animation:goldBorderScan 2.5s linear infinite;pointer-events:none;
 }
-.admin-pic-wrap{width:100%;aspect-ratio:1/1;overflow:hidden;position:relative;background:var(--surface2);}
-.admin-pic-wrap img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block;transition:transform .3s;}
+
+/* Admin pic: proper square fill */
+.admin-pic-wrap{
+  width:100%;aspect-ratio:1/1;overflow:hidden;
+  position:relative;background:var(--surface2);
+}
+.admin-pic-wrap img{
+  width:100%;height:100%;
+  object-fit:cover;object-position:center top;
+  display:block;transition:transform .3s;
+}
 .admin-card:hover .admin-pic-wrap img{transform:scale(1.06);}
 .status-badge{
   position:absolute;top:6px;right:6px;
@@ -381,7 +412,8 @@ body::after{content:"";position:fixed;inset:0;background-image:repeating-linear-
 @media(min-width:600px){.hero{height:250px;}.slide-content h1{font-size:20px;}}
 @media(min-width:900px){
   .section{padding:22px 20px 0;}.hero{height:280px;}
-  .hub-grid{grid-template-columns:repeat(6,1fr);}
+  /* ── PC: Club Hub 5 columns ── */
+  .hub-grid{grid-template-columns:repeat(5,1fr);}
   .store-grid{grid-template-columns:repeat(4,minmax(0,220px));justify-content:center;}
   .champ-grid{grid-template-columns:repeat(4,1fr);}
   .find-grid{gap:10px;}
@@ -506,7 +538,7 @@ body::after{content:"";position:fixed;inset:0;background-image:repeating-linear-
     <div class="sec-title">PLAYER RANK</div>
     <div class="sec-line right"></div>
   </div>
-  <div class="rank-slider-wrap">
+  <div class="rank-slider-wrap" id="rankWrap">
     <div class="rank-track" id="rankTrack">
       <div style="padding:30px;font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:4px;color:var(--muted);text-align:center;">
         <i class="fa-solid fa-spinner fa-spin" style="display:block;font-size:16px;margin-bottom:10px;color:var(--neon-cyan);text-shadow:0 0 10px var(--neon-cyan);"></i>LOADING...
@@ -523,7 +555,7 @@ body::after{content:"";position:fixed;inset:0;background-image:repeating-linear-
     <div class="sec-title">ADMIN PANEL</div>
     <div class="sec-line right"></div>
   </div>
-  <div class="admin-slider-wrap">
+  <div class="admin-slider-wrap" id="adminWrap">
     <div class="admin-track" id="adminTrack">
       <div style="padding:30px;font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:4px;color:var(--muted);text-align:center;">
         <i class="fa-solid fa-spinner fa-spin" style="display:block;font-size:16px;margin-bottom:10px;color:var(--neon-cyan);text-shadow:0 0 10px var(--neon-cyan);"></i>LOADING...
@@ -645,6 +677,79 @@ function parseCSV(text){
 
 function formatBDTime(ds){if(!ds)return'';const d=new Date(ds);if(isNaN(d))return'';return d.toLocaleString('en-BD',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit',hour12:true,timeZone:'Asia/Dhaka'});}
 
+/* ── DRAG-TO-SCROLL for rank + admin sliders ── */
+function makeDraggable(wrapEl, trackEl) {
+  let isDragging = false, startX = 0, scrollLeft = 0, moved = false;
+  let autoOffset = 0; // track CSS animation offset
+
+  // Pause animation on hover/drag, resume on leave
+  wrapEl.addEventListener('mouseenter', () => trackEl.classList.add('paused'));
+  wrapEl.addEventListener('mouseleave', () => {
+    if (!isDragging) trackEl.classList.remove('paused');
+  });
+
+  // Get current visual translateX from running animation
+  function getAnimX() {
+    const st = window.getComputedStyle(trackEl);
+    const mx = new DOMMatrix(st.transform);
+    return mx.m41;
+  }
+
+  function startDrag(clientX) {
+    isDragging = true; moved = false;
+    trackEl.classList.add('paused');
+    autoOffset = getAnimX();
+    // Switch from CSS animation to manual JS transform
+    trackEl.style.animation = 'none';
+    trackEl.style.transform = `translateX(${autoOffset}px)`;
+    startX = clientX;
+    scrollLeft = autoOffset;
+  }
+
+  function onDrag(clientX) {
+    if (!isDragging) return;
+    const dx = clientX - startX;
+    if (Math.abs(dx) > 3) moved = true;
+    let newX = scrollLeft + dx;
+    // Seamless loop: track is doubled, so half = full set width
+    const halfW = trackEl.scrollWidth / 2;
+    if (newX > 0) newX = newX - halfW;
+    if (newX < -halfW) newX = newX + halfW;
+    trackEl.style.transform = `translateX(${newX}px)`;
+    scrollLeft = newX; startX = clientX;
+  }
+
+  function endDrag() {
+    if (!isDragging) return;
+    isDragging = false;
+    // Resume CSS animation from current position
+    const currentX = parseFloat(trackEl.style.transform.replace('translateX(','')) || 0;
+    const halfW = trackEl.scrollWidth / 2;
+    const pct = Math.abs(currentX) / halfW;
+    const durAttr = parseFloat(trackEl.style.animationDuration) || 40;
+    const delay = -(pct * durAttr);
+    trackEl.style.transform = '';
+    trackEl.style.animation = '';
+    trackEl.style.animationDelay = delay + 's';
+    trackEl.classList.remove('paused');
+  }
+
+  // Mouse
+  wrapEl.addEventListener('mousedown', e => { startDrag(e.clientX); });
+  window.addEventListener('mousemove', e => { if (isDragging) onDrag(e.clientX); });
+  window.addEventListener('mouseup', () => endDrag());
+
+  // Touch
+  wrapEl.addEventListener('touchstart', e => { startDrag(e.touches[0].clientX); }, {passive:true});
+  wrapEl.addEventListener('touchmove', e => {
+    if (isDragging) { e.preventDefault(); onDrag(e.touches[0].clientX); }
+  }, {passive:false});
+  wrapEl.addEventListener('touchend', () => endDrag());
+
+  // Prevent link clicks after drag
+  wrapEl.addEventListener('click', e => { if (moved) e.preventDefault(); }, true);
+}
+
 /* ── HERO SLIDES ── */
 let slides=[],current=0,autoTimer;
 fetch(`https://opensheet.elk.sh/${sheetID}/SLIDES`).then(r=>r.json()).then(data=>{slides=data;renderSlides();startAuto();}).catch(()=>{});
@@ -688,6 +793,17 @@ function buildStars(rateStr,isGold){
   return html;
 }
 
+/* ── WIN% FORMATTER ── */
+function formatWinPct(val) {
+  if (!val || val === '-') return '-';
+  // Remove existing % if present, parse as float
+  const num = parseFloat(String(val).replace('%', ''));
+  if (isNaN(num)) return '-';
+  // If it looks like a decimal (0.5 = 50%), convert; if already full (50), keep
+  const pct = num <= 1 ? Math.round(num * 100) : Math.round(num);
+  return pct + '%';
+}
+
 /* ── PLAYER RANK + ADMIN PANEL (parallel fetch) ── */
 Promise.all([
   fetch(LEADER_CSV+'&t='+Date.now()).then(r=>r.text()),
@@ -706,7 +822,15 @@ Promise.all([
   });
 
   /* ── PLAYER RANK ── */
-  const sorted=[...leaders].sort((a,b)=>parseInt(a['Overall Rank']||999)-parseInt(b['Overall Rank']||999));
+  // Filter: only players with a rank AND at least 1 match played
+  const sorted=[...leaders]
+    .filter(p => {
+      const rank = parseInt(p['Overall Rank'] || '');
+      const pl   = parseInt(p['Overall_PL']   || '0');
+      return !isNaN(rank) && rank > 0 && pl > 0;
+    })
+    .sort((a,b)=>parseInt(a['Overall Rank'])-parseInt(b['Overall Rank']));
+
   if(sorted.length){
     const cards=sorted.map(p=>{
       const id=(p['Club_ID']||'').trim();
@@ -715,10 +839,14 @@ Promise.all([
       const pic=(mem['Profile Picture (For Web)']||'').trim();
       const rank=p['Overall Rank']||'-';
       const pl=p['Overall_PL']||'-';
-      const winPct=p['Overall_Win%']||'-';
+      const winRaw=p['Overall_Win%']||'-';
+      const winPct=formatWinPct(winRaw);
       const gf=p['Total GF']||'-';
       const profileLink=`https://goatfcbd.com/players/profile/?id=${encodeURIComponent(id)}`;
-      const imgHtml=pic?`<img src="${pic}" alt="${name}" loading="lazy" onerror="this.parentNode.innerHTML='<div style=\\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:var(--surface3);\\'><i class=\\'fa-solid fa-user-shield\\' style=\\'font-size:28px;color:var(--muted2);\\' ></i></div>'">`:`<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:var(--surface3);"><i class="fa-solid fa-user-shield" style="font-size:28px;color:var(--muted2);"></i></div>`;
+      const imgHtml=pic
+        ? `<img src="${pic}" alt="${name}" loading="lazy" onerror="this.style.display='none';this.parentNode.querySelector('.rank-fallback').style.display='flex'">
+           <div class="rank-fallback" style="display:none;width:100%;height:100%;align-items:center;justify-content:center;background:var(--surface3);position:absolute;inset:0;"><i class="fa-solid fa-user-shield" style="font-size:28px;color:var(--muted2);"></i></div>`
+        : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:var(--surface3);"><i class="fa-solid fa-user-shield" style="font-size:28px;color:var(--muted2);"></i></div>`;
       return `<a class="rank-card" href="${profileLink}" target="_blank" rel="noopener">
         <div class="rank-pic-wrap">
           ${imgHtml}
@@ -727,20 +855,20 @@ Promise.all([
         <div class="rank-body">
           <div class="rank-name">${name}</div>
           <div class="rank-stats">
-            <div class="rank-stat"><div class="rank-stat-val">${rank}</div><div class="rank-stat-lbl">Rank</div></div>
-            <div class="rank-stat win"><div class="rank-stat-val">${winPct}%</div><div class="rank-stat-lbl">Win%</div></div>
+            <div class="rank-stat"><div class="rank-stat-val">${pl}</div><div class="rank-stat-lbl">Matches</div></div>
+            <div class="rank-stat win"><div class="rank-stat-val">${winPct}</div><div class="rank-stat-lbl">Win%</div></div>
             <div class="rank-stat goal"><div class="rank-stat-val">${gf}</div><div class="rank-stat-lbl">Goals</div></div>
           </div>
         </div>
       </a>`;
     }).join('');
-    /* Duplicate for seamless infinite loop */
     document.getElementById('rankTrack').innerHTML=cards+cards;
-    /* Adjust animation duration based on card count */
     const dur=Math.max(30,sorted.length*4);
     document.getElementById('rankTrack').style.animationDuration=dur+'s';
+    // Init drag scroll
+    makeDraggable(document.getElementById('rankWrap'), document.getElementById('rankTrack'));
   } else {
-    document.getElementById('rankTrack').innerHTML='<div style="padding:20px;font-family:\'Exo 2\',sans-serif;font-size:10px;color:var(--muted);">No data</div>';
+    document.getElementById('rankTrack').innerHTML='<div style="padding:20px;font-family:\'Exo 2\',sans-serif;font-size:10px;color:var(--muted);">No ranked players yet</div>';
   }
 
   /* ── ADMIN PANEL ── */
@@ -756,9 +884,12 @@ Promise.all([
       const isGold=rate>100;
       const isActive=status==='active';
       const statusLabel=isActive?'Active':'Busy';
-      const imgHtml=pic?`<img src="${pic}" alt="${name}" loading="lazy" onerror="this.parentNode.innerHTML='<div style=\\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:var(--surface3);\\'><i class=\\'fa-solid fa-user-tie\\' style=\\'font-size:28px;color:var(--muted2);\\' ></i></div>'">`:`<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:var(--surface3);"><i class="fa-solid fa-user-tie" style="font-size:28px;color:var(--muted2);"></i></div>`;
+      const imgHtml=pic
+        ? `<img src="${pic}" alt="${name}" loading="lazy" onerror="this.style.display='none';this.parentNode.querySelector('.admin-fallback').style.display='flex'">
+           <div class="admin-fallback" style="display:none;width:100%;height:100%;align-items:center;justify-content:center;background:var(--surface3);position:absolute;inset:0;"><i class="fa-solid fa-user-tie" style="font-size:28px;color:var(--muted2);"></i></div>`
+        : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:var(--surface3);"><i class="fa-solid fa-user-tie" style="font-size:28px;color:var(--muted2);"></i></div>`;
       return `<div class="admin-card${isGold?' gold-card':''}">
-        <div class="admin-pic-wrap">
+        <div class="admin-pic-wrap" style="position:relative;">
           ${imgHtml}
           <div class="status-badge ${isActive?'active':'busy'}">
             <span class="s-dot"></span>${statusLabel}
@@ -774,6 +905,8 @@ Promise.all([
     document.getElementById('adminTrack').innerHTML=adminCards+adminCards;
     const dur=Math.max(25,admins.length*4);
     document.getElementById('adminTrack').style.animationDuration=dur+'s';
+    // Init drag scroll
+    makeDraggable(document.getElementById('adminWrap'), document.getElementById('adminTrack'));
   } else {
     document.getElementById('adminTrack').innerHTML='<div style="padding:20px;font-family:\'Exo 2\',sans-serif;font-size:10px;color:var(--muted);">No data</div>';
   }

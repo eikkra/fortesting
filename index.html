@@ -158,24 +158,45 @@ body::after{content:"";position:fixed;inset:0;background-image:repeating-linear-
 .hub-icon{font-size:26px;margin-bottom:8px;display:block;}
 .hub-title{font-family:'Exo 2',sans-serif;font-size:11px;font-weight:800;letter-spacing:1px;color:var(--text);text-transform:uppercase;}
 
-/* ── SLIDER WRAPPER (shared: rank + admin) ── */
-.rank-slider-wrap,.admin-slider-wrap{
-  overflow:hidden;position:relative;width:100%;
-  cursor:grab;user-select:none;-webkit-user-select:none;
+/* ══════════════════════════════════════════════
+   SLIDER WRAPPER — momentum-based smooth scroll
+   ══════════════════════════════════════════════ */
+.rank-slider-wrap,
+.admin-slider-wrap {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: pan-y; /* let vertical scroll pass through naturally */
 }
-.rank-slider-wrap:active,.admin-slider-wrap:active{cursor:grabbing;}
-.rank-slider-wrap::before,.rank-slider-wrap::after,
-.admin-slider-wrap::before,.admin-slider-wrap::after{
-  content:'';position:absolute;top:0;bottom:0;width:40px;z-index:10;pointer-events:none;
-}
-.rank-slider-wrap::before,.admin-slider-wrap::before{left:0;background:linear-gradient(90deg,var(--bg),transparent);}
-.rank-slider-wrap::after,.admin-slider-wrap::after{right:0;background:linear-gradient(270deg,var(--bg),transparent);}
+.rank-slider-wrap:active,
+.admin-slider-wrap:active { cursor: grabbing; }
 
-/* Tracks — NO CSS animation; pure JS scroll */
-.rank-track,.admin-track{
-  display:flex;gap:10px;
-  width:max-content;
-  will-change:transform;
+/* fade edges */
+.rank-slider-wrap::before, .rank-slider-wrap::after,
+.admin-slider-wrap::before, .admin-slider-wrap::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 32px;
+  z-index: 10;
+  pointer-events: none;
+}
+.rank-slider-wrap::before,
+.admin-slider-wrap::before  { left:  0; background: linear-gradient(90deg,  var(--bg), transparent); }
+.rank-slider-wrap::after,
+.admin-slider-wrap::after   { right: 0; background: linear-gradient(270deg, var(--bg), transparent); }
+
+/* Tracks — positioned via JS transform */
+.rank-track,
+.admin-track {
+  display: flex;
+  gap: 10px;
+  width: max-content;
+  will-change: transform;
+  /* NO CSS animation — pure JS */
 }
 
 /* ── RANK CARD — compact ── */
@@ -194,8 +215,6 @@ body::after{content:"";position:fixed;inset:0;background-image:repeating-linear-
   animation:rankBorderScan 4s linear infinite;pointer-events:none;
 }
 .rank-card:hover{transform:translateY(-4px) scale(1.03);border-color:rgba(0,240,255,0.6);}
-
-/* ── CHANGED: square aspect ratio for perfect pic fit ── */
 .rank-pic-wrap{
   width:100%;aspect-ratio:1/1;overflow:hidden;
   position:relative;background:var(--surface2);
@@ -243,8 +262,6 @@ body::after{content:"";position:fixed;inset:0;background-image:repeating-linear-
   -webkit-mask-composite:xor;mask-composite:exclude;
   animation:goldBorderScan 2.5s linear infinite;pointer-events:none;
 }
-
-/* ── CHANGED: square aspect ratio for perfect pic fit ── */
 .admin-pic-wrap{
   width:100%;aspect-ratio:1/1;overflow:hidden;
   position:relative;background:var(--surface2);
@@ -627,7 +644,6 @@ function formatBDTime(ds){
   return d.toLocaleString('en-BD',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit',hour12:true,timeZone:'Asia/Dhaka'});
 }
 
-/* ── WIN% FORMATTER ── */
 function formatWinPct(val){
   if(!val||val==='-')return'-';
   const num=parseFloat(String(val).replace('%',''));
@@ -636,78 +652,153 @@ function formatWinPct(val){
   return pct+'%';
 }
 
-/* ════════════════════════════════════════════
-   PURE JS AUTO-SCROLL + DRAG SLIDER
-   ════════════════════════════════════════════ */
-function makeSlider(wrapEl, trackEl, speedPx) {
-  if(!wrapEl||!trackEl) return;
+/* ════════════════════════════════════════════════════
+   SMOOTH MOMENTUM SLIDER
+   — Uses requestAnimationFrame only for momentum decay.
+   — Auto-scroll via setInterval (no RAF fighting touch).
+   — touch-action:pan-y on wrapper so vertical page
+     scroll never gets blocked.
+   ════════════════════════════════════════════════════ */
+function makeSlider(wrapEl, trackEl, autoSpeedPx) {
+  if (!wrapEl || !trackEl) return;
 
-  let pos = 0;
-  let halfW = 0;
-  let raf = null;
-  let lastTime = null;
-  let dragging = false;
+  let pos        = 0;   // current translateX (negative = scrolled right)
+  let velocity   = 0;   // px/ms — used for momentum after drag ends
+  let halfW      = 0;   // half the duplicated track width (for seamless loop)
+  let isDragging = false;
   let dragStartX = 0;
-  let dragStartPos = 0;
-  let moved = false;
-  let paused = false;
+  let lastX      = 0;
+  let lastTime   = 0;
+  let hasMoved   = false;
+  let momentumID = null;
+  let autoID     = null;
+  let hovered    = false;
 
-  function getHalfW(){ return trackEl.scrollWidth / 2; }
+  /* ── helpers ── */
+  function getHalfW() { return trackEl.scrollWidth / 2; }
 
-  function applyPos(p){
+  function clampLoop(p) {
     halfW = getHalfW();
-    if(halfW > 0){
-      while(p > 0) p -= halfW;
-      while(p < -halfW) p += halfW;
+    if (halfW <= 0) return p;
+    while (p > 0)      p -= halfW;
+    while (p < -halfW) p += halfW;
+    return p;
+  }
+
+  function commit(p) {
+    pos = clampLoop(p);
+    trackEl.style.transform = 'translateX(' + pos + 'px)';
+  }
+
+  /* ── auto-scroll: simple interval tick, no RAF ── */
+  function startAuto() {
+    if (autoID) return;
+    // 16ms ≈ 60fps; move autoSpeedPx per second → autoSpeedPx/60 per frame
+    autoID = setInterval(() => {
+      if (!isDragging && !hovered) {
+        commit(pos - autoSpeedPx / 60);
+      }
+    }, 16);
+  }
+
+  /* ── momentum after drag release ── */
+  function applyMomentum() {
+    if (momentumID) cancelAnimationFrame(momentumID);
+    const FRICTION = 0.92; // lower = stops faster; 0.92 feels natural
+    function tick() {
+      if (Math.abs(velocity) < 0.15) { velocity = 0; return; }
+      commit(pos + velocity);
+      velocity *= FRICTION;
+      momentumID = requestAnimationFrame(tick);
     }
-    pos = p;
-    trackEl.style.transform = 'translateX('+pos+'px)';
+    momentumID = requestAnimationFrame(tick);
   }
 
-  function step(ts){
-    if(lastTime===null) lastTime=ts;
-    const dt = Math.min(ts - lastTime, 50);
-    lastTime = ts;
-    if(!dragging && !paused){
-      applyPos(pos - speedPx * dt / 1000);
+  /* ── pause on hover (desktop) ── */
+  wrapEl.addEventListener('mouseenter', () => { hovered = true; });
+  wrapEl.addEventListener('mouseleave', () => { hovered = false; if (!isDragging) velocity = 0; });
+
+  /* ── MOUSE drag ── */
+  wrapEl.addEventListener('mousedown', e => {
+    if (momentumID) { cancelAnimationFrame(momentumID); velocity = 0; }
+    isDragging = true; hasMoved = false;
+    dragStartX = e.clientX; lastX = e.clientX; lastTime = performance.now();
+    wrapEl.style.cursor = 'grabbing';
+    e.preventDefault();
+  });
+
+  window.addEventListener('mousemove', e => {
+    if (!isDragging) return;
+    const now = performance.now();
+    const dx  = e.clientX - lastX;
+    if (Math.abs(e.clientX - dragStartX) > 3) hasMoved = true;
+    // velocity in px/ms → we'll multiply by ~16 for per-frame use
+    velocity = dx / Math.max(now - lastTime, 1);
+    commit(pos + dx);
+    lastX = e.clientX; lastTime = now;
+  });
+
+  window.addEventListener('mouseup', () => {
+    if (!isDragging) return;
+    isDragging = false;
+    wrapEl.style.cursor = 'grab';
+    if (Math.abs(velocity) > 0.1) {
+      velocity *= 16; // convert px/ms → px/frame
+      applyMomentum();
     }
-    raf = requestAnimationFrame(step);
-  }
+  });
 
-  function startRAF(){ if(!raf) raf=requestAnimationFrame(step); }
+  /* click guard — swallow clicks that were actually drags */
+  wrapEl.addEventListener('click', e => {
+    if (hasMoved) { e.preventDefault(); e.stopPropagation(); }
+  }, true);
 
-  wrapEl.addEventListener('mouseenter', ()=>{ paused=true; });
-  wrapEl.addEventListener('mouseleave', ()=>{ if(!dragging) paused=false; });
+  /* ── TOUCH drag ── */
+  let touchStartX = 0;
+  let touchLastX  = 0;
+  let touchLastT  = 0;
 
-  function onDragStart(clientX){
-    dragging=true; moved=false;
-    dragStartX=clientX; dragStartPos=pos;
-    wrapEl.style.cursor='grabbing';
-  }
-  function onDragMove(clientX){
-    if(!dragging) return;
-    const dx = clientX - dragStartX;
-    if(Math.abs(dx)>3) moved=true;
-    applyPos(dragStartPos + dx);
-  }
-  function onDragEnd(){
-    if(!dragging) return;
-    dragging=false; paused=false;
-    wrapEl.style.cursor='grab';
-    lastTime=null;
-  }
+  wrapEl.addEventListener('touchstart', e => {
+    if (momentumID) { cancelAnimationFrame(momentumID); velocity = 0; }
+    isDragging = true; hasMoved = false;
+    touchStartX = e.touches[0].clientX;
+    touchLastX  = touchStartX;
+    touchLastT  = performance.now();
+  }, { passive: true });
 
-  wrapEl.addEventListener('mousedown', e=>{ onDragStart(e.clientX); e.preventDefault(); });
-  window.addEventListener('mousemove', e=>{ if(dragging) onDragMove(e.clientX); });
-  window.addEventListener('mouseup',   ()=>{ onDragEnd(); });
+  wrapEl.addEventListener('touchmove', e => {
+    if (!isDragging) return;
+    const tx  = e.touches[0].clientX;
+    const dx  = tx - touchLastX;
+    const now = performance.now();
+    const dt  = Math.max(now - touchLastT, 1);
 
-  wrapEl.addEventListener('touchstart', e=>{ onDragStart(e.touches[0].clientX); }, {passive:true});
-  wrapEl.addEventListener('touchmove',  e=>{ if(dragging){ e.preventDefault(); onDragMove(e.touches[0].clientX); } }, {passive:false});
-  wrapEl.addEventListener('touchend',   ()=>{ onDragEnd(); });
+    /* Only hijack horizontal swipes; let vertical pass through */
+    if (!hasMoved) {
+      const totalDX = Math.abs(tx - touchStartX);
+      const totalDY = Math.abs(e.touches[0].clientY - e.touches[0].clientY); // 0 on first move
+      if (totalDX < 6) return; // wait until clearly horizontal
+    }
 
-  wrapEl.addEventListener('click', e=>{ if(moved){ e.preventDefault(); e.stopPropagation(); } }, true);
+    hasMoved = true;
+    velocity = dx / dt;
+    commit(pos + dx);
+    touchLastX = tx; touchLastT = now;
+    e.preventDefault(); // prevent page scroll only once we're sure it's horizontal
+  }, { passive: false });
 
-  startRAF();
+  wrapEl.addEventListener('touchend', () => {
+    if (!isDragging) return;
+    isDragging = false;
+    if (Math.abs(velocity) > 0.1) {
+      velocity *= 16;
+      applyMomentum();
+    } else {
+      velocity = 0;
+    }
+  }, { passive: true });
+
+  startAuto();
 }
 
 /* ── HERO SLIDES ── */

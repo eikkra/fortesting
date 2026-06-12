@@ -1,924 +1,1088 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CP SYSTEM</title>
-<link rel="icon" type="image/png" href="https://i.imgur.com/LY3Bb9m.png">
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
-
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Admin Responsibilities — GOAT FC</title>
+<link rel="icon" type="image/png" href="https://i.imgur.com/LY3Bb9m.png"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 <style>
-:root {
-  --bg:     #06040e;
-  --bg2:    #0d0a1a;
-  --bg3:    #120e22;
-  --gold:   #ffd700;
-  --gold2:  #ffb300;
-  --gold3:  #ffe066;
-  --cyan:   #00f5ff;
-  --green:  #39ff14;
-  --red:    #ff3b3b;
-  --purple: #c084fc;
-  --border: rgba(255,215,0,0.18);
-  --text:   #f0e6c8;
-  --muted:  #7a6a4a;
+:root{
+  --bg:#04060f;
+  --bg2:#080c18;
+  --bg3:#0d1120;
+  --bg4:#121726;
+  --border:rgba(0,255,180,0.08);
+  --border2:rgba(0,255,180,0.18);
+  --border3:rgba(0,255,180,0.3);
+  --neon:#00FFB4;
+  --neon2:#00D4FF;
+  --neon3:#7B2FFF;
+  --neon-dim:rgba(0,255,180,0.1);
+  --neon-dim2:rgba(0,212,255,0.1);
+  --gold:#FFD166;
+  --red:#FF4655;
+  --orange:#FF6B35;
+  --white:#EEF2FF;
+  --muted:rgba(238,242,255,0.5);
+  --muted2:rgba(238,242,255,0.28);
+  --muted3:rgba(238,242,255,0.15);
+  --ff-hud:'Orbitron',sans-serif;
+  --ff-ui:'Rajdhani',sans-serif;
+  --ff-mono:'JetBrains Mono',monospace;
+  --ease:cubic-bezier(0.16,1,0.3,1);
+  --ease2:cubic-bezier(0.34,1.56,0.64,1);
+  --glow:0 0 20px rgba(0,255,180,0.3),0 0 60px rgba(0,255,180,0.1);
+  --shadow:0 8px 32px rgba(0,0,0,0.6);
 }
 
-*{ margin:0; padding:0; box-sizing:border-box; }
+/* ── ROLE ACCENT COLORS ── */
+:root{
+  --c-head:#00FFB4;      /* Head Admin — neon green */
+  --c-co:#00D4FF;        /* Co-Admin — cyan */
+  --c-asst:#FFD166;      /* Assistant Admin — gold */
+  --c-rec-h:#b084ff;     /* Recruit Head — purple */
+  --c-rec-c:#FF6B35;     /* Recruit Coordinator — orange */
+  --c-tour:#FF4655;      /* Tournament Admin — red */
+}
 
-body {
-  font-family:'Exo 2',sans-serif;
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
   background:var(--bg);
-  color:var(--text);
-  min-height:100vh;
+  color:var(--white);
+  font-family:var(--ff-ui);
+  font-size:16px;
+  line-height:1.7;
   overflow-x:hidden;
-  padding-bottom:30px;
+  -webkit-font-smoothing:antialiased;
 }
+a{color:inherit;text-decoration:none}
 
-body::before {
-  content:'';
-  position:fixed; inset:0;
-  background:repeating-linear-gradient(
-    0deg, transparent, transparent 2px,
-    rgba(255,215,0,0.012) 2px, rgba(255,215,0,0.012) 4px
-  );
-  pointer-events:none; z-index:1000;
-}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:linear-gradient(var(--neon),var(--neon2));border-radius:2px}
 
-body::after {
-  content:'';
-  position:fixed; inset:0;
+/* grid bg */
+body::before{
+  content:'';position:fixed;inset:0;
   background-image:
-    linear-gradient(rgba(255,215,0,0.035) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(255,215,0,0.035) 1px,transparent 1px);
-  background-size:40px 40px;
-  animation:gridMove 22s linear infinite;
-  pointer-events:none; z-index:0;
-}
-@keyframes gridMove {
-  0%{background-position:0 0;}
-  100%{background-position:40px 40px;}
+    linear-gradient(rgba(0,255,180,0.018) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,255,180,0.018) 1px,transparent 1px);
+  background-size:50px 50px;
+  pointer-events:none;z-index:0;
 }
 
-.orb {
-  position:fixed; border-radius:50%;
-  pointer-events:none; z-index:1; filter:blur(80px);
-}
-.orb1 {
-  width:380px; height:380px; top:-100px; left:-80px;
-  background:radial-gradient(circle,rgba(255,215,0,0.07) 0%,transparent 70%);
-  animation:orbFloat 9s ease-in-out infinite;
-}
-.orb2 {
-  width:300px; height:300px; top:35%; right:-80px;
-  background:radial-gradient(circle,rgba(255,140,0,0.06) 0%,transparent 70%);
-  animation:orbFloat 12s ease-in-out infinite; animation-delay:-4s;
-}
-.orb3 {
-  width:260px; height:260px; bottom:-60px; left:30%;
-  background:radial-gradient(circle,rgba(192,132,252,0.055) 0%,transparent 70%);
-  animation:orbFloat 14s ease-in-out infinite; animation-delay:-7s;
-}
-@keyframes orbFloat {
-  0%,100%{transform:translateY(0) scale(1);}
-  50%{transform:translateY(-26px) scale(1.06);}
-}
-@keyframes blink {
-  0%,100%{opacity:0.35;} 50%{opacity:1;}
-}
+/* orbs */
+.orb{position:fixed;border-radius:50%;pointer-events:none;z-index:0;filter:blur(80px);animation:orbFloat 8s ease-in-out infinite;}
+.orb1{width:400px;height:400px;background:radial-gradient(circle,rgba(0,255,180,0.06) 0%,transparent 70%);top:-100px;right:-100px;animation-delay:0s;}
+.orb2{width:300px;height:300px;background:radial-gradient(circle,rgba(0,212,255,0.05) 0%,transparent 70%);bottom:10%;left:-80px;animation-delay:-3s;}
+.orb3{width:250px;height:250px;background:radial-gradient(circle,rgba(123,47,255,0.04) 0%,transparent 70%);top:40%;right:5%;animation-delay:-5s;}
+@keyframes orbFloat{0%,100%{transform:translate(0,0)}33%{transform:translate(20px,-30px)}66%{transform:translate(-15px,20px)}}
 
-/* ── TOPBAR ── */
-.topbar {
-  position:sticky; top:0; z-index:999;
-  height:50px;
-  display:flex; align-items:center; justify-content:space-between;
-  padding:0 16px;
-  background:rgba(6,4,14,0.93);
-  backdrop-filter:blur(16px);
-  border-bottom:1px solid rgba(255,215,0,0.13);
-  box-shadow:0 2px 20px rgba(0,0,0,0.6);
-  text-decoration:none; color:inherit;
-}
-.topbar-glow {
-  position:absolute; bottom:0; left:0; right:0; height:1px;
-  background:linear-gradient(90deg,transparent,var(--gold),transparent);
-  opacity:0.35;
-}
-.top-left { display:flex; align-items:center; gap:9px; }
-.top-logo {
-  width:26px;
-  filter:drop-shadow(0 0 7px var(--gold));
-}
-.top-title {
-  font-family:'Orbitron',sans-serif;
-  font-size:12px; font-weight:700; letter-spacing:1.5px;
-  background:linear-gradient(90deg,var(--gold),var(--gold3));
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-}
-.home-btn {
-  width:32px; height:32px;
-  display:flex; align-items:center; justify-content:center;
-  border-radius:8px;
-  background:rgba(255,215,0,0.07);
-  border:1px solid rgba(255,215,0,0.2);
-  color:var(--gold); font-size:12px;
-  transition:all 0.2s;
-}
-.home-btn:hover {
-  background:rgba(255,215,0,0.15);
-  box-shadow:0 0 12px rgba(255,215,0,0.3);
-}
+.scanline{position:fixed;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(0,255,180,0.12),transparent);animation:scanline 6s linear infinite;pointer-events:none;z-index:0;}
+@keyframes scanline{0%{transform:translateY(-100%)}100%{transform:translateY(100vh)}}
 
 /* ── HEADER ── */
-.header {
-  position:relative; z-index:10;
-  text-align:center;
-  padding:26px 16px 18px;
-  border-bottom:1px solid rgba(255,215,0,0.1);
-  background:linear-gradient(180deg,rgba(255,215,0,0.04) 0%,transparent 100%);
+#header{
+  position:fixed;top:0;left:0;right:0;z-index:900;
+  height:58px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 clamp(1rem,4vw,2.5rem);
+  background:rgba(4,6,15,0.88);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
 }
-.header-badge {
-  display:inline-flex; align-items:center; gap:7px;
-  background:rgba(255,215,0,0.07);
-  border:1px solid rgba(255,215,0,0.28);
-  border-radius:4px; padding:3px 12px;
-  font-size:15px; font-weight:800; letter-spacing:3px;
-  color:var(--gold); text-transform:uppercase;
-  margin-bottom:14px;
-  animation:pulseBadge 3s ease-in-out infinite;
+.nav-left{display:flex;align-items:center;gap:16px}
+.nav-logo{
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--ff-hud);font-size:1rem;font-weight:900;
+  letter-spacing:0.1em;color:var(--neon);
+  text-shadow:0 0 14px rgba(0,255,180,0.6);
 }
-@keyframes pulseBadge {
-  0%,100%{box-shadow:0 0 6px rgba(255,215,0,0.2);}
-  50%{box-shadow:0 0 18px rgba(255,215,0,0.5);}
+.logo-icon{
+  width:34px;height:34px;
+  background:linear-gradient(135deg,var(--neon-dim),rgba(0,212,255,0.1));
+  border:1px solid var(--border2);border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;box-shadow:0 0 10px rgba(0,255,180,0.15);flex-shrink:0;
 }
-.header h1 {
-  font-family:'Orbitron',sans-serif;
-  font-size:clamp(17px,4.5vw,30px);
-  font-weight:900; letter-spacing:2px;
-  background:linear-gradient(90deg,var(--gold2),var(--gold3),var(--gold2));
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-  filter:drop-shadow(0 0 14px rgba(255,215,0,0.4));
-  line-height:1.1;
+.logo-icon img{width:100%;height:100%;object-fit:cover;border-radius:5px;}
+.nav-right{display:flex;align-items:center;gap:10px}
+.nav-home-btn{
+  display:flex;align-items:center;gap:6px;
+  font-family:var(--ff-mono);font-size:0.62rem;
+  letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--muted2);padding:5px 10px;
+  border:1px solid var(--border);border-radius:4px;
+  background:transparent;transition:all 0.2s;cursor:pointer;
 }
-.header-desc {
-  margin-top:10px; font-size:11px;
-  color:var(--muted); letter-spacing:1.5px; text-transform:uppercase;
+.nav-home-btn:hover{color:var(--neon);border-color:var(--border2);background:var(--neon-dim)}
+.page-label{
+  font-family:var(--ff-mono);font-size:0.55rem;
+  letter-spacing:0.15em;text-transform:uppercase;
+  color:var(--muted2);padding:4px 10px;
+  border:1px solid var(--border);border-radius:3px;
+  background:var(--bg2);
 }
-
-/* ── WRAP ── */
-.wrap {
-  position:relative; z-index:10;
-  max-width:960px; margin:auto;
-  padding:14px 12px 0;
-}
-
-/* ── SEARCH BOX ── */
-.search-wrapper {
-  margin-bottom:12px;
-  display:flex; align-items:center; gap:8px;
-}
-.search-box {
-  flex:1;
-  display:flex; align-items:center; gap:8px;
-  background:rgba(255,215,0,0.05);
-  border:1px solid rgba(255,215,0,0.2);
-  border-radius:8px;
-  padding:7px 12px;
-  transition:all 0.2s;
-}
-.search-box:focus-within {
-  border-color:rgba(255,215,0,0.5);
-  background:rgba(255,215,0,0.08);
-  box-shadow:0 0 14px rgba(255,215,0,0.15);
-}
-.search-box i {
-  color:var(--muted); font-size:12px; flex-shrink:0;
-}
-.search-box input {
-  flex:1; background:none; border:none; outline:none;
-  color:var(--text); font-family:'Exo 2',sans-serif;
-  font-size:12px; font-weight:600; letter-spacing:0.5px;
-}
-.search-box input::placeholder { color:var(--muted); }
-.search-clear {
-  background:none; border:none; cursor:pointer;
-  color:var(--muted); font-size:11px; padding:0;
-  transition:color 0.2s; display:none;
-}
-.search-clear:hover { color:var(--gold); }
-.search-count {
-  font-family:'Orbitron',sans-serif;
-  font-size:9px; letter-spacing:1px;
-  color:var(--muted); white-space:nowrap;
-  background:rgba(255,215,0,0.06);
-  border:1px solid rgba(255,215,0,0.12);
-  border-radius:5px; padding:5px 9px;
+@media(max-width:520px){
+  .page-label{display:none}
+  .nav-home-btn span{display:none}
 }
 
-/* ── TABLE CARD ── */
-.table-card {
-  background:linear-gradient(145deg,var(--bg2),var(--bg3));
-  border:1px solid var(--border);
-  border-radius:14px;
+/* ── HERO / PAGE TOP ── */
+.page-hero{
+  min-height:54vh;
+  padding:calc(58px + clamp(3rem,7vw,4rem)) clamp(1rem,5vw,3rem) clamp(2rem,5vw,3.5rem);
+  position:relative;z-index:1;
+  display:flex;flex-direction:column;justify-content:flex-end;
   overflow:hidden;
-  box-shadow:0 0 30px rgba(255,215,0,0.07), 0 0 60px rgba(0,0,0,0.5);
 }
-
-/* ── TABLE CONTAINER (for sticky header) ── */
-.table-scroll {
-  overflow-x:auto;
-  max-height:calc(100vh - 260px);
-  overflow-y:auto;
+.page-hero::after{
+  content:'';
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse at 60% 40%,rgba(0,255,180,0.04) 0%,transparent 70%);
+  pointer-events:none;
 }
-.table-scroll::-webkit-scrollbar { width:4px; height:4px; }
-.table-scroll::-webkit-scrollbar-track { background:rgba(255,215,0,0.03); }
-.table-scroll::-webkit-scrollbar-thumb { background:rgba(255,215,0,0.2); border-radius:4px; }
-
-table {
-  width:100%;
-  border-collapse:collapse;
+.hero-eyebrow{
+  font-family:var(--ff-mono);font-size:0.62rem;
+  letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--neon2);margin-bottom:0.8rem;
+  display:inline-flex;align-items:center;gap:10px;
+  opacity:0;animation:fadeUp 0.5s var(--ease) 0.1s forwards;
 }
-
-thead tr {
-  background:rgba(13,10,26,0.98);
-  border-bottom:1px solid rgba(255,215,0,0.2);
-  position:sticky; top:0; z-index:20;
+.hero-eyebrow::before{content:'';width:24px;height:1px;background:var(--neon2)}
+.page-title{
+  font-family:var(--ff-hud);
+  font-size:clamp(2rem,6vw,4rem);
+  font-weight:900;line-height:1;
+  letter-spacing:0.02em;
+  margin-bottom:1rem;
+  opacity:0;animation:fadeUp 0.6s var(--ease) 0.2s forwards;
 }
-
-th {
-  padding:12px 8px;
-  font-family:'Orbitron',sans-serif;
-  font-size:10px; font-weight:700;
-  letter-spacing:1px; text-transform:uppercase;
-  color:var(--gold);
-  text-align:center;
-  white-space:nowrap;
-  background:rgba(13,10,26,0.98);
+.page-title span{
+  background:linear-gradient(135deg,var(--neon) 0%,var(--neon2) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
-th:first-child { text-align:left; padding-left:14px; }
-
-td {
-  padding:10px 8px;
-  font-size:12px; font-weight:600;
-  text-align:center;
-  border-bottom:1px solid rgba(255,215,0,0.06);
-  white-space:nowrap;
-  transition:background 0.2s;
+.page-desc{
+  max-width:580px;font-size:clamp(0.85rem,1.7vw,0.95rem);
+  color:var(--muted);line-height:1.85;
+  opacity:0;animation:fadeUp 0.6s var(--ease) 0.32s forwards;
 }
-td:first-child { text-align:left; padding-left:14px; }
-
-tbody tr {
-  animation:fadeRow 0.4s ease both;
-  cursor:pointer;
+.role-count-row{
+  display:flex;gap:clamp(0.5rem,2vw,1.2rem);flex-wrap:wrap;
+  margin-top:1.8rem;
+  opacity:0;animation:fadeUp 0.6s var(--ease) 0.45s forwards;
 }
-@keyframes fadeRow {
-  from{opacity:0; transform:translateY(8px);}
-  to{opacity:1; transform:translateY(0);}
-}
-tbody tr:hover td {
-  background:rgba(255,215,0,0.05);
-}
-tbody tr:last-child td { border-bottom:none; }
-
-/* ── PLAYER CELL ── */
-.club-cell {
-  display:flex; align-items:center; gap:8px;
-}
-.club-avatar {
-  width:28px; height:28px; border-radius:50%;
-  object-fit:cover;
-  border:1.5px solid rgba(255,215,0,0.25);
-  flex-shrink:0;
-  background:rgba(255,215,0,0.05);
-}
-.club-avatar-placeholder {
-  width:28px; height:28px; border-radius:50%;
-  background:rgba(255,215,0,0.08);
-  border:1.5px solid rgba(255,215,0,0.15);
-  display:flex; align-items:center; justify-content:center;
-  flex-shrink:0; font-size:10px; color:var(--muted);
-}
-.club-info { min-width:0; }
-.player-name {
-  font-size:11px; font-weight:700; color:var(--text);
-  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-  max-width:130px; line-height:1.2;
-}
-.club-id-sub {
-  font-size:9px; color:var(--muted); letter-spacing:0.5px;
-  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-  max-width:130px;
-}
-
-/* ── BID COMBINED ── */
-.bid-combined {
-  display:flex; flex-direction:column; align-items:center; gap:1px;
-  line-height:1.2;
-}
-.bid-earn { color:#39ff14; font-size:10px; font-weight:700; }
-.bid-deduct { color:#ff3b3b; font-size:10px; font-weight:700; }
-.bid-divider { width:1px; height:10px; background:rgba(255,255,255,0.12); display:none; }
-
-/* ── CP VALUES ── */
-.val-base    { color:#a0d4ff; }
-.val-tour    { color:#c084fc; }
-.val-bonus   { color:var(--gold3); }
-.val-sell    { color:#38bdf8; }
-
-.val-net-pos {
-  color:var(--gold);
-  font-family:'Orbitron',sans-serif;
-  font-size:11px; font-weight:700;
-  text-shadow:0 0 8px rgba(255,215,0,0.5);
-}
-.val-net-neg {
-  color:var(--red);
-  font-family:'Orbitron',sans-serif;
-  font-size:11px; font-weight:700;
-}
-
-/* ── ACTION BUTTON ── */
-.btn-claim {
-  display:inline-flex; align-items:center; gap:5px;
-  padding:6px 12px;
-  background:linear-gradient(135deg,var(--gold2),var(--gold));
-  color:#000; border:none;
-  border-radius:6px; font-family:'Exo 2',sans-serif;
-  font-size:11px; font-weight:700; letter-spacing:0.5px;
-  cursor:pointer; transition:all 0.2s;
-  box-shadow:0 0 10px rgba(255,215,0,0.4);
-}
-.btn-claim:hover {
-  transform:scale(1.06);
-  box-shadow:0 0 18px rgba(255,215,0,0.65);
-}
-.btn-locked {
-  display:inline-flex; align-items:center; gap:5px;
-  padding:6px 12px;
-  background:rgba(255,255,255,0.05);
-  color:var(--muted); border:1px solid rgba(255,255,255,0.08);
-  border-radius:6px; font-family:'Exo 2',sans-serif;
-  font-size:11px; font-weight:600; letter-spacing:0.5px;
-  cursor:not-allowed;
-}
-
-/* ── LOADING ── */
-#loading {
-  position:fixed; inset:0; background:var(--bg);
-  display:flex; flex-direction:column;
-  align-items:center; justify-content:center;
-  z-index:9999; gap:20px;
-}
-.loader-ring {
-  width:60px; height:60px;
-  border:3px solid rgba(255,215,0,0.12);
-  border-top-color:var(--gold);
-  border-radius:50%;
-  animation:spin 0.9s linear infinite;
-}
-@keyframes spin{ to{transform:rotate(360deg);} }
-.loader-text {
-  font-family:'Orbitron',sans-serif;
-  font-size:11px; letter-spacing:3px; color:var(--gold);
-  animation:blink 1.5s ease-in-out infinite;
-}
-
-/* ── WITHDRAW POPUP ── */
-.popup {
-  position:fixed; inset:0;
-  background:rgba(0,0,0,0.8);
-  display:flex; align-items:center; justify-content:center;
-  visibility:hidden; z-index:9998;
-  backdrop-filter:blur(6px);
-}
-.popup-content {
-  background:linear-gradient(145deg,var(--bg2),var(--bg3));
-  border:1px solid rgba(255,215,0,0.3);
-  border-radius:16px; padding:28px 24px;
-  text-align:center;
-  box-shadow:0 0 40px rgba(255,215,0,0.2);
-  width:90%; max-width:320px;
-  animation:popIn 0.25s ease;
-}
-@keyframes popIn {
-  from{transform:scale(0.85); opacity:0;}
-  to{transform:scale(1); opacity:1;}
-}
-.popup-icon { font-size:36px; margin-bottom:10px; }
-.popup-content h2 {
-  font-family:'Orbitron',sans-serif;
-  font-size:16px; color:var(--gold); margin-bottom:12px;
-}
-.popup-content p {
-  font-size:12px; color:var(--muted); margin:4px 0; letter-spacing:0.5px;
-}
-.popup-contact {
-  margin-top:14px; padding:12px;
-  background:rgba(255,215,0,0.06);
-  border:1px solid rgba(255,215,0,0.15);
-  border-radius:8px; font-size:12px; color:var(--text);
-  line-height:1.8;
-}
-.popup-close {
-  margin-top:16px;
-  padding:8px 20px;
-  background:linear-gradient(135deg,var(--gold2),var(--gold));
-  color:#000; border:none; border-radius:8px;
-  font-family:'Exo 2',sans-serif;
-  font-size:13px; font-weight:700; cursor:pointer;
+.rc-badge{
+  display:flex;align-items:center;gap:7px;
+  font-family:var(--ff-mono);font-size:0.58rem;
+  letter-spacing:0.08em;text-transform:uppercase;
+  padding:5px 12px;border-radius:3px;
+  border:1px solid rgba(255,255,255,0.08);
+  background:rgba(255,255,255,0.03);
+  color:var(--muted2);cursor:pointer;
   transition:all 0.2s;
 }
-.popup-close:hover { transform:scale(1.05); box-shadow:0 0 16px rgba(255,215,0,0.5); }
+.rc-badge:hover,.rc-badge.active{color:var(--white);background:rgba(255,255,255,0.07);border-color:rgba(255,255,255,0.2)}
+.rc-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
 
-/* ── PLAYER MODAL ── */
-.player-modal {
-  position:fixed; inset:0;
-  background:rgba(0,0,0,0.85);
-  display:flex; align-items:center; justify-content:center;
-  visibility:hidden; opacity:0;
-  z-index:9997;
-  backdrop-filter:blur(10px);
-  transition:opacity 0.25s, visibility 0.25s;
+/* ── MAIN LAYOUT ── */
+.page-wrap{
+  position:relative;z-index:1;
+  max-width:1200px;margin:0 auto;
+  padding:0 clamp(1rem,5vw,3rem) clamp(4rem,8vw,6rem);
+  display:grid;
+  grid-template-columns:240px 1fr;
+  gap:clamp(1.5rem,3vw,2.5rem);
+  align-items:start;
 }
-.player-modal.show {
-  visibility:visible; opacity:1;
+
+/* ── SIDEBAR ── */
+.sidebar{
+  position:sticky;top:72px;
+  display:flex;flex-direction:column;gap:6px;
 }
-.player-modal-content {
-  background:linear-gradient(145deg,var(--bg2),var(--bg3));
-  border:1px solid rgba(255,215,0,0.3);
-  border-radius:20px; padding:32px 28px;
-  text-align:center;
-  box-shadow:0 0 60px rgba(255,215,0,0.15), 0 0 120px rgba(0,0,0,0.8);
-  width:90%; max-width:300px;
-  animation:popIn 0.25s ease;
+.sidebar-title{
+  font-family:var(--ff-mono);font-size:0.55rem;
+  letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--muted2);padding:0 4px;margin-bottom:6px;
+}
+.role-btn{
+  display:flex;align-items:center;gap:11px;
+  padding:10px 14px;border-radius:5px;
+  border:1px solid transparent;
+  background:transparent;
+  cursor:pointer;transition:all 0.18s var(--ease);
+  text-align:left;width:100%;
+  position:relative;overflow:hidden;
+}
+.role-btn::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:2px;
+  border-radius:0 1px 1px 0;
+  background:var(--accent);opacity:0;
+  transition:opacity 0.18s;
+}
+.role-btn.active,.role-btn:hover{
+  background:rgba(255,255,255,0.04);
+  border-color:rgba(255,255,255,0.07);
+}
+.role-btn.active::before,.role-btn:hover::before{opacity:1}
+.role-btn.active{background:rgba(255,255,255,0.06)}
+.rb-icon{
+  width:30px;height:30px;border-radius:7px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.75rem;flex-shrink:0;
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.07);
+  transition:all 0.18s;
+}
+.role-btn.active .rb-icon,.role-btn:hover .rb-icon{
+  background:rgba(255,255,255,0.1);
+}
+.rb-text{display:flex;flex-direction:column;gap:1px;min-width:0}
+.rb-name{
+  font-family:var(--ff-ui);font-size:0.82rem;font-weight:600;
+  color:var(--muted);line-height:1.2;
+  transition:color 0.18s;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.role-btn.active .rb-name,.role-btn:hover .rb-name{color:var(--white)}
+.rb-sub{
+  font-family:var(--ff-mono);font-size:0.5rem;
+  letter-spacing:0.07em;text-transform:uppercase;
+  color:var(--muted2);
+}
+
+/* ── CONTENT AREA ── */
+.content-area{min-width:0}
+.role-panel{display:none}
+.role-panel.active{display:block;animation:panelIn 0.35s var(--ease) both}
+@keyframes panelIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+.panel-header{
+  padding:clamp(1.4rem,3vw,2rem) clamp(1.4rem,3vw,2rem) clamp(1.2rem,2.5vw,1.6rem);
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:8px 8px 0 0;
+  border-bottom:none;
+  position:relative;overflow:hidden;
+  display:flex;align-items:flex-start;gap:1.2rem;
+}
+.panel-header::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--accent),rgba(255,255,255,0.1),transparent);
+}
+.panel-header::after{
+  content:'';position:absolute;top:0;right:0;
+  width:200px;height:200px;
+  background:radial-gradient(circle,rgba(255,255,255,0.02) 0%,transparent 70%);
+  pointer-events:none;
+}
+.ph-icon{
+  width:52px;height:52px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.3rem;flex-shrink:0;
+  border:1px solid rgba(255,255,255,0.1);
+}
+.ph-meta{flex:1;min-width:0}
+.ph-role-label{
+  font-family:var(--ff-mono);font-size:0.57rem;
+  letter-spacing:0.15em;text-transform:uppercase;
+  margin-bottom:0.35rem;
+}
+.ph-role-name{
+  font-family:var(--ff-hud);font-size:clamp(1rem,2.5vw,1.5rem);
+  font-weight:700;color:var(--white);line-height:1.1;
+  letter-spacing:0.04em;margin-bottom:0.5rem;
+}
+.ph-desc{font-size:0.83rem;color:var(--muted);line-height:1.7;max-width:540px;}
+
+/* tasks container */
+.tasks-wrap{
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-top:1px solid rgba(255,255,255,0.04);
+  border-radius:0 0 8px 8px;
+  overflow:hidden;
+}
+
+/* task accordion */
+.task-block{border-bottom:1px solid var(--border)}
+.task-block:last-child{border-bottom:none}
+.task-trigger{
+  display:flex;align-items:center;gap:1rem;
+  padding:clamp(0.9rem,2vw,1.1rem) clamp(1.2rem,2.5vw,1.6rem);
+  cursor:pointer;width:100%;background:transparent;border:none;
+  text-align:left;transition:background 0.18s;
   position:relative;
 }
-.modal-close-btn {
-  position:absolute; top:12px; right:14px;
-  background:rgba(255,255,255,0.06);
-  border:1px solid rgba(255,255,255,0.1);
-  color:var(--muted); border-radius:6px;
-  width:26px; height:26px;
-  display:flex; align-items:center; justify-content:center;
-  font-size:11px; cursor:pointer; transition:all 0.2s;
+.task-trigger:hover{background:rgba(255,255,255,0.025)}
+.task-trigger.open{background:rgba(255,255,255,0.03)}
+.tt-num{
+  font-family:var(--ff-hud);font-size:0.6rem;font-weight:700;
+  min-width:22px;flex-shrink:0;
+  opacity:0.5;
 }
-.modal-close-btn:hover { color:var(--gold); border-color:rgba(255,215,0,0.3); }
-.modal-avatar {
-  width:80px; height:80px; border-radius:50%;
-  object-fit:cover;
-  border:2px solid var(--gold);
-  box-shadow:0 0 20px rgba(255,215,0,0.3);
-  margin:0 auto 12px;
-  display:block;
+.tt-icon{
+  width:26px;height:26px;border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.7rem;flex-shrink:0;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.07);
 }
-.modal-avatar-placeholder {
-  width:80px; height:80px; border-radius:50%;
-  background:rgba(255,215,0,0.08);
-  border:2px solid rgba(255,215,0,0.3);
-  display:flex; align-items:center; justify-content:center;
-  margin:0 auto 12px; font-size:28px; color:var(--muted);
+.tt-title{
+  flex:1;font-family:var(--ff-ui);font-size:0.88rem;font-weight:600;
+  color:var(--white);letter-spacing:0.01em;
 }
-.modal-name {
-  font-family:'Orbitron',sans-serif;
-  font-size:14px; font-weight:700; color:var(--text);
-  margin-bottom:4px; letter-spacing:0.5px;
+.tt-arrow{
+  font-size:0.65rem;color:var(--muted2);
+  transition:transform 0.25s var(--ease);flex-shrink:0;
 }
-.modal-clubid {
-  font-size:11px; color:var(--muted); letter-spacing:1px;
-  text-transform:uppercase; margin-bottom:18px;
+.task-trigger.open .tt-arrow{transform:rotate(90deg)}
+
+/* task body */
+.task-body{
+  display:none;
+  padding:0 clamp(1.2rem,2.5vw,1.6rem) clamp(1rem,2vw,1.3rem);
+  padding-left:calc(clamp(1.2rem,2.5vw,1.6rem) + 22px + 26px + 2rem);
 }
-.modal-cp-box {
-  background:rgba(255,215,0,0.06);
-  border:1px solid rgba(255,215,0,0.18);
-  border-radius:10px; padding:14px;
-  margin-bottom:18px;
+.task-body.open{display:block;animation:bodyIn 0.28s var(--ease) both}
+@keyframes bodyIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+
+/* list items inside task body */
+.task-list{display:flex;flex-direction:column;gap:0.45rem;margin-top:0.2rem}
+.task-item{
+  display:flex;align-items:flex-start;gap:0.8rem;
+  font-size:0.82rem;color:var(--muted);line-height:1.7;
+  padding:0.7rem 0.9rem;
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:5px;
+  transition:border-color 0.18s,transform 0.18s var(--ease);
 }
-.modal-cp-label {
-  font-size:9px; letter-spacing:2px; color:var(--muted);
-  text-transform:uppercase; margin-bottom:4px;
+.task-item:hover{border-color:var(--border2);transform:translateX(3px)}
+.ti-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;margin-top:8px;}
+.task-item a{color:var(--neon2);word-break:break-all;font-family:var(--ff-mono);font-size:0.75rem;}
+.task-item a:hover{text-decoration:underline}
+
+/* sub-section inside task body */
+.sub-section{margin-top:0.75rem}
+.sub-section-title{
+  font-family:var(--ff-mono);font-size:0.57rem;
+  letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--muted2);margin-bottom:0.45rem;
+  display:flex;align-items:center;gap:8px;
 }
-.modal-cp-val-pos {
-  font-family:'Orbitron',sans-serif;
-  font-size:22px; font-weight:900; color:var(--gold);
-  text-shadow:0 0 14px rgba(255,215,0,0.5);
+.sub-section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* schedule table */
+.sched-table{width:100%;border-collapse:collapse;margin-top:0.3rem}
+.sched-table th,.sched-table td{
+  padding:0.5rem 0.8rem;text-align:left;
+  font-size:0.78rem;border:1px solid var(--border);
 }
-.modal-cp-val-neg {
-  font-family:'Orbitron',sans-serif;
-  font-size:22px; font-weight:900; color:var(--red);
+.sched-table th{
+  font-family:var(--ff-mono);font-size:0.55rem;
+  letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--muted2);background:var(--bg3);font-weight:500;
 }
-.modal-cp-sub {
-  font-size:9px; color:var(--muted); margin-top:3px; letter-spacing:1px;
+.sched-table td{color:var(--muted);background:var(--bg2)}
+.sched-table td:first-child{font-family:var(--ff-mono);font-size:0.72rem;color:var(--neon2)}
+.sched-table td:last-child{color:var(--white);font-weight:600}
+
+/* teamwork callout */
+.teamwork-callout{
+  margin-top:0;
+  padding:clamp(1.2rem,2.5vw,1.5rem) clamp(1.4rem,3vw,2rem);
+  background:var(--bg3);
+  border-top:1px solid var(--border);
+  display:flex;align-items:flex-start;gap:1rem;
+}
+.tw-icon{
+  font-size:1.3rem;flex-shrink:0;margin-top:2px;
+  color:var(--neon);opacity:0.7;
+}
+.tw-body h4{
+  font-family:var(--ff-hud);font-size:0.78rem;font-weight:700;
+  color:var(--white);letter-spacing:0.04em;margin-bottom:0.4rem;
+}
+.tw-body p{font-size:0.8rem;color:var(--muted);line-height:1.7;}
+
+/* footer */
+footer{
+  border-top:1px solid var(--border);
+  padding:clamp(2rem,5vw,3rem) clamp(1rem,5vw,3rem);
+  display:flex;flex-direction:column;align-items:center;
+  gap:0.65rem;text-align:center;position:relative;z-index:1;
+  background:var(--bg2);
+}
+.footer-logo{font-family:var(--ff-hud);font-size:1.4rem;font-weight:900;letter-spacing:0.1em;color:var(--neon);text-shadow:0 0 16px rgba(0,255,180,0.5);}
+footer p{font-size:0.73rem;color:var(--muted2);font-family:var(--ff-mono)}
+
+/* ── MOBILE: sidebar becomes horizontal tab row ── */
+@media(max-width:820px){
+  .page-wrap{
+    grid-template-columns:1fr;
+    padding-top:0;
+  }
+  .sidebar{
+    position:static;
+    flex-direction:row;
+    flex-wrap:wrap;
+    gap:5px;
+    padding:clamp(0.75rem,2vw,1rem) 0;
+  }
+  .sidebar-title{display:none}
+  .role-btn{
+    flex-direction:column;align-items:center;
+    gap:5px;padding:9px 10px;
+    flex:1;min-width:calc(33% - 5px);
+    text-align:center;
+  }
+  .role-btn::before{top:0;left:0;right:0;bottom:auto;width:auto;height:2px;border-radius:0 0 1px 1px;}
+  .rb-text{align-items:center}
+  .rb-sub{display:none}
+  .rb-name{font-size:0.7rem;white-space:normal;text-align:center}
+  .rb-icon{width:26px;height:26px;font-size:0.68rem}
+  .task-body{
+    padding-left:clamp(1.2rem,2.5vw,1.6rem);
+  }
+}
+@media(max-width:480px){
+  .role-btn{min-width:calc(50% - 5px)}
+  .ph-icon{width:40px;height:40px;font-size:1rem}
+  .panel-header{flex-direction:column;gap:0.8rem}
+  .ph-role-name{font-size:1.1rem}
 }
 
-/* ── FOOTER ── */
-.powered-by {
-  position:relative; z-index:10;
-  text-align:center; padding:16px 0 20px;
-  font-family:'Orbitron',sans-serif;
-  font-size:9px; letter-spacing:3px;
-  color:var(--muted); text-transform:uppercase; opacity:0.45;
-}
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
 
-/* ── EMPTY ── */
-.empty-row td {
-  text-align:center; padding:40px;
-  color:var(--muted); font-size:13px; letter-spacing:1px;
-}
-
-/* ── MOBILE ── */
-@media(max-width:600px) {
-  .wrap { padding:8px 4px 0; }
-  .table-card { border-radius:10px; }
-  .table-scroll { max-height:calc(100vh - 240px); }
-  table { font-size:9px; }
-  th { font-size:8px; padding:8px 5px; letter-spacing:0; }
-  td { font-size:9px; padding:8px 5px; }
-  td:first-child { padding-left:8px; }
-  th:first-child { padding-left:8px; }
-  .player-name { max-width:72px; font-size:9px; }
-  .club-id-sub { max-width:72px; font-size:8px; }
-  .club-avatar { width:24px; height:24px; }
-  .club-avatar-placeholder { width:24px; height:24px; font-size:9px; }
-  .club-cell { gap:5px; }
-  .val-net-pos, .val-net-neg { font-size:9px; }
-  .btn-claim { padding:4px 7px; font-size:9px; gap:3px; border-radius:5px; }
-  .btn-locked { padding:4px 7px; font-size:9px; gap:3px; border-radius:5px; }
-  .btn-claim i, .btn-locked i { display:none; }
-  .header h1 { font-size:16px; }
-  .header-desc { font-size:10px; }
-  .bid-earn, .bid-deduct { font-size:9px; }
-  .search-box input { font-size:11px; }
-  .search-count { font-size:8px; padding:4px 7px; }
-}
+hr.divider{border:none;height:1px;background:linear-gradient(90deg,transparent,var(--border),var(--border2),var(--border),transparent);margin:0;}
 </style>
 </head>
-
 <body>
+
 <div class="orb orb1"></div>
 <div class="orb orb2"></div>
 <div class="orb orb3"></div>
-
-<!-- LOADING -->
-<div id="loading">
-  <div class="loader-ring"></div>
-  <div class="loader-text">LOADING CP DATA...</div>
-</div>
-
-<!-- TOPBAR -->
-<a href="https://goatfcbd.com" class="topbar">
-  <div class="top-left">
-    <img src="https://i.imgur.com/LY3Bb9m.png" class="top-logo" alt="GOAT FC">
-    <div class="top-title">GOAT FC</div>
-  </div>
-  <div class="home-btn"><i class="fa-solid fa-house"></i></div>
-  <div class="topbar-glow"></div>
-</a>
+<div class="scanline"></div>
 
 <!-- HEADER -->
-<div class="header">
-  <div class="header-badge">
-    <i class="fa-solid fa-coins" style="font-size:19px;"></i>
-    CP SYSTEM
+<header id="header">
+  <div class="nav-left">
+    <a href="https://goatfcbd.com" class="nav-logo">
+      <div class="logo-icon">
+        <img src="https://i.imgur.com/SjIUSlC.png" alt="GOAT FC" onerror="this.style.display='none';this.parentNode.innerHTML='🐐'"/>
+      </div>
+      <span>GOAT FC</span>
+    </a>
   </div>
-  <div class="header-desc">
-    <i class="fa-solid fa-fire" style="color:var(--gold); margin-right:5px;"></i>
-    Earn CP &bull; Manage Bids &bull; Claim Rewards &bull; Only the strongest rise
+  <div class="nav-right">
+    <span class="page-label">Admin Guide</span>
+    <a href="https://goatfcbd.com" class="nav-home-btn">
+      <i class="fa-solid fa-house"></i>
+      <span>Home</span>
+    </a>
+  </div>
+</header>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <p class="hero-eyebrow">Internal Documentation · GOAT FC</p>
+  <h1 class="page-title"><span>Admin</span> Responsibilities</h1>
+  <p class="page-desc">Role-based responsibilities for every admin position in the club. Click a role to view its duties and guidelines.</p>
+  <div class="role-count-row">
+    <div class="rc-badge active" onclick="switchRole('head')" style="--accent:var(--c-head)"><span class="rc-dot" style="background:var(--c-head)"></span>Head Admin</div>
+    <div class="rc-badge" onclick="switchRole('co')" style="--accent:var(--c-co)"><span class="rc-dot" style="background:var(--c-co)"></span>Co-Admin</div>
+    <div class="rc-badge" onclick="switchRole('asst')" style="--accent:var(--c-asst)"><span class="rc-dot" style="background:var(--c-asst)"></span>Assistant Admin</div>
+    <div class="rc-badge" onclick="switchRole('rech')" style="--accent:var(--c-rec-h)"><span class="rc-dot" style="background:var(--c-rec-h)"></span>Recruit Head</div>
+    <div class="rc-badge" onclick="switchRole('recc')" style="--accent:var(--c-rec-c)"><span class="rc-dot" style="background:var(--c-rec-c)"></span>Recruit Coordinator</div>
+    <div class="rc-badge" onclick="switchRole('tour')" style="--accent:var(--c-tour)"><span class="rc-dot" style="background:var(--c-tour)"></span>Tournament Admin</div>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- MAIN -->
+<div class="page-wrap">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <p class="sidebar-title">Select Role</p>
+
+    <button class="role-btn active" data-role="head" onclick="switchRole('head')" style="--accent:var(--c-head)">
+      <div class="rb-icon" style="color:var(--c-head)"><i class="fa-solid fa-crown"></i></div>
+      <div class="rb-text">
+        <span class="rb-name">Head Admin</span>
+        <span class="rb-sub">3 duties</span>
+      </div>
+    </button>
+
+    <button class="role-btn" data-role="co" onclick="switchRole('co')" style="--accent:var(--c-co)">
+      <div class="rb-icon" style="color:var(--c-co)"><i class="fa-solid fa-shield-halved"></i></div>
+      <div class="rb-text">
+        <span class="rb-name">Co-Admin</span>
+        <span class="rb-sub">3 duties</span>
+      </div>
+    </button>
+
+    <button class="role-btn" data-role="asst" onclick="switchRole('asst')" style="--accent:var(--c-asst)">
+      <div class="rb-icon" style="color:var(--c-asst)"><i class="fa-solid fa-user-tie"></i></div>
+      <div class="rb-text">
+        <span class="rb-name">Assistant Admin</span>
+        <span class="rb-sub">3 duties</span>
+      </div>
+    </button>
+
+    <button class="role-btn" data-role="rech" onclick="switchRole('rech')" style="--accent:var(--c-rec-h)">
+      <div class="rb-icon" style="color:var(--c-rec-h)"><i class="fa-solid fa-user-plus"></i></div>
+      <div class="rb-text">
+        <span class="rb-name">Recruit Head</span>
+        <span class="rb-sub">2 duties</span>
+      </div>
+    </button>
+
+    <button class="role-btn" data-role="recc" onclick="switchRole('recc')" style="--accent:var(--c-rec-c)">
+      <div class="rb-icon" style="color:var(--c-rec-c)"><i class="fa-solid fa-clipboard-check"></i></div>
+      <div class="rb-text">
+        <span class="rb-name">Recruit Coordinator</span>
+        <span class="rb-sub">3 duties</span>
+      </div>
+    </button>
+
+    <button class="role-btn" data-role="tour" onclick="switchRole('tour')" style="--accent:var(--c-tour)">
+      <div class="rb-icon" style="color:var(--c-tour)"><i class="fa-solid fa-trophy"></i></div>
+      <div class="rb-text">
+        <span class="rb-name">Tournament Admin</span>
+        <span class="rb-sub">5 duties</span>
+      </div>
+    </button>
+  </aside>
+
+  <!-- CONTENT -->
+  <div class="content-area">
+
+    <!-- ══ HEAD ADMIN ══ -->
+    <div class="role-panel active" id="panel-head">
+      <div class="panel-header" style="--accent:var(--c-head)">
+        <div class="ph-icon" style="background:rgba(0,255,180,0.1);color:var(--c-head);border-color:rgba(0,255,180,0.2)">
+          <i class="fa-solid fa-crown"></i>
+        </div>
+        <div class="ph-meta">
+          <p class="ph-role-label" style="color:var(--c-head)">📛 Role</p>
+          <h2 class="ph-role-name">Head Admin</h2>
+          <p class="ph-desc">Overall command of the club's operational activities — from squad management and match coordination to admin oversight and score reporting.</p>
+        </div>
+      </div>
+      <div class="tasks-wrap">
+
+        <div class="task-block">
+          <button class="task-trigger" onclick="toggleTask(this)">
+            <span class="tt-num" style="color:var(--c-head)">01</span>
+            <div class="tt-icon" style="color:var(--c-head)"><i class="fa-solid fa-users-rectangle"></i></div>
+            <span class="tt-title">Squad Submission Management</span>
+            <i class="fa-solid fa-chevron-right tt-arrow"></i>
+          </button>
+          <div class="task-body">
+            <div class="task-list">
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-head)"></span>প্রতিদিন নির্ধারিত সময় (দুপুর ২:০০ – ৩:০০ টার মধ্যে) Squad Roster অনুযায়ী Squad Submit করতে হবে।</div>
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-head)"></span>Squad Submission Link: <a href="https://cobegbd.com/cpanel/?id=1457&tabs=squad_submission" target="_blank">cobegbd.com → Squad Submission</a></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="task-block">
+          <button class="task-trigger" onclick="toggleTask(this)">
+            <span class="tt-num" style="color:var(--c-head)">02</span>
+            <div class="tt-icon" style="color:var(--c-head)"><i class="fa-solid fa-calendar-check"></i></div>
+            <span class="tt-title">Fixture & Match Management</span>
+            <i class="fa-solid fa-chevron-right tt-arrow"></i>
+          </button>
+          <div class="task-body">
+            <div class="task-list">
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-head)"></span>নিয়মিত Fixture Check করতে হবে।</div>
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-head)"></span>নির্ধারিত সময়ের মধ্যে সকল Match Group-এ Join নিশ্চিত করতে হবে।</div>
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-head)"></span>Schedule Link: <a href="https://cobegbd.com/cpanel/?id=1457&tabs=schedule" target="_blank">cobegbd.com → Schedule</a></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="task-block">
+          <button class="task-trigger" onclick="toggleTask(this)">
+            <span class="tt-num" style="color:var(--c-head)">03</span>
+            <div class="tt-icon" style="color:var(--c-head)"><i class="fa-solid fa-network-wired"></i></div>
+            <span class="tt-title">Administrative Coordination</span>
+            <i class="fa-solid fa-chevron-right tt-arrow"></i>
+          </button>
+          <div class="task-body">
+            <div class="task-list">
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-head)"></span>Co-Admin ও Assistant Admin-এর সাথে নিয়মিত যোগাযোগ রাখতে হবে।</div>
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-head)"></span>Squad Roster সংগ্রহ ও পর্যবেক্ষণ করতে হবে।</div>
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-head)"></span>সকল Admin-এর কার্যক্রম মনিটর করতে হবে।</div>
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-head)"></span>ম্যাচ শেষ হওয়ার পর Website-এ সঠিকভাবে Club vs Club Score Submit করতে হবে।</div>
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-head)"></span>Score Submission Link: <a href="https://goatfcbd.com/adminscoresubmit/" target="_blank">goatfcbd.com/adminscoresubmit</a></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="teamwork-callout">
+          <i class="fa-solid fa-handshake-angle tw-icon"></i>
+          <div class="tw-body">
+            <h4>Teamwork & Support Policy</h4>
+            <p>মনে রাখতে হবে, আমরা সবাই একটি পরিবার। যদি কোনো Admin অতিরিক্ত ব্যস্ত থাকে, তাহলে অন্যান্য Admin-দের কাছ থেকে সাহায্য নিতে হবে। সকল Admin সবসময় একে অপরকে সহায়তা করবে।</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══ CO-ADMIN ══ -->
+    <div class="role-panel" id="panel-co">
+      <div class="panel-header" style="--accent:var(--c-co)">
+        <div class="ph-icon" style="background:rgba(0,212,255,0.1);color:var(--c-co);border-color:rgba(0,212,255,0.2)">
+          <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <div class="ph-meta">
+          <p class="ph-role-label" style="color:var(--c-co)">⛔ Role</p>
+          <h2 class="ph-role-name">Co-Admin</h2>
+          <p class="ph-desc">Fixture monitoring, group activity management, and on-field referee responsibilities during matches.</p>
+        </div>
+      </div>
+      <div class="tasks-wrap">
+
+        <div class="task-block">
+          <button class="task-trigger" onclick="toggleTask(this)">
+            <span class="tt-num" style="color:var(--c-co)">01</span>
+            <div class="tt-icon" style="color:var(--c-co)"><i class="fa-solid fa-calendar-days"></i></div>
+            <span class="tt-title">Fixture Monitoring</span>
+            <i class="fa-solid fa-chevron-right tt-arrow"></i>
+          </button>
+          <div class="task-body">
+            <div class="task-list">
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-co)"></span>নিয়মিত Fixture Check করতে হবে।</div>
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-co)"></span>কোনো Admin Match Group-এ Join করতে ভুলে গেলে নিজে Join হয়ে অন্যদের Join করাতে হবে।</div>
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-co)"></span>Schedule Link: <a href="https://cobegbd.com/cpanel/?id=1457&tabs=schedule" target="_blank">cobegbd.com → Schedule</a></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="task-block">
+          <button class="task-trigger" onclick="toggleTask(this)">
+            <span class="tt-num" style="color:var(--c-co)">02</span>
+            <div class="tt-icon" style="color:var(--c-co)"><i class="fa-solid fa-people-group"></i></div>
+            <span class="tt-title">Group Activity Management</span>
+            <i class="fa-solid fa-chevron-right tt-arrow"></i>
+          </button>
+          <div class="task-body">
+            <div class="task-list">
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-co)"></span>প্রতিদিন রাত ৯:০০ – ১০:০০ টার মধ্যে নিশ্চিত করতে হবে যে সকল Player ও Admin তাদের Fixture অনুযায়ী Group-এ Join করেছে।</div>
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-co)"></span>কেউ Join না করলে Manual Add করতে হবে।</div>
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-co)"></span>নতুন Player-দের Deadline উল্লেখ করে Mention দিতে হবে।</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="task-block">
+          <button class="task-trigger" onclick="toggleTask(this)">
+            <span class="tt-num" style="color:var(--c-co)">03</span>
+            <div class="tt-icon" style="color:var(--c-co)"><i class="fa-solid fa-gavel"></i></div>
+            <span class="tt-title">Match Referee Responsibilities</span>
+            <i class="fa-solid fa-chevron-right tt-arrow"></i>
+          </button>
+          <div class="task-body">
+            <div class="task-list">
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-co)"></span>ম্যাচ চলাকালীন Referee হিসেবে Rules অনুসরণ ও প্রয়োগ করতে হবে।</div>
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-co)"></span>Player-দের যেকোনো সমস্যা বা বিরোধের ক্ষেত্রে Club-এর প্রতিনিধি হিসেবে দায়িত্ব পালন করতে হবে।</div>
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-co)"></span>সকল Tournament Rules ভালোভাবে জানা ও বুঝে রাখতে হবে।</div>
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-co)"></span>বড় কোনো Issue হলে Head Admin বা অন্যান্য Admin-দের সম্পৃক্ত করতে হবে।</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══ ASSISTANT ADMIN ══ -->
+    <div class="role-panel" id="panel-asst">
+      <div class="panel-header" style="--accent:var(--c-asst)">
+        <div class="ph-icon" style="background:rgba(255,209,102,0.1);color:var(--c-asst);border-color:rgba(255,209,102,0.2)">
+          <i class="fa-solid fa-user-tie"></i>
+        </div>
+        <div class="ph-meta">
+          <p class="ph-role-label" style="color:var(--c-asst)">🛑 Role</p>
+          <h2 class="ph-role-name">Assistant Admin</h2>
+          <p class="ph-desc">Squad roster announcements, sub/swap assistance, and opponent verification duties before and during matches.</p>
+        </div>
+      </div>
+      <div class="tasks-wrap">
+
+        <div class="task-block">
+          <button class="task-trigger" onclick="toggleTask(this)">
+            <span class="tt-num" style="color:var(--c-asst)">01</span>
+            <div class="tt-icon" style="color:var(--c-asst)"><i class="fa-solid fa-bullhorn"></i></div>
+            <span class="tt-title">Squad Roster Announcement</span>
+            <i class="fa-solid fa-chevron-right tt-arrow"></i>
+          </button>
+          <div class="task-body">
+            <div class="task-list">
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-asst)"></span>Squad Submit-এর পূর্বে Group-এ Squad Roster প্রকাশ করতে হবে।</div>
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-asst)"></span>কোনো Player-এর সমস্যা থাকলে Squad Submit-এর আগেই জানাতে উৎসাহিত করতে হবে।</div>
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-asst)"></span>Final Squad এই Roster অনুযায়ী Submit করা হবে।</div>
+            </div>
+            <div class="sub-section">
+              <p class="sub-section-title">Squad Roster Schedule</p>
+              <table class="sched-table">
+                <thead>
+                  <tr><th>Day & Time</th><th>Groups</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>First Day — 12:30 AM</td><td>A, B, C, D</td></tr>
+                  <tr><td>Second Day — 10:30 PM</td><td>E, F</td></tr>
+                  <tr><td>Second Day — 11:30 PM</td><td>G, H</td></tr>
+                  <tr><td>Last Day — 12:30 AM</td><td>I, J, K, L</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="task-block">
+          <button class="task-trigger" onclick="toggleTask(this)">
+            <span class="tt-num" style="color:var(--c-asst)">02</span>
+            <div class="tt-icon" style="color:var(--c-asst)"><i class="fa-solid fa-rotate"></i></div>
+            <span class="tt-title">Sub / Swap Assistance</span>
+            <i class="fa-solid fa-chevron-right tt-arrow"></i>
+          </button>
+          <div class="task-body">
+            <div class="task-list">
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-asst)"></span>Squad Submit হওয়ার পর কোনো Player-এর জরুরি সমস্যা দেখা দিলে Sub অথবা Swap Player খুঁজে দিতে সহায়তা করতে হবে।</div>
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-asst)"></span>প্রয়োজন হলে Player-দের মধ্যে সমন্বয় করে Replacement নিশ্চিত করতে হবে।</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="task-block">
+          <button class="task-trigger" onclick="toggleTask(this)">
+            <span class="tt-num" style="color:var(--c-asst)">03</span>
+            <div class="tt-icon" style="color:var(--c-asst)"><i class="fa-solid fa-magnifying-glass"></i></div>
+            <span class="tt-title">Opponent Verification</span>
+            <i class="fa-solid fa-chevron-right tt-arrow"></i>
+          </button>
+          <div class="task-body">
+            <div class="task-list">
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-asst)"></span>Match Group-এ Opponent Win/Draw হওয়ার পর Player-দের বারবার স্মরণ করিয়ে দিতে হবে যাতে তারা Opponent-এর তথ্য সঠিকভাবে যাচাই করে।</div>
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-asst)"></span>কোনো তথ্য সন্দেহজনক মনে হলে নিজেও যাচাই করতে হবে।</div>
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-asst)"></span>Tournament-এর Win/Loss নির্ধারণে এটি অত্যন্ত গুরুত্বপূর্ণ একটি দায়িত্ব।</div>
+            </div>
+            <div class="sub-section">
+              <p class="sub-section-title">Verification Checklist</p>
+              <div class="task-list" style="margin-top:0">
+                <div class="task-item"><span class="ti-dot" style="background:var(--c-asst)"></span><i class="fa-solid fa-video" style="margin-right:6px;opacity:0.6"></i> Match Video</div>
+                <div class="task-item"><span class="ti-dot" style="background:var(--c-asst)"></span><i class="fa-solid fa-fingerprint" style="margin-right:6px;opacity:0.6"></i> UID</div>
+                <div class="task-item"><span class="ti-dot" style="background:var(--c-asst)"></span><i class="fa-solid fa-mobile-screen" style="margin-right:6px;opacity:0.6"></i> Device Information</div>
+                <div class="task-item"><span class="ti-dot" style="background:var(--c-asst)"></span><i class="fa-brands fa-facebook" style="margin-right:6px;opacity:0.6"></i> Facebook Profile Link</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══ RECRUIT HEAD ══ -->
+    <div class="role-panel" id="panel-rech">
+      <div class="panel-header" style="--accent:var(--c-rec-h)">
+        <div class="ph-icon" style="background:rgba(176,132,255,0.1);color:var(--c-rec-h);border-color:rgba(176,132,255,0.2)">
+          <i class="fa-solid fa-user-plus"></i>
+        </div>
+        <div class="ph-meta">
+          <p class="ph-role-label" style="color:var(--c-rec-h)">☢️ Role</p>
+          <h2 class="ph-role-name">Recruit Head</h2>
+          <p class="ph-desc">Leads recruitment strategy, manages trial campaigns, and makes final player selection decisions for the club.</p>
+        </div>
+      </div>
+      <div class="tasks-wrap">
+
+        <div class="task-block">
+          <button class="task-trigger" onclick="toggleTask(this)">
+            <span class="tt-num" style="color:var(--c-rec-h)">01</span>
+            <div class="tt-icon" style="color:var(--c-rec-h)"><i class="fa-solid fa-rectangle-ad"></i></div>
+            <span class="tt-title">Recruitment Management</span>
+            <i class="fa-solid fa-chevron-right tt-arrow"></i>
+          </button>
+          <div class="task-body">
+            <div class="task-list">
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-rec-h)"></span>Club-এর জন্য নিয়মিত (Weekly) Recruitment Post করতে হবে।</div>
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-rec-h)"></span>আগ্রহী Player-দের নির্ধারিত সময়ের মধ্যে Trial সম্পন্ন হয়েছে কিনা তা নিশ্চিত করতে হবে।</div>
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-rec-h)"></span>Trial কার্যক্রম নিয়মিত পর্যবেক্ষণ ও সমন্বয় করতে হবে।</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="task-block">
+          <button class="task-trigger" onclick="toggleTask(this)">
+            <span class="tt-num" style="color:var(--c-rec-h)">02</span>
+            <div class="tt-icon" style="color:var(--c-rec-h)"><i class="fa-solid fa-star-half-stroke"></i></div>
+            <span class="tt-title">Player Evaluation & Selection</span>
+            <i class="fa-solid fa-chevron-right tt-arrow"></i>
+          </button>
+          <div class="task-body">
+            <div class="task-list">
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-rec-h)"></span>Trial Track নিয়মিত Check ও Review করতে হবে।</div>
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-rec-h)"></span>Trial Performance, Behaviour এবং Overall Quality মূল্যায়ন করে সেরা Player নির্বাচন করতে হবে।</div>
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-rec-h)"></span>নির্বাচিত Player-দের জন্য Club ID প্রদান ও Club-এ অন্তর্ভুক্তির প্রাথমিক অনুমোদন দিতে হবে।</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══ RECRUIT COORDINATOR ══ -->
+    <div class="role-panel" id="panel-recc">
+      <div class="panel-header" style="--accent:var(--c-rec-c)">
+        <div class="ph-icon" style="background:rgba(255,107,53,0.1);color:var(--c-rec-c);border-color:rgba(255,107,53,0.2)">
+          <i class="fa-solid fa-clipboard-check"></i>
+        </div>
+        <div class="ph-meta">
+          <p class="ph-role-label" style="color:var(--c-rec-c)">⚠️ Role</p>
+          <h2 class="ph-role-name">Recruit Coordinator</h2>
+          <p class="ph-desc">Handles trial registration, organizes trial sessions, evaluates performance, and finalizes player onboarding.</p>
+        </div>
+      </div>
+      <div class="tasks-wrap">
+
+        <div class="task-block">
+          <button class="task-trigger" onclick="toggleTask(this)">
+            <span class="tt-num" style="color:var(--c-rec-c)">01</span>
+            <div class="tt-icon" style="color:var(--c-rec-c)"><i class="fa-solid fa-file-circle-check"></i></div>
+            <span class="tt-title">Trial Registration Verification</span>
+            <i class="fa-solid fa-chevron-right tt-arrow"></i>
+          </button>
+          <div class="task-body">
+            <div class="task-list">
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-rec-c)"></span>Trial Group-এ Join করা সকল Player-এর কাছ থেকে প্রয়োজনীয় তথ্য সংগ্রহ করতে হবে।</div>
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-rec-c)"></span>জমাকৃত তথ্য সঠিক ও সম্পূর্ণ কিনা তা যাচাই করতে হবে।</div>
+            </div>
+            <div class="sub-section">
+              <p class="sub-section-title">Required Documents</p>
+              <div class="task-list" style="margin-top:0">
+                <div class="task-item"><span class="ti-dot" style="background:var(--c-rec-c)"></span><i class="fa-solid fa-image" style="margin-right:6px;opacity:0.6"></i> Konami ID Screenshot</div>
+                <div class="task-item"><span class="ti-dot" style="background:var(--c-rec-c)"></span><i class="fa-solid fa-wifi" style="margin-right:6px;opacity:0.6"></i> Internet Speed Test Screenshot</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="task-block">
+          <button class="task-trigger" onclick="toggleTask(this)">
+            <span class="tt-num" style="color:var(--c-rec-c)">02</span>
+            <div class="tt-icon" style="color:var(--c-rec-c)"><i class="fa-solid fa-futbol"></i></div>
+            <span class="tt-title">Trial Management</span>
+            <i class="fa-solid fa-chevron-right tt-arrow"></i>
+          </button>
+          <div class="task-body">
+            <div class="task-list">
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-rec-c)"></span>নতুন Player-দের Mention দিয়ে নির্ধারিত সময় অনুযায়ী Trial আয়োজন করতে হবে।</div>
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-rec-c)"></span>Trial শেষে Player-এর Performance Review যথাযথভাবে Trial Track-এ Update করতে হবে।</div>
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-rec-c)"></span>প্রতিটি Review-এর সাথে নিজের Club ID উল্লেখ করতে হবে, যাতে Reviewer সহজে শনাক্ত করা যায়।</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="task-block">
+          <button class="task-trigger" onclick="toggleTask(this)">
+            <span class="tt-num" style="color:var(--c-rec-c)">03</span>
+            <div class="tt-icon" style="color:var(--c-rec-c)"><i class="fa-solid fa-id-card-clip"></i></div>
+            <span class="tt-title">Player Selection & Registration</span>
+            <i class="fa-solid fa-chevron-right tt-arrow"></i>
+          </button>
+          <div class="task-body">
+            <div class="task-list">
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-rec-c)"></span>অন্যান্য Admin-দের সাথে আলোচনা করে যোগ্য Player নির্বাচন করতে হবে।</div>
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-rec-c)"></span>নির্বাচিত Player-দের Club ID প্রদান ও Club Member Registration সম্পন্ন হয়েছে কিনা তা নিশ্চিত করতে হবে।</div>
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-rec-c)"></span>Recruitment Process-এর সকল ধাপ সুষ্ঠুভাবে সম্পন্ন হয়েছে কিনা তা পর্যবেক্ষণ করতে হবে।</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══ TOURNAMENT ADMIN ══ -->
+    <div class="role-panel" id="panel-tour">
+      <div class="panel-header" style="--accent:var(--c-tour)">
+        <div class="ph-icon" style="background:rgba(255,70,85,0.1);color:var(--c-tour);border-color:rgba(255,70,85,0.2)">
+          <i class="fa-solid fa-trophy"></i>
+        </div>
+        <div class="ph-meta">
+          <p class="ph-role-label" style="color:var(--c-tour)">🏆 Role</p>
+          <h2 class="ph-role-name">Tournament Admin</h2>
+          <p class="ph-desc">Manages all tournament-related activities — from promotion and registration to match monitoring, score verification, and club registration.</p>
+        </div>
+      </div>
+      <div class="tasks-wrap">
+
+        <div class="task-block">
+          <button class="task-trigger" onclick="toggleTask(this)">
+            <span class="tt-num" style="color:var(--c-tour)">01</span>
+            <div class="tt-icon" style="color:var(--c-tour)"><i class="fa-solid fa-megaphone"></i></div>
+            <span class="tt-title">Tournament Promotion & Communication</span>
+            <i class="fa-solid fa-chevron-right tt-arrow"></i>
+          </button>
+          <div class="task-body">
+            <div class="task-list">
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-tour)"></span>Club-এর সকল Tournament সংক্রান্ত তথ্য যথাযথভাবে Post করতে হবে যাতে সকল Member সময়মতো জানতে পারে।</div>
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-tour)"></span>Tournament-এর Rules, Schedule, Registration Deadline এবং অন্যান্য গুরুত্বপূর্ণ তথ্য স্পষ্টভাবে উল্লেখ করতে হবে।</div>
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-tour)"></span>Member-দের অংশগ্রহণে উৎসাহিত করা এবং প্রয়োজনীয় তথ্য প্রদান করতে হবে।</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="task-block">
+          <button class="task-trigger" onclick="toggleTask(this)">
+            <span class="tt-num" style="color:var(--c-tour)">02</span>
+            <div class="tt-icon" style="color:var(--c-tour)"><i class="fa-solid fa-list-check"></i></div>
+            <span class="tt-title">Registration & Participation Verification</span>
+            <i class="fa-solid fa-chevron-right tt-arrow"></i>
+          </button>
+          <div class="task-body">
+            <div class="task-list">
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-tour)"></span>Participation Form নিয়মিত Check করতে হবে।</div>
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-tour)"></span>সকল Member সঠিক ও সম্পূর্ণ তথ্য দিয়ে Form Fill-up করেছে কিনা তা নিশ্চিত করতে হবে।</div>
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-tour)"></span>কোনো ভুল বা অসম্পূর্ণ তথ্য থাকলে সংশ্লিষ্ট Member-কে দ্রুত জানিয়ে সংশোধনের ব্যবস্থা করতে হবে।</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="task-block">
+          <button class="task-trigger" onclick="toggleTask(this)">
+            <span class="tt-num" style="color:var(--c-tour)">03</span>
+            <div class="tt-icon" style="color:var(--c-tour)"><i class="fa-solid fa-eye"></i></div>
+            <span class="tt-title">Match Monitoring & Support</span>
+            <i class="fa-solid fa-chevron-right tt-arrow"></i>
+          </button>
+          <div class="task-body">
+            <div class="task-list">
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-tour)"></span>Tournament Match Group নিয়মিত Monitor করতে হবে।</div>
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-tour)"></span>Match চলাকালীন কোনো সমস্যা, Rule Violation বা Technical Issue দেখা দিলে দ্রুত সমাধানের উদ্যোগ নিতে হবে।</div>
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-tour)"></span>প্রয়োজন হলে Referee, Opponent Team বা Tournament Authority-এর সাথে যোগাযোগ করে বিষয়টি সমাধান করতে হবে।</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="task-block">
+          <button class="task-trigger" onclick="toggleTask(this)">
+            <span class="tt-num" style="color:var(--c-tour)">04</span>
+            <div class="tt-icon" style="color:var(--c-tour)"><i class="fa-solid fa-scoreboard"></i></div>
+            <span class="tt-title">Score Verification & Tracking</span>
+            <i class="fa-solid fa-chevron-right tt-arrow"></i>
+          </button>
+          <div class="task-body">
+            <div class="task-list">
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-tour)"></span>প্রতিটি Match শেষে Website বা Tournament App-এ Score সঠিকভাবে Update হয়েছে কিনা তা নিশ্চিত করতে হবে।</div>
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-tour)"></span>Score, Result এবং Standings নিয়মিত পর্যবেক্ষণ করতে হবে।</div>
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-tour)"></span>কোনো ভুল বা অসঙ্গতি পাওয়া গেলে দ্রুত সংশ্লিষ্ট কর্তৃপক্ষকে জানাতে হবে।</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="task-block">
+          <button class="task-trigger" onclick="toggleTask(this)">
+            <span class="tt-num" style="color:var(--c-tour)">05</span>
+            <div class="tt-icon" style="color:var(--c-tour)"><i class="fa-solid fa-pen-to-square"></i></div>
+            <span class="tt-title">Tournament Registration Management</span>
+            <i class="fa-solid fa-chevron-right tt-arrow"></i>
+          </button>
+          <div class="task-body">
+            <div class="task-list">
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-tour)"></span>Club vs Club Tournament থেকে শুরু করে সকল গুরুত্বপূর্ণ Tournament-এ Club-এর Registration যথাসময়ে সম্পন্ন করতে হবে।</div>
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-tour)"></span>Registration Requirements, Deadline এবং Tournament Rules পূর্বেই যাচাই করতে হবে।</div>
+              <div class="task-item"><span class="ti-dot" style="background:var(--c-tour)"></span>Club-এর অংশগ্রহণ নিশ্চিত করতে প্রয়োজনীয় সকল Administrative কার্যক্রম সম্পন্ন করতে হবে।</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
   </div>
 </div>
 
-<!-- TABLE -->
-<div class="wrap">
+<hr class="divider"/>
 
-  <!-- SEARCH -->
-  <div class="search-wrapper">
-    <div class="search-box">
-      <i class="fa-solid fa-magnifying-glass"></i>
-      <input type="text" id="search-input" placeholder="Search Club ID... (GFC-001 or GFC001)" autocomplete="off">
-      <button class="search-clear" id="search-clear" title="Clear"><i class="fa-solid fa-xmark"></i></button>
-    </div>
-    <div class="search-count" id="search-count">— CLUBS</div>
-  </div>
-
-  <div class="table-card">
-    <div class="table-scroll">
-      <table>
-        <thead>
-          <tr>
-            <th style="text-align:left">Club ID</th>
-            <th>Base</th>
-            <th>Reward</th>
-            <th>Bonus</th>
-            <th>Sell</th>
-            <th>Bid+/-</th>
-            <th>Net CP</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody id="table-body"></tbody>
-      </table>
-    </div>
-  </div>
-</div>
-
-<div class="powered-by"><i class="fa-solid fa-bolt" style="margin-right:5px;"></i>POWERED BY GOAT FC</div>
-
-<!-- WITHDRAW POPUP -->
-<div class="popup" id="popup">
-  <div class="popup-content">
-    <div class="popup-icon">✅</div>
-    <h2>Withdraw Request Sent!</h2>
-    <p>Your request has been submitted.</p>
-    <div class="popup-contact">
-      <div><i class="fa-solid fa-envelope" style="color:var(--gold); margin-right:6px;"></i>goatfcbd@gmail.com</div>
-      <div><i class="fa-brands fa-whatsapp" style="color:var(--green); margin-right:6px;"></i>+8801521253995</div>
-    </div>
-    <button class="popup-close" onclick="closePopup()">Close</button>
-  </div>
-</div>
-
-<!-- PLAYER MODAL -->
-<div class="player-modal" id="player-modal" onclick="closePlayerModal(event)">
-  <div class="player-modal-content" id="player-modal-content">
-    <button class="modal-close-btn" onclick="closePlayerModalDirect()"><i class="fa-solid fa-xmark"></i></button>
-    <div id="modal-avatar-wrap"></div>
-    <div class="modal-name" id="modal-name">—</div>
-    <div class="modal-clubid" id="modal-clubid">—</div>
-    <div class="modal-cp-box">
-      <div class="modal-cp-label">Net CP Balance</div>
-      <div id="modal-cp-val">—</div>
-      <div class="modal-cp-sub" id="modal-cp-sub"></div>
-    </div>
-    <div id="modal-action"></div>
-  </div>
-</div>
+<footer>
+  <div class="footer-logo">GOAT FC</div>
+  <p style="font-size:0.68rem;font-family:var(--ff-mono);color:var(--muted2)">Internal Admin Guideline · Confidential</p>
+  <p>© 2025 GOAT FC · Est. December 28, 2023 · All Rights Reserved</p>
+</footer>
 
 <script>
-const CP_URL     = "https://opensheet.elk.sh/1DSPKPaU1ZQYbFM4iYbE1VXgDAXU-FCT7--QhYJsNf1M/CP_System";
-const MEMBERS_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv";
+/* ── ROLE SWITCHING ── */
+function switchRole(id) {
+  // panels
+  document.querySelectorAll('.role-panel').forEach(p => p.classList.remove('active'));
+  const panel = document.getElementById('panel-' + id);
+  if (panel) panel.classList.add('active');
 
-let allRows = [];        // sorted CP data
-let membersMap = {};     // clubIdNorm -> { name, pic }
-let currentRows = [];    // filtered rows
+  // sidebar buttons
+  document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+  const btn = document.querySelector(`.role-btn[data-role="${id}"]`);
+  if (btn) btn.classList.add('active');
 
-/* ── Normalise club ID for matching ── */
-function normId(id) {
-  return String(id).toUpperCase().replace(/[^A-Z0-9]/g,'');
+  // hero badges
+  document.querySelectorAll('.rc-badge').forEach(b => b.classList.remove('active'));
+  const badges = document.querySelectorAll('.rc-badge');
+  const order = ['head','co','asst','rech','recc','tour'];
+  const idx = order.indexOf(id);
+  if (badges[idx]) badges[idx].classList.add('active');
+
+  // on mobile scroll to content
+  if (window.innerWidth <= 820) {
+    document.querySelector('.content-area').scrollIntoView({behavior:'smooth', block:'start'});
+  }
 }
 
-/* ── Parse CSV ── */
-function parseCSV(text) {
-  const lines = text.trim().split('\n');
-  const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g,''));
-  return lines.slice(1).map(line => {
-    // Handle quoted fields
-    const vals = [];
-    let inQ = false, cur = '';
-    for (let i = 0; i < line.length; i++) {
-      const c = line[i];
-      if (c === '"') { inQ = !inQ; }
-      else if (c === ',' && !inQ) { vals.push(cur); cur = ''; }
-      else cur += c;
+/* ── TASK ACCORDION ── */
+function toggleTask(trigger) {
+  const body = trigger.nextElementSibling;
+  const isOpen = trigger.classList.contains('open');
+
+  // close all in same panel
+  const panel = trigger.closest('.role-panel');
+  panel.querySelectorAll('.task-trigger.open').forEach(t => {
+    if (t !== trigger) {
+      t.classList.remove('open');
+      t.nextElementSibling.classList.remove('open');
     }
-    vals.push(cur);
-    const obj = {};
-    headers.forEach((h, i) => { obj[h] = (vals[i]||'').trim(); });
-    return obj;
-  });
-}
-
-/* ── Load members ── */
-async function loadMembers() {
-  try {
-    const res  = await fetch(MEMBERS_CSV);
-    const text = await res.text();
-    const rows = parseCSV(text);
-    rows.forEach(r => {
-      const raw = r["Club ID Number"] || r["Club ID"] || '';
-      if (!raw) return;
-      const key = normId(raw);
-      membersMap[key] = {
-        name: r["Full Name"] || '',
-        pic:  r["Profile Picture (For Web)"] || ''
-      };
-    });
-  } catch(e) { console.warn("Members load failed", e); }
-}
-
-/* ── Build avatar element ── */
-function buildAvatar(clubId, size='sm') {
-  const member = membersMap[normId(clubId)];
-  if (member && member.pic) {
-    const img = document.createElement('img');
-    img.className = 'club-avatar';
-    img.src = member.pic;
-    img.alt = '';
-    img.onerror = () => {
-      const ph = document.createElement('div');
-      ph.className = 'club-avatar-placeholder';
-      ph.innerHTML = '<i class="fa-solid fa-user"></i>';
-      img.replaceWith(ph);
-    };
-    return img;
-  }
-  const ph = document.createElement('div');
-  ph.className = 'club-avatar-placeholder';
-  ph.innerHTML = '<i class="fa-solid fa-user"></i>';
-  return ph;
-}
-
-/* ── Render rows ── */
-function renderRows(data) {
-  const tbody = document.getElementById("table-body");
-  tbody.innerHTML = "";
-
-  if (!data.length) {
-    tbody.innerHTML = `<tr class="empty-row"><td colspan="8"><i class="fa-solid fa-magnifying-glass" style="opacity:0.3; margin-right:8px;"></i>No clubs found</td></tr>`;
-    updateCount(0);
-    return;
-  }
-
-  data.forEach((club, i) => {
-    const net    = parseInt(club["Net CP"]) || 0;
-    const base   = club["Base CP"] || 0;
-    const tour   = club["Reward"] || 0;
-    const bonus  = club["Bonus CP"] || 0;
-    const earn   = club["Earn By Bid"] || 0;
-    const sell   = club["Sell CP"] || 0;
-    const deduct = club["Deduct By Bid"] || 0;
-    const clubId = club["Player Club ID"] || "—";
-
-    const member = membersMap[normId(clubId)] || {};
-    const playerName = member.name || clubId;
-
-    const netCls = net >= 0 ? 'val-net-pos' : 'val-net-neg';
-
-    const actionBtn = (net >= 1000)
-      ? `<button class="btn-claim" onclick="event.stopPropagation();withdraw('${clubId}')"><i class="fa-solid fa-coins"></i> Claim</button>`
-      : `<button class="btn-locked" disabled><i class="fa-solid fa-lock"></i> Locked</button>`;
-
-    const tr = document.createElement("tr");
-    tr.style.animationDelay = `${i * 0.04}s`;
-    tr.setAttribute('data-clubid', clubId);
-    tr.setAttribute('data-net', net);
-    tr.onclick = () => openPlayerModal(clubId, playerName, net, member.pic);
-
-    // Avatar cell
-    const tdClub = document.createElement('td');
-    const cellDiv = document.createElement('div');
-    cellDiv.className = 'club-cell';
-    cellDiv.appendChild(buildAvatar(clubId));
-    const infoDiv = document.createElement('div');
-    infoDiv.className = 'club-info';
-    infoDiv.innerHTML = `<div class="player-name">${playerName}</div><div class="club-id-sub">${clubId}</div>`;
-    cellDiv.appendChild(infoDiv);
-    tdClub.appendChild(cellDiv);
-
-    tr.appendChild(tdClub);
-    tr.innerHTML += `
-      <td><span class="val-base">${base}</span></td>
-      <td><span class="val-tour">${tour}</span></td>
-      <td><span class="val-bonus">${bonus}</span></td>
-      <td><span class="val-sell">${sell}</span></td>
-      <td>
-        <div class="bid-combined">
-          <span class="bid-earn">+${earn}</span>
-          <span class="bid-deduct">-${deduct}</span>
-        </div>
-      </td>
-      <td><span class="${netCls}">${net}</span></td>
-      <td>${actionBtn}</td>
-    `;
-    tbody.appendChild(tr);
   });
 
-  updateCount(data.length);
+  trigger.classList.toggle('open', !isOpen);
+  body.classList.toggle('open', !isOpen);
 }
 
-function updateCount(n) {
-  document.getElementById('search-count').textContent = `${n} CLUB${n !== 1 ? 'S' : ''}`;
-}
-
-/* ── Search ── */
-function applySearch(q) {
-  const norm = normId(q);
-  if (!norm) {
-    currentRows = allRows;
-  } else {
-    currentRows = allRows.filter(club => {
-      const id = normId(club["Player Club ID"] || '');
-      return id.includes(norm);
-    });
-  }
-  renderRows(currentRows);
-
-  const clearBtn = document.getElementById('search-clear');
-  clearBtn.style.display = q ? 'block' : 'none';
-}
-
-document.getElementById('search-input').addEventListener('input', function() {
-  applySearch(this.value);
-});
-document.getElementById('search-clear').addEventListener('click', function() {
-  document.getElementById('search-input').value = '';
-  applySearch('');
-  document.getElementById('search-input').focus();
-});
-
-/* ── Player Modal ── */
-function openPlayerModal(clubId, name, net, pic) {
-  const modal = document.getElementById('player-modal');
-
-  document.getElementById('modal-name').textContent = name || clubId;
-  document.getElementById('modal-clubid').textContent = clubId;
-
-  // Avatar
-  const wrap = document.getElementById('modal-avatar-wrap');
-  wrap.innerHTML = '';
-  if (pic) {
-    const img = document.createElement('img');
-    img.className = 'modal-avatar';
-    img.src = pic;
-    img.alt = '';
-    img.onerror = () => {
-      const ph = document.createElement('div');
-      ph.className = 'modal-avatar-placeholder';
-      ph.innerHTML = '<i class="fa-solid fa-user"></i>';
-      img.replaceWith(ph);
-    };
-    wrap.appendChild(img);
-  } else {
-    wrap.innerHTML = '<div class="modal-avatar-placeholder"><i class="fa-solid fa-user"></i></div>';
-  }
-
-  // Net CP
-  const cpEl = document.getElementById('modal-cp-val');
-  cpEl.className = net >= 0 ? 'modal-cp-val-pos' : 'modal-cp-val-neg';
-  cpEl.textContent = net;
-  document.getElementById('modal-cp-sub').textContent = net >= 1000 ? '✅ Eligible to claim' : `Need ${1000 - net} more CP to claim`;
-
-  // Action
-  const actEl = document.getElementById('modal-action');
-  if (net >= 1000) {
-    actEl.innerHTML = `<button class="btn-claim" style="width:100%;justify-content:center;padding:10px;" onclick="withdraw('${clubId}')"><i class="fa-solid fa-coins"></i> Claim Reward</button>`;
-  } else {
-    actEl.innerHTML = `<button class="btn-locked" style="width:100%;justify-content:center;padding:10px;" disabled><i class="fa-solid fa-lock"></i> Locked</button>`;
-  }
-
-  modal.classList.add('show');
-}
-
-function closePlayerModal(e) {
-  if (e.target === document.getElementById('player-modal')) {
-    document.getElementById('player-modal').classList.remove('show');
-  }
-}
-function closePlayerModalDirect() {
-  document.getElementById('player-modal').classList.remove('show');
-}
-
-/* ── Withdraw ── */
-function withdraw(id) {
-  const email   = "goatfcbd@gmail.com";
-  const subject = "GOAT FC CP Withdraw Request";
-  const body    = `Club ID: ${id} requesting 1000 CP withdraw`;
-  window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  document.getElementById("popup").style.visibility = "visible";
-}
-
-function closePopup() {
-  document.getElementById("popup").style.visibility = "hidden";
-}
-
-/* ── Main Load ── */
-async function loadData() {
-  try {
-    const [cpData] = await Promise.all([
-      fetch(CP_URL).then(r => r.json()),
-      loadMembers()
-    ]);
-
-    cpData.sort((a, b) => (parseInt(b["Net CP"]) || 0) - (parseInt(a["Net CP"]) || 0));
-    allRows = cpData;
-    currentRows = cpData;
-
-    if (!cpData.length) {
-      document.getElementById("table-body").innerHTML =
-        `<tr class="empty-row"><td colspan="8"><i class="fa-solid fa-coins" style="opacity:0.3; margin-right:8px;"></i>No data available</td></tr>`;
-      updateCount(0);
-      return;
+/* ── SCROLL REVEAL (reuse pattern from about page) ── */
+const revObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.style.opacity = '1';
+      e.target.style.transform = 'translateY(0)';
+      revObs.unobserve(e.target);
     }
+  });
+}, {threshold: 0.08});
 
-    renderRows(allRows);
-  } catch(e) {
-    document.getElementById("table-body").innerHTML =
-      `<tr class="empty-row"><td colspan="8">Failed to load data. Please refresh.</td></tr>`;
-  } finally {
-    document.getElementById("loading").style.display = "none";
-  }
-}
-
-loadData();
+/* open first task of default panel on load */
+window.addEventListener('DOMContentLoaded', () => {
+  const first = document.querySelector('#panel-head .task-trigger');
+  if (first) toggleTask(first);
+});
 </script>
 </body>
 </html>

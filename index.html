@@ -1,736 +1,909 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>PLAYERS HUB — GOAT FC</title>
-<link rel="icon" type="image/png" href="https://i.imgur.com/LY3Bb9m.png"/>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@500;600;700&family=Exo+2:wght@700;800;900&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
-
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>BD Staff Meal Attendance</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
-
-:root{
---bg:#060610;
---surface:#0d0d1a;
---surface2:#111122;
---surface3:#161628;
---border:#1e1e3a;
---border2:#252548;
---neon-cyan:#00f0ff;
---neon-purple:#bf00ff;
---neon-green:#00ff88;
---neon-pink:#ff007a;
---neon-yellow:#f5ff00;
---text:#eef0ff;
---muted:#5a5a80;
---muted2:#383860;
-}
-
-@keyframes shimmer{
-0%{background-position:200% center;}
-100%{background-position:-200% center;}
-}
-
-@keyframes rgbBorder{
-0%{border-color:#00f0ff;box-shadow:0 0 14px #00f0ff50;}
-33%{border-color:#bf00ff;box-shadow:0 0 14px #bf00ff50;}
-66%{border-color:#ff007a;box-shadow:0 0 14px #ff007a50;}
-100%{border-color:#00f0ff;box-shadow:0 0 14px #00f0ff50;}
-}
-
-@keyframes pulse{
-0%,100%{opacity:1;}50%{opacity:0.3;}
-}
-
-@keyframes fadeUp{
-from{opacity:0;transform:translateY(18px);}
-to{opacity:1;transform:translateY(0);}
-}
-
-@keyframes spin{
-from{transform:rotate(0deg);}
-to{transform:rotate(360deg);}
-}
-
-@keyframes gradMove{
-0%{background-position:0%;}
-100%{background-position:200%;}
-}
-
-body{
-background:var(--bg);
-font-family:'Rajdhani',sans-serif;
-color:var(--text);
-min-height:100vh;
-overflow-x:hidden;
-padding-bottom:40px;
-}
-
-body::before{
-content:"";
-position:fixed;inset:0;
-background:
-radial-gradient(ellipse at 15% 15%,rgba(0,240,255,0.055) 0%,transparent 45%),
-radial-gradient(ellipse at 85% 85%,rgba(191,0,255,0.055) 0%,transparent 45%),
-radial-gradient(ellipse at 50% 50%,rgba(0,255,136,0.02) 0%,transparent 60%);
-pointer-events:none;z-index:-1;
-}
-
-/* ── TOPBAR ── */
-.topbar{
-height:46px;
-display:flex;align-items:center;justify-content:space-between;
-padding:0 14px;
-background:rgba(6,6,16,0.97);
-border-bottom:1px solid rgba(0,240,255,0.12);
-position:sticky;top:0;z-index:999;
-backdrop-filter:blur(14px);
-text-decoration:none;
-box-shadow:0 2px 20px rgba(0,240,255,0.05);
-}
-
-.top-left{display:flex;align-items:center;gap:8px;}
-
-.top-logo{
-width:20px;
-filter:drop-shadow(0 0 7px #00f0ff) brightness(1.1);
-}
-
-.top-title{
-font-family:'Orbitron',sans-serif;
-font-size:12px;font-weight:900;letter-spacing:3px;
-background:linear-gradient(90deg,var(--neon-cyan),var(--neon-purple));
--webkit-background-clip:text;-webkit-text-fill-color:transparent;
-}
-
-.home-btn{
-width:30px;height:30px;
-display:flex;align-items:center;justify-content:center;
-border-radius:6px;
-border:1px solid rgba(0,240,255,0.15);
-color:var(--neon-cyan);font-size:11px;
-transition:all .2s;
-}
-.home-btn:hover{background:rgba(0,240,255,0.08);box-shadow:0 0 10px rgba(0,240,255,0.2);}
-
-/* ── HERO ── */
-.hero{
-text-align:center;
-padding:20px 16px 14px;
-}
-
-.hero-title{
-font-family:'Orbitron',sans-serif;
-font-size:26px;font-weight:900;letter-spacing:7px;
-background:linear-gradient(90deg,#00f0ff,#bf00ff,#ff007a,#f5ff00,#00f0ff);
-background-size:300% auto;
--webkit-background-clip:text;-webkit-text-fill-color:transparent;
-animation:shimmer 4s linear infinite;
-line-height:1;
-}
-
-.hero-slogan{
-margin-top:6px;
-font-family:'Exo 2',sans-serif;
-font-size:10px;font-weight:700;
-letter-spacing:5px;
-color:var(--muted);
-text-transform:uppercase;
-}
-
-/* ── WRAP ── */
-.wrap{
-width:100%;max-width:900px;
-margin:0 auto;
-padding:0 10px;
-}
-
-/* ── SEARCH ── */
-.search-wrap{
-position:relative;
-margin-bottom:18px;
-}
-
-.search-icon{
-position:absolute;left:14px;top:50%;transform:translateY(-50%);
-color:var(--neon-cyan);font-size:12px;
-opacity:0.7;pointer-events:none;
-}
-
-.search-box{
-width:100%;
-height:46px;
-padding:0 16px 0 38px;
-border-radius:6px;
-border:1px solid rgba(0,240,255,0.18);
-background:var(--surface);
-outline:none;
-color:var(--text);
-font-size:13px;font-weight:700;
-font-family:'Rajdhani',sans-serif;
-letter-spacing:0.5px;
-transition:all .25s;
-box-shadow:0 0 12px rgba(0,240,255,0.03);
-}
-
-.search-box::placeholder{color:var(--muted);font-weight:600;}
-
-.search-box:focus{
-border-color:rgba(0,240,255,0.45);
-box-shadow:0 0 20px rgba(0,240,255,0.12),inset 0 0 8px rgba(0,240,255,0.04);
-}
-
-/* ── STATS BAR ── */
-.stats-bar{
-display:flex;align-items:center;justify-content:space-between;
-margin-bottom:14px;
-padding:0 2px;
-}
-
-.stats-bar-left{
-font-family:'Exo 2',sans-serif;
-font-size:9px;font-weight:800;
-letter-spacing:2px;color:var(--muted);
-text-transform:uppercase;
-}
-
-.stats-bar-left span{
-color:var(--neon-cyan);
-text-shadow:0 0 8px rgba(0,240,255,0.6);
-}
-
-.stats-bar-right{
-font-family:'Exo 2',sans-serif;
-font-size:8px;font-weight:800;
-letter-spacing:2px;color:var(--muted2);
-text-transform:uppercase;
-}
-
-/* ── GRID ── */
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
-gap:10px;
-}
-
-/* ── CARD ── */
-.card{
-position:relative;
-background:var(--surface);
-border:1px solid var(--border);
-border-radius:6px;
-overflow:hidden;
-cursor:pointer;
-transition:all .22s;
-text-align:center;
-padding:16px 10px 14px;
-animation:fadeUp .35s ease both;
-}
-
-.card::after{
-content:"";
-position:absolute;inset:0;
-background:linear-gradient(135deg,rgba(0,240,255,0.03),transparent 60%,rgba(191,0,255,0.03));
-pointer-events:none;
-}
-
-.card:hover{
-transform:translateY(-3px);
-border-color:rgba(0,240,255,0.3);
-box-shadow:0 0 24px rgba(0,240,255,0.1),0 8px 30px rgba(0,0,0,0.4);
-background:var(--surface2);
-}
-
-/* AVATAR */
-.card-avatar{
-width:68px;height:68px;
-border-radius:5px;
-border:2px solid var(--neon-cyan);
-overflow:hidden;
-background:var(--surface2);
-margin:0 auto 10px;
-animation:rgbBorder 4s linear infinite;
-flex-shrink:0;
-}
-
-.card-avatar img{
-width:100%;height:100%;
-object-fit:cover;
-}
-
-/* NAME */
-.card-name{
-font-family:'Exo 2',sans-serif;
-font-size:13px;font-weight:900;
-letter-spacing:0.5px;
-line-height:1.2;
-color:var(--text);
-white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-margin-bottom:7px;
-}
-
-/* ID PILL */
-.card-id{
-display:inline-flex;align-items:center;gap:5px;
-padding:4px 10px;
-border-radius:3px;
-border:1px solid rgba(0,240,255,0.3);
-background:rgba(0,240,255,0.07);
-font-family:'Exo 2',sans-serif;
-font-size:9px;font-weight:800;
-letter-spacing:1.5px;
-color:var(--neon-cyan);
-text-shadow:0 0 8px rgba(0,240,255,0.6);
-text-transform:uppercase;
-}
-
-.card-id i{font-size:8px;opacity:0.8;}
-
-/* VIEW BUTTON */
-.card-view{
-margin-top:9px;
-display:flex;align-items:center;justify-content:center;gap:5px;
-padding:5px 0;
-border-radius:3px;
-border:1px solid rgba(191,0,255,0.25);
-background:rgba(191,0,255,0.07);
-font-family:'Exo 2',sans-serif;
-font-size:8px;font-weight:800;
-letter-spacing:2px;
-color:#bf00ff;
-text-shadow:0 0 8px rgba(191,0,255,0.6);
-text-transform:uppercase;
-opacity:0;
-transform:translateY(4px);
-transition:all .2s;
-}
-
-.card:hover .card-view{
-opacity:1;transform:translateY(0);
-}
-
-/* ── EMPTY ── */
-.empty{
-grid-column:1/-1;
-padding:60px 20px;
-text-align:center;
-font-family:'Orbitron',sans-serif;
-font-size:10px;letter-spacing:4px;color:var(--muted);
-}
-.empty i{
-display:block;font-size:22px;margin-bottom:14px;
-color:var(--neon-pink);
-text-shadow:0 0 12px var(--neon-pink);
-}
-
-/* ── LOADER ── */
-.loader{
-grid-column:1/-1;
-padding:60px 20px;text-align:center;
-font-family:'Orbitron',sans-serif;
-font-size:10px;letter-spacing:4px;color:var(--muted);
-}
-.loader i{
-color:var(--neon-cyan);
-text-shadow:0 0 12px var(--neon-cyan);
-display:block;font-size:22px;margin-bottom:14px;
-}
-
-/* ══ AVAILABLE CLUB IDs SECTION ══ */
-.club-section{
-margin-top:36px;
-}
-
-.sec-hd{
-display:flex;align-items:center;gap:10px;
-margin-bottom:14px;
-}
-
-.sec-title{
-font-family:'Orbitron',sans-serif;
-font-size:10px;font-weight:700;letter-spacing:3.5px;
-color:var(--neon-cyan);text-transform:uppercase;white-space:nowrap;
-}
-
-.sec-line{
-flex:1;height:1px;
-background:linear-gradient(90deg,rgba(0,240,255,0.35),transparent);
-}
-
-.sec-count{
-font-family:'JetBrains Mono',monospace;
-font-size:8px;color:var(--muted2);letter-spacing:1px;
-padding:2px 8px;
-border:1px solid rgba(0,240,255,0.1);border-radius:10px;
-}
-
-.club-id-box{
-background:var(--surface);
-border:1px solid var(--border);
-border-radius:12px;
-padding:16px;
-position:relative;overflow:hidden;
-}
-
-.club-id-box::before{
-content:'';position:absolute;top:0;left:0;right:0;height:2px;
-background:linear-gradient(90deg,var(--neon-green),var(--neon-cyan),var(--neon-purple));
-}
-
-.club-id-header{
-display:flex;align-items:center;justify-content:space-between;
-margin-bottom:14px;flex-wrap:wrap;gap:8px;
-}
-
-.club-id-label{
-font-family:'JetBrains Mono',monospace;
-font-size:9px;letter-spacing:2px;color:var(--muted);
-text-transform:uppercase;
-display:flex;align-items:center;gap:6px;
-}
-
-.club-id-label i{color:var(--neon-green);font-size:9px;}
-
-.club-id-refresh{
-display:flex;align-items:center;gap:5px;padding:4px 10px;
-background:rgba(0,240,255,0.05);border:1px solid rgba(0,240,255,0.15);
-border-radius:6px;color:var(--neon-cyan);
-font-family:'JetBrains Mono',monospace;font-size:8px;
-letter-spacing:1px;cursor:pointer;transition:all .2s;
-text-transform:uppercase;border:none;outline:none;
-}
-
-.club-id-refresh:hover{
-background:rgba(0,240,255,0.12);
-box-shadow:0 0 10px rgba(0,240,255,0.2);
-}
-
-.club-id-refresh i{font-size:9px;}
-.club-id-refresh.spinning i{animation:spin .6s linear infinite;}
-
-.club-id-grid{
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(78px,1fr));
-gap:6px;
-}
-
-.club-id-pill{
-padding:6px 4px;border-radius:7px;
-background:rgba(0,255,136,0.04);
-border:1px solid rgba(0,255,136,0.14);
-text-align:center;
-font-family:'JetBrains Mono',monospace;
-font-size:9.5px;
-color:var(--neon-green);
-letter-spacing:.5px;
-transition:all .2s;
-cursor:default;
-}
-
-.club-id-pill:hover{
-background:rgba(0,255,136,0.1);
-border-color:rgba(0,255,136,0.35);
-box-shadow:0 0 10px rgba(0,255,136,0.15);
-}
-
-.club-id-loading{
-display:flex;align-items:center;justify-content:center;gap:8px;
-padding:24px;
-color:var(--muted);
-font-family:'JetBrains Mono',monospace;
-font-size:10px;letter-spacing:1px;
-}
-
-.club-id-loading i{
-animation:spin 1s linear infinite;
-color:var(--neon-cyan);
-}
-
-.club-id-error{
-display:flex;align-items:center;gap:8px;
-padding:12px;
-background:rgba(255,0,122,0.05);
-border:1px solid rgba(255,0,122,0.15);
-border-radius:8px;
-color:#ff5599;
-font-family:'JetBrains Mono',monospace;
-font-size:10px;letter-spacing:1px;
-}
-
-.club-id-stats{
-display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;
-}
-
-.cis{
-display:flex;align-items:center;gap:5px;padding:3px 9px;
-border-radius:10px;
-font-family:'JetBrains Mono',monospace;
-font-size:7.5px;letter-spacing:1px;
-}
-
-.cis-free{
-background:rgba(0,255,136,0.05);
-border:1px solid rgba(0,255,136,0.14);
-color:var(--neon-green);
-}
-
-.cis-used{
-background:rgba(245,255,0,0.05);
-border:1px solid rgba(245,255,0,0.14);
-color:var(--neon-yellow);
-}
-
-/* ── RESPONSIVE ── */
-@media(max-width:480px){
-.hero-title{font-size:19px;letter-spacing:4px;}
-.grid{grid-template-columns:repeat(2,1fr);gap:8px;}
-.card{padding:13px 8px 12px;}
-.card-avatar{width:56px;height:56px;}
-.card-name{font-size:11px;}
-.card-id{font-size:8px;padding:3px 8px;}
-.card-view{font-size:7px;}
-.club-id-grid{grid-template-columns:repeat(auto-fill,minmax(68px,1fr));}
-}
-
-@media(min-width:600px){
-.grid{grid-template-columns:repeat(3,1fr);}
-.card-avatar{width:72px;height:72px;}
-}
-
-@media(min-width:900px){
-.grid{grid-template-columns:repeat(4,1fr);}
-.wrap{padding:0 20px;}
-}
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green-dark: #085041;
+    --green-mid: #0F6E56;
+    --green: #1D9E75;
+    --green-light: #5DCAA5;
+    --green-pale: #E1F5EE;
+    --amber: #EF9F27;
+    --amber-pale: #FAEEDA;
+    --amber-dark: #633806;
+    --purple: #7F77DD;
+    --purple-pale: #EEEDFE;
+    --purple-dark: #3C3489;
+    --red: #E24B4A;
+    --red-pale: #FCEBEB;
+    --red-dark: #791F1F;
+    --blue: #378ADD;
+    --blue-pale: #E6F1FB;
+    --blue-dark: #0C447C;
+    --bg: #f4f6f4;
+    --surface: #ffffff;
+    --surface2: #f0f2f0;
+    --border: rgba(0,0,0,0.09);
+    --border-md: rgba(0,0,0,0.15);
+    --text: #1a1a1a;
+    --text-muted: #5a6a5a;
+    --text-hint: #8a9a8a;
+    --radius: 10px;
+    --radius-lg: 14px;
+    --shadow: 0 1px 4px rgba(0,0,0,0.07);
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  /* ---- LAYOUT ---- */
+  .app-shell { display: flex; min-height: 100vh; }
+
+  .sidebar {
+    width: 220px;
+    background: var(--green-dark);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    flex-shrink: 0;
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    z-index: 100;
+    overflow-y: auto;
+  }
+
+  .sidebar-brand {
+    padding: 20px 18px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+  }
+  .sidebar-brand h2 { font-size: 15px; font-weight: 600; line-height: 1.3; }
+  .sidebar-brand p { font-size: 11px; opacity: 0.65; margin-top: 3px; }
+
+  .sidebar-meta { padding: 12px 18px; border-bottom: 1px solid rgba(255,255,255,0.12); }
+  .sidebar-meta .meta-row { display: flex; justify-content: space-between; font-size: 11px; padding: 3px 0; }
+  .sidebar-meta .meta-row span:first-child { opacity: 0.65; }
+  .sidebar-meta .meta-row span:last-child { font-weight: 500; }
+
+  .nav { padding: 10px 10px; flex: 1; }
+  .nav-item {
+    display: flex; align-items: center; gap: 9px;
+    padding: 9px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    color: rgba(255,255,255,0.75);
+    margin-bottom: 2px;
+    transition: background 0.15s, color 0.15s;
+  }
+  .nav-item:hover { background: rgba(255,255,255,0.1); color: #fff; }
+  .nav-item.active { background: rgba(255,255,255,0.18); color: #fff; font-weight: 500; }
+  .nav-item svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+  .main {
+    margin-left: 220px;
+    flex: 1;
+    min-height: 100vh;
+    padding: 24px 28px;
+    max-width: calc(100vw - 220px);
+  }
+
+  /* ---- TOP BAR ---- */
+  .top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .page-title { font-size: 20px; font-weight: 600; }
+  .page-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .date-badge {
+    background: var(--green-pale);
+    color: var(--green-dark);
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 20px;
+  }
+
+  /* ---- SUMMARY CARDS ---- */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .stat-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    padding: 14px 16px;
+    box-shadow: var(--shadow);
+  }
+  .stat-card .label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .stat-card .value { font-size: 22px; font-weight: 600; color: var(--text); }
+  .stat-card .sub { font-size: 11px; color: var(--text-hint); margin-top: 3px; }
+  .stat-card.green .value { color: var(--green-mid); }
+  .stat-card.red .value { color: var(--red); }
+
+  /* ---- TABS ---- */
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ---- STAFF TABLE ---- */
+  .card {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .card-header {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .card-header h3 { font-size: 14px; font-weight: 600; }
+  .card-header .badge {
+    background: var(--green-pale);
+    color: var(--green-mid);
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: 20px;
+  }
+
+  table { width: 100%; border-collapse: collapse; }
+  thead th {
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+  }
+  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: #f8faf8; }
+  tbody td { padding: 10px 14px; font-size: 13px; vertical-align: middle; }
+
+  .avatar {
+    width: 32px; height: 32px; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 600; flex-shrink: 0;
+  }
+  .staff-cell { display: flex; align-items: center; gap: 9px; }
+  .staff-name { font-weight: 500; font-size: 13px; }
+  .staff-role { font-size: 11px; color: var(--text-muted); }
+
+  .pill {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 500;
+  }
+  .pill-green { background: var(--green-pale); color: var(--green-dark); }
+  .pill-red { background: var(--red-pale); color: var(--red-dark); }
+
+  .num-pos { color: var(--green-mid); font-weight: 600; }
+  .num-neg { color: var(--red); font-weight: 600; }
+
+  /* ---- FORMS ---- */
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .form-group { display: flex; flex-direction: column; gap: 5px; }
+  .form-group label { font-size: 12px; font-weight: 500; color: var(--text-muted); }
+  .form-group input, .form-group select, .form-group textarea {
+    padding: 9px 12px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border-md);
+    font-family: inherit;
+    font-size: 13px;
+    color: var(--text);
+    background: var(--surface);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .form-group input:focus, .form-group select:focus { border-color: var(--green-light); }
+
+  .meal-toggle { display: flex; gap: 8px; }
+  .meal-btn {
+    flex: 1;
+    padding: 9px;
+    border-radius: var(--radius);
+    border: 1.5px solid var(--border-md);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    background: var(--surface2);
+    color: var(--text-muted);
+    transition: all 0.15s;
+  }
+  .meal-btn:hover { border-color: var(--green-light); }
+  .meal-btn.sel-b { background: var(--green-pale); color: var(--green-dark); border-color: var(--green-light); }
+  .meal-btn.sel-l { background: var(--amber-pale); color: var(--amber-dark); border-color: var(--amber); }
+  .meal-btn.sel-d { background: var(--purple-pale); color: var(--purple-dark); border-color: var(--purple); }
+
+  .btn {
+    padding: 9px 20px;
+    border-radius: var(--radius);
+    border: none;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-primary { background: var(--green); color: #fff; }
+  .btn-primary:hover { background: var(--green-mid); }
+  .btn-blue { background: var(--blue); color: #fff; }
+  .btn-blue:hover { background: var(--blue-dark); }
+  .btn-full { width: 100%; padding: 11px; }
+  .btn-sm { padding: 6px 12px; font-size: 12px; }
+
+  .form-actions { margin-top: 16px; display: flex; justify-content: flex-end; gap: 8px; }
+
+  /* ---- MEAL DOTS ---- */
+  .dot { display: inline-flex; width: 26px; height: 26px; border-radius: 6px; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; }
+  .dot-b { background: var(--green-pale); color: var(--green-dark); }
+  .dot-l { background: var(--amber-pale); color: var(--amber-dark); }
+  .dot-d { background: var(--purple-pale); color: var(--purple-dark); }
+
+  /* ---- TOAST ---- */
+  .toast {
+    position: fixed; bottom: 24px; right: 24px;
+    background: var(--green-dark); color: #fff;
+    padding: 10px 20px; border-radius: var(--radius);
+    font-size: 13px; font-weight: 500;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+    opacity: 0; transform: translateY(10px);
+    transition: opacity 0.25s, transform 0.25s;
+    pointer-events: none; z-index: 999;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); }
+
+  /* ---- BAZAR LIST ---- */
+  .entry-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 18px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .entry-row:last-child { border-bottom: none; }
+  .entry-row .desc { font-weight: 500; }
+  .entry-row .date-txt { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+  .entry-row .amount { font-weight: 600; color: var(--green-mid); }
+
+  /* ---- RESPONSIVE ---- */
+  @media (max-width: 900px) {
+    .sidebar { width: 60px; }
+    .sidebar-brand p, .sidebar-brand h2, .sidebar-meta, .nav-item span { display: none; }
+    .nav-item { justify-content: center; padding: 10px; }
+    .main { margin-left: 60px; max-width: calc(100vw - 60px); padding: 16px; }
+    .summary-grid { grid-template-columns: repeat(2, 1fr); }
+    .form-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    .summary-grid { grid-template-columns: 1fr 1fr; }
+    .main { padding: 12px; }
+    table { font-size: 12px; }
+    thead th, tbody td { padding: 8px 10px; }
+  }
+
+  .section-divider {
+    height: 1px; background: var(--border);
+    margin: 0 18px;
+  }
+
+  .empty-state {
+    padding: 32px;
+    text-align: center;
+    color: var(--text-hint);
+    font-size: 13px;
+  }
+
+  .progress-bar-wrap {
+    background: var(--surface2);
+    border-radius: 4px;
+    height: 5px;
+    width: 100%;
+    margin-top: 4px;
+  }
+  .progress-bar {
+    height: 5px;
+    border-radius: 4px;
+    background: var(--green-light);
+  }
+
+  .inline-form { padding: 18px; }
 </style>
 </head>
 <body>
 
-<!-- TOPBAR -->
-<a href="https://goatfcbd.com" class="topbar" style="text-decoration:none;">
-<div class="top-left">
-<img src="https://i.imgur.com/LY3Bb9m.png" class="top-logo">
-<div class="top-title">GOAT FC</div>
-</div>
-<div class="home-btn"><i class="fa-solid fa-house"></i></div>
-</a>
+<div class="app-shell">
 
-<!-- HERO -->
-<div class="hero">
-<div class="hero-title">PLAYERS HUB</div>
-<div class="hero-slogan">SEARCH YOUR FAVORITE PLAYER</div>
-</div>
-
-<!-- WRAP -->
-<div class="wrap">
-
-<div class="search-wrap">
-<i class="fa-solid fa-magnifying-glass search-icon"></i>
-<input type="text" id="search" class="search-box" placeholder="Search Player Name / ID...">
-</div>
-
-<div class="stats-bar">
-<div class="stats-bar-left">Total Players: <span id="count">—</span></div>
-<div class="stats-bar-right">GOAT FC ROSTER</div>
-</div>
-
-<div id="grid" class="grid">
-<div class="loader">
-<i class="fa-solid fa-spinner fa-spin"></i>
-LOADING PLAYERS...
-</div>
-</div>
-
-<!-- ══ AVAILABLE CLUB IDs ══ -->
-<div class="club-section">
-  <div class="sec-hd">
-    <div class="sec-title"><i class="fa-solid fa-id-card" style="margin-right:6px"></i>Available Club IDs</div>
-    <div class="sec-line"></div>
-    <div class="sec-count" id="freeCount">GFC-001 → GFC-128</div>
-  </div>
-
-  <div class="club-id-box">
-    <div class="club-id-header">
-      <div class="club-id-label">
-        <i class="fa-solid fa-circle-check"></i>
-        Unregistered IDs — Available for Assignment
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <h2>BD Staff Meal</h2>
+      <p>Business Deal Project</p>
+    </div>
+    <div class="sidebar-meta">
+      <div class="meta-row"><span>Date</span><span id="sb-date">14/05/2026</span></div>
+      <div class="meta-row"><span>Rate</span><span id="sb-rate">৳57.26</span></div>
+      <div class="meta-row"><span>Bazar</span><span id="sb-bazar">৳26,425</span></div>
+      <div class="meta-row"><span>Meals</span><span id="sb-meals">461.5</span></div>
+    </div>
+    <nav class="nav">
+      <div class="nav-item active" onclick="goTab('overview')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        <span>Overview</span>
       </div>
-      <button class="club-id-refresh" id="refreshBtn" onclick="loadClubIds()">
-        <i class="fa-solid fa-rotate"></i> Refresh
-      </button>
-    </div>
+      <div class="nav-item" onclick="goTab('staff')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span>Staff</span>
+      </div>
+      <div class="nav-item" onclick="goTab('meal')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>
+        <span>Mark Meal</span>
+      </div>
+      <div class="nav-item" onclick="goTab('deposit')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        <span>Deposit</span>
+      </div>
+      <div class="nav-item" onclick="goTab('bazar')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span>Bazar</span>
+      </div>
+    </nav>
+  </aside>
 
-    <div id="clubIdContent">
-      <div class="club-id-loading">
-        <i class="fa-solid fa-circle-notch"></i> Loading ID data…
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- OVERVIEW TAB -->
+    <div id="tab-overview" class="tab-panel active">
+      <div class="top-bar">
+        <div>
+          <div class="page-title">Dashboard</div>
+          <div class="page-sub">BD Staff Meal Attendance — May 2026</div>
+        </div>
+        <div class="date-badge" id="today-badge">14/05/2026</div>
+      </div>
+
+      <div class="summary-grid" id="summary-grid"></div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3>Staff balance overview</h3>
+          <span class="badge" id="staff-count-badge">15 members</span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Staff</th>
+              <th>Deposit (৳)</th>
+              <th>Consume (৳)</th>
+              <th>Balance (৳)</th>
+              <th>Meals</th>
+              <th>Rate</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="overview-tbody"></tbody>
+        </table>
       </div>
     </div>
 
-    <div class="club-id-stats" id="clubIdStats" style="display:none;">
-      <div class="cis cis-free"><i class="fa-solid fa-circle-dot"></i> <span id="statFree">0</span> Available</div>
-      <div class="cis cis-used"><i class="fa-solid fa-circle-dot"></i> <span id="statUsed">0</span> Registered</div>
+    <!-- STAFF TAB -->
+    <div id="tab-staff" class="tab-panel">
+      <div class="top-bar">
+        <div>
+          <div class="page-title">Staff Details</div>
+          <div class="page-sub">Individual meal and payment records</div>
+        </div>
+      </div>
+      <div id="staff-cards-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;"></div>
     </div>
-  </div>
+
+    <!-- MARK MEAL TAB -->
+    <div id="tab-meal" class="tab-panel">
+      <div class="top-bar">
+        <div>
+          <div class="page-title">Mark Meal Attendance</div>
+          <div class="page-sub">Record breakfast, lunch, and dinner per staff</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div class="card">
+          <div class="card-header"><h3>Add attendance</h3></div>
+          <div class="inline-form">
+            <div class="form-grid" style="margin-bottom:14px;">
+              <div class="form-group">
+                <label>Staff member</label>
+                <select id="meal-staff"></select>
+              </div>
+              <div class="form-group">
+                <label>Date</label>
+                <input type="date" id="meal-date" />
+              </div>
+            </div>
+            <div class="form-group" style="margin-bottom:14px;">
+              <label>Meals attended</label>
+              <div class="meal-toggle">
+                <button class="meal-btn" id="btn-B" onclick="toggleMeal('B')">🌅 Breakfast</button>
+                <button class="meal-btn" id="btn-L" onclick="toggleMeal('L')">☀️ Lunch</button>
+                <button class="meal-btn" id="btn-D" onclick="toggleMeal('D')">🌙 Dinner</button>
+              </div>
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label>Count preview</label>
+              <div style="background:var(--surface2);border-radius:var(--radius);padding:9px 12px;font-size:13px;color:var(--text-muted);" id="meal-preview">Select meals above</div>
+            </div>
+            <div class="form-actions">
+              <button class="btn btn-primary btn-full" onclick="saveMeal()">Save attendance</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><h3>Recent entries</h3></div>
+          <div id="recent-entries-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEPOSIT TAB -->
+    <div id="tab-deposit" class="tab-panel">
+      <div class="top-bar">
+        <div>
+          <div class="page-title">Deposit Management</div>
+          <div class="page-sub">Add or track staff deposits</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:360px 1fr;gap:16px;">
+        <div class="card" style="height:fit-content;">
+          <div class="card-header"><h3>Add deposit</h3></div>
+          <div class="inline-form">
+            <div class="form-group" style="margin-bottom:12px;">
+              <label>Staff member</label>
+              <select id="dep-staff"></select>
+            </div>
+            <div class="form-group" style="margin-bottom:12px;">
+              <label>Amount (৳)</label>
+              <input type="number" id="dep-amount" placeholder="e.g. 1000" min="1" />
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label>Note (optional)</label>
+              <input type="text" id="dep-note" placeholder="e.g. Cash payment" />
+            </div>
+            <div class="form-actions">
+              <button class="btn btn-blue btn-full" onclick="addDeposit()">Add deposit</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><h3>Deposit summary</h3></div>
+          <table>
+            <thead>
+              <tr><th>Staff</th><th>Total deposit (৳)</th><th>Consume (৳)</th><th>Balance (৳)</th></tr>
+            </thead>
+            <tbody id="deposit-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- BAZAR TAB -->
+    <div id="tab-bazar" class="tab-panel">
+      <div class="top-bar">
+        <div>
+          <div class="page-title">Bazar (Market) Cost</div>
+          <div class="page-sub">Track daily market expenses</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:360px 1fr;gap:16px;">
+        <div class="card" style="height:fit-content;">
+          <div class="card-header"><h3>Add bazar entry</h3></div>
+          <div class="inline-form">
+            <div class="form-group" style="margin-bottom:12px;">
+              <label>Date</label>
+              <input type="date" id="bazar-date" />
+            </div>
+            <div class="form-group" style="margin-bottom:12px;">
+              <label>Total cost (৳)</label>
+              <input type="number" id="bazar-amount" placeholder="e.g. 1200" min="1" />
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label>Description</label>
+              <input type="text" id="bazar-desc" placeholder="e.g. Rice, fish, vegetables..." />
+            </div>
+            <div class="form-actions">
+              <button class="btn btn-primary btn-full" onclick="saveBazar()">Save entry</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3>Bazar history</h3>
+            <span class="badge" id="bazar-total-badge">Total: ৳26,425</span>
+          </div>
+          <div id="bazar-list"></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
 </div>
 
-</div><!-- /wrap -->
+<div class="toast" id="toast"></div>
 
 <script>
-/* ── PLAYERS ── */
-const MEMBER_CSV='https://docs.google.com/spreadsheets/d/e/2PACX-1vRqRJZskk_f4F0Xgx7eLadfVhLmjipE8bpbU9oFV5BYumJc1MKuU1LA4WjEKouVq67wEQ3-lo7VbkQ6/pub?gid=133947099&single=true&output=csv';
+const BASE_BAZAR = 26425;
+const BASE_RATE = 57.26;
 
-/* ── CLUB ID CSV ── */
-const CLUB_ID_CSV='https://docs.google.com/spreadsheets/d/e/2PACX-1vQtkoOu5zsfPZBPfMfqXfFW8v0EbYKE-O2lWWuImHqsjkclSAuNk-yoYzalwtNq5_FAu8Lavc89kpVU/pub?gid=1443111548&single=true&output=csv';
+const INITIAL_STAFF = [
+  {id:1, name:"Md. Engr. Azad", role:"PM", deposit:1164, meals:22},
+  {id:2, name:"MD. Salauddin", role:"PE", deposit:263, meals:9.5},
+  {id:3, name:"MD. Rashedul Hasan", role:"Engi.", deposit:2770, meals:40.5},
+  {id:4, name:"MD. Mnjum Ali", role:"Engi.", deposit:7475, meals:45.5},
+  {id:5, name:"MD. Hayat Ali", role:"Account", deposit:2067, meals:45.5},
+  {id:6, name:"MD. Bellal Hossain", role:"S.K.", deposit:1903, meals:45.5},
+  {id:7, name:"MD Forid Vai", role:"", deposit:1000, meals:10},
+  {id:8, name:"MD. Shafiqul", role:"Curi.", deposit:2750, meals:30.5},
+  {id:9, name:"Minhaz", role:"Curi.", deposit:2592, meals:41.5},
+  {id:10, name:"Rinku", role:"Dekko", deposit:2503, meals:45.5},
+  {id:11, name:"Habib", role:"Dekko", deposit:1281, meals:45.5},
+  {id:12, name:"Badhon", role:"Con.", deposit:2122, meals:36},
+  {id:13, name:"Rasel", role:"", deposit:1000, meals:6},
+  {id:14, name:"Rana", role:"Dekko", deposit:1000, meals:18},
+  {id:15, name:"Alamin", role:"Ele.", deposit:1452, meals:20},
+];
 
-let playersData=[];
+const BG_COLORS = ['#E1F5EE','#FAEEDA','#EEEDFE','#FAECE7','#E6F1FB','#EAF3DE','#FBEAF0','#FCEBEB','#E1F5EE','#EEEDFE','#FAEEDA','#E6F1FB','#FAECE7','#EAF3DE','#FBEAF0'];
+const FG_COLORS = ['#085041','#633806','#3C3489','#993C1D','#0C447C','#27500A','#72243E','#791F1F','#085041','#3C3489','#633806','#0C447C','#993C1D','#27500A','#72243E'];
 
-/* ── CSV helpers ── */
-function parseCSVLine(line){
-  const result=[];
-  let cur='';let inQ=false;
-  for(let i=0;i<line.length;i++){
-    const ch=line[i];
-    if(ch==='"'){inQ=!inQ;}
-    else if(ch===','&&!inQ){result.push(cur.trim());cur='';}
-    else{cur+=ch;}
-  }
-  result.push(cur.trim());
-  return result;
-}
-
-function normalize(x){return(x||'').toLowerCase();}
-function pad(n){return String(n).padStart(3,'0');}
-
-/* ── PLAYERS LOADER ── */
-async function loadPlayers(){
-  try{
-    const res=await fetch(MEMBER_CSV+'&t='+Date.now());
-    const text=await res.text();
-    const rows=text.split('\n').map(r=>r.split(','));
-    playersData=[];
-    rows.slice(1).forEach(r=>{
-      if(!r[0])return;
-      playersData.push({
-        name:(r[0]||'Unknown').trim(),
-        id:(r[1]||'N/A').trim(),
-        pic:(r[4]||'https://i.imgur.com/LY3Bb9m.png').trim()
-      });
-    });
-    document.getElementById('count').textContent=playersData.length;
-    render(playersData);
-  }catch(err){
-    document.getElementById('grid').innerHTML=`
-      <div class="loader">
-        <i class="fa-solid fa-triangle-exclamation" style="color:#ff007a;text-shadow:0 0 12px #ff007a;"></i>
-        FAILED TO LOAD
-      </div>`;
+function loadData() {
+  try {
+    return {
+      staff: JSON.parse(localStorage.getItem('bdmeal_staff')) || JSON.parse(JSON.stringify(INITIAL_STAFF)),
+      mealLog: JSON.parse(localStorage.getItem('bdmeal_log')) || [],
+      bazarLog: JSON.parse(localStorage.getItem('bdmeal_bazar')) || [],
+    };
+  } catch(e) {
+    return { staff: JSON.parse(JSON.stringify(INITIAL_STAFF)), mealLog: [], bazarLog: [] };
   }
 }
 
-function render(data){
-  if(!data.length){
-    document.getElementById('grid').innerHTML=`
-      <div class="empty">
-        <i class="fa-solid fa-user-slash"></i>
-        NO PLAYER FOUND
-      </div>`;
-    return;
-  }
-  let html='';
-  data.forEach((p,i)=>{
-    html+=`
-      <div class="card" style="animation-delay:${Math.min(i*0.04,0.5)}s" onclick="openProfile('${p.id}')">
-        <div class="card-avatar">
-          <img src="${p.pic}" alt="${p.name}" crossorigin="anonymous" onerror="this.src='https://i.imgur.com/LY3Bb9m.png'">
+function saveData() {
+  try {
+    localStorage.setItem('bdmeal_staff', JSON.stringify(state.staff));
+    localStorage.setItem('bdmeal_log', JSON.stringify(state.mealLog));
+    localStorage.setItem('bdmeal_bazar', JSON.stringify(state.bazarLog));
+  } catch(e) {}
+}
+
+let state = loadData();
+let selectedMeals = {B:false, L:false, D:false};
+
+function totalBazar() {
+  return BASE_BAZAR + state.bazarLog.reduce((s,b) => s + b.amount, 0);
+}
+function totalMeals() {
+  return state.staff.reduce((s,st) => s + st.meals, 0);
+}
+function mealRate() {
+  const tm = totalMeals();
+  return tm > 0 ? totalBazar() / tm : BASE_RATE;
+}
+function consume(st) {
+  return Math.round(st.meals * mealRate());
+}
+function balance(st) {
+  return st.deposit - consume(st);
+}
+function initials(name) {
+  return name.trim().split(/\s+/).slice(0,2).map(w=>w[0]).join('').toUpperCase();
+}
+
+function fmt(n) { return n.toLocaleString('en-BD'); }
+function fmtSgn(n) { return (n >= 0 ? '+' : '') + fmt(n); }
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+/* ---------- SIDEBAR META ---------- */
+function updateMeta() {
+  document.getElementById('sb-rate').textContent = '৳' + mealRate().toFixed(2);
+  document.getElementById('sb-bazar').textContent = '৳' + fmt(totalBazar());
+  document.getElementById('sb-meals').textContent = totalMeals().toFixed(1);
+  if (document.getElementById('bazar-total-badge'))
+    document.getElementById('bazar-total-badge').textContent = 'Total: ৳' + fmt(totalBazar());
+}
+
+/* ---------- SUMMARY GRID ---------- */
+function renderSummary() {
+  const dep = state.staff.reduce((s,st)=>s+st.deposit,0);
+  const con = state.staff.reduce((s,st)=>s+consume(st),0);
+  const bal = dep - con;
+  const neg = state.staff.filter(st=>balance(st)<0).length;
+  document.getElementById('summary-grid').innerHTML = `
+    <div class="stat-card green">
+      <div class="label">Total deposit</div>
+      <div class="value">৳${fmt(dep)}</div>
+      <div class="sub">All 15 staff</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Total consume</div>
+      <div class="value">৳${fmt(con)}</div>
+      <div class="sub">Based on meal rate</div>
+    </div>
+    <div class="stat-card ${bal>=0?'green':'red'}">
+      <div class="label">Net balance</div>
+      <div class="value">${fmtSgn(bal)}</div>
+      <div class="sub">Deposit − consume</div>
+    </div>
+    <div class="stat-card ${neg>0?'red':'green'}">
+      <div class="label">Due members</div>
+      <div class="value">${neg}</div>
+      <div class="sub">Negative balance</div>
+    </div>
+  `;
+}
+
+/* ---------- OVERVIEW TABLE ---------- */
+function renderOverviewTable() {
+  const tbody = document.getElementById('overview-tbody');
+  if (!tbody) return;
+  tbody.innerHTML = state.staff.map((st, i) => {
+    const con = consume(st);
+    const bal = balance(st);
+    const statusHtml = bal >= 0
+      ? `<span class="pill pill-green">OK</span>`
+      : `<span class="pill pill-red">Due ৳${fmt(Math.abs(bal))}</span>`;
+    return `<tr>
+      <td><div class="staff-cell">
+        <div class="avatar" style="background:${BG_COLORS[i]};color:${FG_COLORS[i]}">${initials(st.name)}</div>
+        <div><div class="staff-name">${st.name}</div><div class="staff-role">${st.role||'Staff'}</div></div>
+      </div></td>
+      <td>৳${fmt(st.deposit)}</td>
+      <td>৳${fmt(con)}</td>
+      <td class="${bal>=0?'num-pos':'num-neg'}">${fmtSgn(bal)}</td>
+      <td>${st.meals}</td>
+      <td>৳${mealRate().toFixed(2)}</td>
+      <td>${statusHtml}</td>
+    </tr>`;
+  }).join('');
+}
+
+/* ---------- STAFF CARDS ---------- */
+function renderStaffCards() {
+  const grid = document.getElementById('staff-cards-grid');
+  if (!grid) return;
+  grid.innerHTML = state.staff.map((st, i) => {
+    const con = consume(st);
+    const bal = balance(st);
+    const pct = (st.meals / (totalMeals()||1) * 100).toFixed(1);
+    const logs = state.mealLog.filter(m=>m.staffId===st.id).slice(-6);
+    const dotsHtml = logs.map(m=>`
+      <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
+        <div style="font-size:9px;color:var(--text-hint)">${m.date.slice(5)}</div>
+        <div style="display:flex;gap:2px;">
+          ${m.B?'<div class="dot dot-b">B</div>':''}
+          ${m.L?'<div class="dot dot-l">L</div>':''}
+          ${m.D?'<div class="dot dot-d">D</div>':''}
         </div>
-        <div class="card-name">${p.name}</div>
-        <div class="card-id"><i class="fa-solid fa-shield-halved"></i>${p.id}</div>
-        <div class="card-view"><i class="fa-solid fa-arrow-up-right-from-square"></i> VIEW PROFILE</div>
-      </div>`;
+      </div>`).join('');
+    return `<div class="card" style="margin-bottom:0;">
+      <div style="padding:14px 16px;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:center;">
+        <div class="avatar" style="background:${BG_COLORS[i]};color:${FG_COLORS[i]};width:40px;height:40px;font-size:13px;">${initials(st.name)}</div>
+        <div>
+          <div style="font-weight:600;font-size:13px;">${st.name}</div>
+          <div style="font-size:11px;color:var(--text-muted);">${st.role||'Staff'}</div>
+        </div>
+        <div style="margin-left:auto;text-align:right;">
+          <div class="${bal>=0?'num-pos':'num-neg'}" style="font-size:14px;">${fmtSgn(bal)}</div>
+          <div style="font-size:10px;color:var(--text-hint);">balance</div>
+        </div>
+      </div>
+      <div style="padding:12px 16px;">
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;text-align:center;">
+          <div><div style="font-size:15px;font-weight:600;">৳${fmt(st.deposit)}</div><div style="font-size:10px;color:var(--text-hint);">Deposit</div></div>
+          <div><div style="font-size:15px;font-weight:600;">৳${fmt(con)}</div><div style="font-size:10px;color:var(--text-hint);">Consume</div></div>
+          <div><div style="font-size:15px;font-weight:600;">${st.meals}</div><div style="font-size:10px;color:var(--text-hint);">Meals</div></div>
+        </div>
+        <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">Meal share: ${pct}%</div>
+        <div class="progress-bar-wrap"><div class="progress-bar" style="width:${pct}%"></div></div>
+        ${logs.length ? `<div style="margin-top:10px;font-size:10px;color:var(--text-hint);margin-bottom:5px;">Recent attendance</div><div style="display:flex;gap:6px;flex-wrap:wrap;">${dotsHtml}</div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ---------- MEAL TAB ---------- */
+function populateSelects() {
+  ['meal-staff','dep-staff'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.innerHTML = state.staff.map(st=>`<option value="${st.id}">${st.name}${st.role?' ('+st.role+')':''}</option>`).join('');
   });
-  document.getElementById('grid').innerHTML=html;
+  const today = new Date().toISOString().slice(0,10);
+  ['meal-date','bazar-date'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el && !el.value) el.value = today;
+  });
 }
 
-document.getElementById('search').addEventListener('input',function(){
-  const v=normalize(this.value);
-  const filtered=playersData.filter(p=>
-    normalize(p.name).includes(v)||normalize(p.id).includes(v)
-  );
-  render(filtered);
-});
-
-function openProfile(id){
-  window.location.href='profile/?id='+id;
+function toggleMeal(type) {
+  selectedMeals[type] = !selectedMeals[type];
+  const cls = {B:'sel-b', L:'sel-l', D:'sel-d'};
+  document.getElementById('btn-'+type).classList.toggle(cls[type], selectedMeals[type]);
+  updateMealPreview();
 }
 
-/* ── CLUB ID LOADER ── */
-async function loadClubIds(){
-  const content=document.getElementById('clubIdContent');
-  const statsEl=document.getElementById('clubIdStats');
-  const btn=document.getElementById('refreshBtn');
-  const freeCount=document.getElementById('freeCount');
+function updateMealPreview() {
+  const b = selectedMeals.B, l = selectedMeals.L, d = selectedMeals.D;
+  const count = (b?0.5:0)+(l?0.5:0)+(d?1:0);
+  const names = [b&&'Breakfast',l&&'Lunch',d&&'Dinner'].filter(Boolean);
+  const prev = document.getElementById('meal-preview');
+  if (prev) prev.textContent = count > 0 ? `${names.join(' + ')} = ${count} meal units` : 'Select meals above';
+}
 
-  content.innerHTML='<div class="club-id-loading"><i class="fa-solid fa-circle-notch"></i> Fetching sheet data…</div>';
-  statsEl.style.display='none';
-  if(btn) btn.classList.add('spinning');
+function saveMeal() {
+  const staffId = parseInt(document.getElementById('meal-staff').value);
+  const date = document.getElementById('meal-date').value;
+  if (!date) { showToast('Please select a date'); return; }
+  const count = (selectedMeals.B?0.5:0)+(selectedMeals.L?0.5:0)+(selectedMeals.D?1:0);
+  if (!count) { showToast('Select at least one meal'); return; }
 
-  try{
-    const resp=await fetch(CLUB_ID_CSV+'&_='+Date.now());
-    if(!resp.ok) throw new Error('HTTP '+resp.status);
-    const text=await resp.text();
-
-    /* find Club ID column */
-    const lines=text.trim().split('\n');
-    const headers=parseCSVLine(lines[0]).map(h=>h.replace(/"/g,'').trim().toLowerCase());
-    const clubIdCol=headers.findIndex(h=>h.includes('club id'));
-
-    const usedIds=new Set();
-    if(clubIdCol!==-1){
-      for(let i=1;i<lines.length;i++){
-        const cols=parseCSVLine(lines[i]);
-        const raw=(cols[clubIdCol]||'').replace(/"/g,'').trim().toUpperCase();
-        if(raw) usedIds.add(raw);
-      }
-    }
-
-    /* build all IDs */
-    const allIds=[];
-    for(let i=1;i<=128;i++) allIds.push('GFC-'+pad(i));
-    const freeIds=allIds.filter(id=>!usedIds.has(id));
-    const usedCount=allIds.length-freeIds.length;
-
-    freeCount.textContent=freeIds.length+' Free · '+usedCount+' Used';
-
-    if(freeIds.length===0){
-      content.innerHTML='<div class="club-id-error"><i class="fa-solid fa-circle-xmark"></i> All Club IDs (GFC-001 to GFC-128) are currently assigned.</div>';
-    } else {
-      const grid=document.createElement('div');
-      grid.className='club-id-grid';
-      freeIds.forEach(id=>{
-        const pill=document.createElement('div');
-        pill.className='club-id-pill';
-        pill.textContent=id;
-        grid.appendChild(pill);
-      });
-      content.innerHTML='';
-      content.appendChild(grid);
-    }
-
-    document.getElementById('statFree').textContent=freeIds.length;
-    document.getElementById('statUsed').textContent=usedCount;
-    statsEl.style.display='flex';
-
-  }catch(err){
-    content.innerHTML='<div class="club-id-error"><i class="fa-solid fa-triangle-exclamation"></i> Failed to load data. Check network or sheet permissions.</div>';
+  const existing = state.mealLog.findIndex(m => m.staffId===staffId && m.date===date);
+  const entry = {staffId, date, B:selectedMeals.B, L:selectedMeals.L, D:selectedMeals.D};
+  const st = state.staff.find(s=>s.id===staffId);
+  if (existing >= 0) {
+    const old = state.mealLog[existing];
+    const oldCount = (old.B?0.5:0)+(old.L?0.5:0)+(old.D?1:0);
+    state.mealLog[existing] = entry;
+    st.meals = Math.max(0, +(st.meals - oldCount + count).toFixed(1));
+  } else {
+    state.mealLog.push(entry);
+    st.meals = +(st.meals + count).toFixed(1);
   }
-
-  if(btn) btn.classList.remove('spinning');
+  saveData();
+  selectedMeals = {B:false,L:false,D:false};
+  ['B','L','D'].forEach(t => { const b=document.getElementById('btn-'+t); if(b) b.className='meal-btn'; });
+  updateMealPreview();
+  renderAll();
+  renderRecentEntries();
+  showToast('Attendance saved!');
 }
 
-/* ── INIT ── */
-loadPlayers();
-loadClubIds();
+function renderRecentEntries() {
+  const el = document.getElementById('recent-entries-list');
+  if (!el) return;
+  const recent = [...state.mealLog].reverse().slice(0,12);
+  el.innerHTML = recent.length ? recent.map(m => {
+    const st = state.staff.find(s=>s.id===m.staffId);
+    return `<div class="entry-row">
+      <div><div class="desc">${st?st.name:'?'}</div><div class="date-txt">${m.date}</div></div>
+      <div style="display:flex;gap:4px;">
+        ${m.B?'<div class="dot dot-b">B</div>':''}
+        ${m.L?'<div class="dot dot-l">L</div>':''}
+        ${m.D?'<div class="dot dot-d">D</div>':''}
+      </div>
+    </div>`;
+  }).join('') : '<div class="empty-state">No entries yet. Mark meals above.</div>';
+}
+
+/* ---------- DEPOSIT TAB ---------- */
+function addDeposit() {
+  const staffId = parseInt(document.getElementById('dep-staff').value);
+  const amount = parseFloat(document.getElementById('dep-amount').value);
+  if (!amount || amount <= 0) { showToast('Enter a valid amount'); return; }
+  const st = state.staff.find(s=>s.id===staffId);
+  st.deposit += amount;
+  saveData();
+  document.getElementById('dep-amount').value = '';
+  renderAll();
+  showToast(`৳${fmt(amount)} added for ${st.name}`);
+}
+
+function renderDepositTable() {
+  const tbody = document.getElementById('deposit-tbody');
+  if (!tbody) return;
+  tbody.innerHTML = state.staff.map((st, i) => {
+    const con = consume(st);
+    const bal = balance(st);
+    return `<tr>
+      <td><div class="staff-cell">
+        <div class="avatar" style="background:${BG_COLORS[i]};color:${FG_COLORS[i]};width:28px;height:28px;font-size:10px;">${initials(st.name)}</div>
+        <div class="staff-name">${st.name}</div>
+      </div></td>
+      <td>৳${fmt(st.deposit)}</td>
+      <td>৳${fmt(con)}</td>
+      <td class="${bal>=0?'num-pos':'num-neg'}">${fmtSgn(bal)}</td>
+    </tr>`;
+  }).join('');
+}
+
+/* ---------- BAZAR TAB ---------- */
+function saveBazar() {
+  const date = document.getElementById('bazar-date').value;
+  const amount = parseFloat(document.getElementById('bazar-amount').value);
+  const desc = document.getElementById('bazar-desc').value.trim();
+  if (!date || !amount || amount <= 0) { showToast('Fill date and amount'); return; }
+  state.bazarLog.push({date, amount, desc: desc||'Bazar'});
+  saveData();
+  document.getElementById('bazar-amount').value = '';
+  document.getElementById('bazar-desc').value = '';
+  renderAll();
+  renderBazarList();
+  showToast('Bazar entry saved!');
+}
+
+function renderBazarList() {
+  const el = document.getElementById('bazar-list');
+  if (!el) return;
+  const all = [...state.bazarLog].reverse();
+  el.innerHTML = all.length
+    ? all.map(b=>`<div class="entry-row"><div><div class="desc">${b.desc}</div><div class="date-txt">${b.date}</div></div><div class="amount">৳${fmt(b.amount)}</div></div>`).join('')
+    : '<div class="empty-state">No additional bazar entries. Base cost: ৳26,425</div>';
+  if (document.getElementById('bazar-total-badge'))
+    document.getElementById('bazar-total-badge').textContent = 'Total: ৳' + fmt(totalBazar());
+}
+
+/* ---------- NAV ---------- */
+function goTab(name) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  event.currentTarget.classList.add('active');
+  populateSelects();
+  if (name==='meal') renderRecentEntries();
+  if (name==='deposit') renderDepositTable();
+  if (name==='bazar') renderBazarList();
+  if (name==='staff') renderStaffCards();
+}
+
+/* ---------- RENDER ALL ---------- */
+function renderAll() {
+  updateMeta();
+  renderSummary();
+  renderOverviewTable();
+  renderDepositTable();
+  renderStaffCards();
+  renderBazarList();
+}
+
+/* ---------- INIT ---------- */
+const todayStr = new Date().toLocaleDateString('en-BD');
+document.getElementById('today-badge').textContent = todayStr;
+document.getElementById('sb-date').textContent = todayStr;
+populateSelects();
+renderAll();
 </script>
 </body>
 </html>

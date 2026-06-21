@@ -1,909 +1,542 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
+
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>BD Staff Meal Attendance</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>eKickHub Register</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css"/>
+
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  :root {
-    --green-dark: #085041;
-    --green-mid: #0F6E56;
-    --green: #1D9E75;
-    --green-light: #5DCAA5;
-    --green-pale: #E1F5EE;
-    --amber: #EF9F27;
-    --amber-pale: #FAEEDA;
-    --amber-dark: #633806;
-    --purple: #7F77DD;
-    --purple-pale: #EEEDFE;
-    --purple-dark: #3C3489;
-    --red: #E24B4A;
-    --red-pale: #FCEBEB;
-    --red-dark: #791F1F;
-    --blue: #378ADD;
-    --blue-pale: #E6F1FB;
-    --blue-dark: #0C447C;
-    --bg: #f4f6f4;
-    --surface: #ffffff;
-    --surface2: #f0f2f0;
-    --border: rgba(0,0,0,0.09);
-    --border-md: rgba(0,0,0,0.15);
-    --text: #1a1a1a;
-    --text-muted: #5a6a5a;
-    --text-hint: #8a9a8a;
-    --radius: 10px;
-    --radius-lg: 14px;
-    --shadow: 0 1px 4px rgba(0,0,0,0.07);
-  }
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Orbitron',sans-serif;
+}
 
-  body {
-    font-family: 'Inter', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    font-size: 14px;
-    line-height: 1.5;
-  }
+body{
 
-  /* ---- LAYOUT ---- */
-  .app-shell { display: flex; min-height: 100vh; }
+background:#020617;
+color:white;
 
-  .sidebar {
-    width: 220px;
-    background: var(--green-dark);
-    color: #fff;
-    display: flex;
-    flex-direction: column;
-    padding: 0;
-    flex-shrink: 0;
-    position: fixed;
-    top: 0; left: 0; bottom: 0;
-    z-index: 100;
-    overflow-y: auto;
-  }
+min-height:100vh;
 
-  .sidebar-brand {
-    padding: 20px 18px 16px;
-    border-bottom: 1px solid rgba(255,255,255,0.12);
-  }
-  .sidebar-brand h2 { font-size: 15px; font-weight: 600; line-height: 1.3; }
-  .sidebar-brand p { font-size: 11px; opacity: 0.65; margin-top: 3px; }
+padding:25px 15px;
 
-  .sidebar-meta { padding: 12px 18px; border-bottom: 1px solid rgba(255,255,255,0.12); }
-  .sidebar-meta .meta-row { display: flex; justify-content: space-between; font-size: 11px; padding: 3px 0; }
-  .sidebar-meta .meta-row span:first-child { opacity: 0.65; }
-  .sidebar-meta .meta-row span:last-child { font-weight: 500; }
+overflow-y:auto;
 
-  .nav { padding: 10px 10px; flex: 1; }
-  .nav-item {
-    display: flex; align-items: center; gap: 9px;
-    padding: 9px 10px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 13px;
-    color: rgba(255,255,255,0.75);
-    margin-bottom: 2px;
-    transition: background 0.15s, color 0.15s;
-  }
-  .nav-item:hover { background: rgba(255,255,255,0.1); color: #fff; }
-  .nav-item.active { background: rgba(255,255,255,0.18); color: #fff; font-weight: 500; }
-  .nav-item svg { width: 16px; height: 16px; flex-shrink: 0; }
+}
 
-  .main {
-    margin-left: 220px;
-    flex: 1;
-    min-height: 100vh;
-    padding: 24px 28px;
-    max-width: calc(100vw - 220px);
-  }
+.bg1{
+position:fixed;
+width:400px;
+height:400px;
+background:#00ffe1;
+filter:blur(180px);
+opacity:.15;
+top:-100px;
+left:-100px;
+z-index:-1;
+}
 
-  /* ---- TOP BAR ---- */
-  .top-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-  .page-title { font-size: 20px; font-weight: 600; }
-  .page-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-  .date-badge {
-    background: var(--green-pale);
-    color: var(--green-dark);
-    font-size: 12px;
-    font-weight: 500;
-    padding: 5px 12px;
-    border-radius: 20px;
-  }
+.bg2{
+position:fixed;
+width:400px;
+height:400px;
+background:#ff00c8;
+filter:blur(180px);
+opacity:.15;
+bottom:-100px;
+right:-100px;
+z-index:-1;
+}
 
-  /* ---- SUMMARY CARDS ---- */
-  .summary-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-    margin-bottom: 20px;
-  }
-  .stat-card {
-    background: var(--surface);
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
-    padding: 14px 16px;
-    box-shadow: var(--shadow);
-  }
-  .stat-card .label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
-  .stat-card .value { font-size: 22px; font-weight: 600; color: var(--text); }
-  .stat-card .sub { font-size: 11px; color: var(--text-hint); margin-top: 3px; }
-  .stat-card.green .value { color: var(--green-mid); }
-  .stat-card.red .value { color: var(--red); }
+.box{
 
-  /* ---- TABS ---- */
-  .tab-panel { display: none; }
-  .tab-panel.active { display: block; }
+width:100%;
+max-width:500px;
 
-  /* ---- STAFF TABLE ---- */
-  .card {
-    background: var(--surface);
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--border);
-    box-shadow: var(--shadow);
-    overflow: hidden;
-    margin-bottom: 20px;
-  }
-  .card-header {
-    padding: 14px 18px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .card-header h3 { font-size: 14px; font-weight: 600; }
-  .card-header .badge {
-    background: var(--green-pale);
-    color: var(--green-mid);
-    font-size: 11px;
-    font-weight: 500;
-    padding: 3px 8px;
-    border-radius: 20px;
-  }
+margin:auto;
 
-  table { width: 100%; border-collapse: collapse; }
-  thead th {
-    padding: 10px 14px;
-    text-align: left;
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.4px;
-    background: var(--surface2);
-    border-bottom: 1px solid var(--border);
-  }
-  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
-  tbody tr:last-child { border-bottom: none; }
-  tbody tr:hover { background: #f8faf8; }
-  tbody td { padding: 10px 14px; font-size: 13px; vertical-align: middle; }
+background:
+rgba(255,255,255,.05);
 
-  .avatar {
-    width: 32px; height: 32px; border-radius: 50%;
-    display: inline-flex; align-items: center; justify-content: center;
-    font-size: 11px; font-weight: 600; flex-shrink: 0;
-  }
-  .staff-cell { display: flex; align-items: center; gap: 9px; }
-  .staff-name { font-weight: 500; font-size: 13px; }
-  .staff-role { font-size: 11px; color: var(--text-muted); }
+border:
+1px solid rgba(255,255,255,.08);
 
-  .pill {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: 500;
-  }
-  .pill-green { background: var(--green-pale); color: var(--green-dark); }
-  .pill-red { background: var(--red-pale); color: var(--red-dark); }
+backdrop-filter:blur(16px);
 
-  .num-pos { color: var(--green-mid); font-weight: 600; }
-  .num-neg { color: var(--red); font-weight: 600; }
+padding:25px;
 
-  /* ---- FORMS ---- */
-  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-  .form-group { display: flex; flex-direction: column; gap: 5px; }
-  .form-group label { font-size: 12px; font-weight: 500; color: var(--text-muted); }
-  .form-group input, .form-group select, .form-group textarea {
-    padding: 9px 12px;
-    border-radius: var(--radius);
-    border: 1px solid var(--border-md);
-    font-family: inherit;
-    font-size: 13px;
-    color: var(--text);
-    background: var(--surface);
-    outline: none;
-    transition: border-color 0.15s;
-  }
-  .form-group input:focus, .form-group select:focus { border-color: var(--green-light); }
+border-radius:30px;
 
-  .meal-toggle { display: flex; gap: 8px; }
-  .meal-btn {
-    flex: 1;
-    padding: 9px;
-    border-radius: var(--radius);
-    border: 1.5px solid var(--border-md);
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    background: var(--surface2);
-    color: var(--text-muted);
-    transition: all 0.15s;
-  }
-  .meal-btn:hover { border-color: var(--green-light); }
-  .meal-btn.sel-b { background: var(--green-pale); color: var(--green-dark); border-color: var(--green-light); }
-  .meal-btn.sel-l { background: var(--amber-pale); color: var(--amber-dark); border-color: var(--amber); }
-  .meal-btn.sel-d { background: var(--purple-pale); color: var(--purple-dark); border-color: var(--purple); }
+box-shadow:
+0 0 35px rgba(0,255,225,.18),
+0 0 60px rgba(255,0,200,.10);
 
-  .btn {
-    padding: 9px 20px;
-    border-radius: var(--radius);
-    border: none;
-    font-family: inherit;
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-  .btn-primary { background: var(--green); color: #fff; }
-  .btn-primary:hover { background: var(--green-mid); }
-  .btn-blue { background: var(--blue); color: #fff; }
-  .btn-blue:hover { background: var(--blue-dark); }
-  .btn-full { width: 100%; padding: 11px; }
-  .btn-sm { padding: 6px 12px; font-size: 12px; }
+}
 
-  .form-actions { margin-top: 16px; display: flex; justify-content: flex-end; gap: 8px; }
+.logo{
 
-  /* ---- MEAL DOTS ---- */
-  .dot { display: inline-flex; width: 26px; height: 26px; border-radius: 6px; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; }
-  .dot-b { background: var(--green-pale); color: var(--green-dark); }
-  .dot-l { background: var(--amber-pale); color: var(--amber-dark); }
-  .dot-d { background: var(--purple-pale); color: var(--purple-dark); }
+font-size:40px;
+font-weight:900;
 
-  /* ---- TOAST ---- */
-  .toast {
-    position: fixed; bottom: 24px; right: 24px;
-    background: var(--green-dark); color: #fff;
-    padding: 10px 20px; border-radius: var(--radius);
-    font-size: 13px; font-weight: 500;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.18);
-    opacity: 0; transform: translateY(10px);
-    transition: opacity 0.25s, transform 0.25s;
-    pointer-events: none; z-index: 999;
-  }
-  .toast.show { opacity: 1; transform: translateY(0); }
+text-align:center;
 
-  /* ---- BAZAR LIST ---- */
-  .entry-row {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 10px 18px;
-    border-bottom: 1px solid var(--border);
-    font-size: 13px;
-  }
-  .entry-row:last-child { border-bottom: none; }
-  .entry-row .desc { font-weight: 500; }
-  .entry-row .date-txt { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
-  .entry-row .amount { font-weight: 600; color: var(--green-mid); }
+margin-bottom:8px;
 
-  /* ---- RESPONSIVE ---- */
-  @media (max-width: 900px) {
-    .sidebar { width: 60px; }
-    .sidebar-brand p, .sidebar-brand h2, .sidebar-meta, .nav-item span { display: none; }
-    .nav-item { justify-content: center; padding: 10px; }
-    .main { margin-left: 60px; max-width: calc(100vw - 60px); padding: 16px; }
-    .summary-grid { grid-template-columns: repeat(2, 1fr); }
-    .form-grid { grid-template-columns: 1fr; }
-  }
-  @media (max-width: 600px) {
-    .summary-grid { grid-template-columns: 1fr 1fr; }
-    .main { padding: 12px; }
-    table { font-size: 12px; }
-    thead th, tbody td { padding: 8px 10px; }
-  }
+background:
+linear-gradient(90deg,#00ffe1,#ff00c8);
 
-  .section-divider {
-    height: 1px; background: var(--border);
-    margin: 0 18px;
-  }
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
 
-  .empty-state {
-    padding: 32px;
-    text-align: center;
-    color: var(--text-hint);
-    font-size: 13px;
-  }
+}
 
-  .progress-bar-wrap {
-    background: var(--surface2);
-    border-radius: 4px;
-    height: 5px;
-    width: 100%;
-    margin-top: 4px;
-  }
-  .progress-bar {
-    height: 5px;
-    border-radius: 4px;
-    background: var(--green-light);
-  }
+.label{
 
-  .inline-form { padding: 18px; }
+display:block;
+
+font-size:11px;
+
+margin-bottom:7px;
+
+color:#00ffe1;
+
+font-weight:700;
+
+letter-spacing:.5px;
+
+}
+
+.sub{
+
+text-align:center;
+
+font-size:11px;
+
+color:#aaa;
+
+margin-bottom:25px;
+
+line-height:1.6;
+
+}
+
+.inputBox{
+
+margin-bottom:14px;
+
+position:relative;
+
+}
+
+.inputBox input,
+.inputBox select{
+
+width:100%;
+
+padding:13px;
+
+background:#0f172a;
+
+border:
+1px solid #1e293b;
+
+border-radius:14px;
+
+outline:none;
+
+color:white;
+
+font-size:13px;
+
+}
+
+.inputBox input[type="file"]{
+padding:10px;
+}
+
+.eye{
+
+position:absolute;
+
+right:15px;
+
+top:50%;
+
+transform:translateY(-50%);
+
+cursor:pointer;
+
+font-size:15px;
+
+}
+
+.smallText{
+
+font-size:10px;
+
+color:#9ca3af;
+
+margin-top:6px;
+
+line-height:1.5;
+
+}
+
+.btn{
+
+width:100%;
+
+padding:14px;
+
+border:none;
+
+border-radius:15px;
+
+background:
+linear-gradient(90deg,#00ffe1,#ff00c8);
+
+font-size:14px;
+
+font-weight:700;
+
+cursor:pointer;
+
+color:white;
+
+margin-top:5px;
+
+}
+
+.googleBtn{
+
+width:100%;
+
+padding:14px;
+
+border:none;
+
+border-radius:15px;
+
+background:white;
+
+font-size:13px;
+
+font-weight:700;
+
+cursor:pointer;
+
+margin-bottom:15px;
+
+}
+
+.msg{
+
+margin-top:15px;
+
+text-align:center;
+
+font-size:12px;
+
+font-weight:700;
+
+color:#00ffe1;
+
+min-height:20px;
+
+}
+
+.bottom{
+
+margin-top:20px;
+
+text-align:center;
+
+font-size:12px;
+
+color:#aaa;
+
+}
+
+.bottom a{
+
+color:#00ffe1;
+
+text-decoration:none;
+
+}
+
+#cropContainer{
+
+display:none;
+
+margin-bottom:15px;
+
+}
+
+#preview{
+
+max-width:100%;
+
+border-radius:20px;
+
+}
+
 </style>
+
 </head>
+
 <body>
 
-<div class="app-shell">
+<div class="bg1"></div>
+<div class="bg2"></div>
 
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-    <div class="sidebar-brand">
-      <h2>BD Staff Meal</h2>
-      <p>Business Deal Project</p>
-    </div>
-    <div class="sidebar-meta">
-      <div class="meta-row"><span>Date</span><span id="sb-date">14/05/2026</span></div>
-      <div class="meta-row"><span>Rate</span><span id="sb-rate">৳57.26</span></div>
-      <div class="meta-row"><span>Bazar</span><span id="sb-bazar">৳26,425</span></div>
-      <div class="meta-row"><span>Meals</span><span id="sb-meals">461.5</span></div>
-    </div>
-    <nav class="nav">
-      <div class="nav-item active" onclick="goTab('overview')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-        <span>Overview</span>
-      </div>
-      <div class="nav-item" onclick="goTab('staff')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        <span>Staff</span>
-      </div>
-      <div class="nav-item" onclick="goTab('meal')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>
-        <span>Mark Meal</span>
-      </div>
-      <div class="nav-item" onclick="goTab('deposit')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-        <span>Deposit</span>
-      </div>
-      <div class="nav-item" onclick="goTab('bazar')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-        <span>Bazar</span>
-      </div>
-    </nav>
-  </aside>
+<div class="box">
 
-  <!-- MAIN -->
-  <main class="main">
-
-    <!-- OVERVIEW TAB -->
-    <div id="tab-overview" class="tab-panel active">
-      <div class="top-bar">
-        <div>
-          <div class="page-title">Dashboard</div>
-          <div class="page-sub">BD Staff Meal Attendance — May 2026</div>
-        </div>
-        <div class="date-badge" id="today-badge">14/05/2026</div>
-      </div>
-
-      <div class="summary-grid" id="summary-grid"></div>
-
-      <div class="card">
-        <div class="card-header">
-          <h3>Staff balance overview</h3>
-          <span class="badge" id="staff-count-badge">15 members</span>
-        </div>
-        <table>
-          <thead>
-            <tr>
-              <th>Staff</th>
-              <th>Deposit (৳)</th>
-              <th>Consume (৳)</th>
-              <th>Balance (৳)</th>
-              <th>Meals</th>
-              <th>Rate</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody id="overview-tbody"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- STAFF TAB -->
-    <div id="tab-staff" class="tab-panel">
-      <div class="top-bar">
-        <div>
-          <div class="page-title">Staff Details</div>
-          <div class="page-sub">Individual meal and payment records</div>
-        </div>
-      </div>
-      <div id="staff-cards-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;"></div>
-    </div>
-
-    <!-- MARK MEAL TAB -->
-    <div id="tab-meal" class="tab-panel">
-      <div class="top-bar">
-        <div>
-          <div class="page-title">Mark Meal Attendance</div>
-          <div class="page-sub">Record breakfast, lunch, and dinner per staff</div>
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-        <div class="card">
-          <div class="card-header"><h3>Add attendance</h3></div>
-          <div class="inline-form">
-            <div class="form-grid" style="margin-bottom:14px;">
-              <div class="form-group">
-                <label>Staff member</label>
-                <select id="meal-staff"></select>
-              </div>
-              <div class="form-group">
-                <label>Date</label>
-                <input type="date" id="meal-date" />
-              </div>
-            </div>
-            <div class="form-group" style="margin-bottom:14px;">
-              <label>Meals attended</label>
-              <div class="meal-toggle">
-                <button class="meal-btn" id="btn-B" onclick="toggleMeal('B')">🌅 Breakfast</button>
-                <button class="meal-btn" id="btn-L" onclick="toggleMeal('L')">☀️ Lunch</button>
-                <button class="meal-btn" id="btn-D" onclick="toggleMeal('D')">🌙 Dinner</button>
-              </div>
-            </div>
-            <div class="form-group" style="margin-bottom:0;">
-              <label>Count preview</label>
-              <div style="background:var(--surface2);border-radius:var(--radius);padding:9px 12px;font-size:13px;color:var(--text-muted);" id="meal-preview">Select meals above</div>
-            </div>
-            <div class="form-actions">
-              <button class="btn btn-primary btn-full" onclick="saveMeal()">Save attendance</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-header"><h3>Recent entries</h3></div>
-          <div id="recent-entries-list"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- DEPOSIT TAB -->
-    <div id="tab-deposit" class="tab-panel">
-      <div class="top-bar">
-        <div>
-          <div class="page-title">Deposit Management</div>
-          <div class="page-sub">Add or track staff deposits</div>
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:360px 1fr;gap:16px;">
-        <div class="card" style="height:fit-content;">
-          <div class="card-header"><h3>Add deposit</h3></div>
-          <div class="inline-form">
-            <div class="form-group" style="margin-bottom:12px;">
-              <label>Staff member</label>
-              <select id="dep-staff"></select>
-            </div>
-            <div class="form-group" style="margin-bottom:12px;">
-              <label>Amount (৳)</label>
-              <input type="number" id="dep-amount" placeholder="e.g. 1000" min="1" />
-            </div>
-            <div class="form-group" style="margin-bottom:0;">
-              <label>Note (optional)</label>
-              <input type="text" id="dep-note" placeholder="e.g. Cash payment" />
-            </div>
-            <div class="form-actions">
-              <button class="btn btn-blue btn-full" onclick="addDeposit()">Add deposit</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-header"><h3>Deposit summary</h3></div>
-          <table>
-            <thead>
-              <tr><th>Staff</th><th>Total deposit (৳)</th><th>Consume (৳)</th><th>Balance (৳)</th></tr>
-            </thead>
-            <tbody id="deposit-tbody"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- BAZAR TAB -->
-    <div id="tab-bazar" class="tab-panel">
-      <div class="top-bar">
-        <div>
-          <div class="page-title">Bazar (Market) Cost</div>
-          <div class="page-sub">Track daily market expenses</div>
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:360px 1fr;gap:16px;">
-        <div class="card" style="height:fit-content;">
-          <div class="card-header"><h3>Add bazar entry</h3></div>
-          <div class="inline-form">
-            <div class="form-group" style="margin-bottom:12px;">
-              <label>Date</label>
-              <input type="date" id="bazar-date" />
-            </div>
-            <div class="form-group" style="margin-bottom:12px;">
-              <label>Total cost (৳)</label>
-              <input type="number" id="bazar-amount" placeholder="e.g. 1200" min="1" />
-            </div>
-            <div class="form-group" style="margin-bottom:0;">
-              <label>Description</label>
-              <input type="text" id="bazar-desc" placeholder="e.g. Rice, fish, vegetables..." />
-            </div>
-            <div class="form-actions">
-              <button class="btn btn-primary btn-full" onclick="saveBazar()">Save entry</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-header">
-            <h3>Bazar history</h3>
-            <span class="badge" id="bazar-total-badge">Total: ৳26,425</span>
-          </div>
-          <div id="bazar-list"></div>
-        </div>
-      </div>
-    </div>
-
-  </main>
+<div class="logo">
+eKickHub
 </div>
 
-<div class="toast" id="toast"></div>
+<div class="sub">
+Elite Football Gaming Platform
+</div>
 
-<script>
-const BASE_BAZAR = 26425;
-const BASE_RATE = 57.26;
+<button class="googleBtn" id="googleBtn">
+CONTINUE WITH GOOGLE
+</button>
 
-const INITIAL_STAFF = [
-  {id:1, name:"Md. Engr. Azad", role:"PM", deposit:1164, meals:22},
-  {id:2, name:"MD. Salauddin", role:"PE", deposit:263, meals:9.5},
-  {id:3, name:"MD. Rashedul Hasan", role:"Engi.", deposit:2770, meals:40.5},
-  {id:4, name:"MD. Mnjum Ali", role:"Engi.", deposit:7475, meals:45.5},
-  {id:5, name:"MD. Hayat Ali", role:"Account", deposit:2067, meals:45.5},
-  {id:6, name:"MD. Bellal Hossain", role:"S.K.", deposit:1903, meals:45.5},
-  {id:7, name:"MD Forid Vai", role:"", deposit:1000, meals:10},
-  {id:8, name:"MD. Shafiqul", role:"Curi.", deposit:2750, meals:30.5},
-  {id:9, name:"Minhaz", role:"Curi.", deposit:2592, meals:41.5},
-  {id:10, name:"Rinku", role:"Dekko", deposit:2503, meals:45.5},
-  {id:11, name:"Habib", role:"Dekko", deposit:1281, meals:45.5},
-  {id:12, name:"Badhon", role:"Con.", deposit:2122, meals:36},
-  {id:13, name:"Rasel", role:"", deposit:1000, meals:6},
-  {id:14, name:"Rana", role:"Dekko", deposit:1000, meals:18},
-  {id:15, name:"Alamin", role:"Ele.", deposit:1452, meals:20},
-];
+<div class="inputBox">
+<input type="text" id="full_name" placeholder="Full Name">
+</div>
 
-const BG_COLORS = ['#E1F5EE','#FAEEDA','#EEEDFE','#FAECE7','#E6F1FB','#EAF3DE','#FBEAF0','#FCEBEB','#E1F5EE','#EEEDFE','#FAEEDA','#E6F1FB','#FAECE7','#EAF3DE','#FBEAF0'];
-const FG_COLORS = ['#085041','#633806','#3C3489','#993C1D','#0C447C','#27500A','#72243E','#791F1F','#085041','#3C3489','#633806','#0C447C','#993C1D','#27500A','#72243E'];
+<div class="inputBox">
+<input type="email" id="email" placeholder="Email" readonly>
+</div>
 
-function loadData() {
-  try {
-    return {
-      staff: JSON.parse(localStorage.getItem('bdmeal_staff')) || JSON.parse(JSON.stringify(INITIAL_STAFF)),
-      mealLog: JSON.parse(localStorage.getItem('bdmeal_log')) || [],
-      bazarLog: JSON.parse(localStorage.getItem('bdmeal_bazar')) || [],
-    };
-  } catch(e) {
-    return { staff: JSON.parse(JSON.stringify(INITIAL_STAFF)), mealLog: [], bazarLog: [] };
-  }
-}
+<div class="inputBox">
 
-function saveData() {
-  try {
-    localStorage.setItem('bdmeal_staff', JSON.stringify(state.staff));
-    localStorage.setItem('bdmeal_log', JSON.stringify(state.mealLog));
-    localStorage.setItem('bdmeal_bazar', JSON.stringify(state.bazarLog));
-  } catch(e) {}
-}
+<input type="password" id="password" placeholder="Set Password">
 
-let state = loadData();
-let selectedMeals = {B:false, L:false, D:false};
+<span class="eye" id="eyeBtn">
+👁
+</span>
 
-function totalBazar() {
-  return BASE_BAZAR + state.bazarLog.reduce((s,b) => s + b.amount, 0);
-}
-function totalMeals() {
-  return state.staff.reduce((s,st) => s + st.meals, 0);
-}
-function mealRate() {
-  const tm = totalMeals();
-  return tm > 0 ? totalBazar() / tm : BASE_RATE;
-}
-function consume(st) {
-  return Math.round(st.meals * mealRate());
-}
-function balance(st) {
-  return st.deposit - consume(st);
-}
-function initials(name) {
-  return name.trim().split(/\s+/).slice(0,2).map(w=>w[0]).join('').toUpperCase();
-}
+</div>
 
-function fmt(n) { return n.toLocaleString('en-BD'); }
-function fmtSgn(n) { return (n >= 0 ? '+' : '') + fmt(n); }
+<div class="inputBox">
+<input type="text" id="phone" placeholder="Phone Number">
+</div>
 
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2400);
-}
+<div class="inputBox">
 
-/* ---------- SIDEBAR META ---------- */
-function updateMeta() {
-  document.getElementById('sb-rate').textContent = '৳' + mealRate().toFixed(2);
-  document.getElementById('sb-bazar').textContent = '৳' + fmt(totalBazar());
-  document.getElementById('sb-meals').textContent = totalMeals().toFixed(1);
-  if (document.getElementById('bazar-total-badge'))
-    document.getElementById('bazar-total-badge').textContent = 'Total: ৳' + fmt(totalBazar());
-}
+<label class="label">
+Birth Date (NID/BC Verified)
+</label>
 
-/* ---------- SUMMARY GRID ---------- */
-function renderSummary() {
-  const dep = state.staff.reduce((s,st)=>s+st.deposit,0);
-  const con = state.staff.reduce((s,st)=>s+consume(st),0);
-  const bal = dep - con;
-  const neg = state.staff.filter(st=>balance(st)<0).length;
-  document.getElementById('summary-grid').innerHTML = `
-    <div class="stat-card green">
-      <div class="label">Total deposit</div>
-      <div class="value">৳${fmt(dep)}</div>
-      <div class="sub">All 15 staff</div>
-    </div>
-    <div class="stat-card">
-      <div class="label">Total consume</div>
-      <div class="value">৳${fmt(con)}</div>
-      <div class="sub">Based on meal rate</div>
-    </div>
-    <div class="stat-card ${bal>=0?'green':'red'}">
-      <div class="label">Net balance</div>
-      <div class="value">${fmtSgn(bal)}</div>
-      <div class="sub">Deposit − consume</div>
-    </div>
-    <div class="stat-card ${neg>0?'red':'green'}">
-      <div class="label">Due members</div>
-      <div class="value">${neg}</div>
-      <div class="sub">Negative balance</div>
-    </div>
-  `;
-}
+<input type="date" id="dob">
 
-/* ---------- OVERVIEW TABLE ---------- */
-function renderOverviewTable() {
-  const tbody = document.getElementById('overview-tbody');
-  if (!tbody) return;
-  tbody.innerHTML = state.staff.map((st, i) => {
-    const con = consume(st);
-    const bal = balance(st);
-    const statusHtml = bal >= 0
-      ? `<span class="pill pill-green">OK</span>`
-      : `<span class="pill pill-red">Due ৳${fmt(Math.abs(bal))}</span>`;
-    return `<tr>
-      <td><div class="staff-cell">
-        <div class="avatar" style="background:${BG_COLORS[i]};color:${FG_COLORS[i]}">${initials(st.name)}</div>
-        <div><div class="staff-name">${st.name}</div><div class="staff-role">${st.role||'Staff'}</div></div>
-      </div></td>
-      <td>৳${fmt(st.deposit)}</td>
-      <td>৳${fmt(con)}</td>
-      <td class="${bal>=0?'num-pos':'num-neg'}">${fmtSgn(bal)}</td>
-      <td>${st.meals}</td>
-      <td>৳${mealRate().toFixed(2)}</td>
-      <td>${statusHtml}</td>
-    </tr>`;
-  }).join('');
-}
+</div>
 
-/* ---------- STAFF CARDS ---------- */
-function renderStaffCards() {
-  const grid = document.getElementById('staff-cards-grid');
-  if (!grid) return;
-  grid.innerHTML = state.staff.map((st, i) => {
-    const con = consume(st);
-    const bal = balance(st);
-    const pct = (st.meals / (totalMeals()||1) * 100).toFixed(1);
-    const logs = state.mealLog.filter(m=>m.staffId===st.id).slice(-6);
-    const dotsHtml = logs.map(m=>`
-      <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
-        <div style="font-size:9px;color:var(--text-hint)">${m.date.slice(5)}</div>
-        <div style="display:flex;gap:2px;">
-          ${m.B?'<div class="dot dot-b">B</div>':''}
-          ${m.L?'<div class="dot dot-l">L</div>':''}
-          ${m.D?'<div class="dot dot-d">D</div>':''}
-        </div>
-      </div>`).join('');
-    return `<div class="card" style="margin-bottom:0;">
-      <div style="padding:14px 16px;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:center;">
-        <div class="avatar" style="background:${BG_COLORS[i]};color:${FG_COLORS[i]};width:40px;height:40px;font-size:13px;">${initials(st.name)}</div>
-        <div>
-          <div style="font-weight:600;font-size:13px;">${st.name}</div>
-          <div style="font-size:11px;color:var(--text-muted);">${st.role||'Staff'}</div>
-        </div>
-        <div style="margin-left:auto;text-align:right;">
-          <div class="${bal>=0?'num-pos':'num-neg'}" style="font-size:14px;">${fmtSgn(bal)}</div>
-          <div style="font-size:10px;color:var(--text-hint);">balance</div>
-        </div>
-      </div>
-      <div style="padding:12px 16px;">
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;text-align:center;">
-          <div><div style="font-size:15px;font-weight:600;">৳${fmt(st.deposit)}</div><div style="font-size:10px;color:var(--text-hint);">Deposit</div></div>
-          <div><div style="font-size:15px;font-weight:600;">৳${fmt(con)}</div><div style="font-size:10px;color:var(--text-hint);">Consume</div></div>
-          <div><div style="font-size:15px;font-weight:600;">${st.meals}</div><div style="font-size:10px;color:var(--text-hint);">Meals</div></div>
-        </div>
-        <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">Meal share: ${pct}%</div>
-        <div class="progress-bar-wrap"><div class="progress-bar" style="width:${pct}%"></div></div>
-        ${logs.length ? `<div style="margin-top:10px;font-size:10px;color:var(--text-hint);margin-bottom:5px;">Recent attendance</div><div style="display:flex;gap:6px;flex-wrap:wrap;">${dotsHtml}</div>` : ''}
-      </div>
-    </div>`;
-  }).join('');
-}
+<div class="inputBox">
 
-/* ---------- MEAL TAB ---------- */
-function populateSelects() {
-  ['meal-staff','dep-staff'].forEach(id => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.innerHTML = state.staff.map(st=>`<option value="${st.id}">${st.name}${st.role?' ('+st.role+')':''}</option>`).join('');
-  });
-  const today = new Date().toISOString().slice(0,10);
-  ['meal-date','bazar-date'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el && !el.value) el.value = today;
-  });
-}
+<select id="gender">
 
-function toggleMeal(type) {
-  selectedMeals[type] = !selectedMeals[type];
-  const cls = {B:'sel-b', L:'sel-l', D:'sel-d'};
-  document.getElementById('btn-'+type).classList.toggle(cls[type], selectedMeals[type]);
-  updateMealPreview();
-}
+<option value="">
+Select Gender
+</option>
 
-function updateMealPreview() {
-  const b = selectedMeals.B, l = selectedMeals.L, d = selectedMeals.D;
-  const count = (b?0.5:0)+(l?0.5:0)+(d?1:0);
-  const names = [b&&'Breakfast',l&&'Lunch',d&&'Dinner'].filter(Boolean);
-  const prev = document.getElementById('meal-preview');
-  if (prev) prev.textContent = count > 0 ? `${names.join(' + ')} = ${count} meal units` : 'Select meals above';
-}
+<option>Male</option>
+<option>Female</option>
 
-function saveMeal() {
-  const staffId = parseInt(document.getElementById('meal-staff').value);
-  const date = document.getElementById('meal-date').value;
-  if (!date) { showToast('Please select a date'); return; }
-  const count = (selectedMeals.B?0.5:0)+(selectedMeals.L?0.5:0)+(selectedMeals.D?1:0);
-  if (!count) { showToast('Select at least one meal'); return; }
+</select>
 
-  const existing = state.mealLog.findIndex(m => m.staffId===staffId && m.date===date);
-  const entry = {staffId, date, B:selectedMeals.B, L:selectedMeals.L, D:selectedMeals.D};
-  const st = state.staff.find(s=>s.id===staffId);
-  if (existing >= 0) {
-    const old = state.mealLog[existing];
-    const oldCount = (old.B?0.5:0)+(old.L?0.5:0)+(old.D?1:0);
-    state.mealLog[existing] = entry;
-    st.meals = Math.max(0, +(st.meals - oldCount + count).toFixed(1));
-  } else {
-    state.mealLog.push(entry);
-    st.meals = +(st.meals + count).toFixed(1);
-  }
-  saveData();
-  selectedMeals = {B:false,L:false,D:false};
-  ['B','L','D'].forEach(t => { const b=document.getElementById('btn-'+t); if(b) b.className='meal-btn'; });
-  updateMealPreview();
-  renderAll();
-  renderRecentEntries();
-  showToast('Attendance saved!');
-}
+</div>
 
-function renderRecentEntries() {
-  const el = document.getElementById('recent-entries-list');
-  if (!el) return;
-  const recent = [...state.mealLog].reverse().slice(0,12);
-  el.innerHTML = recent.length ? recent.map(m => {
-    const st = state.staff.find(s=>s.id===m.staffId);
-    return `<div class="entry-row">
-      <div><div class="desc">${st?st.name:'?'}</div><div class="date-txt">${m.date}</div></div>
-      <div style="display:flex;gap:4px;">
-        ${m.B?'<div class="dot dot-b">B</div>':''}
-        ${m.L?'<div class="dot dot-l">L</div>':''}
-        ${m.D?'<div class="dot dot-d">D</div>':''}
-      </div>
-    </div>`;
-  }).join('') : '<div class="empty-state">No entries yet. Mark meals above.</div>';
-}
+<div class="inputBox">
 
-/* ---------- DEPOSIT TAB ---------- */
-function addDeposit() {
-  const staffId = parseInt(document.getElementById('dep-staff').value);
-  const amount = parseFloat(document.getElementById('dep-amount').value);
-  if (!amount || amount <= 0) { showToast('Enter a valid amount'); return; }
-  const st = state.staff.find(s=>s.id===staffId);
-  st.deposit += amount;
-  saveData();
-  document.getElementById('dep-amount').value = '';
-  renderAll();
-  showToast(`৳${fmt(amount)} added for ${st.name}`);
-}
+<select id="country">
 
-function renderDepositTable() {
-  const tbody = document.getElementById('deposit-tbody');
-  if (!tbody) return;
-  tbody.innerHTML = state.staff.map((st, i) => {
-    const con = consume(st);
-    const bal = balance(st);
-    return `<tr>
-      <td><div class="staff-cell">
-        <div class="avatar" style="background:${BG_COLORS[i]};color:${FG_COLORS[i]};width:28px;height:28px;font-size:10px;">${initials(st.name)}</div>
-        <div class="staff-name">${st.name}</div>
-      </div></td>
-      <td>৳${fmt(st.deposit)}</td>
-      <td>৳${fmt(con)}</td>
-      <td class="${bal>=0?'num-pos':'num-neg'}">${fmtSgn(bal)}</td>
-    </tr>`;
-  }).join('');
-}
+<option value="">
+Select Country
+</option>
 
-/* ---------- BAZAR TAB ---------- */
-function saveBazar() {
-  const date = document.getElementById('bazar-date').value;
-  const amount = parseFloat(document.getElementById('bazar-amount').value);
-  const desc = document.getElementById('bazar-desc').value.trim();
-  if (!date || !amount || amount <= 0) { showToast('Fill date and amount'); return; }
-  state.bazarLog.push({date, amount, desc: desc||'Bazar'});
-  saveData();
-  document.getElementById('bazar-amount').value = '';
-  document.getElementById('bazar-desc').value = '';
-  renderAll();
-  renderBazarList();
-  showToast('Bazar entry saved!');
-}
+<option>Afghanistan</option>
+<option>Albania</option>
+<option>Algeria</option>
+<option>Argentina</option>
+<option>Australia</option>
+<option>Austria</option>
+<option>Bangladesh</option>
+<option>Belgium</option>
+<option>Brazil</option>
+<option>Canada</option>
+<option>China</option>
+<option>Denmark</option>
+<option>Egypt</option>
+<option>England</option>
+<option>Finland</option>
+<option>France</option>
+<option>Germany</option>
+<option>Ghana</option>
+<option>Greece</option>
+<option>Hong Kong</option>
+<option>Hungary</option>
+<option>Iceland</option>
+<option>India</option>
+<option>Indonesia</option>
+<option>Iran</option>
+<option>Iraq</option>
+<option>Ireland</option>
+<option>Italy</option>
+<option>Japan</option>
+<option>Kuwait</option>
+<option>Malaysia</option>
+<option>Mexico</option>
+<option>Morocco</option>
+<option>Myanmar</option>
+<option>Nepal</option>
+<option>Netherlands</option>
+<option>New Zealand</option>
+<option>Nigeria</option>
+<option>Norway</option>
+<option>Pakistan</option>
+<option>Palestine</option>
+<option>Philippines</option>
+<option>Poland</option>
+<option>Portugal</option>
+<option>Qatar</option>
+<option>Romania</option>
+<option>Russia</option>
+<option>Saudi Arabia</option>
+<option>Scotland</option>
+<option>Singapore</option>
+<option>South Africa</option>
+<option>South Korea</option>
+<option>Spain</option>
+<option>Sri Lanka</option>
+<option>Sweden</option>
+<option>Switzerland</option>
+<option>Thailand</option>
+<option>Turkey</option>
+<option>UAE</option>
+<option>Ukraine</option>
+<option>United Kingdom</option>
+<option>United States</option>
+<option>Uruguay</option>
+<option>Vietnam</option>
 
-function renderBazarList() {
-  const el = document.getElementById('bazar-list');
-  if (!el) return;
-  const all = [...state.bazarLog].reverse();
-  el.innerHTML = all.length
-    ? all.map(b=>`<div class="entry-row"><div><div class="desc">${b.desc}</div><div class="date-txt">${b.date}</div></div><div class="amount">৳${fmt(b.amount)}</div></div>`).join('')
-    : '<div class="empty-state">No additional bazar entries. Base cost: ৳26,425</div>';
-  if (document.getElementById('bazar-total-badge'))
-    document.getElementById('bazar-total-badge').textContent = 'Total: ৳' + fmt(totalBazar());
-}
+</select>
 
-/* ---------- NAV ---------- */
-function goTab(name) {
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.getElementById('tab-'+name).classList.add('active');
-  event.currentTarget.classList.add('active');
-  populateSelects();
-  if (name==='meal') renderRecentEntries();
-  if (name==='deposit') renderDepositTable();
-  if (name==='bazar') renderBazarList();
-  if (name==='staff') renderStaffCards();
-}
+</div>
 
-/* ---------- RENDER ALL ---------- */
-function renderAll() {
-  updateMeta();
-  renderSummary();
-  renderOverviewTable();
-  renderDepositTable();
-  renderStaffCards();
-  renderBazarList();
-}
+<div class="inputBox">
+<input type="text"
+id="district"
+placeholder="State / District / City">
+</div>
 
-/* ---------- INIT ---------- */
-const todayStr = new Date().toLocaleDateString('en-BD');
-document.getElementById('today-badge').textContent = todayStr;
-document.getElementById('sb-date').textContent = todayStr;
-populateSelects();
-renderAll();
-</script>
+<div class="inputBox">
+
+<select id="position">
+
+<option value="">
+Game Position
+</option>
+
+<option>CF</option>
+<option>SS</option>
+<option>LWF</option>
+<option>RWF</option>
+<option>AMF</option>
+<option>LMF</option>
+<option>RMF</option>
+<option>CMF</option>
+<option>DMF</option>
+<option>LB</option>
+<option>RB</option>
+<option>CB</option>
+<option>GK</option>
+
+</select>
+
+</div>
+
+<div class="inputBox">
+<input type="text"
+id="konami_id"
+placeholder="ASDF-000-000-000">
+</div>
+
+<div class="inputBox">
+<input type="text"
+id="device_name"
+placeholder="Device Name">
+</div>
+
+<div class="inputBox">
+<input type="text"
+id="fb_id_url"
+placeholder="Facebook Profile URL">
+</div>
+
+<div class="inputBox">
+
+<input type="file"
+id="image"
+accept="image/*">
+
+<div class="smallText">
+
+Recommended Size: 500×500px<br>
+
+Crop your image before upload.<br>
+
+Image auto compressed for fast loading.
+
+</div>
+
+</div>
+
+<div id="cropContainer">
+
+<img id="preview">
+
+</div>
+
+<button class="btn" id="registerBtn">
+REGISTER NOW
+</button>
+
+<div class="msg" id="msg"></div>
+
+<div class="bottom">
+
+Already have account?
+
+<a href="../login/">
+Login
+</a>
+
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
+
+<script type="module"
+src="app.js"></script>
+
 </body>
 </html>

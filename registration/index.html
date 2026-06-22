@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>eKickHub Register</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css"/>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Orbitron',sans-serif;
+}
+
+body{
+
+background:#020617;
+color:white;
+
+min-height:100vh;
+
+padding:25px 15px;
+
+overflow-y:auto;
+
+}
+
+.bg1{
+position:fixed;
+width:400px;
+height:400px;
+background:#00ffe1;
+filter:blur(180px);
+opacity:.15;
+top:-100px;
+left:-100px;
+z-index:-1;
+}
+
+.bg2{
+position:fixed;
+width:400px;
+height:400px;
+background:#ff00c8;
+filter:blur(180px);
+opacity:.15;
+bottom:-100px;
+right:-100px;
+z-index:-1;
+}
+
+.box{
+
+width:100%;
+max-width:500px;
+
+margin:auto;
+
+background:
+rgba(255,255,255,.05);
+
+border:
+1px solid rgba(255,255,255,.08);
+
+backdrop-filter:blur(16px);
+
+padding:25px;
+
+border-radius:30px;
+
+box-shadow:
+0 0 35px rgba(0,255,225,.18),
+0 0 60px rgba(255,0,200,.10);
+
+}
+
+.logo{
+
+font-size:40px;
+font-weight:900;
+
+text-align:center;
+
+margin-bottom:8px;
+
+background:
+linear-gradient(90deg,#00ffe1,#ff00c8);
+
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+
+}
+
+.label{
+
+display:block;
+
+font-size:11px;
+
+margin-bottom:7px;
+
+color:#00ffe1;
+
+font-weight:700;
+
+letter-spacing:.5px;
+
+}
+
+.sub{
+
+text-align:center;
+
+font-size:11px;
+
+color:#aaa;
+
+margin-bottom:25px;
+
+line-height:1.6;
+
+}
+
+.inputBox{
+
+margin-bottom:14px;
+
+position:relative;
+
+}
+
+.inputBox input,
+.inputBox select{
+
+width:100%;
+
+padding:13px;
+
+background:#0f172a;
+
+border:
+1px solid #1e293b;
+
+border-radius:14px;
+
+outline:none;
+
+color:white;
+
+font-size:13px;
+
+}
+
+.inputBox input[type="file"]{
+padding:10px;
+}
+
+.eye{
+
+position:absolute;
+
+right:15px;
+
+top:50%;
+
+transform:translateY(-50%);
+
+cursor:pointer;
+
+font-size:15px;
+
+}
+
+.smallText{
+
+font-size:10px;
+
+color:#9ca3af;
+
+margin-top:6px;
+
+line-height:1.5;
+
+}
+
+.btn{
+
+width:100%;
+
+padding:14px;
+
+border:none;
+
+border-radius:15px;
+
+background:
+linear-gradient(90deg,#00ffe1,#ff00c8);
+
+font-size:14px;
+
+font-weight:700;
+
+cursor:pointer;
+
+color:white;
+
+margin-top:5px;
+
+}
+
+.googleBtn{
+
+width:100%;
+
+padding:14px;
+
+border:none;
+
+border-radius:15px;
+
+background:white;
+
+font-size:13px;
+
+font-weight:700;
+
+cursor:pointer;
+
+margin-bottom:15px;
+
+}
+
+.msg{
+
+margin-top:15px;
+
+text-align:center;
+
+font-size:12px;
+
+font-weight:700;
+
+color:#00ffe1;
+
+min-height:20px;
+
+}
+
+.bottom{
+
+margin-top:20px;
+
+text-align:center;
+
+font-size:12px;
+
+color:#aaa;
+
+}
+
+.bottom a{
+
+color:#00ffe1;
+
+text-decoration:none;
+
+}
+
+#cropContainer{
+
+display:none;
+
+margin-bottom:15px;
+
+}
+
+#preview{
+
+max-width:100%;
+
+border-radius:20px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="bg1"></div>
+<div class="bg2"></div>
+
+<div class="box">
+
+<div class="logo">
+eKickHub
+</div>
+
+<div class="sub">
+Elite Football Gaming Platform
+</div>
+
+<button class="googleBtn" id="googleBtn">
+CONTINUE WITH GOOGLE
+</button>
+
+<div class="inputBox">
+<input type="text" id="full_name" placeholder="Full Name">
+</div>
+
+<div class="inputBox">
+<input type="email" id="email" placeholder="Email" readonly>
+</div>
+
+<div class="inputBox">
+
+<input type="password" id="password" placeholder="Set Password">
+
+<span class="eye" id="eyeBtn">
+👁
+</span>
+
+</div>
+
+<div class="inputBox">
+<input type="text" id="phone" placeholder="Phone Number">
+</div>
+
+<div class="inputBox">
+
+<label class="label">
+Birth Date (NID/BC Verified)
+</label>
+
+<input type="date" id="dob">
+
+</div>
+
+<div class="inputBox">
+
+<select id="gender">
+
+<option value="">
+Select Gender
+</option>
+
+<option>Male</option>
+<option>Female</option>
+
+</select>
+
+</div>
+
+<div class="inputBox">
+
+<select id="country">
+
+<option value="">
+Select Country
+</option>
+
+<option>Afghanistan</option>
+<option>Albania</option>
+<option>Algeria</option>
+<option>Argentina</option>
+<option>Australia</option>
+<option>Austria</option>
+<option>Bangladesh</option>
+<option>Belgium</option>
+<option>Brazil</option>
+<option>Canada</option>
+<option>China</option>
+<option>Denmark</option>
+<option>Egypt</option>
+<option>England</option>
+<option>Finland</option>
+<option>France</option>
+<option>Germany</option>
+<option>Ghana</option>
+<option>Greece</option>
+<option>Hong Kong</option>
+<option>Hungary</option>
+<option>Iceland</option>
+<option>India</option>
+<option>Indonesia</option>
+<option>Iran</option>
+<option>Iraq</option>
+<option>Ireland</option>
+<option>Italy</option>
+<option>Japan</option>
+<option>Kuwait</option>
+<option>Malaysia</option>
+<option>Mexico</option>
+<option>Morocco</option>
+<option>Myanmar</option>
+<option>Nepal</option>
+<option>Netherlands</option>
+<option>New Zealand</option>
+<option>Nigeria</option>
+<option>Norway</option>
+<option>Pakistan</option>
+<option>Palestine</option>
+<option>Philippines</option>
+<option>Poland</option>
+<option>Portugal</option>
+<option>Qatar</option>
+<option>Romania</option>
+<option>Russia</option>
+<option>Saudi Arabia</option>
+<option>Scotland</option>
+<option>Singapore</option>
+<option>South Africa</option>
+<option>South Korea</option>
+<option>Spain</option>
+<option>Sri Lanka</option>
+<option>Sweden</option>
+<option>Switzerland</option>
+<option>Thailand</option>
+<option>Turkey</option>
+<option>UAE</option>
+<option>Ukraine</option>
+<option>United Kingdom</option>
+<option>United States</option>
+<option>Uruguay</option>
+<option>Vietnam</option>
+
+</select>
+
+</div>
+
+<div class="inputBox">
+<input type="text"
+id="district"
+placeholder="State / District / City">
+</div>
+
+<div class="inputBox">
+
+<select id="position">
+
+<option value="">
+Game Position
+</option>
+
+<option>CF</option>
+<option>SS</option>
+<option>LWF</option>
+<option>RWF</option>
+<option>AMF</option>
+<option>LMF</option>
+<option>RMF</option>
+<option>CMF</option>
+<option>DMF</option>
+<option>LB</option>
+<option>RB</option>
+<option>CB</option>
+<option>GK</option>
+
+</select>
+
+</div>
+
+<div class="inputBox">
+<input type="text"
+id="konami_id"
+placeholder="ASDF-000-000-000">
+</div>
+
+<div class="inputBox">
+<input type="text"
+id="device_name"
+placeholder="Device Name">
+</div>
+
+<div class="inputBox">
+<input type="text"
+id="fb_id_url"
+placeholder="Facebook Profile URL">
+</div>
+
+<div class="inputBox">
+
+<input type="file"
+id="image"
+accept="image/*">
+
+<div class="smallText">
+
+Recommended Size: 500×500px<br>
+
+Crop your image before upload.<br>
+
+Image auto compressed for fast loading.
+
+</div>
+
+</div>
+
+<div id="cropContainer">
+
+<img id="preview">
+
+</div>
+
+<button class="btn" id="registerBtn">
+REGISTER NOW
+</button>
+
+<div class="msg" id="msg"></div>
+
+<div class="bottom">
+
+Already have account?
+
+<a href="../login/">
+Login
+</a>
+
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
+
+<script type="module"
+src="app.js"></script>
+
+</body>
+</html>

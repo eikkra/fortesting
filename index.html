@@ -1,542 +1,448 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>eKickHub Register</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css"/>
-
-<style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Orbitron',sans-serif;
-}
-
-body{
-
-background:#020617;
-color:white;
-
-min-height:100vh;
-
-padding:25px 15px;
-
-overflow-y:auto;
-
-}
-
-.bg1{
-position:fixed;
-width:400px;
-height:400px;
-background:#00ffe1;
-filter:blur(180px);
-opacity:.15;
-top:-100px;
-left:-100px;
-z-index:-1;
-}
-
-.bg2{
-position:fixed;
-width:400px;
-height:400px;
-background:#ff00c8;
-filter:blur(180px);
-opacity:.15;
-bottom:-100px;
-right:-100px;
-z-index:-1;
-}
-
-.box{
-
-width:100%;
-max-width:500px;
-
-margin:auto;
-
-background:
-rgba(255,255,255,.05);
-
-border:
-1px solid rgba(255,255,255,.08);
-
-backdrop-filter:blur(16px);
-
-padding:25px;
-
-border-radius:30px;
-
-box-shadow:
-0 0 35px rgba(0,255,225,.18),
-0 0 60px rgba(255,0,200,.10);
-
-}
-
-.logo{
-
-font-size:40px;
-font-weight:900;
-
-text-align:center;
-
-margin-bottom:8px;
-
-background:
-linear-gradient(90deg,#00ffe1,#ff00c8);
-
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
-
-}
-
-.label{
-
-display:block;
-
-font-size:11px;
-
-margin-bottom:7px;
-
-color:#00ffe1;
-
-font-weight:700;
-
-letter-spacing:.5px;
-
-}
-
-.sub{
-
-text-align:center;
-
-font-size:11px;
-
-color:#aaa;
-
-margin-bottom:25px;
-
-line-height:1.6;
-
-}
-
-.inputBox{
-
-margin-bottom:14px;
-
-position:relative;
-
-}
-
-.inputBox input,
-.inputBox select{
-
-width:100%;
-
-padding:13px;
-
-background:#0f172a;
-
-border:
-1px solid #1e293b;
-
-border-radius:14px;
-
-outline:none;
-
-color:white;
-
-font-size:13px;
-
-}
-
-.inputBox input[type="file"]{
-padding:10px;
-}
-
-.eye{
-
-position:absolute;
-
-right:15px;
-
-top:50%;
-
-transform:translateY(-50%);
-
-cursor:pointer;
-
-font-size:15px;
-
-}
-
-.smallText{
-
-font-size:10px;
-
-color:#9ca3af;
-
-margin-top:6px;
-
-line-height:1.5;
-
-}
-
-.btn{
-
-width:100%;
-
-padding:14px;
-
-border:none;
-
-border-radius:15px;
-
-background:
-linear-gradient(90deg,#00ffe1,#ff00c8);
-
-font-size:14px;
-
-font-weight:700;
-
-cursor:pointer;
-
-color:white;
-
-margin-top:5px;
-
-}
-
-.googleBtn{
-
-width:100%;
-
-padding:14px;
-
-border:none;
-
-border-radius:15px;
-
-background:white;
-
-font-size:13px;
-
-font-weight:700;
-
-cursor:pointer;
-
-margin-bottom:15px;
-
-}
-
-.msg{
-
-margin-top:15px;
-
-text-align:center;
-
-font-size:12px;
-
-font-weight:700;
-
-color:#00ffe1;
-
-min-height:20px;
-
-}
-
-.bottom{
-
-margin-top:20px;
-
-text-align:center;
-
-font-size:12px;
-
-color:#aaa;
-
-}
-
-.bottom a{
-
-color:#00ffe1;
-
-text-decoration:none;
-
-}
-
-#cropContainer{
-
-display:none;
-
-margin-bottom:15px;
-
-}
-
-#preview{
-
-max-width:100%;
-
-border-radius:20px;
-
-}
-
-</style>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>🐦 Flappy Bird · mobile</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(145deg, #1b3b4f 0%, #2a5f7a 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      touch-action: manipulation;
+      padding: 8px;
+    }
+
+    .game-wrapper {
+      background: #87CEEB;
+      border-radius: 40px 40px 24px 24px;
+      box-shadow: 0 20px 30px rgba(0, 0, 0, 0.5), inset 0 0 0 2px rgba(255, 255, 255, 0.3);
+      padding: 16px 16px 20px;
+      max-width: 440px;
+      width: 100%;
+      transition: all 0.2s;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 360 / 500;
+      background: #6ab0d6;
+      border-radius: 28px;
+      box-shadow: inset 0 -6px 0 #3f7a9a, 0 10px 16px rgba(0,0,0,0.3);
+      touch-action: none;
+      cursor: pointer;
+      image-rendering: crisp-edges; /* retro feel */
+    }
+
+    .status-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 16px;
+      padding: 0 6px;
+      color: #f9f3e7;
+      text-shadow: 0 2px 0 #1f3a47;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+
+    .score-box {
+      background: #0b2a38;
+      padding: 6px 18px;
+      border-radius: 40px;
+      font-size: 1.3rem;
+      box-shadow: inset 0 -3px 0 #3b6c82, 0 4px 0 #0b1f28;
+      color: #f6e9b2;
+    }
+
+    .restart-btn {
+      background: #f5c542;
+      border: none;
+      padding: 8px 22px;
+      border-radius: 40px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #1d3d4f;
+      box-shadow: 0 6px 0 #a77d2a, 0 4px 8px rgba(0,0,0,0.3);
+      transition: all 0.07s ease;
+      touch-action: manipulation;
+      cursor: pointer;
+      border: 1px solid #ffe28b;
+      letter-spacing: 0.5px;
+    }
+
+    .restart-btn:active {
+      transform: translateY(5px);
+      box-shadow: 0 1px 0 #a77d2a;
+    }
+
+    .restart-btn:disabled {
+      opacity: 0.4;
+      transform: translateY(3px);
+      box-shadow: 0 3px 0 #7a5d1f;
+      pointer-events: none;
+    }
+
+    .hint {
+      text-align: center;
+      color: #d7ecfa;
+      margin-top: 8px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      text-shadow: 0 1px 2px #0e2d3b;
+    }
+
+    @media (max-width: 460px) {
+      .game-wrapper { padding: 10px; }
+      .score-box { font-size: 1rem; padding: 4px 14px; }
+      .restart-btn { font-size: 0.95rem; padding: 6px 16px; }
+    }
+  </style>
 </head>
-
 <body>
-
-<div class="bg1"></div>
-<div class="bg2"></div>
-
-<div class="box">
-
-<div class="logo">
-eKickHub
+<div class="game-wrapper">
+  <canvas id="gameCanvas" width="360" height="500"></canvas>
+  <div class="status-bar">
+    <span class="score-box">🏆 <span id="scoreDisplay">0</span></span>
+    <button class="restart-btn" id="restartButton">↻ Restart</button>
+  </div>
+  <div class="hint">👆 Tap / click to flap · avoid pipes</div>
 </div>
 
-<div class="sub">
-Elite Football Gaming Platform
-</div>
+<script>
+  (function(){
+    // ----- canvas & context -----
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const scoreSpan = document.getElementById('scoreDisplay');
 
-<button class="googleBtn" id="googleBtn">
-CONTINUE WITH GOOGLE
-</button>
+    // ----- fixed dimensions (logical) -----
+    const W = 360, H = 500;
+    canvas.width = W; canvas.height = H;
 
-<div class="inputBox">
-<input type="text" id="full_name" placeholder="Full Name">
-</div>
+    // ----- game state -----
+    let bird = {
+      x: 60,              // fixed horizontal position
+      y: 230,
+      radius: 11,
+      vy: 0,
+      gravity: 0.22,
+      lift: -5.5,
+    };
 
-<div class="inputBox">
-<input type="email" id="email" placeholder="Email" readonly>
-</div>
+    let pipes = [];
+    const PIPE_WIDTH = 32;
+    const PIPE_GAP = 110;        // gap between top & bottom pipe
+    const PIPE_SPEED = 2.3;
+    const PIPE_SPAWN_INTERVAL = 70; // frames
+    let frameCounter = 0;
+    let score = 0;
+    let gameActive = true;
+    let gameOverFlag = false;     // used to prevent multiple triggers
 
-<div class="inputBox">
+    // ----- helper functions -----
+    function resetGame() {
+      bird.y = 230;
+      bird.vy = 0;
+      pipes = [];
+      frameCounter = 0;
+      score = 0;
+      gameActive = true;
+      gameOverFlag = false;
+      scoreSpan.textContent = '0';
+    }
 
-<input type="password" id="password" placeholder="Set Password">
+    // ----- spawn a pipe pair -----
+    function spawnPipe() {
+      // random gap vertical position (top pipe bottom edge)
+      const minGapY = 70;
+      const maxGapY = H - 70 - PIPE_GAP;
+      const gapY = Math.floor(Math.random() * (maxGapY - minGapY + 1)) + minGapY;
+      pipes.push({
+        x: W,
+        gapY: gapY,
+        scored: false,    // true when bird passed this pipe
+      });
+    }
 
-<span class="eye" id="eyeBtn">
-👁
-</span>
+    // ----- collision detection (rect vs circle) -----
+    function checkCollision(pipe) {
+      // pipe rects:
+      // top pipe: (pipe.x, 0) -> (pipe.x + PIPE_WIDTH, pipe.gapY)
+      // bottom pipe: (pipe.x, pipe.gapY + PIPE_GAP) -> (pipe.x + PIPE_WIDTH, H)
+      const birdLeft = bird.x - bird.radius;
+      const birdRight = bird.x + bird.radius;
+      const birdTop = bird.y - bird.radius;
+      const birdBottom = bird.y + bird.radius;
 
-</div>
+      // top pipe collision
+      if (birdRight > pipe.x && birdLeft < pipe.x + PIPE_WIDTH) {
+        if (birdTop < pipe.gapY) {
+          return true;
+        }
+        // bottom pipe collision
+        if (birdBottom > pipe.gapY + PIPE_GAP) {
+          return true;
+        }
+      }
+      return false;
+    }
 
-<div class="inputBox">
-<input type="text" id="phone" placeholder="Phone Number">
-</div>
+    // ----- update game logic (called each frame) -----
+    function update() {
+      if (!gameActive) return;
 
-<div class="inputBox">
+      // 1. bird physics
+      bird.vy += bird.gravity;
+      bird.y += bird.vy;
 
-<label class="label">
-Birth Date (NID/BC Verified)
-</label>
+      // 2. bird bounds (top & bottom)
+      if (bird.y - bird.radius < 0) {
+        bird.y = bird.radius;
+        bird.vy = 0;
+      }
+      if (bird.y + bird.radius > H) {
+        gameActive = false;
+        gameOverFlag = true;
+        return;
+      }
 
-<input type="date" id="dob">
+      // 3. pipes movement & spawning
+      frameCounter++;
+      if (frameCounter % PIPE_SPAWN_INTERVAL === 0) {
+        spawnPipe();
+      }
 
-</div>
+      for (let i = pipes.length - 1; i >= 0; i--) {
+        const p = pipes[i];
+        p.x -= PIPE_SPEED;
 
-<div class="inputBox">
+        // score increment when bird passes pipe (and not scored yet)
+        if (!p.scored && bird.x > p.x + PIPE_WIDTH) {
+          p.scored = true;
+          score++;
+          scoreSpan.textContent = score;
+        }
 
-<select id="gender">
+        // collision detection (only if game still active)
+        if (gameActive) {
+          if (checkCollision(p)) {
+            gameActive = false;
+            gameOverFlag = true;
+            // we don't break; we still want to render all pipes for visual
+          }
+        }
 
-<option value="">
-Select Gender
-</option>
+        // remove pipes that are off screen (left side)
+        if (p.x + PIPE_WIDTH < 0) {
+          pipes.splice(i, 1);
+        }
+      }
+    }
 
-<option>Male</option>
-<option>Female</option>
+    // ----- drawing functions -----
+    function drawBackground() {
+      // sky gradient
+      const grad = ctx.createLinearGradient(0, 0, 0, H);
+      grad.addColorStop(0, '#4b9fd1');
+      grad.addColorStop(0.6, '#87CEEB');
+      grad.addColorStop(1, '#b3dff0');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, W, H);
 
-</select>
+      // clouds (simple)
+      ctx.fillStyle = 'rgba(255,255,245,0.25)';
+      for (let i = 0; i < 4; i++) {
+        let cx = (i * 97 + frameCounter * 0.2) % (W + 80) - 40;
+        let cy = 30 + i * 33 % 120;
+        ctx.beginPath();
+        ctx.ellipse(cx, cy, 34, 16, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.ellipse(cx + 26, cy - 8, 26, 16, 0, 0, Math.PI * 2);
+        ctx.fill();
+      }
 
-</div>
+      // ground stripes (retro)
+      ctx.fillStyle = '#63a67c';
+      ctx.fillRect(0, H-10, W, 12);
+      ctx.fillStyle = '#4f8a64';
+      ctx.fillRect(0, H-6, W, 6);
+      for (let i = 0; i < W; i += 22) {
+        ctx.fillStyle = '#7bbd8c';
+        ctx.fillRect((i + frameCounter * 0.6) % (W+30) - 15, H-8, 12, 4);
+      }
+    }
 
-<div class="inputBox">
+    function drawPipes() {
+      for (let p of pipes) {
+        const x = p.x;
+        const gapTop = p.gapY;
+        const gapBottom = p.gapY + PIPE_GAP;
 
-<select id="country">
+        // top pipe
+        ctx.fillStyle = '#26734a';
+        ctx.shadowColor = '#0d2f1e';
+        ctx.shadowBlur = 6;
+        ctx.fillRect(x, 0, PIPE_WIDTH, gapTop);
+        // top pipe cap
+        ctx.fillStyle = '#2a8c54';
+        ctx.fillRect(x - 4, gapTop - 14, PIPE_WIDTH + 8, 16);
+        ctx.fillStyle = '#3ba86a';
+        ctx.fillRect(x - 2, gapTop - 12, PIPE_WIDTH + 4, 10);
 
-<option value="">
-Select Country
-</option>
+        // bottom pipe
+        ctx.fillStyle = '#26734a';
+        ctx.fillRect(x, gapBottom, PIPE_WIDTH, H - gapBottom);
+        ctx.fillStyle = '#2a8c54';
+        ctx.fillRect(x - 4, gapBottom, PIPE_WIDTH + 8, 16);
+        ctx.fillStyle = '#3ba86a';
+        ctx.fillRect(x - 2, gapBottom + 2, PIPE_WIDTH + 4, 10);
+        ctx.shadowBlur = 0;
+      }
+    }
 
-<option>Afghanistan</option>
-<option>Albania</option>
-<option>Algeria</option>
-<option>Argentina</option>
-<option>Australia</option>
-<option>Austria</option>
-<option>Bangladesh</option>
-<option>Belgium</option>
-<option>Brazil</option>
-<option>Canada</option>
-<option>China</option>
-<option>Denmark</option>
-<option>Egypt</option>
-<option>England</option>
-<option>Finland</option>
-<option>France</option>
-<option>Germany</option>
-<option>Ghana</option>
-<option>Greece</option>
-<option>Hong Kong</option>
-<option>Hungary</option>
-<option>Iceland</option>
-<option>India</option>
-<option>Indonesia</option>
-<option>Iran</option>
-<option>Iraq</option>
-<option>Ireland</option>
-<option>Italy</option>
-<option>Japan</option>
-<option>Kuwait</option>
-<option>Malaysia</option>
-<option>Mexico</option>
-<option>Morocco</option>
-<option>Myanmar</option>
-<option>Nepal</option>
-<option>Netherlands</option>
-<option>New Zealand</option>
-<option>Nigeria</option>
-<option>Norway</option>
-<option>Pakistan</option>
-<option>Palestine</option>
-<option>Philippines</option>
-<option>Poland</option>
-<option>Portugal</option>
-<option>Qatar</option>
-<option>Romania</option>
-<option>Russia</option>
-<option>Saudi Arabia</option>
-<option>Scotland</option>
-<option>Singapore</option>
-<option>South Africa</option>
-<option>South Korea</option>
-<option>Spain</option>
-<option>Sri Lanka</option>
-<option>Sweden</option>
-<option>Switzerland</option>
-<option>Thailand</option>
-<option>Turkey</option>
-<option>UAE</option>
-<option>Ukraine</option>
-<option>United Kingdom</option>
-<option>United States</option>
-<option>Uruguay</option>
-<option>Vietnam</option>
+    function drawBird() {
+      const bx = bird.x, by = bird.y, r = bird.radius;
+      // shadow
+      ctx.shadowColor = 'rgba(0,0,0,0.2)';
+      ctx.shadowBlur = 12;
 
-</select>
+      // body (yellow)
+      ctx.beginPath();
+      ctx.arc(bx, by, r, 0, Math.PI * 2);
+      ctx.fillStyle = '#f7d44e';
+      ctx.fill();
+      // belly
+      ctx.beginPath();
+      ctx.arc(bx - 2, by + 3, r-4, 0, Math.PI * 2);
+      ctx.fillStyle = '#fae074';
+      ctx.fill();
 
-</div>
+      // wing
+      ctx.beginPath();
+      ctx.ellipse(bx - 5, by - 2, 9, 6, -0.2, 0, Math.PI * 2);
+      ctx.fillStyle = '#e6b83a';
+      ctx.fill();
 
-<div class="inputBox">
-<input type="text"
-id="district"
-placeholder="State / District / City">
-</div>
+      // eye
+      ctx.shadowBlur = 6;
+      ctx.beginPath();
+      ctx.arc(bx + 4, by - 4, 4, 0, Math.PI * 2);
+      ctx.fillStyle = 'white';
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(bx + 6, by - 5, 2, 0, Math.PI * 2);
+      ctx.fillStyle = '#111';
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(bx + 7, by - 6, 0.7, 0, Math.PI * 2);
+      ctx.fillStyle = 'white';
+      ctx.fill();
 
-<div class="inputBox">
+      // beak
+      ctx.beginPath();
+      ctx.moveTo(bx + 10, by);
+      ctx.lineTo(bx + 16, by + 1);
+      ctx.lineTo(bx + 10, by + 5);
+      ctx.closePath();
+      ctx.fillStyle = '#f57c2e';
+      ctx.fill();
 
-<select id="position">
+      ctx.shadowBlur = 0;
+    }
 
-<option value="">
-Game Position
-</option>
+    function drawGameOver() {
+      if (!gameOverFlag && gameActive) return;
+      ctx.fillStyle = 'rgba(0,0,0,0.4)';
+      ctx.fillRect(0, 0, W, H);
+      ctx.fillStyle = '#fbe9d2';
+      ctx.font = 'bold 28px system-ui, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.shadowColor = '#0b1f28';
+      ctx.shadowBlur = 14;
+      ctx.fillText('💀 GAME OVER', W/2, H/2 - 20);
+      ctx.font = '18px system-ui';
+      ctx.fillText('tap "Restart"', W/2, H/2 + 36);
+      ctx.shadowBlur = 0;
+    }
 
-<option>CF</option>
-<option>SS</option>
-<option>LWF</option>
-<option>RWF</option>
-<option>AMF</option>
-<option>LMF</option>
-<option>RMF</option>
-<option>CMF</option>
-<option>DMF</option>
-<option>LB</option>
-<option>RB</option>
-<option>CB</option>
-<option>GK</option>
+    function draw() {
+      drawBackground();
+      drawPipes();
+      drawBird();
+      drawGameOver();
 
-</select>
+      // tiny UI: show score on canvas too (optional)
+      ctx.fillStyle = '#faf0d7';
+      ctx.font = 'bold 17px monospace';
+      ctx.shadowColor = '#1d3d4f';
+      ctx.shadowBlur = 8;
+      ctx.fillText(`🪶 ${score}`, 16, 44);
+      ctx.shadowBlur = 0;
+    }
 
-</div>
+    // ----- game loop -----
+    function gameLoop() {
+      update();
+      draw();
+      requestAnimationFrame(gameLoop);
+    }
 
-<div class="inputBox">
-<input type="text"
-id="konami_id"
-placeholder="ASDF-000-000-000">
-</div>
+    // ----- flap (jump) -----
+    function flap() {
+      if (!gameActive) return;
+      bird.vy = bird.lift;
+      // tiny flap animation (optional: no extra effect)
+    }
 
-<div class="inputBox">
-<input type="text"
-id="device_name"
-placeholder="Device Name">
-</div>
+    // ----- event listeners (mobile + desktop) -----
+    function handleTap(e) {
+      e.preventDefault();
+      flap();
+    }
 
-<div class="inputBox">
-<input type="text"
-id="fb_id_url"
-placeholder="Facebook Profile URL">
-</div>
+    // restart
+    function restartGame() {
+      resetGame();
+      // visual feedback
+      document.getElementById('restartButton').blur();
+    }
 
-<div class="inputBox">
+    // ----- initialization & event binding -----
+    function init() {
+      resetGame();
 
-<input type="file"
-id="image"
-accept="image/*">
+      // tap / click on canvas
+      canvas.addEventListener('click', handleTap);
+      canvas.addEventListener('touchstart', handleTap, { passive: false });
 
-<div class="smallText">
+      // restart button
+      document.getElementById('restartButton').addEventListener('click', restartGame);
 
-Recommended Size: 500×500px<br>
+      // prevent context menu, scrolling
+      canvas.addEventListener('contextmenu', (e) => e.preventDefault());
 
-Crop your image before upload.<br>
+      // start loop
+      gameLoop();
+    }
 
-Image auto compressed for fast loading.
-
-</div>
-
-</div>
-
-<div id="cropContainer">
-
-<img id="preview">
-
-</div>
-
-<button class="btn" id="registerBtn">
-REGISTER NOW
-</button>
-
-<div class="msg" id="msg"></div>
-
-<div class="bottom">
-
-Already have account?
-
-<a href="../login/">
-Login
-</a>
-
-</div>
-
-</div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
-
-<script type="module"
-src="app.js"></script>
-
+    // go!
+    init();
+  })();
+</script>
 </body>
 </html>

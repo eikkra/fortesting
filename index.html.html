@@ -1,0 +1,437 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>ম্যাচডে রুলবুক</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@500;600;700;800&family=Noto+Serif+Bengali:wght@400;600&display=swap">
+<style>
+:root{
+  --paper:#eef3ef;--page:#fbfdfb;--ink:#13241c;--muted:#56695e;--line:#d6e0d9;
+  --acc:#1c6b45;--acc-s:#e3efe7;--on-acc:#fff;--cover:#0f2e21;--cover-ink:#eaf3ed;--cover-soft:#9fd3b5;
+  --or:#ee8423;--bl:#2a64c8;--ye:#e2b01c;--rd:#d3352e;--warn-bg:#fdf1e6;--warn-line:#efc79c;
+  --ui:"Anek Bangla","Noto Sans Bengali","Hind Siliguri",system-ui,sans-serif;
+  --body:"Noto Serif Bengali","Noto Sans Bengali","Hind Siliguri",serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;--paper:#0a130e;--page:#101c16;--ink:#e3ece6;--muted:#91a498;--line:#23362b;
+  --acc:#5cc08c;--acc-s:#15291e;--on-acc:#07140d;--cover:#081810;--warn-bg:#2a1d10;--warn-line:#6b4a24;
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark;--paper:#0a130e;--page:#101c16;--ink:#e3ece6;--muted:#91a498;--line:#23362b;
+  --acc:#5cc08c;--acc-s:#15291e;--on-acc:#07140d;--cover:#081810;--warn-bg:#2a1d10;--warn-line:#6b4a24;
+}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font:16px/1.75 var(--body);margin:0}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+svg{width:20px;height:20px;fill:currentColor;flex:none}
+
+/* Cover */
+.cover{background:var(--cover);color:var(--cover-ink);position:relative;overflow:hidden;padding:52px 16px 40px}
+.cover::before{content:"";position:absolute;inset:14px;border:1.5px solid rgba(255,255,255,.1);border-radius:4px}
+.cover .half{position:absolute;top:14px;bottom:14px;right:90px;width:1.5px;background:rgba(255,255,255,.1)}
+.cover .circle{position:absolute;right:-50px;top:50%;width:280px;height:280px;border:1.5px solid rgba(255,255,255,.1);border-radius:50%;transform:translateY(-50%)}
+.cover .in{max-width:1100px;margin:0 auto;position:relative;display:grid;gap:14px;padding-inline:8px}
+.eyebrow{font:600 14px/1 var(--ui);letter-spacing:.06em;color:var(--cover-soft)}
+h1{font:800 clamp(2.5rem,8vw,4.4rem)/1.05 var(--ui);margin:0;text-wrap:balance}
+.lead{margin:0;max-width:34em;color:rgba(234,243,237,.82)}
+.meta{display:flex;flex-wrap:wrap;gap:8px;font:500 14px/1 var(--ui)}
+.meta span{border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:7px 12px}
+.search{position:relative;max-width:440px;margin-top:6px}
+.search svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);opacity:.7}
+.search input{width:100%;font-family:var(--ui);background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.22);border-radius:12px;padding:12px 44px;color:var(--cover-ink)}
+.search input::placeholder{color:rgba(234,243,237,.6)}
+.search input::-webkit-search-cancel-button{display:none}
+.search button{position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:0;padding:8px;border-radius:8px;cursor:pointer;display:flex;color:var(--cover-ink)}
+
+/* Book layout */
+.book{max-width:1100px;margin:0 auto;padding:0 16px;padding-block:0 64px;display:grid;gap:20px}
+aside{display:contents}
+.toc{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);margin-inline:-16px;padding:10px 16px;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--line)}
+.toc::-webkit-scrollbar{display:none}
+.toc-h,.side-note{display:none}
+.tab{font:500 15px/1.3 var(--ui);display:flex;gap:8px;align-items:center;white-space:nowrap;padding:8px 14px;border:1px solid var(--line);background:var(--page);border-radius:999px;cursor:pointer}
+.tab .n{color:var(--muted);font-variant-numeric:tabular-nums}
+.tab[aria-selected="true"]{background:var(--acc);border-color:var(--acc);color:var(--on-acc)}
+.tab[aria-selected="true"] .n{color:inherit;opacity:.75}
+
+@media (min-width:880px){
+  .book{grid-template-columns:230px 1fr;align-items:start;gap:40px;padding-block:40px 80px}
+  aside{display:block;position:sticky;top:calc(env(safe-area-inset-top,0px) + 24px)}
+  .toc{position:static;flex-direction:column;gap:2px;margin:0;padding:0;border:0;overflow:visible;background:none}
+  .toc-h{display:block;font:700 13px/1 var(--ui);letter-spacing:.08em;color:var(--muted);padding:0 12px 12px}
+  .tab{border:0;background:none;border-radius:8px;padding:10px 12px;white-space:normal;text-align:left}
+  .tab .n{font-weight:700;min-width:1.2em}
+  .tab:hover{background:var(--acc-s)}
+  .tab[aria-selected="true"]{background:var(--acc-s);color:var(--acc);font-weight:700}
+  .side-note{display:grid;gap:8px;margin-top:20px;padding:16px;border:1px dashed var(--line);border-radius:12px;font:500 14px/1.4 var(--ui)}
+  .side-note b{font:700 17px/1.2 var(--ui);color:var(--acc)}
+  .side-note div{display:grid;gap:2px}
+}
+
+/* Page */
+.status{font:500 15px/1.4 var(--ui);color:var(--muted);margin:16px 0 0}
+.page{display:grid;gap:20px}
+.chap{background:var(--page);border:1px solid var(--line);border-radius:6px 14px 14px 6px;box-shadow:inset 16px 0 18px -18px rgba(0,0,0,.35);padding:26px 20px 22px}
+.chap.turn{animation:turn .35s ease}
+@keyframes turn{from{opacity:0;transform:translateX(10px)}}
+@media (min-width:880px){.chap{padding:44px 56px 36px}}
+.ch-head{display:flex;gap:16px;align-items:flex-end;padding-bottom:18px;border-bottom:3px double var(--line)}
+.ch-no{font:800 4.4rem/.8 var(--ui);color:var(--acc)}
+.ch-head small{font:600 14px/1 var(--ui);color:var(--muted);letter-spacing:.06em}
+.ch-head h2{font:700 clamp(1.6rem,4.5vw,2.2rem)/1.2 var(--ui);margin:4px 0 0;text-wrap:balance}
+.ch-desc{margin:14px 0 0;color:var(--muted);max-width:40em}
+.sec{padding-block:22px;border-bottom:1px solid var(--line);display:grid;gap:12px}
+.sec:last-of-type{border-bottom:0}
+.sec h3{font:700 1.2rem/1.35 var(--ui);margin:0;display:flex;gap:10px;align-items:baseline;text-wrap:balance}
+.sec h3 .no{font-size:.95rem;font-weight:600;color:var(--acc);font-variant-numeric:tabular-nums;min-width:2.2em}
+.sec ul,.sec ol{margin:0;padding:0;list-style:none;display:grid;gap:10px;max-width:42em}
+.sec ul li{position:relative;padding-left:22px}
+.sec ul li::before{content:"";position:absolute;left:3px;top:.72em;width:6px;height:6px;background:var(--acc);transform:rotate(45deg)}
+.steps{counter-reset:s}
+.steps li{counter-increment:s;position:relative;padding-left:40px;min-height:28px}
+.steps li::before{content:counter(s,bengali);position:absolute;left:0;top:.1em;width:28px;height:28px;border-radius:50%;background:var(--acc-s);color:var(--acc);font:700 15px/28px var(--ui);text-align:center}
+b{font-weight:600}
+.note{margin:0;font:500 15px/1.6 var(--ui);color:var(--muted);max-width:42em}
+.box{background:var(--warn-bg);border:1px solid var(--warn-line);border-radius:12px;padding:16px 18px;display:grid;gap:10px}
+
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font:500 15px/1.5 var(--ui);font-variant-numeric:tabular-nums}
+th{background:var(--acc-s);color:var(--acc);text-align:left;font-weight:700;padding:10px 14px;white-space:nowrap}
+td{padding:10px 14px;border-top:1px solid var(--line);vertical-align:top}
+td:first-child{font-weight:700}
+.wide table{min-width:560px}
+.wide td{white-space:nowrap}
+
+.cards{display:grid;gap:12px}
+@media (min-width:600px){.cards{grid-template-columns:repeat(2,1fr)}}
+.card{border:1px solid var(--line);border-radius:12px;padding:16px;display:grid;gap:10px;align-content:start;background:var(--paper)}
+.card h4{margin:0;font:700 1.1rem/1.2 var(--ui);display:flex;gap:10px;align-items:center}
+.chip{width:16px;height:22px;border-radius:3px;box-shadow:0 1px 3px rgba(0,0,0,.25);transform:rotate(-8deg)}
+.card .lbl{font:600 13px/1 var(--ui);color:var(--muted);letter-spacing:.04em}
+.card p{margin:0}
+.card ul{gap:6px}
+
+.flow{display:flex !important;flex-wrap:wrap;gap:8px 6px;align-items:center}
+.flow li{font:600 14px/1.3 var(--ui);border:1px solid var(--line);background:var(--acc-s);border-radius:999px;padding:6px 12px;display:flex;gap:6px}
+.flow li i{font-style:normal;color:var(--acc)}
+
+.pager{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center;margin-top:24px;padding-top:20px;border-top:1px solid var(--line)}
+.pager button{font:600 15px/1.3 var(--ui);background:none;border:1px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer;display:flex;gap:6px;align-items:center}
+.pager button:hover{background:var(--acc-s)}
+.pager .next{justify-self:end;text-align:right}
+.pager .count{font:500 14px/1 var(--ui);color:var(--muted);font-variant-numeric:tabular-nums}
+.pager .t{display:none}
+@media (min-width:600px){.pager .t{display:inline}.pager .s{display:none}}
+
+.empty{background:var(--page);border:1px solid var(--line);border-radius:14px;padding:32px 20px;text-align:center;font-family:var(--ui);color:var(--muted)}
+.colophon{grid-column:1/-1;font:500 14px/1.6 var(--ui);color:var(--muted);text-align:center}
+::highlight(hit){background:#f7d64a;color:#13241c}
+body.searching .pager{display:none}
+@media (prefers-reduced-motion:reduce){.chap.turn{animation:none}}
+</style>
+
+<header class="cover">
+  <span class="half"></span><span class="circle"></span>
+  <div class="in">
+    <div class="eyebrow">eFootball ক্লাব টুর্নামেন্ট</div>
+    <h1>ম্যাচডে রুলবুক</h1>
+    <p class="lead">খেলার আগে যা জানা দরকার, সহজ ভাষায় ছোট করে লেখা। অধ্যায় বেছে নাও, অথবা নিচে খুঁজে দেখো।</p>
+    <div class="meta"><span>৬টি অধ্যায়</span><span>সব সময় বাংলাদেশ সময় (GMT+6)</span></div>
+    <div class="search">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z"/></svg>
+      <input id="q" type="search" placeholder="নিয়ম খুঁজুন… যেমন: ব্লু কার্ড, ভিডিও, VPN" aria-label="নিয়ম খুঁজুন">
+      <button id="clear" type="button" aria-label="খোঁজা মুছুন" hidden><svg viewBox="0 0 24 24"><path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<main class="book">
+  <aside>
+    <nav class="toc" role="tablist" aria-label="অধ্যায়সমূহ"><div class="toc-h">সূচিপত্র</div></nav>
+    <div class="side-note">
+      <div><b>১০ মিনিট</b>ম্যাচ শেষে ভিডিও দেওয়ার সময়</div>
+      <div><b>১৫ মিনিট</b>ভিডিও না দিলে অভিযোগের সময়</div>
+      <div><b>৯০ দিন</b>একটি ব্লু কার্ডের মেয়াদ</div>
+      <div><b>২৪ ঘণ্টা</b>রেফারির সিদ্ধান্তে আপিলের সময়</div>
+    </div>
+  </aside>
+  <div>
+    <p class="status" id="status" hidden></p>
+    <div class="page" id="page"></div>
+  </div>
+  <p class="colophon">নিয়ম না জানা কোনো অজুহাত নয়। খেলার আগে পুরো রুলবুক একবার পড়ে নাও।</p>
+</main>
+
+<script>
+const BOOK = [
+{t:'ম্যাচ খেলা', d:'ম্যাচের সেটিং, ডিসকানেক্ট, ব্যাকপাস আর Smart Assist। মাঠে নামার আগে এটুকু জানতেই হবে।', s:[
+  {h:'ম্যাচ সেটিংস', l:[
+    'সময় <b>৮ মিনিট</b>, কন্ডিশন <b>Normal</b>।',
+    'ফিক্সচারে যাকে <b>Key Player</b> বলা আছে, রুম কে বানাবে সেটা সে ঠিক করবে।']},
+  {h:'ল্যাগ বা ডিসকানেক্ট হলে', l:[
+    'ল্যাগ/স্লো হলে আগে <b>স্ক্রিন রেকর্ড চালু</b> করো, তারপর Pause দিয়ে ডিসকানেক্ট করো। প্রমাণ ছাড়া ডিসকানেক্ট করলে <b>ব্লু কার্ড</b>।',
+    'রিম্যাচের রুম বানাবে যার স্ক্রিনে <b>Win</b> দেখাচ্ছে। বল কার পায়ে ছিল সেটা দেখা হবে না।',
+    'ডিসকানেক্টের পর <b>১০ মিনিটের মধ্যে</b> রিম্যাচ শুরু করতে হবে।',
+    'স্কোরবোর্ডে গোল উঠলে বা বল লাইন পার হওয়ার স্ক্রিনশট/রেকর্ড থাকলে গোল গণ্য হবে। রিম্যাচের সময় শেষ হওয়ার পরের গোল গণ্য নয়।',
+    'নিশ্চিত সুযোগে (১v১, ফাঁকায় শট, পেনাল্টি, বিপজ্জনক ফ্রি-কিক) প্রতিপক্ষ ডিসকানেক্ট করলে গোলের সিদ্ধান্ত <b>কমিটি</b> দেবে। “কিপার ঠেকাত” যুক্তি চলবে না।',
+    'প্রতিপক্ষ বাকি সময় খেলতে না চাইলে বা না পারলে, বাকি মিনিটের জন্য রেশিও অনুযায়ী গোল ধরা হবে।',
+    'বারবার ডিসকানেক্ট করলে প্রতিবার ব্লু কার্ড দেওয়া যায়, তবে রিম্যাচ শুরুর আগেই দিতে হবে।']},
+  {h:'রেড কার্ড খেয়ে ডিসকানেক্ট', l:[
+    'গেমে রেড কার্ড পেয়ে ডিসকানেক্ট করলে প্রতিপক্ষ পাবে <b>প্রতিটি রেড কার্ডে ১ গোল</b> + <b>১ গোল টাইম বোনাস</b>।',
+    'দ্বিতীয়ার্ধে হলে টাইম বোনাস নেই, শুধু রেড কার্ডের গোল।',
+    'ডিসকানেক্টের পর রেড কার্ড পাওয়া দলের স্ক্রিনে Win দেখালে রিম্যাচে কার্ডের কোনো প্রভাব থাকবে না।']},
+  {h:'ব্যাকপাস', l:[
+    'সময় নষ্ট করতে ব্যাকপাস খেলা <b>নিষেধ</b>।',
+    'ভিডিও প্রমাণ থাকলে যতক্ষণ ব্যাকপাস খেলেছে তার <b>৩ গুণ বা বেশি সময়</b> যোগ করে রিম্যাচ হবে, সাথে ইয়েলো কার্ড হতে পারে।']},
+  {h:'Smart Assist', tb:{c:['দল','Smart Assist'], r:[
+    ['Main (Apex, Elite, Foundation)','OFF'],['Academy','OFF'],['Division, District, College, University','OFF'],['Solo টুর্নামেন্ট','OFF'],['Youth','ON বা OFF, যেটা খুশি']]}, l:[
+    'ম্যাচে প্রতিটি দল নিজের নিয়ম মানবে। যেমন Main বনাম Youth হলে Main OFF, Youth ইচ্ছামতো।',
+    'Youth ছাড়া সবাইকে ভিডিওতে <b>Smart Assist সেটিং দেখাতে</b> হবে।',
+    'নিষেধ থাকার পরও ON রেখে খেললে, প্রমাণ মিললে সেই প্লেয়ার <b>অটো লস + রেড কার্ড</b>।']}
+]},
+{t:'সময় ও রুম', d:'কখন মেসেজ দিতে হবে, কখন খেলতে হবে, রুম কে বানাবে আর না খেললে ফল কী হবে।', s:[
+  {h:'ক্যাটাগরি অনুযায়ী সময়', wide:true, tb:{c:['ক্যাটাগরি','রেসপন্স','খেলা শুরু','সাব/সোয়াপ ডেডলাইন'], r:[
+    ['স্টার','রাত ১০:২০–১০:৩০','১০:৩০–১০:৩৫','১০:২০ · জরুরি ১০:৩০'],
+    ['মিড নাইট','রাত ১১:২০–১১:৩০','১১:৩০–১১:৩৫','১১:২০ · জরুরি ১১:৩০'],
+    ['নন-স্টার','রাত ১২:২০–১২:৩০','১২:৩০–১২:৩৫','১২:২০ · জরুরি ১২:৩০'],
+    ['লেট নাইট','রাত ১২:৫০–১:০০','১:০০–১:০৫','১২:৫০ · জরুরি ১:০০'],
+    ['স্পেশাল ম্যাচডে','ফিক্সচারে দেওয়া','রেসপন্সের পর ৫ মিনিট','রেসপন্সের আগে · জরুরি খেলার আগে']]}, l:[
+    'দুজন রাজি থাকলে ডেডলাইনের আগে <b>যেকোনো সময়</b> খেলে ফেলা যায়।',
+    'সময় পেরিয়ে দেরিতে খেলতে রাজি হলে দুজনই সাথে সাথে <b>পরের ক্যাটাগরিতে</b> চলে যাবে (স্টার → মিড নাইট → নন-স্টার → লেট নাইট)। কানেকশন সমস্যা এর বাইরে।']},
+  {h:'রেসপন্স কাকে বলে', l:[
+    'প্রতিপক্ষকে <b>মেনশন</b> করা, তার মেসেজে <b>রিপ্লাই</b> দেওয়া, অথবা সে গ্রুপে না থাকলে তাদের রেফারি/ক্যাপ্টেনকে মেনশন করে জানানো।',
+    'রেসপন্স ধরা হবে না: মেনশন ছাড়া “@oppo”, “amar oppo ke?”, “oppo vai achen?”']},
+  {h:'না খেললে ফল কী', l:[
+    'দুজনই রেসপন্স করেনি → <b>অটো ড্র</b>। একজন করেনি → সে <b>অটো লস</b>।',
+    'রেসপন্স টাইমের আগে গ্রুপে না থাকলে অটো উইন পাবে না (জরুরি সাব ছাড়া)।',
+    'প্রতিপক্ষ গ্রুপে নেই? সময়ের মধ্যে তাদের ক্যাপ্টেনকে মেনশন করে জানাও, নইলে অটো উইন নেই। খেলা না হলে অটো ড্র।',
+    'নিজে প্রতিপক্ষকে Win দিলে সে Win পাবে, ভিডিও লাগবে না।',
+    'সব অটো উইন <b>১-০</b> ধরা হয়।',
+    'অভিযোগ বক্স/VAR চাইলে এসব নিয়মের বাইরে সিদ্ধান্ত দিতে পারে। তাদের কথাই চূড়ান্ত।']},
+  {h:'রুম বানানো', o:[
+    'খেলার সময় শুরু হলে Key Player নিজে রুম বানিয়ে কোড দেবে, অথবা Non-VPN প্লেয়ারকে রুম বানাতে বলবে। কোনোটাই না করলে <b>VPN প্লেয়ার অটো লস</b>।',
+    'Non-VPN প্লেয়ারকে বলা হলে <b>৫ মিনিটের মধ্যে</b> রুম বানাতে হবে, নইলে সে অটো লস।',
+    'কোড পাওয়ার <b>৫ মিনিটের মধ্যে</b> রুমে না ঢুকলে সে অটো লস।']},
+  {h:'VPN দিয়ে কানেক্ট না হলে', o:[
+    'দুজনই ফোনের Recent Apps ক্লিয়ার করো। গেম ব্যাকগ্রাউন্ডে রেখো না।',
+    'VPN প্লেয়ার VPN চালু করবে। দুজনই স্ক্রিন রেকর্ড চালু করে গেমে ঢুকবে।',
+    'প্রথমে VPN প্লেয়ার রুম বানিয়ে একবার চেষ্টা করবে। না হলে Non-VPN প্লেয়ার একবার।',
+    'কানেক্ট হলে খেলো। না হলে দুজনই রেকর্ড করা ভিডিও গ্রুপে দাও।',
+    'ভিডিও ঠিক থাকলে ডেডলাইনের মধ্যে VPN প্লেয়ারকে সাব/সোয়াপ করতে হবে। ডেডলাইন পেরিয়ে গেলে ভিডিওর পর ১০ মিনিট সময়। দরকারে Non-VPN প্লেয়ারও সাব করা যায়।'],
+   n:'সময়মতো সাব না দিলে অটো লস। Non-VPN প্লেয়ার রেকর্ড দিতে না চাইলে সে অটো লস।'},
+  {h:'সুপার ম্যাচ', l:[
+    'ব্যান বা রেড কার্ড পাওয়া ছাড়া দলের যে কেউ খেলতে পারবে, সাব-আউট হওয়া প্লেয়ারও। তবে নিজের ভাগের দলের (Main/Academy/#A/#B) হয়েই।',
+    'কে খেলবে তা <b>রেসপন্স টাইমের আগে</b> জানাতে হবে। এখানে সাব/সোয়াপ নেই।',
+    'গ্রুপ স্টেজ: পরের দিন, রেসপন্স রাত ১২:২০–১২:৩০, খেলা ১২:৩০–১২:৩৫।',
+    'Round of 16 থেকে: একই দিন, রেসপন্স রাত ১২:৫০–১:০০, খেলা ১:০০–১:০৫।',
+    'VPN কে নেবে তা ম্যাচডে টেক্সটে থাকবে। না থাকলে র‍্যান্ডম ড্র।']}
+]},
+{t:'ভিডিও প্রমাণ', d:'কে ভিডিও দেবে, ভিডিওতে কী থাকবে, কতক্ষণের মধ্যে দিতে হবে আর না দিলে কী হবে।', s:[
+  {h:'কাকে ভিডিও দিতে হবে', l:[
+    'জিতলে: <b>জয়ী প্লেয়ার</b>।',
+    'ড্র হলে: <b>দুজনই</b>।',
+    'ডিসকানেক্টে: যে এগিয়ে ছিল কিন্তু তার স্ক্রিনে লস বা প্রতিপক্ষের Win দেখাচ্ছে। না দিলে তার লিডের গোল বাতিল।',
+    'ডিসকানেক্টে স্কোর সমান বা পিছিয়ে থাকলে শুধু ল্যাগ/স্লোর প্রমাণ লাগবে।']},
+  {h:'ভিডিওতে যা দেখা যেতে হবে', flow:['ম্যাচ / রেজাল্ট / ডিসকানেক্ট পেইজ','রুম আইডি','Konami User ID','ফোনের মডেল','Smart Assist সেটিং'],
+   n:'সব তথ্য একই ভিডিওতে পরিষ্কারভাবে থাকতে হবে। অন্য ফোন দিয়ে রেকর্ড করা যায়।'},
+  {h:'সময়সীমা', o:[
+    'ম্যাচ শেষের <b>১০ মিনিটের মধ্যে</b> ভিডিও বা “সেন্ডিং” অবস্থার স্ক্রিনশট দাও।',
+    'না দিলে প্রতিপক্ষ <b>১৫ মিনিটের মধ্যে</b> গ্রুপে অভিযোগ করতে পারবে। পরে অভিযোগ চলবে না, ফল যা আছে তাই থাকবে।',
+    'সময়মতো অভিযোগ হলে <b>রিম্যাচ</b>।']},
+  {h:'ভিডিও পাঠানোর নিয়ম', l:[
+    'যে ফেসবুক আইডি দিয়ে খেলেছ, সেখান থেকেই পাঠাও। <b>ফরোয়ার্ড চলবে না</b>। দরকারে ড্রাইভ লিংক দাও।',
+    'খেলার আগে চার্জ, স্টোরেজ, ডাটা আর রেকর্ড করার জায়গা নিজেই নিশ্চিত করো। কোনো অজুহাত চলবে না।']},
+  {h:'ড্র ম্যাচে ভিডিও না দিলে', l:[
+    'দুজনই ব্যর্থ → ম্যাচ <b>ড্র</b> থাকবে।',
+    'একজন ব্যর্থ আর প্রতিপক্ষ সময়মতো অভিযোগ করলে → <b>০-০ থেকে নতুন রিম্যাচ</b>, ঠিকভাবে ভিডিও দেওয়া প্লেয়ার <b>১ গোল বোনাস</b> পাবে।',
+    'বোনাস পাওয়া প্লেয়ার রিম্যাচে হারলে (মোট ফল ড্র) তাকে আর ভিডিও দিতে হবে না।',
+    'ড্রতে ভিডিও না দিলে বা ভুল দিলে <b>ব্লু কার্ড</b>।']},
+  {h:'নিয়মের বাইরে রিম্যাচ', w:true, l:[
+    'ভিডিও না দিয়ে রিম্যাচের প্রস্তাব, অথবা দুজনই ভিডিও দেওয়ার (বা দুজনই না দেওয়ার) পর রিম্যাচ করা নিষেধ।',
+    'প্রস্তাব দিলে <b>ইয়েলো কার্ড</b>। খেলে ফেললে <b>দুজনেরই রেড কার্ড</b>, রিম্যাচের ফল বাতিল, আগের ফল বহাল।']},
+  {h:'রিম্যাচে সময় ও স্কোর', l:[
+    'পুরো ম্যাচ শেষে ভিডিও সমস্যা → <b>০ মিনিট, ০-০</b> থেকে নতুন ম্যাচ।',
+    'মাঝপথে সমস্যা → যে অংশের ভিডিও নেই শুধু সেই সময় আর স্কোর বাদ দিয়ে বাকিটা আবার খেলা হবে।']}
+]},
+{t:'কার্ড ও শাস্তি', d:'চার রঙের কার্ড কখন আসে, কী শাস্তি হয়, আর কোন ভুলে ব্যান হতে পারে।', s:[
+  {h:'চার রঙের কার্ড', cards:[
+    {c:'--or', n:'অরেঞ্জ কার্ড', why:'খারাপ আচরণ, রেফারি/এডমিনের বিবেচনায়।', p:['ওই ম্যাচডে গ্রুপ ছাড়তে হবে।','ম্যাচ বাকি থাকলে সাব দিতে হবে, ডেডলাইনের পরেও।','খেলা হয়ে গেলে ফল বদলাবে না। পরের ম্যাচডেতে খেলা যাবে।']},
+    {c:'--bl', n:'ব্লু কার্ড', why:'প্রমাণ ছাড়া ডিসকানেক্ট, অথবা ড্রতে ভিডিও না দেওয়া বা ভুল দেওয়া। দিতে পারে রেফারি বা প্রতিপক্ষ ক্যাপ্টেন।', p:['একই ম্যাচে ৩টি → ম্যাচ লস।','৯০ দিনে ৭টি → ৭ দিন সাসপেন্ড।','প্রতিটি কার্ড ৯০ দিন পর গণনা থেকে বাদ।']},
+    {c:'--ye', n:'ইয়েলো কার্ড', why:'নিয়ম ভাঙা বা আচরণের সমস্যা, যেমন ব্যাকপাস বা নিয়মের বাইরে রিম্যাচের প্রস্তাব।', p:['একই ম্যাচডেতে ২টি → রেড কার্ড।','ফল জমার পর ১ মাস কার্যকর। এর মধ্যে আবার পেলে রেড।']},
+    {c:'--rd', n:'রেড কার্ড', why:'গুরুতর নিয়মভঙ্গ, যেমন নিষেধ থাকা Smart Assist বা নিয়মের বাইরে রিম্যাচ খেলা।', p:['ফল জমার আগে পেলে → অটো লস।','ফল জমার পরে পেলে ফল বদলাবে না।','৭ দিন খেলা বন্ধ।']}]},
+  {h:'কার্ড কীভাবে দেওয়া হয়', l:[
+    'আচরণের কার্ড দেয় <b>ম্যাচ রেফারি বা এডমিন</b>, পরিস্থিতি দেখে।',
+    'আগে সতর্ক না করেও কার্ড দেওয়া যায়। দরকারে কার্ডের রঙ বাড়ানো বা শাস্তি মাফও হতে পারে।',
+    'বন্ধুদের মধ্যে হালকা কথায় কিছুটা ছাড় থাকতে পারে, তবে সেটা পরিস্থিতির ওপর নির্ভর করে।']},
+  {h:'যে ভুলে ব্যান হয়', tb:{c:['অপরাধ','শাস্তি'], r:[
+    ['স্ট্যাট নিয়ে কারচুপি','১৫ দিন থেকে ৬ মাস'],
+    ['গ্রুপে খারাপ আচরণ','৩ দিন থেকে স্থায়ী'],
+    ['প্রক্সি খেলা','৬ মাস থেকে স্থায়ী; সহযোগী ৩ মাস থেকে স্থায়ী'],
+    ['প্রক্সিতে ক্লাব ম্যানেজমেন্ট জড়িত','ক্লাব সব চলমান টুর্নামেন্ট থেকে বাদ'],
+    ['সোশ্যাল মিডিয়ায় বিরূপ মন্তব্য','কঠোর শাস্তি; অভিযোগ অফিসিয়াল পেইজের ইনবক্সে']]},
+   n:'স্থায়ী ব্যান মানে সব ইভেন্ট, গ্রুপ, পেইজ আর চ্যানেল থেকে বাদ।'}
+]},
+{t:'প্লেয়ার ও টিম', d:'ইনফো ঠিক রাখা, পরিচয় যাচাই, Youth টিমের সীমা আর ওয়াকওভার।', s:[
+  {h:'প্লেয়ার ইনফো', l:[
+    'ইউজার আইডি বা ডিভাইস বদলানোর শেষ সময় <b>বিকাল ৫:৫৯</b>। ফিক্সচার তৈরির সময় ইনফো কার্ড লক হয়, তাই পরে বদলালে কাজ নাও হতে পারে।',
+    'নাম বা ফেসবুক লিংক বদলাতে এডমিন যাচাই লাগে, সময় <b>৩–৭ দিন</b>।',
+    'ম্যাচডেতে ইনফো ভুল হলে সাব-আউট করো, অথবা দুই ক্যাপ্টেনের অনুমতি নিয়ে খেলো। অনুমতি ছাড়া খেললে <b>১-০ অটো লস</b>।',
+    'ফেসবুক আইডিতে সমস্যা হলে খেলার আগে প্রমাণসহ প্রতিপক্ষকে জানিয়ে অন্য আইডিতে খেলা যায়। না জানালে অটো লস।',
+    'ইনফো কার্ডের ফেসবুক আইডি আর গ্রুপের আইডি একই অ্যাকাউন্ট হতে হবে। নাম হুবহু মিলতে হবে এমন না।',
+    'User ID-র অক্ষর (ASAA/ASBB) ভুল হলে সমস্যা নেই, কিন্তু <b>নম্বর ১০০% মিলতে হবে</b>। শুরুর শূন্য কম-বেশি হলে সমস্যা নেই।']},
+  {h:'পরিচয় যাচাই', l:[
+    'বয়স কমপক্ষে <b>১২ বছর</b>। বাংলাদেশি NID, পাসপোর্ট বা জন্ম নিবন্ধন থাকতে হবে।',
+    'ডকুমেন্টের নামের মূল অংশ প্রোফাইল আর ফেসবুক নামে থাকতে হবে। যেমন “মো. তানভীর হোসেন” হলে নামে “তানভীর” থাকতেই হবে। মো., মোহাম্মদ, হোসেন, ইসলাম, বংশের নাম ধরা হয় না।',
+    'কমিটি যেকোনো সময় ডকুমেন্ট চাইতে পারে, দিতে হবে।',
+    'Division, District, College, University টুর্নামেন্টে ওয়েবসাইট থেকে <b>ভেরিফাই</b> করা বাধ্যতামূলক। না করে খেললে প্রতিপক্ষের আপিলে তারা অটো উইন পাবে।',
+    'কম বয়সী, ডকুমেন্ট ছাড়া, বিদেশি বা ভুয়া নামের প্লেয়ার রেজিস্ট্রেশন করলে প্লেয়ার ও ক্যাপ্টেন ব্যান, ক্লাবের স্লট বন্ধ পর্যন্ত হতে পারে।']},
+  {h:'Youth টিমের সীমা', tb:{c:['কে','কত জয় পর্যন্ত'], r:[
+    ['নতুন রেজিস্ট্রেশন','মোট ৫০ জয় পর্যন্ত'],['Youth স্কোয়াডের সদস্য খেলতে পারবে','মোট ৭৫ জয় পর্যন্ত'],['Academy প্লেয়ার Youth-এ খেলতে পারবে','মোট ৫০ জয় পর্যন্ত']]},
+   n:'সীমার বেশি জয় নিয়ে খেললে অটো লস।'},
+  {h:'ওয়াকওভার ও টিম অটো লস', tb:{c:['টিমের আকার','অটো লস স্কোর'], r:[['১৪ জন','৮-০'],['১২ জন','৭-০'],['১০ জন','৬-০'],['৬ জন','৪-০']]}, l:[
+    'ম্যাচডের <b>২৪ ঘণ্টা আগ পর্যন্ত</b> সাইট/অ্যাপ থেকে ওয়াকওভার দেওয়া যায়। পরে আর না। ফিক্সচারের পর খেলতে না পারলে সবাই অটো লস।',
+    'কেউ খেলার পর টিম অটো লস হলে বাকি সবার ম্যাচ অটো লস।',
+    'প্রতিপক্ষ টিম গ্রুপে না এলে <b>রাত ১০টার মধ্যে</b> তাদের ক্যাপ্টেনকে মেনশন করে জানাও। নইলে ০-০ ড্র।',
+    'রেফারির ভুলে নোটিফিকেশন না পেলে যাচাই করে ম্যাচ পিছানো হতে পারে।']},
+  {h:'ম্যাচ গ্রুপে কারা থাকবে', l:[
+    'শুধু রেজিস্টার্ড ফেসবুক আইডি, ক্যাপ্টেন, ক্লাব অথরিটি আর ইনফো কার্ডের প্লেয়ার।',
+    'অন্য কাউকে রাখতে প্রতিপক্ষ ক্যাপ্টেন বা রেফারির অনুমতি লাগবে।']}
+]},
+{t:'দায়িত্ব ও সিদ্ধান্ত', d:'কার কী কাজ, সিদ্ধান্তে আপত্তি থাকলে কী করবে, আর ম্যান অফ দ্য ম্যাচ কীভাবে বাছা হয়।', s:[
+  {h:'কার কী কাজ', tb:{c:['ভূমিকা','দায়িত্ব'], r:[
+    ['ক্যাপ্টেন','প্লেয়ারদের গ্রুপে আনা, শৃঙ্খলা রাখা, সমস্যা রেফারিকে জানানো আর সব নিয়ম জানা। একই ম্যাচডেতে সর্বোচ্চ ২ বার ক্যাপ্টেন বদলানো যায়।'],
+    ['প্লেয়ার','গ্রুপে যোগ দেওয়া, প্রতিপক্ষের সাথে ম্যাচ ঠিক করা, ফেয়ার-প্লে মানা, তর্কে না জড়ানো, রেফারির কথা মানা।'],
+    ['ম্যাচ রেফারি','ফিক্সচার দেওয়া, অভিযোগের সিদ্ধান্ত, সতর্ক করা, কার্ড দেওয়া বা গ্রুপ থেকে সরানো।'],
+    ['সহকারী রেফারি','রেফারির সব কাজ। রেফারি না থাকলে গ্রুপ সামলানো।'],
+    ['VAR / অভিযোগ বক্স','রেফারির সিদ্ধান্তে আপত্তি শোনা। তাদের সিদ্ধান্ত চূড়ান্ত।']]}},
+  {h:'সিদ্ধান্তে আপত্তি', o:[
+    'ম্যাচডে শেষের <b>২৪ ঘণ্টার মধ্যে</b> অভিযোগ বক্সে রিভিউ চাও।',
+    'ওই ম্যাচের ফল হোল্ডে থাকবে, বাকি ম্যাচ চলবে।',
+    '<b>১–৭ দিনের মধ্যে</b> কমিটি চূড়ান্ত সিদ্ধান্ত দেবে।'],
+   n:'নিয়ম না জেনে ভুল করলে দায় প্লেয়ার আর ক্লাবের। নিয়ম না জেনে রেফারির দায়িত্ব নিলে শাস্তি হতে পারে।'},
+  {h:'ম্যান অফ দ্য ম্যাচ', flow:['জরুরি জয়/ড্র','গোল ব্যবধান','ক্লিন শিট','গোল সংখ্যা','রেটিং','প্রতিপক্ষের র‍্যাংক'], l:[
+    'ওপরের ক্রমে বিচার হবে। তারপরও সমান হলে রেফারি ঠিক করবে।',
+    'বাদ পড়বে: ডিটেইল স্ট্যাট জমা না দিলে (ডিসকানেক্ট ছাড়া), অটো উইন, জয়ের পর রেড কার্ড, Youth ম্যাচডেতে Academy প্লেয়ার।',
+    'নাম, জনপ্রিয়তা বা পছন্দ দেখে নয়, শুধু ম্যাচের তথ্য দেখে।']}
+]}
+];
+
+const bn = n => String(n).replace(/\d/g, d => '০১২৩৪৫৬৭৮৯'[d]);
+const $ = s => document.querySelector(s);
+const page = $('#page'), toc = $('.toc'), q = $('#q'), status = $('#status');
+const chev = d => `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${d}"/></svg>`;
+const LEFT = 'M15.41,16.58L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.58Z';
+const RIGHT = 'M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z';
+
+const list = (a, cls = '') => `<ul class="${cls}">${a.map(x => `<li data-s>${x}</li>`).join('')}</ul>`;
+function section(s, ci, si) {
+  let body = '';
+  if (s.tb) body += `<div class="tw${s.wide ? ' wide' : ''}"><table><thead><tr>${s.tb.c.map(c => `<th>${c}</th>`).join('')}</tr></thead><tbody>${
+    s.tb.r.map(r => `<tr data-s>${r.map(c => `<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+  if (s.cards) body += `<div class="cards">${s.cards.map(c => `<div class="card" data-s>
+    <h4><span class="chip" style="background:var(${c.c})"></span>${c.n}</h4>
+    <span class="lbl">কখন</span><p>${c.why}</p><span class="lbl">শাস্তি</span>${list(c.p)}</div>`).join('')}</div>`;
+  if (s.flow) body += `<ul class="flow" data-s>${s.flow.map((x, i) => `<li><i>${bn(i + 1)}</i>${x}</li>`).join('')}</ul>`;
+  if (s.o) body += `<ol class="steps">${s.o.map(x => `<li data-s>${x}</li>`).join('')}</ol>`;
+  if (s.l) body += list(s.l);
+  if (s.n) body += `<p class="note" data-s><b>মনে রাখো:</b> ${s.n}</p>`;
+  if (s.w) body = `<div class="box">${body}</div>`;
+  return `<section class="sec" id="r${ci + 1}-${si + 1}"><h3><span class="no">${bn(ci + 1)}.${bn(si + 1)}</span>${s.h}</h3>${body}</section>`;
+}
+
+page.innerHTML = BOOK.map((c, i) => `<article class="chap" id="ch${i + 1}" role="tabpanel" aria-labelledby="t${i + 1}" hidden>
+  <div class="ch-head"><span class="ch-no">${bn(i + 1)}</span><div><small>অধ্যায়</small><h2>${c.t}</h2></div></div>
+  <p class="ch-desc">${c.d}</p>
+  ${c.s.map((s, j) => section(s, i, j)).join('')}
+  <nav class="pager">
+    ${i ? `<button type="button" data-go="${i - 1}">${chev(LEFT)}<span class="t">${BOOK[i - 1].t}</span><span class="s">আগে</span></button>` : '<span></span>'}
+    <span class="count">পৃষ্ঠা ${bn(i + 1)} / ${bn(BOOK.length)}</span>
+    ${i < BOOK.length - 1 ? `<button type="button" class="next" data-go="${i + 1}"><span class="s">পরে</span><span class="t">${BOOK[i + 1].t}</span>${chev(RIGHT)}</button>` : '<span></span>'}
+  </nav></article>`).join('');
+
+toc.insertAdjacentHTML('beforeend', BOOK.map((c, i) =>
+  `<button class="tab" role="tab" id="t${i + 1}" aria-controls="ch${i + 1}" type="button" data-go="${i}"><span class="n">${bn(i + 1)}</span>${c.t}</button>`).join(''));
+
+const chaps = [...page.querySelectorAll('.chap')], tabs = [...toc.querySelectorAll('.tab')];
+let cur = -1;
+
+function show(i, turn) {
+  cur = i;
+  chaps.forEach((c, k) => { c.hidden = k !== i; c.classList.toggle('turn', turn && k === i); });
+  tabs.forEach((t, k) => { t.setAttribute('aria-selected', k === i); t.tabIndex = k === i ? 0 : -1; });
+  tabs[i].scrollIntoView({ block: 'nearest', inline: 'nearest' });
+  try { history.replaceState(null, '', '#ch' + (i + 1)); } catch (e) {}
+}
+
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-go]');
+  if (!b) return;
+  if (q.value) clearSearch();
+  show(+b.dataset.go, true);
+  const top = $('.book').getBoundingClientRect().top;
+  if (top < 0) window.scrollTo({ top: scrollY + top, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+});
+
+toc.addEventListener('keydown', e => {
+  const d = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
+  if (d == null) return;
+  e.preventDefault();
+  show((cur + d + BOOK.length) % BOOK.length, true);
+  tabs[cur].focus();
+});
+
+/* Search: filters rules across all chapters and highlights matches */
+const units = [...page.querySelectorAll('[data-s]')];
+const canMark = window.CSS && CSS.highlights && window.Highlight;
+
+function mark(term) {
+  if (!canMark) return;
+  CSS.highlights.delete('hit');
+  if (!term) return;
+  const ranges = [];
+  units.filter(u => !u.hidden).forEach(u => {
+    const w = document.createTreeWalker(u, NodeFilter.SHOW_TEXT);
+    for (let n; (n = w.nextNode());) {
+      const t = n.data.toLowerCase();
+      for (let i = t.indexOf(term); i > -1; i = t.indexOf(term, i + term.length)) {
+        const r = new Range(); r.setStart(n, i); r.setEnd(n, i + term.length); ranges.push(r);
+      }
+    }
+  });
+  CSS.highlights.set('hit', new Highlight(...ranges));
+}
+
+function search() {
+  const term = q.value.trim().toLowerCase();
+  $('#clear').hidden = !q.value;
+  if (term.length < 2) { if (document.body.classList.contains('searching')) clearSearch(true); return; }
+  document.body.classList.add('searching');
+  let hits = 0;
+  units.forEach(u => { u.hidden = !u.textContent.toLowerCase().includes(term); if (!u.hidden) hits++; });
+  page.querySelectorAll('.sec').forEach(s => { s.hidden = !s.querySelector('[data-s]:not([hidden])'); });
+  chaps.forEach(c => { c.hidden = !c.querySelector('.sec:not([hidden])'); c.classList.remove('turn'); });
+  tabs.forEach(t => t.setAttribute('aria-selected', false));
+  status.hidden = false;
+  status.textContent = hits ? `“${q.value.trim()}” — ${bn(hits)}টি নিয়ম পাওয়া গেছে` : `“${q.value.trim()}” দিয়ে কোনো নিয়ম পাওয়া যায়নি। অন্য শব্দ দিয়ে খুঁজে দেখো।`;
+  mark(term);
+}
+
+function clearSearch(keepText) {
+  if (!keepText) q.value = '';
+  $('#clear').hidden = !q.value;
+  document.body.classList.remove('searching');
+  units.forEach(u => u.hidden = false);
+  page.querySelectorAll('.sec').forEach(s => s.hidden = false);
+  status.hidden = true;
+  mark('');
+  show(cur < 0 ? 0 : cur, false);
+}
+
+q.addEventListener('input', search);
+$('#clear').addEventListener('click', () => { clearSearch(); q.focus(); });
+
+const m = location.hash.match(/^#ch([1-6])$/);
+show(m ? m[1] - 1 : 0, false);
+</script>
+
+</body></html>
